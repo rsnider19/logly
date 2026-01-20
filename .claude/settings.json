@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fvm flutter pub get:*)",
+      "Bash(fvm flutter analyze:*)",
+      "Bash(fvm dart run:*)",
+      "Bash(git commit:*)",
+      "Bash(git add:*)"
+    ],
+    "ask": [
+      "Bash(git push:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}
