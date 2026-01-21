@@ -1,0 +1,4461 @@
+{
+  "status": "success",
+  "recordsTotal": 9,
+  "data": [
+    {
+      "id": "1",
+      "name": "Workouts",
+      "category_type": "0",
+      "color": "#e8131a",
+      "created_at": "2019-08-15 10:28:08.555931",
+      "updated_at": "2021-05-23 16:37:01.502305",
+      "cat_key": "workouts",
+      "image": "car",
+      "order_by": "1",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-dumbbell-50.png",
+      "activity": [
+        {
+          "id": "99",
+          "name": "At-Home",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-warm-up-50.png",
+          "created_at": "2019-09-04 17:45:24.915047",
+          "updated_at": "2020-01-17 10:49:46.627243",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "334",
+              "name": "Push-ups",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "335",
+              "name": "Sit-ups",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "336",
+              "name": "Planks",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "337",
+              "name": "Squats",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "338",
+              "name": "Lunges",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "339",
+              "name": "Dumbells",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "340",
+              "name": "Burpees",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "341",
+              "name": "Wall Sits",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "342",
+              "name": "Step-ups",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "343",
+              "name": "Pull-ups",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "344",
+              "name": "Dips",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "345",
+              "name": "Supermans",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "346",
+              "name": "Hip Raises",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "347",
+              "name": "Crunches",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "348",
+              "name": "Twists",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "349",
+              "name": "Bicycle Crunch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "350",
+              "name": "Core",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "351",
+              "name": "Legs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "352",
+              "name": "Arms",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "353",
+              "name": "Chest",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "354",
+              "name": "Shoulders",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "355",
+              "name": "Back",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "356",
+              "name": "Biceps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "357",
+              "name": "Supermans",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "377",
+          "name": "Ballet",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-ballet-shoes-100.png",
+          "created_at": "2022-01-18 08:03:18",
+          "updated_at": "2022-01-18 08:03:18",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "110",
+          "name": "Barbell",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-dumbbell-50.png",
+          "created_at": "2020-02-13 17:06:01.391467",
+          "updated_at": "2021-03-30 07:19:49.871127",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "1",
+          "name": "Barre",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-stretching-hamstring-50.png",
+          "created_at": "2019-08-15 10:28:08.599511",
+          "updated_at": "2021-03-30 07:50:19.443663",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "358",
+              "name": "Barre",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "359",
+              "name": "barre3",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "360",
+              "name": "Pure Barre",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "361",
+              "name": "Barre Forte",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "name": "Boxing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-boxing-60.png",
+          "created_at": "2019-08-15 10:28:08.604322",
+          "updated_at": "2021-03-29 18:32:01.734897",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "358",
+              "name": "Barre",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "359",
+              "name": "barre3",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "360",
+              "name": "Pure Barre",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "361",
+              "name": "Barre Forte",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "362",
+              "name": "POW!",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "363",
+              "name": "TITLE Boxing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "364",
+              "name": "9Round Fitness",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "365",
+              "name": "UFC Gym",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "366",
+              "name": "Rumble",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "367",
+              "name": "Shadowbox",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "368",
+              "name": "Body Shot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "331",
+          "name": "Calisthenics",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/physical.png",
+          "created_at": "2021-05-04 13:45:05.480369",
+          "updated_at": "2021-05-04 13:45:53.662462",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "3",
+          "name": "Cardio (Mixed)",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-heart-with-pulse-100.png",
+          "created_at": "2019-08-15 10:28:08.608764",
+          "updated_at": "2021-03-29 18:24:05.98855",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "5",
+          "name": "Core Training",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-pilates-50.png",
+          "created_at": "2019-08-15 10:28:08.616447",
+          "updated_at": "2021-03-30 07:51:01.307044",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "6",
+          "name": "Cross Training",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-exercise-50.png",
+          "created_at": "2019-08-15 10:28:08.619738",
+          "updated_at": "2021-03-31 03:08:36.846307",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "7",
+          "name": "CrossFit",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-crossfit-50.png",
+          "created_at": "2019-08-15 10:28:08.622589",
+          "updated_at": "2021-03-31 03:08:37.184628",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "8",
+          "name": "Cycling",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cycling-50.png",
+          "created_at": "2019-08-15 10:28:08.625513",
+          "updated_at": "2021-03-31 03:08:37.467856",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "331",
+              "name": "Bike",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "374",
+              "name": "Flywheel",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "375",
+              "name": "Cycle614",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "376",
+              "name": "SoulCycle",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "377",
+              "name": "Peloton",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "378",
+              "name": "CycleBar",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "379",
+              "name": "iFit",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "616",
+              "name": "High Ride",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "631",
+              "name": "Recumbent",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "9",
+          "name": "Elliptical",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-elliptical-60.png",
+          "created_at": "2019-08-15 10:28:08.62844",
+          "updated_at": "2021-03-31 03:08:37.805925",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "10",
+          "name": "HIIT",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-exercise-50.png",
+          "created_at": "2019-08-15 10:28:08.631261",
+          "updated_at": "2021-03-31 03:08:38.088038",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "332",
+              "name": "Fitwall",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-workout-50.png"
+            },
+            {
+              "id": "382",
+              "name": "Orangetheory",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "383",
+              "name": "F45",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "384",
+              "name": "Fit36",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "385",
+              "name": "Tabata",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "386",
+              "name": "SWEAT",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "387",
+              "name": "Barry's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "502",
+              "name": "Duality",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "612",
+              "name": "HASfit",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "632",
+              "name": "Alchemy365",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "11",
+          "name": "Hiking",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-trekking-50.png",
+          "created_at": "2019-08-15 10:28:08.634048",
+          "updated_at": "2021-03-30 07:52:32.476836",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "387",
+          "name": "Hula Hoop",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-circle-100.png",
+          "created_at": "2022-02-14 04:57:28",
+          "updated_at": "2022-02-14 04:57:28",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "503",
+              "name": "Smart Hoop",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "12",
+          "name": "Jump Rope",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/jump_rope.png",
+          "created_at": "2019-08-15 10:28:08.637457",
+          "updated_at": "2021-03-30 07:52:56.381287",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "116",
+          "name": "Karate",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-taekwondo-60.png",
+          "created_at": "2020-08-29 14:58:23.058836",
+          "updated_at": "2021-05-25 17:30:37.95159",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "388",
+              "name": "Goju",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "389",
+              "name": "Shotokan",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "390",
+              "name": "Wado",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "391",
+              "name": "Shito",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "525",
+          "name": "Kegels",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-pelvis-100.png",
+          "created_at": "2023-04-01 06:15:27",
+          "updated_at": "2023-04-01 06:15:27",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "535",
+          "name": "Kettlebell",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-kettlebell-64.png",
+          "created_at": "2024-02-13 10:06:04",
+          "updated_at": "2024-02-13 10:06:04",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "13",
+          "name": "Kickbox",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fight-100.png",
+          "created_at": "2019-08-15 10:28:08.641276",
+          "updated_at": "2021-03-31 03:08:38.655292",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "470",
+          "name": "Moving",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-trolley-100.png",
+          "created_at": "2022-05-03 01:56:36",
+          "updated_at": "2022-05-03 01:56:36",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "471",
+          "name": "Obstacle Course ",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-athlete-51.png",
+          "created_at": "2022-07-27 03:49:01",
+          "updated_at": "2022-07-27 03:49:01",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "14",
+          "name": "Pilates",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-pilates-50.png",
+          "created_at": "2019-08-15 10:28:08.644975",
+          "updated_at": "2021-03-30 07:53:19.289481",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "381",
+          "name": "Pole Dancing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-pole-dancer-96.png",
+          "created_at": "2022-01-27 04:51:54",
+          "updated_at": "2022-01-27 04:51:54",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "472",
+          "name": "Qi Cong",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/martial_arts.png",
+          "created_at": "2022-10-28 05:09:08",
+          "updated_at": "2022-10-28 05:09:08",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "327",
+          "name": "Recovery Workout",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-heart-health-50.png",
+          "created_at": "2021-04-16 17:27:05.811643",
+          "updated_at": "2021-04-16 17:27:34.198552",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "15",
+          "name": "Rower",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-rowing-machine-50.png",
+          "created_at": "2019-08-15 10:28:08.648777",
+          "updated_at": "2021-03-29 18:32:08.29703",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "16",
+          "name": "Run",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-running-50_(1).png",
+          "created_at": "2019-08-15 10:28:08.652549",
+          "updated_at": "2021-03-25 00:19:07.827766",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "1",
+              "name": "Base",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "2",
+              "name": "Progression",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "3",
+              "name": "Fartlck",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "318",
+              "name": "Interval",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/run.png"
+            },
+            {
+              "id": "407",
+              "name": "Sprints",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "408",
+              "name": "Hills",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "409",
+              "name": "Treadmill",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "554",
+              "name": "Trail",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "527",
+          "name": "Snowshoeing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-walking-50.png",
+          "created_at": "2023-04-01 06:28:32",
+          "updated_at": "2023-04-01 06:28:32",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "19",
+          "name": "Stairs",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/stair_stepper.png",
+          "created_at": "2019-08-15 10:28:08.662898",
+          "updated_at": "2021-03-29 18:32:08.047414",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "398",
+              "name": "StairMaster",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "399",
+              "name": "Outdoor Stairs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "400",
+              "name": "Stadium Stairs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "401",
+              "name": "Stair Stepper",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "402",
+              "name": "Building Steps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "473",
+              "name": "Technogym",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "28",
+          "name": "Strength Training",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-crossfit-50.png",
+          "created_at": "2019-08-15 10:28:08.693525",
+          "updated_at": "2021-03-31 03:08:38.945567",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "398",
+              "name": "StairMaster",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "399",
+              "name": "Outdoor Stairs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "400",
+              "name": "Stadium Stairs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "401",
+              "name": "Stair Stepper",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "402",
+              "name": "Building Steps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "473",
+              "name": "Technogym",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "403",
+              "name": "Bracey Performance",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "444",
+              "name": "Yoga 2.0",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "464",
+              "name": "Duality",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "613",
+              "name": "Tonal",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "22",
+          "name": "Stretching",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-stretching-50.png",
+          "created_at": "2019-08-15 10:28:08.672938",
+          "updated_at": "2021-03-31 03:08:39.281607",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "354",
+          "name": "Swim",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-swimming-50.png",
+          "created_at": "2021-07-19 02:53:55",
+          "updated_at": "2021-07-19 02:53:55",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "24",
+          "name": "Walk",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-walking-50.png",
+          "created_at": "2019-08-15 10:28:08.67957",
+          "updated_at": "2021-03-31 03:08:39.904129",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "404",
+              "name": "Treadmill",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "405",
+              "name": "Speed Walking",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "406",
+              "name": "Casual",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "25",
+          "name": "Water Fitness",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/water_fitness.png",
+          "created_at": "2019-08-15 10:28:08.682839",
+          "updated_at": "2021-03-31 03:08:40.24129",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "26",
+          "name": "Weight Lifting",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-weightlifting-50.png",
+          "created_at": "2019-08-15 10:28:08.686329",
+          "updated_at": "2021-03-31 03:11:55.195037",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "410",
+              "name": "Arms",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "411",
+              "name": "Back",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "412",
+              "name": "Biceps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "413",
+              "name": "Chest",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "414",
+              "name": "Core",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "415",
+              "name": "Full Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "416",
+              "name": "Legs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "417",
+              "name": "Shoulders",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "418",
+              "name": "Triceps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "419",
+              "name": "Upper Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "420",
+              "name": "Lower Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "505",
+              "name": "Deadlift",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "27",
+          "name": "Yoga",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/yoga-posture.png",
+          "created_at": "2019-08-15 10:28:08.689814",
+          "updated_at": "2021-03-31 03:11:54.847708",
+          "category_id": "1",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "410",
+              "name": "Arms",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "411",
+              "name": "Back",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "412",
+              "name": "Biceps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "413",
+              "name": "Chest",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "414",
+              "name": "Core",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "415",
+              "name": "Full Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "416",
+              "name": "Legs",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "417",
+              "name": "Shoulders",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "418",
+              "name": "Triceps",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "419",
+              "name": "Upper Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "420",
+              "name": "Lower Body",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "505",
+              "name": "Deadlift",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "421",
+              "name": "Ashtanga",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "422",
+              "name": "Bikram",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "423",
+              "name": "Iyengar",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "424",
+              "name": "Jivamukti",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "425",
+              "name": "Power",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "426",
+              "name": "Sivananda",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "427",
+              "name": "Vinyasa",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "428",
+              "name": "Yin",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "429",
+              "name": "Hot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "430",
+              "name": "CorePower",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "431",
+              "name": "Yoga 2.0",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "432",
+              "name": "BIG Power",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "553",
+              "name": "Yoga Box",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "577",
+              "name": "DDP Yoga",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Sports",
+      "category_type": "0",
+      "color": "#139e1f",
+      "created_at": "2019-08-15 10:28:08.559141",
+      "updated_at": "2021-03-30 02:28:29.692738",
+      "cat_key": "sports",
+      "image": "dribbble",
+      "order_by": "2",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_basketball_player_50px_1.png",
+      "activity": [
+        {
+          "id": "29",
+          "name": "Archery",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_archer_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.698445",
+          "updated_at": "2021-03-31 12:37:19.010285",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "30",
+          "name": "Badminton",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_badminton_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.701857",
+          "updated_at": "2021-03-31 12:49:55.8046",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "31",
+          "name": "Baseball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_baseball_player_50px.png",
+          "created_at": "2019-08-15 10:28:08.705072",
+          "updated_at": "2021-03-31 12:50:06.615768",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "32",
+          "name": "Basketball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_basketball_player_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.708459",
+          "updated_at": "2021-03-31 12:50:39.705362",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "33",
+          "name": "Bowling",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_bowling_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.711809",
+          "updated_at": "2021-03-31 12:50:48.033647",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "97",
+          "name": "Canoeing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_canoe_50px_1.png",
+          "created_at": "2019-09-02 20:08:01.633233",
+          "updated_at": "2021-03-31 12:50:57.212232",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "4",
+          "name": "Climb",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-climbing-50.png",
+          "created_at": "2019-08-15 10:28:08.612581",
+          "updated_at": "2021-03-31 03:08:36.503163",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "369",
+              "name": "Brooklyn Boulder",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "370",
+              "name": "First Ascent",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "371",
+              "name": "Denver Bouldering",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "372",
+              "name": "Movement Climbing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "373",
+              "name": "The Spot Bouldering",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "34",
+          "name": "Climbing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-climbing-50.png",
+          "created_at": "2019-08-15 10:28:08.715205",
+          "updated_at": "2021-03-31 12:51:28.62316",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "35",
+          "name": "Cricket",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_cricket_50px.png",
+          "created_at": "2019-08-15 10:28:08.718568",
+          "updated_at": "2021-03-31 12:51:38.108728",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "36",
+          "name": "Cross-Country Skiing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_cross_country_skiing_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.721744",
+          "updated_at": "2021-03-31 12:51:46.021937",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "37",
+          "name": "Curling",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-curling-stone-90 (1).png",
+          "created_at": "2019-08-15 10:28:08.724909",
+          "updated_at": "2021-03-31 12:51:54.817493",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "38",
+          "name": "Dance",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_tango_50px_2.png",
+          "created_at": "2019-08-15 10:28:08.728079",
+          "updated_at": "2021-03-31 12:52:05.205838",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "335",
+          "name": "Disc Golf",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-frisbee-50.png",
+          "created_at": "2021-05-23 16:26:44.923857",
+          "updated_at": "2021-05-23 16:28:44.225474",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "380",
+              "name": "9 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "381",
+              "name": "18 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "39",
+          "name": "Equestrian Sports",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_horseback_riding_50px1.png",
+          "created_at": "2019-08-15 10:28:08.731253",
+          "updated_at": "2021-03-31 12:52:14.656323",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "40",
+          "name": "Fencing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_fencing_50px.png",
+          "created_at": "2019-08-15 10:28:08.734477",
+          "updated_at": "2021-03-31 12:52:23.332194",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "41",
+          "name": "Fishing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_fishing_pole_50px.png",
+          "created_at": "2019-08-15 10:28:08.737605",
+          "updated_at": "2021-03-31 12:52:30.485322",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "42",
+          "name": "Football",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_american_football_50px.png",
+          "created_at": "2019-08-15 10:28:08.740878",
+          "updated_at": "2021-03-31 12:52:39.193766",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "66",
+          "name": "Golf",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_golf_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.816158",
+          "updated_at": "2021-03-24 08:14:51.041833",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "392",
+              "name": "9 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "393",
+              "name": "18 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "394",
+              "name": "Scramble",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "438",
+              "name": "36 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "439",
+              "name": "Best Ball",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "440",
+              "name": "Driving Range",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "441",
+              "name": "Match Play",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "442",
+              "name": "Simulator",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "443",
+              "name": "27 Holes",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "43",
+          "name": "Gymnastics",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_acrobatics_50px.png",
+          "created_at": "2019-08-15 10:28:08.744075",
+          "updated_at": "2021-03-31 13:08:59.797447",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "44",
+          "name": "Handball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_handball_50px.png",
+          "created_at": "2019-08-15 10:28:08.747003",
+          "updated_at": "2021-03-31 13:09:13.256717",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "45",
+          "name": "Hockey",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_field_hockey_50px.png",
+          "created_at": "2019-08-15 10:28:08.750163",
+          "updated_at": "2021-03-31 13:09:21.328787",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "46",
+          "name": "Hunting",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_hunt_50px.png",
+          "created_at": "2019-08-15 10:28:08.753417",
+          "updated_at": "2021-03-31 13:09:40.121574",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "118",
+          "name": "Kayaking",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_canoe_50px_11.png",
+          "created_at": "2020-09-02 13:52:39.140534",
+          "updated_at": "2021-03-31 13:10:03.18107",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "333",
+          "name": "Kickball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_soccer_50px_1.png",
+          "created_at": "2021-05-06 20:21:59.461315",
+          "updated_at": "2021-05-06 20:21:59.461315",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "47",
+          "name": "Lacrosse",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_lacrosse_player_50px.png",
+          "created_at": "2019-08-15 10:28:08.756736",
+          "updated_at": "2021-03-31 13:10:23.835798",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "48",
+          "name": "Martial Arts",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fight-100.png",
+          "created_at": "2019-08-15 10:28:08.760026",
+          "updated_at": "2021-03-31 13:10:32.060385",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "473",
+          "name": "Motocross",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-motocross-90.png",
+          "created_at": "2022-07-27 03:49:11",
+          "updated_at": "2022-07-27 03:49:11",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "378",
+          "name": "Netball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-netball-96 (1).png",
+          "created_at": "2022-01-25 02:46:58",
+          "updated_at": "2022-01-25 02:46:58",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "521",
+          "name": "Pickleball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_tennis_player_50px.png",
+          "created_at": "2023-03-01 04:03:08",
+          "updated_at": "2023-03-01 04:03:08",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "49",
+          "name": "Racquetball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/racquetball.png",
+          "created_at": "2019-08-15 10:28:08.763388",
+          "updated_at": "2021-03-31 13:10:42.101288",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "50",
+          "name": "Rugby",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/rugby.png",
+          "created_at": "2019-08-15 10:28:08.766818",
+          "updated_at": "2021-03-31 13:10:58.947287",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "51",
+          "name": "Sailing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/sailing.png",
+          "created_at": "2019-08-15 10:28:08.770277",
+          "updated_at": "2021-03-31 13:12:09.771933",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "106",
+          "name": "Scuba Diving",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_scuba_diving_50px.png",
+          "created_at": "2019-12-26 19:50:55.259609",
+          "updated_at": "2021-03-24 08:14:54.237024",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "101",
+          "name": "Shooting Range",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/Shooting_Range.png",
+          "created_at": "2019-12-06 17:46:41.360612",
+          "updated_at": "2021-03-31 13:12:34.58968",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "117",
+          "name": "Skateboarding",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-skateboarding-50.png",
+          "created_at": "2020-08-30 20:44:33.438368",
+          "updated_at": "2021-03-30 20:48:19.422847",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "18",
+          "name": "Skating",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-skateboarding-50.png",
+          "created_at": "2019-08-15 10:28:08.659422",
+          "updated_at": "2021-03-30 07:56:07.668309",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "395",
+              "name": "Skateboarding",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-skateboarding-50.png"
+            },
+            {
+              "id": "396",
+              "name": "Roller Blading",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-rollerblade-50.png"
+            },
+            {
+              "id": "397",
+              "name": "Ice Skating",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-ice-skate-50.png"
+            }
+          ]
+        },
+        {
+          "id": "518",
+          "name": "Ski Touring",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_cross_country_skiing_50px_1.png",
+          "created_at": "2023-01-31 02:08:54",
+          "updated_at": "2023-01-31 02:08:54",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "52",
+          "name": "Skiing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/skiing.png",
+          "created_at": "2019-08-15 10:28:08.773449",
+          "updated_at": "2021-03-26 14:23:14.532356",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "54",
+          "name": "Snowboarding",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_snowboarding_50px.png",
+          "created_at": "2019-08-15 10:28:08.780127",
+          "updated_at": "2021-03-30 10:36:44.057699",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "55",
+          "name": "Soccer",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_soccer_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.783256",
+          "updated_at": "2021-03-31 13:18:52.714192",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "56",
+          "name": "Softball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_baseball_player_50px.png",
+          "created_at": "2019-08-15 10:28:08.785738",
+          "updated_at": "2021-03-31 13:15:39.472147",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "57",
+          "name": "Squash",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_squash_racquet_50px_2.png",
+          "created_at": "2019-08-15 10:28:08.788351",
+          "updated_at": "2021-03-31 13:15:50.967576",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "58",
+          "name": "Surfing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/surfing.png",
+          "created_at": "2019-08-15 10:28:08.791162",
+          "updated_at": "2021-03-31 13:16:00.348993",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "60",
+          "name": "Table Tennis",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_ping_pong_50px_2.png",
+          "created_at": "2019-08-15 10:28:08.797169",
+          "updated_at": "2021-03-31 13:19:02.904013",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "61",
+          "name": "Tennis",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_tennis_player_50px.png",
+          "created_at": "2019-08-15 10:28:08.80033",
+          "updated_at": "2021-03-31 13:19:17.642618",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "62",
+          "name": "Track & Field",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/track_and_field.png",
+          "created_at": "2019-08-15 10:28:08.803977",
+          "updated_at": "2021-03-31 13:19:31.331314",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "474",
+          "name": "Ultimate Frisbee",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-frisbee-50.png",
+          "created_at": "2023-01-03 03:49:45",
+          "updated_at": "2023-01-03 03:49:45",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "63",
+          "name": "Volleyball",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_volleyball_player_50px.png",
+          "created_at": "2019-08-15 10:28:08.807452",
+          "updated_at": "2021-03-31 13:19:39.792009",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "64",
+          "name": "Water Polo",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/water_polo.png",
+          "created_at": "2019-08-15 10:28:08.81034",
+          "updated_at": "2021-03-31 13:20:10.933734",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "373",
+          "name": "Water Skiing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-waterskiing-90.png",
+          "created_at": "2021-12-02 10:06:42",
+          "updated_at": "2021-12-02 10:06:42",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "65",
+          "name": "Wrestling",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/wrestling.png",
+          "created_at": "2019-08-15 10:28:08.813153",
+          "updated_at": "2021-03-31 12:31:31.413687",
+          "category_id": "2",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Mind & Body",
+      "category_type": "0",
+      "color": "#0063B1",
+      "created_at": "2019-08-15 10:28:08.56141",
+      "updated_at": "2021-03-30 02:28:29.695293",
+      "cat_key": "mindfulness",
+      "image": "heartbeat",
+      "order_by": "3",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-sauna-50.png",
+      "activity": [
+        {
+          "id": "123",
+          "name": "Bath",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_bath_50px.png",
+          "created_at": "2021-01-07 19:48:48.700162",
+          "updated_at": "2021-03-31 13:20:29.128813",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "478",
+          "name": "Breathing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_breath_50px.png",
+          "created_at": "2022-10-31 07:04:21",
+          "updated_at": "2022-10-31 07:04:21",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "68",
+          "name": "Chiropractor",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_physical_therapy_50px.png",
+          "created_at": "2019-08-15 10:28:08.822551",
+          "updated_at": "2021-03-31 13:20:35.095804",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "374",
+          "name": "Church",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-city-church-90.png",
+          "created_at": "2021-12-20 03:46:24",
+          "updated_at": "2021-12-20 03:46:24",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "69",
+          "name": "Coaching",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_leadership_50px.png",
+          "created_at": "2019-08-15 10:28:08.825007",
+          "updated_at": "2021-03-31 13:20:41.806619",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "479",
+          "name": "Crocheting ",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-yarn-64.png",
+          "created_at": "2023-01-03 06:16:25",
+          "updated_at": "2023-01-03 06:16:25",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "476",
+          "name": "Cryotherapy",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-snowflake-100.png",
+          "created_at": "2022-02-24 04:39:03",
+          "updated_at": "2022-02-24 04:39:03",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "98",
+          "name": "Dentist",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_tooth_50px.png",
+          "created_at": "2019-09-04 00:06:08.927569",
+          "updated_at": "2021-03-31 13:20:47.821069",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "481",
+          "name": "Devotional",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-book-96.png",
+          "created_at": "2023-01-04 03:33:52",
+          "updated_at": "2023-01-04 03:33:52",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "329",
+          "name": "Draw",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_pencil_drawing_50px.png",
+          "created_at": "2021-05-03 02:55:57.251233",
+          "updated_at": "2021-05-03 02:55:57.251233",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "330",
+          "name": "Eating Journal",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_journal_50px.png",
+          "created_at": "2021-05-04 13:31:52.729057",
+          "updated_at": "2021-05-04 13:31:52.729057",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "376",
+          "name": "Facial",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cleansing-100.png",
+          "created_at": "2022-01-18 05:08:41",
+          "updated_at": "2022-01-18 05:08:41",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "480",
+          "name": "Guitar",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-rock-music-100.png",
+          "created_at": "2023-01-04 02:28:21",
+          "updated_at": "2023-01-04 02:28:21",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "71",
+          "name": "Haircut",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_barber_scissors_50px.png",
+          "created_at": "2019-08-15 10:28:08.830039",
+          "updated_at": "2021-03-31 13:21:00.581293",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "475",
+          "name": "Hydrotherapy",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-jacuzzi-100.png",
+          "created_at": "2022-02-24 04:36:22",
+          "updated_at": "2022-02-24 04:36:22",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "561",
+              "name": "Hot Tub",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-jacuzzi-100.png"
+            },
+            {
+              "id": "562",
+              "name": "Cold Plunge",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-defrosting-100.png"
+            },
+            {
+              "id": "563",
+              "name": "Ice Bath",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-defrosting-100.png"
+            },
+            {
+              "id": "564",
+              "name": "Jacuzzi",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-jacuzzi-100.png"
+            },
+            {
+              "id": "614",
+              "name": "Steam",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "615",
+              "name": "Sauna",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "121",
+          "name": "Journal",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_journal_50px.png",
+          "created_at": "2020-09-27 13:16:19.915545",
+          "updated_at": "2021-03-24 07:54:51.35634",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "72",
+          "name": "Massage",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_massage_50px.png",
+          "created_at": "2019-08-15 10:28:08.832699",
+          "updated_at": "2021-03-31 13:21:12.249121",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "538",
+          "name": "MAT Session",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_physical_therapy_50px.png",
+          "created_at": "2024-02-27 05:30:08",
+          "updated_at": "2024-02-27 05:30:08",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "73",
+          "name": "Meditation",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_meditation_50px_1.png",
+          "created_at": "2019-08-15 10:28:08.835421",
+          "updated_at": "2021-03-24 07:54:51.968183",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "74",
+          "name": "Nails",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/nails.png",
+          "created_at": "2019-08-15 10:28:08.839072",
+          "updated_at": "2021-03-31 13:21:30.07117",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "471",
+              "name": "Manicure",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "472",
+              "name": "Pedicure",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "75",
+          "name": "Nap",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/napping.png",
+          "created_at": "2019-08-15 10:28:08.86519",
+          "updated_at": "2021-03-31 13:21:42.025725",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "76",
+          "name": "Physical",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_stethoscope_50px.png",
+          "created_at": "2019-08-15 10:28:08.869003",
+          "updated_at": "2021-03-31 13:21:49.232828",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "77",
+          "name": "Physical Therapy",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_physical_therapy_50px.png",
+          "created_at": "2019-08-15 10:28:08.872536",
+          "updated_at": "2021-03-24 07:54:53.214732",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "380",
+          "name": "Planner Work",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-moleskine-100.png",
+          "created_at": "2022-01-27 02:27:11",
+          "updated_at": "2022-01-27 02:27:11",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "528",
+          "name": "Playing Music",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-guitar-100.png",
+          "created_at": "2023-04-01 06:32:44",
+          "updated_at": "2023-04-01 06:32:44",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "590",
+              "name": "Drums",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-drum-set-90.png"
+            },
+            {
+              "id": "591",
+              "name": "Piano",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-grand-piano-90.png"
+            },
+            {
+              "id": "592",
+              "name": "Guitar",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-guitar-100.png"
+            }
+          ]
+        },
+        {
+          "id": "537",
+          "name": "PNF Stretching",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-stretching-50.png",
+          "created_at": "2024-02-27 05:27:37",
+          "updated_at": "2024-02-27 05:27:37",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "108",
+          "name": "Prayer",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/Prayer.png",
+          "created_at": "2020-01-22 13:12:51.427269",
+          "updated_at": "2021-03-31 13:22:03.014532",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "78",
+          "name": "Reading",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/reading.png",
+          "created_at": "2019-08-15 10:28:08.875583",
+          "updated_at": "2021-03-31 13:22:09.294253",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "477",
+          "name": "Red Light Therapy",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-light-100.png",
+          "created_at": "2022-04-13 07:38:12",
+          "updated_at": "2022-04-13 07:38:12",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "113",
+          "name": "Rest Day",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-relax-100.png",
+          "created_at": "2020-08-25 14:38:54.007728",
+          "updated_at": "2021-03-29 17:47:46.896721",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "17",
+          "name": "Sauna",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/sauna.png",
+          "created_at": "2019-08-15 10:28:08.656069",
+          "updated_at": "2021-03-30 07:19:50.950006",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "109",
+          "name": "Sleep",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_sleeping_in_bed_50px.png",
+          "created_at": "2020-01-22 13:13:12.230761",
+          "updated_at": "2021-03-29 17:47:46.768809",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "79",
+          "name": "Spray Tan",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/spray_tan.png",
+          "created_at": "2019-08-15 10:28:08.878717",
+          "updated_at": "2021-03-31 13:22:32.889189",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "21",
+          "name": "Steam Room",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/sauna.png",
+          "created_at": "2019-08-15 10:28:08.669507",
+          "updated_at": "2021-03-29 18:32:07.652047",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "104",
+          "name": "Study",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/Study.png",
+          "created_at": "2019-12-13 17:19:03.304936",
+          "updated_at": "2021-03-29 07:00:57.96762",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "475",
+              "name": "Finance",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "476",
+              "name": "Math",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "477",
+              "name": "History",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "478",
+              "name": "Physics",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "479",
+              "name": "Language",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "480",
+              "name": "Geology ",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "481",
+              "name": "Engineering",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "482",
+              "name": "Psychology",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "483",
+              "name": "Architecture",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "484",
+              "name": "Science",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "485",
+              "name": "Biology",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "486",
+              "name": "Art",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "487",
+              "name": "Business",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "488",
+              "name": "Music",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "489",
+              "name": "Nursing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "490",
+              "name": "Statistics",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "491",
+              "name": "Politics ",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "492",
+              "name": "Education",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "493",
+              "name": "Aviation",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "494",
+              "name": "Public Relations",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "495",
+              "name": "Journalism",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "496",
+              "name": "Economics",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "497",
+              "name": "Chemistry",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "498",
+              "name": "Environmental",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "80",
+          "name": "Therapy",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/therapy.png",
+          "created_at": "2019-08-15 10:28:08.881815",
+          "updated_at": "2021-03-31 08:02:05.41565",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "332",
+          "name": "TV",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-retro-tv-100.png",
+          "created_at": "2021-05-04 13:46:17.124156",
+          "updated_at": "2021-05-04 13:47:25.50419",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "81",
+          "name": "Waxing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/waxing.png",
+          "created_at": "2019-08-15 10:28:08.884766",
+          "updated_at": "2021-03-30 12:02:11.724262",
+          "category_id": "3",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Health",
+      "category_type": "0",
+      "color": "#4a4a4a",
+      "created_at": "2021-03-18 14:00:00.124526",
+      "updated_at": "2021-04-08 22:27:01.542127",
+      "cat_key": "test",
+      "image": "medkit",
+      "order_by": "4",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-heart-health-50.png",
+      "activity": [
+        {
+          "id": "67",
+          "name": "Blood Work",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-blood-sample-50.png",
+          "created_at": "2019-08-15 10:28:08.819897",
+          "updated_at": "2021-03-31 08:28:50.729626",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "516",
+          "name": "Bowel Movement",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-bowel-flush-100.png",
+          "created_at": "2023-01-23 07:17:41",
+          "updated_at": "2023-01-23 07:17:41",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "325",
+          "name": "Breath Hold",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_breath_50px.png",
+          "created_at": "2021-04-08 22:24:11.54503",
+          "updated_at": "2021-04-08 22:24:11.54503",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "530",
+          "name": "Cleanse",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-mate-100.png",
+          "created_at": "2023-04-22 08:05:24",
+          "updated_at": "2023-04-22 08:05:24",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "593",
+              "name": "Fasting",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fasting-128(-xxxhdpi).png"
+            },
+            {
+              "id": "594",
+              "name": "Food Restriction",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fasting-128(-xxxhdpi).png"
+            },
+            {
+              "id": "595",
+              "name": "Liver Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "596",
+              "name": "Juice Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "597",
+              "name": "Total Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "598",
+              "name": "Master Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "599",
+              "name": "Colon Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "600",
+              "name": "Parasite Cleanse",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "601",
+              "name": "Foot Detox",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "602",
+              "name": "Nasal Irrigation",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "603",
+              "name": "Oxygen Detox",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "523",
+          "name": "Coffee",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-coffee-cup-90.png",
+          "created_at": "2023-03-09 03:07:05",
+          "updated_at": "2023-03-09 03:07:05",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "492",
+          "name": "Dentist",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_tooth_50px.png",
+          "created_at": "2019-09-04 00:06:08.927569",
+          "updated_at": "2021-03-31 13:20:47.821069",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "70",
+          "name": "Doctor",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_stethoscope_50px.png",
+          "created_at": "2019-08-15 10:28:08.827531",
+          "updated_at": "2021-03-31 07:48:50.504797",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "532",
+          "name": "Dry Needling",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/DryNeedling.png",
+          "created_at": "2024-02-13 08:59:20",
+          "updated_at": "2024-02-13 08:59:20",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "379",
+          "name": "Fasting",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fasting-128(-xxxhdpi).png",
+          "created_at": "2022-01-27 02:22:25",
+          "updated_at": "2022-01-27 02:22:25",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "505",
+          "name": "Floss",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-floss-96.png",
+          "created_at": "2023-01-03 03:43:21",
+          "updated_at": "2023-01-03 03:43:21",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "388",
+          "name": "Headache",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-brain-100.png",
+          "created_at": "2022-02-15 03:04:08",
+          "updated_at": "2022-02-15 03:04:08",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "498",
+          "name": "HRV",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-heart-rate-64.png",
+          "created_at": "2022-05-03 02:36:19",
+          "updated_at": "2022-05-03 02:36:19",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "497",
+          "name": "Infection",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-virus-100.png",
+          "created_at": "2022-03-09 04:06:44",
+          "updated_at": "2022-03-09 04:06:44",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "512",
+              "name": "Skin",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-skin-100.png"
+            },
+            {
+              "id": "513",
+              "name": "Eye",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-eye-90.png"
+            },
+            {
+              "id": "514",
+              "name": "Ear",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-hearing-100.png"
+            },
+            {
+              "id": "515",
+              "name": "Extremity",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-contact-78.png"
+            }
+          ]
+        },
+        {
+          "id": "504",
+          "name": "Injury",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cast-100.png",
+          "created_at": "2022-12-27 04:14:51",
+          "updated_at": "2022-12-27 04:14:51",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "512",
+              "name": "Skin",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-skin-100.png"
+            },
+            {
+              "id": "513",
+              "name": "Eye",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-eye-90.png"
+            },
+            {
+              "id": "514",
+              "name": "Ear",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-hearing-100.png"
+            },
+            {
+              "id": "515",
+              "name": "Extremity",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-contact-78.png"
+            },
+            {
+              "id": "532",
+              "name": "Arm",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "533",
+              "name": "Leg",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "534",
+              "name": "Ankle",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-ankle-100.png"
+            },
+            {
+              "id": "535",
+              "name": "Neck",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "536",
+              "name": "Chest",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "537",
+              "name": "Hamstring",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "538",
+              "name": "Groin",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "539",
+              "name": "Bicep",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "540",
+              "name": "Oblique",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "541",
+              "name": "Achilles",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "542",
+              "name": "Foot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-ankle-100.png"
+            },
+            {
+              "id": "543",
+              "name": "Finger",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "544",
+              "name": "Wrist",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "545",
+              "name": "Knee",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "560",
+              "name": "Foot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "386",
+          "name": "Juice",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-orange-juice-100.png",
+          "created_at": "2022-02-14 04:52:19",
+          "updated_at": "2022-02-14 04:52:19",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "517",
+          "name": "Meals",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-tableware-100.png",
+          "created_at": "2023-01-23 07:29:09",
+          "updated_at": "2023-01-23 07:29:09",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "565",
+              "name": "Breakfast",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-coffee-cup-90.png"
+            },
+            {
+              "id": "566",
+              "name": "Lunch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "567",
+              "name": "Dinner",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "568",
+              "name": "Fast Food",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cheeseburger-90.png"
+            },
+            {
+              "id": "569",
+              "name": "Snack",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-potato-chips-100.png"
+            }
+          ]
+        },
+        {
+          "id": "501",
+          "name": "Medication",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-hand-with-a-pill-100.png",
+          "created_at": "2022-09-13 01:20:13",
+          "updated_at": "2022-09-13 01:20:13",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "565",
+              "name": "Breakfast",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-coffee-cup-90.png"
+            },
+            {
+              "id": "566",
+              "name": "Lunch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "567",
+              "name": "Dinner",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "568",
+              "name": "Fast Food",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cheeseburger-90.png"
+            },
+            {
+              "id": "569",
+              "name": "Snack",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-potato-chips-100.png"
+            },
+            {
+              "id": "528",
+              "name": "1st Dose",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "529",
+              "name": "2nd Dost",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "530",
+              "name": "3rd Dose",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "531",
+              "name": "4th Dose",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "496",
+          "name": "Menstruation ",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-drop-of-blood-100.png",
+          "created_at": "2022-02-20 08:22:28",
+          "updated_at": "2022-02-20 08:22:28",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "503",
+          "name": "Panic Attack",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-shaking-100.png",
+          "created_at": "2022-11-22 04:44:06",
+          "updated_at": "2022-11-22 04:44:06",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "500",
+          "name": "Probiotics ",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-probiotics-64.png",
+          "created_at": "2022-09-13 01:13:58",
+          "updated_at": "2022-09-13 01:13:58",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "355",
+          "name": "Sick",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/Sick1.png",
+          "created_at": "2021-07-19 02:55:33",
+          "updated_at": "2021-07-19 02:55:33",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "328",
+              "name": "Cold",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "329",
+              "name": "Flu",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "330",
+              "name": "Aches",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "474",
+              "name": "Diarrhea",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "516",
+              "name": "Virus",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "517",
+              "name": "Cough",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "546",
+              "name": "Soar Throat",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "385",
+          "name": "Smoking",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-smoking-100.png",
+          "created_at": "2022-02-09 08:23:22",
+          "updated_at": "2022-02-09 08:23:22",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "506",
+          "name": "Sobriety",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-no-alcohol-90.png",
+          "created_at": "2023-01-04 03:37:45",
+          "updated_at": "2023-01-04 03:37:45",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "520",
+          "name": "Sunlight",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-field-100.png",
+          "created_at": "2023-02-28 05:05:14",
+          "updated_at": "2023-02-28 05:05:14",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "522",
+          "name": "Tinnitus",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-hearing-100.png",
+          "created_at": "2023-03-01 04:06:45",
+          "updated_at": "2023-03-01 04:06:45",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "328",
+          "name": "Vaccine Shot",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_syringe_50px.png",
+          "created_at": "2021-04-30 19:39:24.442472",
+          "updated_at": "2021-04-30 19:41:01.110705",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "445",
+              "name": "COVID-19 #1",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "446",
+              "name": "COVID-19 #2",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "447",
+              "name": "COVID-19 Booster",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "499",
+          "name": "Vitamins",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-pills-60.png",
+          "created_at": "2022-06-17 05:51:49",
+          "updated_at": "2022-06-17 05:51:49",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "445",
+              "name": "COVID-19 #1",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "446",
+              "name": "COVID-19 #2",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "447",
+              "name": "COVID-19 Booster",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "604",
+              "name": "C",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "605",
+              "name": "D3",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "606",
+              "name": "Omega-3",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "607",
+              "name": "A",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "608",
+              "name": "B-12",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "609",
+              "name": "Co-Q10",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "610",
+              "name": "Calcium",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "611",
+              "name": "Magnesium",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "502",
+          "name": "Water",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-bottle-of-water-100.png",
+          "created_at": "2022-09-13 01:23:19",
+          "updated_at": "2022-09-13 01:23:19",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "371",
+          "name": "Weight",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-weighing-100.png",
+          "created_at": "2021-10-24 03:55:29",
+          "updated_at": "2021-10-24 03:55:29",
+          "category_id": "6",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        }
+      ]
+    },
+    {
+      "id": "12",
+      "name": "Experiences",
+      "category_type": "0",
+      "color": "#8e44ad",
+      "created_at": "2021-03-25 20:07:07.583607",
+      "updated_at": "2021-04-27 13:48:21.718747",
+      "cat_key": "experiences",
+      "image": "map-marker",
+      "order_by": "5",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/vacation.png",
+      "activity": [
+        {
+          "id": "507",
+          "name": "Camping",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_campfire_50px.png",
+          "created_at": "2020-04-09 14:37:27.185348",
+          "updated_at": "2020-08-29 15:01:48.083209",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "508",
+          "name": "Car",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-car-90.png",
+          "created_at": "2022-02-20 08:34:44",
+          "updated_at": "2022-02-20 08:34:44",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "510",
+          "name": "Club",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-dj-100.png",
+          "created_at": "2022-03-08 04:55:45",
+          "updated_at": "2022-03-08 04:55:45",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "510",
+              "name": "Dayclub",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "511",
+              "name": "Nightclub",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "83",
+          "name": "Concert",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_concert_50px.png",
+          "created_at": "2019-08-15 10:28:08.891754",
+          "updated_at": "2021-03-31 01:58:35.578735",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "510",
+              "name": "Dayclub",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "511",
+              "name": "Nightclub",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "526",
+              "name": "Festival",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "514",
+          "name": "Dirt Bike",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-dirt-bike-100.png",
+          "created_at": "2022-07-27 03:49:07",
+          "updated_at": "2022-07-27 03:49:07",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "372",
+          "name": "Dog Sledding",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_sled_50px.png",
+          "created_at": "2021-11-11 05:56:20",
+          "updated_at": "2021-11-11 05:56:20",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "533",
+          "name": "Family Outing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-family-100.png",
+          "created_at": "2024-02-13 09:59:20",
+          "updated_at": "2024-02-13 09:59:20",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "513",
+          "name": "Hot Springs",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-hot-springs-90.png",
+          "created_at": "2022-04-21 07:24:14",
+          "updated_at": "2022-04-21 07:24:14",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "322",
+          "name": "Movie",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-popcorn-100.png",
+          "created_at": "2021-04-01 13:57:35.640742",
+          "updated_at": "2021-04-01 13:57:35.640742",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "509",
+          "name": "Paragliding",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-paragliding-100.png",
+          "created_at": "2022-02-20 08:37:17",
+          "updated_at": "2022-02-20 08:37:17",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "515",
+          "name": "River Tubing",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_canoe_50px_11.png",
+          "created_at": "2022-08-08 06:07:25",
+          "updated_at": "2022-08-08 06:07:25",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "95",
+          "name": "Sporting Event",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-performance-100.png",
+          "created_at": "2019-08-28 18:39:20.144899",
+          "updated_at": "2021-04-01 02:07:22.88042",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "448",
+              "name": "MLB",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "449",
+              "name": "NFL",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "450",
+              "name": "NBA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "451",
+              "name": "NHL",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "452",
+              "name": "NCAAF",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "453",
+              "name": "NCAAB",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "454",
+              "name": "WNBA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "455",
+              "name": "MLS",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "456",
+              "name": "NASCAR",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "457",
+              "name": "Soccer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "458",
+              "name": "Golf",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "459",
+              "name": "MMA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "460",
+              "name": "WWE",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "461",
+              "name": "X Games",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "462",
+              "name": "Olympics",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "463",
+              "name": "Boxing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "353",
+          "name": "Vacation",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/vacation.png",
+          "created_at": "2021-07-19 02:50:45",
+          "updated_at": "2021-07-19 02:50:45",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "1",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "448",
+              "name": "MLB",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "449",
+              "name": "NFL",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "450",
+              "name": "NBA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "451",
+              "name": "NHL",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "452",
+              "name": "NCAAF",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "453",
+              "name": "NCAAB",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "454",
+              "name": "WNBA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "455",
+              "name": "MLS",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "456",
+              "name": "NASCAR",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "457",
+              "name": "Soccer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "458",
+              "name": "Golf",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "459",
+              "name": "MMA",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "460",
+              "name": "WWE",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "461",
+              "name": "X Games",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "462",
+              "name": "Olympics",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "463",
+              "name": "Boxing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "323",
+              "name": "City",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-city-50.png"
+            },
+            {
+              "id": "324",
+              "name": "Beach",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/vacation.png"
+            },
+            {
+              "id": "325",
+              "name": "Mountains",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-mountain-50.png"
+            },
+            {
+              "id": "326",
+              "name": "Backcountry",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-trail-100.png"
+            },
+            {
+              "id": "327",
+              "name": "Desert",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-western-100.png"
+            },
+            {
+              "id": "433",
+              "name": "Countryside",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-field-100.png"
+            },
+            {
+              "id": "434",
+              "name": "Lake",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-lake-50.png"
+            },
+            {
+              "id": "435",
+              "name": "Roadtrip",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-car-roof-box-100.png"
+            },
+            {
+              "id": "436",
+              "name": "Travel",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "437",
+              "name": "Cruise",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cruise-ship-50.png"
+            },
+            {
+              "id": "465",
+              "name": "National Park",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-national-park-100.png"
+            },
+            {
+              "id": "527",
+              "name": "Sailing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "512",
+          "name": "Wedding",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-wedding-cake-64.png",
+          "created_at": "2022-04-13 06:03:26",
+          "updated_at": "2022-04-13 06:03:26",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "365",
+          "name": "Whitewater Rafting",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_canoe_50px_11.png",
+          "created_at": "2021-10-06 03:41:00",
+          "updated_at": "2021-10-06 03:41:00",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "511",
+          "name": "Zip Lining",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-zipline-100.png",
+          "created_at": "2022-04-13 05:49:48",
+          "updated_at": "2022-04-13 05:49:48",
+          "category_id": "12",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Others",
+      "category_type": "0",
+      "color": "#ff6d00",
+      "created_at": "2019-08-15 10:28:08.563537",
+      "updated_at": "2021-03-30 02:28:29.697955",
+      "cat_key": "others",
+      "image": "cog",
+      "order_by": "6",
+      "icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-infinite-50.png",
+      "activity": [
+        {
+          "id": "489",
+          "name": "Breast Feeding ",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-breast-100.png",
+          "created_at": "2022-04-13 07:43:46",
+          "updated_at": "2022-04-13 07:43:46",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "96",
+          "name": "Business Trip",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/logly_ic_business_trip.png",
+          "created_at": "2019-09-02 14:30:31.398563",
+          "updated_at": "2019-09-30 08:51:35.374175",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "111",
+          "name": "Camping",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_campfire_50px.png",
+          "created_at": "2020-04-09 14:37:27.185348",
+          "updated_at": "2020-08-29 15:01:48.083209",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "382",
+          "name": "Chores",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-dirty-dishes-100.png",
+          "created_at": "2022-02-04 03:28:25",
+          "updated_at": "2022-02-04 03:28:25",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "547",
+              "name": "Cleaning",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "548",
+              "name": "Mowing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "549",
+              "name": "Dusting",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "550",
+              "name": "Laundry",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "551",
+              "name": "Yard Work",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "552",
+              "name": "Storage",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "485",
+          "name": "Cooking",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-fry-100.png",
+          "created_at": "2022-02-15 03:06:24",
+          "updated_at": "2022-02-15 03:06:24",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "103",
+          "name": "Date",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-two-hearts-100.png",
+          "created_at": "2019-12-07 00:35:39.574443",
+          "updated_at": "2020-01-17 10:49:46.636444",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "105",
+          "name": "Drinks",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_champagne_50px.png",
+          "created_at": "2019-12-21 17:02:45.014242",
+          "updated_at": "2021-03-22 10:44:55.369941",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "518",
+              "name": "Alcohol",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "519",
+              "name": "Beer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "520",
+              "name": "Wine",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "521",
+              "name": "Liquor",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "522",
+              "name": "Cocktails",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "490",
+          "name": "Errands",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cash-register-90.png",
+          "created_at": "2023-01-11 02:57:27",
+          "updated_at": "2023-01-11 02:57:27",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "384",
+          "name": "Expences",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-general-ledger-100.png",
+          "created_at": "2022-02-09 08:18:10",
+          "updated_at": "2022-02-09 08:18:10",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "519",
+          "name": "Friends",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-friends-100.png",
+          "created_at": "2023-02-15 02:02:19",
+          "updated_at": "2023-02-15 02:02:19",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "375",
+          "name": "Gaming",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-nintendo-switch-pro-controller-100.png",
+          "created_at": "2022-01-03 07:24:40",
+          "updated_at": "2022-01-03 07:24:40",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "570",
+              "name": "Fortnite",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "571",
+              "name": "Call of Duty",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "572",
+              "name": "League of Legends",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "573",
+              "name": "Minecraft",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "574",
+              "name": "Grand Theft Auto",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "575",
+              "name": "Roblox",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "576",
+              "name": "Overwatch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "488",
+          "name": "Gardening",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-garden-100.png",
+          "created_at": "2022-02-20 08:21:46",
+          "updated_at": "2022-02-20 08:21:46",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "487",
+          "name": "Lawn Care",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-lawn-mower-100.png",
+          "created_at": "2022-02-20 08:21:32",
+          "updated_at": "2022-02-20 08:21:32",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "504",
+              "name": "Mowing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-lawn-mower-100.png"
+            }
+          ]
+        },
+        {
+          "id": "383",
+          "name": "Life Event",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-event-64.png",
+          "created_at": "2022-02-09 08:02:48",
+          "updated_at": "2022-02-09 08:02:48",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "504",
+              "name": "Mowing",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-lawn-mower-100.png"
+            },
+            {
+              "id": "499",
+              "name": "Car",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-car-90.png"
+            },
+            {
+              "id": "500",
+              "name": "House",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-house-with-a-garden-100.png"
+            },
+            {
+              "id": "501",
+              "name": "Moving",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-truck-100.png"
+            },
+            {
+              "id": "523",
+              "name": "Engagement",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "524",
+              "name": "Marriage ",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "525",
+              "name": "Divorce",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "486",
+          "name": "Other",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-infinite-50.png",
+          "created_at": "2022-02-17 02:23:58",
+          "updated_at": "2022-02-17 02:23:58",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "115",
+          "name": "Party\/ Gathering",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_party_50px.png",
+          "created_at": "2020-08-29 14:58:04.971291",
+          "updated_at": "2021-03-24 15:26:20.485567",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "529",
+          "name": "Phone",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-iphone-14-pro-100.png",
+          "created_at": "2023-04-01 06:34:59",
+          "updated_at": "2023-04-01 06:34:59",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "102",
+          "name": "Restaurant",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-tableware-100.png",
+          "created_at": "2019-12-07 00:35:03.465728",
+          "updated_at": "2021-03-24 15:26:20.774594",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "466",
+              "name": "Breakfast",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "467",
+              "name": "Brunch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "468",
+              "name": "Lunch",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "469",
+              "name": "Dinner",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "470",
+              "name": "Celebration",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "120",
+          "name": "Sex",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8_make_love_50px.png",
+          "created_at": "2020-09-18 15:40:22.243597",
+          "updated_at": "2021-03-31 07:53:12.723608",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "531",
+          "name": "Shopping",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-cash-register-90.png",
+          "created_at": "2024-01-06 10:36:37",
+          "updated_at": "2024-01-06 10:36:37",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "617",
+              "name": "Costco",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "618",
+              "name": "Walmart",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "619",
+              "name": "Target",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "620",
+              "name": "Aldi",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "621",
+              "name": "Sam's Club",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "622",
+              "name": "Mall",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "623",
+              "name": "Dick's Sporting Goods",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "624",
+              "name": "Best Buy",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "625",
+              "name": "Michael's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "626",
+              "name": "Amazon",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "627",
+              "name": "Home Depot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "628",
+              "name": "Lowe's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "629",
+              "name": "Meijer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "630",
+              "name": "Kroger",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "524",
+          "name": "Streaming",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-retro-tv-100.png",
+          "created_at": "2023-04-01 06:14:31",
+          "updated_at": "2023-04-01 06:14:31",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "617",
+              "name": "Costco",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "618",
+              "name": "Walmart",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "619",
+              "name": "Target",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "620",
+              "name": "Aldi",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "621",
+              "name": "Sam's Club",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "622",
+              "name": "Mall",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "623",
+              "name": "Dick's Sporting Goods",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "624",
+              "name": "Best Buy",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "625",
+              "name": "Michael's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "626",
+              "name": "Amazon",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "627",
+              "name": "Home Depot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "628",
+              "name": "Lowe's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "629",
+              "name": "Meijer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "630",
+              "name": "Kroger",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "578",
+              "name": "YouTube",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "579",
+              "name": "Netflix",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "580",
+              "name": "Hulu",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "581",
+              "name": "Disney+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "582",
+              "name": "Paramount+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "583",
+              "name": "Apple TV+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "584",
+              "name": "Amazon Prime",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "585",
+              "name": "HBO",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "526",
+          "name": "Stress \/ Anxiety",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-anxiety-100.png",
+          "created_at": "2023-04-01 06:22:06",
+          "updated_at": "2023-04-01 06:22:06",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": [
+            {
+              "id": "617",
+              "name": "Costco",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "618",
+              "name": "Walmart",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "619",
+              "name": "Target",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "620",
+              "name": "Aldi",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "621",
+              "name": "Sam's Club",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "622",
+              "name": "Mall",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "623",
+              "name": "Dick's Sporting Goods",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "624",
+              "name": "Best Buy",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "625",
+              "name": "Michael's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "626",
+              "name": "Amazon",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "627",
+              "name": "Home Depot",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "628",
+              "name": "Lowe's",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "629",
+              "name": "Meijer",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "630",
+              "name": "Kroger",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "578",
+              "name": "YouTube",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "579",
+              "name": "Netflix",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "580",
+              "name": "Hulu",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "581",
+              "name": "Disney+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "582",
+              "name": "Paramount+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "583",
+              "name": "Apple TV+",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "584",
+              "name": "Amazon Prime",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "585",
+              "name": "HBO",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "586",
+              "name": "Low",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "587",
+              "name": "Medium",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "588",
+              "name": "High",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            },
+            {
+              "id": "589",
+              "name": "Extreme",
+              "subactivity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/no-image.png"
+            }
+          ]
+        },
+        {
+          "id": "356",
+          "name": "Testandroid",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-ballet-dancer-50.png",
+          "created_at": "2021-07-20 04:40:52",
+          "updated_at": "2021-07-20 04:40:52",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "536",
+          "name": "Water Plants",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/icons8-basil-100.png",
+          "created_at": "2024-02-24 02:36:51",
+          "updated_at": "2024-02-24 02:36:51",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "491",
+          "name": "Work",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/logly_ic_business_trip.png",
+          "created_at": "2023-01-11 02:59:49",
+          "updated_at": "2023-01-11 02:59:49",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        },
+        {
+          "id": "119",
+          "name": "Work Travel",
+          "activity_icon": "https:\/\/loglyimages.s3.us-east-2.amazonaws.com\/logly_ic_business_trip.png",
+          "created_at": "2020-09-18 15:40:15.957109",
+          "updated_at": "2021-03-31 13:24:59.239549",
+          "category_id": "4",
+          "favorite_activity": 0,
+          "most_popular": "0",
+          "activity_is_hidden": "False",
+          "subactivity": []
+        }
+      ]
+    }
+  ]
+}

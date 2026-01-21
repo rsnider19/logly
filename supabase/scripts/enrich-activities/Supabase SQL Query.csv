@@ -1,0 +1,201 @@
+activity_id,name,string_agg
+e678bea2-53e4-53f0-b29e-41df0315816e,Floss,null
+20f197d8-38e9-562b-ad1d-0ae6d2304963,Calisthenics,null
+29e948ba-6a22-5712-b0a1-5dc2971fb84f,Prayer,null
+e608ee38-c8ca-5384-bd0f-54a32ddfafd5,Hula Hoop,Smart Hoop
+8ca4de14-b3b3-5556-b1a9-7572068c1d7c,Smoking,null
+8a0ea615-9f6c-5f96-a916-1a112329d279,Drinks,"Alcohol, Beer, Wine, Liquor, Cocktails"
+f38a79f1-495c-5e42-a661-646e80d9acf3,Water Plants,null
+deb94022-33d7-5020-aa86-ca2efc86aa23,Surfing,null
+0ede326d-522d-53f5-ae0e-7540b0816e77,Boxing,"POW!, TITLE Boxing, 9Round Fitness, UFC Gym, Rumble, Shadowbox, Body Shot"
+50518eae-1753-50d8-89eb-62f4e2991503,Meals,"Breakfast, Lunch, Dinner, Fast Food, Snack"
+1281a1f8-c2b1-5d30-994d-2ba35d3fae3d,Menstruation,null
+22a91a4a-61b8-5686-b0a5-aaf5f7b265a4,Climbing,null
+dd424672-11e2-5f5a-a695-f84ecdb17251,Water Fitness,null
+127162ea-ed94-53a4-a356-e775ca07c159,Date,null
+cf89ab22-afb6-5750-8896-4f4edc2d7d16,Therapy,null
+d9e31dca-a449-5cfd-854a-52ceeaa328ae,Vitamins,"C, D3, Omega-3, A, B-12, Co-Q10, Calcium, Magnesium"
+13d13031-dffb-5e15-87dc-1e842435b1a5,Barre,"Barre, barre3, Pure Barre, Barre Forte"
+ed9e0e06-9618-5649-8435-9fea1c970a16,Ultimate Frisbee,null
+f20ef3f5-aebe-5045-a1da-c2cf7846f7c4,Expences,null
+1b5f4957-2ddd-5436-ad72-f6f6361f2762,Cleanse,"Fasting, Food Restriction, Liver Cleanse, Juice Cleanse, Total Cleanse, Master Cleanse, Colon Cleanse, Parasite Cleanse, Foot Detox, Nasal Irrigation, Oxygen Detox"
+e04490ea-83ff-5bfc-bf51-268a98dcb88c,Work Travel,null
+85e20d41-12d7-5e78-8ea7-d4c705e8ec4d,Snowshoeing,null
+1a359ccd-a5d2-57fc-8dc1-91a57bcb7009,Scuba Diving,null
+a67e680e-460a-5941-9fa8-56bf5a2ebce6,Weight Lifting,"Arms, Back, Biceps, Chest, Core, Full Body, Legs, Shoulders, Triceps, Upper Body, Lower Body, Deadlift"
+6f64bdd9-4325-555f-bb04-5971164a883d,Swim,null
+139073e1-66d0-5e84-b5f8-016bb4b930cd,Breathing,null
+c86bc0da-4ef1-5d35-8daf-7564339102cf,Shopping,"Costco, Walmart, Target, Aldi, Sam's Club, Mall, Dick's Sporting Goods, Best Buy, Michael's, Amazon, Home Depot, Lowe's, Meijer, Kroger"
+50e07fb4-e6bb-5193-b70b-db56b94e1a3c,Skating,"Skateboarding, Roller Blading, Ice Skating"
+92e0fba6-25a8-5fe9-b559-ada7972421c4,Juice,null
+2d1e0bcd-10fb-56d5-a37c-065535d6b695,At-Home,"Push-ups, Sit-ups, Planks, Squats, Lunges, Dumbells, Burpees, Wall Sits, Step-ups, Pull-ups, Dips, Supermans, Hip Raises, Crunches, Twists, Bicycle Crunch, Core, Legs, Arms, Chest, Shoulders, Back, Biceps, Supermans"
+5ca919b2-5b4d-59c5-ba55-fd509a9bdef0,Stairs,"StairMaster, Outdoor Stairs, Stadium Stairs, Stair Stepper, Building Steps, Technogym"
+2e77d69c-7cdf-5092-b422-c8cef2f5657e,Testandroid,null
+100cbd92-331c-5a05-a9f2-428e9cabc4b5,Injury,"Arm, Leg, Ankle, Neck, Chest, Hamstring, Groin, Bicep, Oblique, Achilles, Foot, Finger, Wrist, Knee, Foot"
+68147d7a-a4d5-5970-a71a-04e4067577d1,Family Outing,null
+81854450-6c8a-5b99-8ed1-b90124b0cb85,Kegels,null
+3f31c095-2179-5cbe-925e-bc1f4f2d597f,Bowel Movement,null
+0565bdfc-51a5-54df-b83c-fb2baf12a305,Motocross,null
+370dc58b-3eb5-5f50-a1e3-36a14e563576,Strength Training,"Bracey Performance, Yoga 2.0, Duality, Tonal"
+881d88f7-d2ef-56a6-9022-9603eaeb31fc,Red Light Therapy,null
+0898b4a2-fa32-544a-b5ca-eb87ac0d675a,Football,null
+0b43c0a1-9849-5f47-b11e-2f2aed897e49,Run,"Base, Progression, Fartlck, Interval, Sprints, Hills, Treadmill, Trail"
+d30c2ded-d48d-5e0e-bee1-80244f8b193d,Barbell,null
+c67f6787-3818-52f1-8094-49f25135337b,Track & Field,null
+a3b4e90d-6e1f-57e0-befd-95303617441b,Breast Feeding,null
+4f013de6-b34e-5824-a36d-12c40a53a51d,Other,null
+b57cf1ea-e4f4-5371-b6b5-cda5502fb173,Sleep,null
+52ce9f13-395b-5a7a-86ac-12c8c4f32dd3,Nails,"Manicure, Pedicure"
+a1629b84-7e9d-5969-a5d6-2748be284a7e,Party/ Gathering,null
+d3b5f485-9578-53b7-ac97-b5fb3df43bc7,MAT Session,null
+88e81fb1-3384-5dc8-9163-d6cb4f6f85b4,Panic Attack,null
+c5a630d8-c585-5c19-bbc7-604dbcb74334,Reading,null
+45f7c242-baab-5cba-be1c-8d96ea98a471,Elliptical,null
+e8791fb3-bbcc-57e6-8371-b8d1eff192fa,Skiing,null
+8d14b250-6fbd-53dc-960f-1d6830344ac9,Dirt Bike,null
+fdc943fb-b2db-50f9-9622-97f61072cc50,Kickbox,null
+c7c06888-4e15-5512-8d1e-309adf04d6b3,Phone,null
+e4412705-dbf1-5726-8dcc-2962cc4c7b9a,Work,null
+29e017a0-fc34-50bc-97bb-197d2a720238,Eating Journal,null
+68e96e11-96c8-5cc2-b8b0-9a4529fdfe98,Cross Training,null
+efbdbb4f-71e0-5e1b-b0eb-5d706cbcea36,Soccer,null
+16871b7e-1810-5859-9cdd-5b5ac919cc21,Physical,null
+c59adbe5-0222-5af3-8f6e-73c490a498ec,Medication,"1st Dose, 2nd Dost, 3rd Dose, 4th Dose"
+8e0dc783-93a1-57dc-b736-4094b4e11611,Vacation,"City, Beach, Mountains, Backcountry, Desert, Countryside, Lake, Roadtrip, Travel, Cruise, National Park, Sailing"
+9beceaf3-046c-5d31-8a4a-6382672707eb,Spray Tan,null
+60fb715e-7e98-5e08-9da6-04f7c182fd1f,Sick,"Cold, Flu, Aches, Diarrhea, Virus, Cough, Soar Throat"
+761cee39-9bea-5f2a-81ff-909e722d54e5,Hydrotherapy,"Hot Tub, Cold Plunge, Ice Bath, Jacuzzi, Steam, Sauna"
+a199cbf9-418e-5ea0-9d3e-90a3a87a566d,Vaccine Shot,"COVID-19 #1, COVID-19 #2, COVID-19 Booster"
+e07eaa92-24a1-540f-80ec-44c07257f6df,Car,null
+e9e5d45a-1e33-5803-8614-ee2dd87ce8f2,Table Tennis,null
+7b5ade87-ec83-5cbb-8567-9ea0440edee7,Whitewater Rafting,null
+333f4d52-e05c-5aed-a009-43fdc73b4758,Business Trip,null
+d265fab5-6985-5f20-8449-95f26857da33,Blood Work,null
+853d261e-06e3-5385-8b2a-bc74b23da400,Devotional,null
+182a8a16-1618-51a4-86b8-c5481f52f787,Curling,null
+d1376acf-b83a-50b7-a520-a6c90dcdecfd,Study,"Finance, Math, History, Physics, Language, Geology, Engineering, Psychology, Architecture, Science, Biology, Art, Business, Music, Nursing, Statistics, Politics, Education, Aviation, Public Relations, Journalism, Economics, Chemistry, Environmental"
+447ba779-1f8b-5f16-918e-77fd8b67f356,PNF Stretching,null
+a42c4d0a-dd38-5fa0-acd3-7692f4f8388a,Fencing,null
+6c2d570c-bc8d-58e4-8aa0-e2a13f505e5f,Tinnitus,null
+7d8c6ded-8ea9-5f14-bcf5-308f45335d5c,Zip Lining,null
+ddf32b33-d9ae-5b87-95f2-0a0c67f87c64,Wrestling,null
+8aacc13b-574f-5b50-9d7a-63c1b6d79377,Disc Golf,"9 Holes, 18 Holes"
+824d20db-cc0f-507d-9838-962633f460c2,Cardio (Mixed),null
+44dea516-7df1-5636-b5f4-c5ffb8c033d7,Stress / Anxiety,"Low, Medium, High, Extreme"
+100073e3-fcb1-5cc9-9598-7f3dd859758d,Dance,null
+fbc2ee1c-6939-558f-a080-624876e7b567,Lawn Care,Mowing
+9e0e7ce1-c99d-517a-b6b5-e081be2d2222,Wheezing,null
+396d1850-fcf8-59fe-93fe-85b5b8dc8dc5,Hockey,null
+34f79cb7-d444-56df-a1af-13e4a0b7220d,River Tubing,null
+925a01b6-d9c1-5908-bdd1-6b460f414db5,CrossFit,null
+ccbdf98f-cddb-5242-a68b-ce69fc0880c8,Stretching,null
+f1da5f9b-e9f3-5dd8-a371-c17b21b51e33,TV,null
+3beadadb-24d8-5391-a7be-9b882467cbd3,Gaming,"Fortnite, Call of Duty, League of Legends, Minecraft, Grand Theft Auto, Roblox, Overwatch"
+2b1ab2d6-641d-57e3-a2d4-bc3ab26a9b68,Handball,null
+6e0d91f2-49dd-5018-896f-681a212cd475,HIIT,"Fitwall, Orangetheory, F45, Fit36, Tabata, SWEAT, Barry's, Duality, HASfit, Alchemy365"
+6a258edd-c7c1-594d-9794-e5ffb6cf93be,Coaching,null
+a308068e-8f1e-5528-b1de-885a0938484c,Ballet,null
+cd2deb67-060b-513a-a584-5dc329b61681,Meditation,null
+2f51aad2-bc70-58fe-9891-fe06df4cb885,Snowboarding,null
+8e6f6878-926f-545d-a5df-18414e836beb,Karate,"Goju, Shotokan, Wado, Shito"
+30cdb035-f8b9-5a5b-a46b-8afbbe158c3a,Fasting,null
+3efaf8be-0564-551c-ba2b-1d6aacdba0b2,Gardening,null
+852fa3c3-cd2f-5ea8-9d92-569f91c03984,Dentist,null
+104d5448-7afb-5efe-9da6-7b47f11748dc,Streaming,"YouTube, Netflix, Hulu, Disney+, Paramount+, Apple TV+, Amazon Prime, HBO"
+c999708a-9373-5714-856e-87f8f7d12d03,Dog Sledding,null
+ae96404a-d01e-5d4a-a294-ffc8bffac986,Draw,null
+4cc6fd6a-54e3-5490-bbe0-0d315c6127c4,Wedding,null
+06b950be-8a77-5bc1-8524-ad30e5701c0b,Movie,null
+eb709a6c-f4d9-593d-ae83-8c7d62b54708,Dry Needling,null
+ad172d5b-e28b-5e3e-bb6f-46311cd19680,Qi Cong,null
+fafb3063-75ef-5fcb-ad22-39304ac04893,Cryotherapy,null
+00c95925-b8fb-5451-be92-378bd428a20a,Sailing,null
+0b7bddd5-4541-59eb-a0b7-23cf6bcb4d47,Pole Dancing,null
+e6045d0a-17d7-5612-9bd5-700a0753b049,Dentist,null
+7f4c9d8f-91f3-5e0e-8f0c-c63d79e59bec,Yoga,"Ashtanga, Bikram, Iyengar, Jivamukti, Power, Sivananda, Vinyasa, Yin, Hot, CorePower, Yoga 2.0, BIG Power, Yoga Box, DDP Yoga"
+19aca369-c8e0-5046-b343-eae74e1bc383,Canoeing,null
+647223e3-ff67-597d-bea4-6b188ea08872,Walk,"Treadmill, Speed Walking, Casual"
+0c5f4897-609c-59df-b938-8aaa7cc1176d,Equestrian Sports,null
+e01df0d5-76c6-55ed-aec4-e245f62f9300,Life Event,"Car, House, Moving, Engagement, Marriage, Divorce"
+a23b5067-a94c-50f8-a2ba-ab29ec7c3b8d,Moving,null
+e6078694-0a16-5264-b47d-457603aad113,Friends,null
+e69abe3c-4380-5123-b26c-069e08228b8d,Playing Music,"Drums, Piano, Guitar"
+13e3685d-120b-597c-8c59-957d7e5ae0ed,Errands,null
+fb52afcf-8aa0-5932-ab3f-89ad00a967fe,HRV,null
+d9ef5357-3864-5284-ae46-c3fc9b014810,Coffee,null
+e21fe419-ef94-5939-bbe5-d9a6e12b24d7,Chores,"Cleaning, Mowing, Dusting, Laundry, Yard Work, Storage"
+f2a21e75-ae92-56b1-b85b-b342c6de30f1,Facial,null
+14447054-b475-51ba-bb70-d394bccf9044,Pilates,null
+922a95c6-b479-5f44-af44-228d078fe4c5,Pickleball,null
+b3f15391-f1b5-56ae-b1ff-e78495b39ab8,Bath,null
+aef61ca1-0b4a-5b12-aeb0-cb33be521fe2,Planner Work,null
+d6741f30-2a15-57e8-bcbb-c58a913ecb15,Shooting Range,null
+d092d4fc-ea8d-58ca-971e-c5a6c65acee2,Badminton,null
+6b22ab7a-7f9d-5bed-9ff8-d6406809a421,Lacrosse,null
+64993a40-a339-5c17-9674-8cab8c208939,Doctor,null
+1574a40d-17b1-5331-982e-d1c7d808420b,Squash,null
+45da7e21-ae98-57e2-9207-ab7862b658d9,Gymnastics,null
+32bba106-55e2-507a-bd07-59ab3d486847,Crocheting,null
+947de72e-aac4-51b2-b146-408315c09110,Haircut,null
+b0d1e637-4c98-5b36-8eda-46420190dda2,Water Polo,null
+c179cbf7-e7dc-5c61-b468-e3ad7563f2d9,Water,null
+3bee367c-f6b6-5dae-bda4-2e3813ab0ce5,Cricket,null
+c07b4ff9-a962-5267-b41e-5d667d199661,Rugby,null
+3bc8434b-7fcc-5403-b679-f5356116f329,Racquetball,null
+c4fc9dfa-b272-5476-926d-524f4b19964f,Sauna,null
+d8716c0a-ba51-5b49-8bd1-43a601a8b018,Softball,null
+ab7b3e31-0081-513c-87d0-4dd24a19a48c,Volleyball,null
+c3c6b5bf-6fef-588d-a3d4-6af7b0b5e716,Headache,null
+b629d3bc-c943-5a7e-bd8b-030f11a3e507,Kayaking,null
+bce5b280-977d-543f-b56d-20b1e3b3bc2f,Hiking,null
+83b3f160-bb5c-593b-905c-edf1e726c9d8,Camping,null
+0a323c92-e4af-58bd-968b-0c25484c7e6f,Restaurant,"Breakfast, Brunch, Lunch, Dinner, Celebration"
+58859c56-9464-5305-a374-c66656834d1a,Jump Rope,null
+e9f22822-2d8c-56e5-be8a-f749176ac62d,Guitar,null
+ddcd36b7-b90a-59b5-9987-8a64edbef67c,Kettlebell,null
+316fac7f-4c2d-5c44-9c2a-f5a7473311c3,Recovery Workout,null
+6e7bf28d-1dd2-5240-8ce4-a9fa1270047e,Massage,null
+0c932ba7-d9c7-5193-99e9-f62a7aa5cb70,Breath Hold,null
+9dff5baf-ecad-5093-84c8-4833e33c88b2,Chiropractor,null
+9ace621d-e781-5b77-a523-567a24a1c71d,Infection,"Skin, Eye, Ear, Extremity"
+2b484716-d543-5638-9fc2-6def3e388e4f,DIY Project,null
+1bc4d2ee-df42-5f55-ad54-bbee92af6137,Tennis,null
+450bb979-7a8e-569b-b6b7-0ba5fec9ba53,Fishing,null
+fb91ec4e-98f8-53c2-ad4d-1ed44028b015,Club,"Dayclub, Nightclub"
+25cf905e-c111-5e0d-9334-1575341b3925,Sex,null
+03c51603-8b49-5a19-aed1-98b1bf0d8e30,Netball,null
+0db07e3f-6451-5ba1-9e18-c8330fe70098,Hot Springs,null
+63660e96-8384-51b9-b189-df8bcfe0deff,Probiotics,null
+c5945008-4078-5293-8c7f-d9d25da915bb,Bowling,null
+3eb52427-efb7-5e5c-a672-12bbf796b6fb,Archery,null
+176839a2-9c3e-596d-b1b1-4a77ba16f3cf,Church,null
+1bd92b1c-1c91-537c-938e-9a0243bff017,Steam Room,null
+3eef0f92-5b52-580a-a3b5-e9b6399cb1bf,Camping,null
+981aef3f-cf4c-5b6f-88b1-2660ad3dd679,Handstand,null
+fb1ae6ce-63e5-5b31-be56-15bfe56f8f17,Obstacle Course,null
+11a8adb4-16a2-5cfe-9412-f583056b72d1,Cross-Country Skiing,null
+67de7908-6f4c-5a41-a2ba-f1e7a00e73c4,Sunlight,null
+9f2bdd86-8380-5a79-a426-d0c0061b7aca,Weight,null
+606ae6ec-ec20-5362-9d10-79a81bfba3f9,Waxing,null
+815db158-0e6a-5d40-b54f-365cae33cbb5,Rower,null
+8870faea-30d4-52db-9659-8c75a0ba9ce3,Cycling,"Bike, Flywheel, Cycle614, SoulCycle, Peloton, CycleBar, iFit, High Ride, Recumbent"
+527e3c27-bdd5-5df6-8cee-2310ca802366,Nap,null
+b9630dae-233d-52a8-ad5f-9eb3641e8e53,Rest Day,null
+b420c46c-5e91-5171-b308-089d1d068d06,Baseball,null
+4bcdf28d-03db-59e7-b731-e2ed13e4c45d,Journal,null
+45cbe4d6-2b12-53f3-90cc-cd8f5da3442c,Basketball,null
+c9537d01-0d7c-53fa-a9ed-54781075a22d,Golf,"9 Holes, 18 Holes, Scramble, 36 Holes, Best Ball, Driving Range, Match Play, Simulator, 27 Holes"
+07131afc-bdd1-5040-9eef-f636dc56d11b,Core Training,null
+7308b549-abe5-5494-bd55-002c259040cc,Sobriety,null
+420439f2-d1c7-5ec4-a3cb-60bdf40e1376,Skateboarding,null
+0f45c744-2957-54fc-82b7-6ea0dd9fd8a3,Sporting Event,"MLB, NFL, NBA, NHL, NCAAF, NCAAB, WNBA, MLS, NASCAR, Soccer, Golf, MMA, WWE, X Games, Olympics, Boxing"
+6d2a19e6-b3c6-5bf3-b12c-376608bd9162,Physical Therapy,null
+8666c655-8971-53c4-81c9-31d4bb6288bd,Water Skiing,null
+ae9673db-b72e-57cd-a542-74369fc86753,Martial Arts,null
+f04fa7df-b8bc-5307-ab80-7295850e1981,Concert,Festival
+790cddb1-06a7-52fd-ad16-31894f77fe33,Cooking,null
+7d522063-e3ba-5416-bf0c-51dfa16a9757,Paragliding,null
+8e705df7-86e6-53f4-992a-3eb62beecd13,Ski Touring,null
+80625daf-e32d-50d1-8bf7-440522bcfee9,Kickball,null
+f0bf16c1-8419-5a14-ae5b-dc9cc79f8f1e,Hunting,null
+19d30981-bc86-545c-97e4-53d1a3db2313,Climb,"Brooklyn Boulder, First Ascent, Denver Bouldering, Movement Climbing, The Spot Bouldering"

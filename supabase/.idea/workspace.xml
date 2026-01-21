@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="bc870a32-6a92-4260-a766-fc0e7b2c35b4" name="Changes" comment="db driven prompts">
+      <change beforePath="$PROJECT_DIR$/../env/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/../env/.env.development" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/src/utils/providers/gql_client_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/src/utils/providers/gql_client_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../lib/src/utils/providers/supabase_provider.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../lib/src/utils/providers/supabase_provider.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.toml" beforeDir="false" afterPath="$PROJECT_DIR$/config.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions/_utils/requireServiceRole.ts" beforeDir="false" afterPath="$PROJECT_DIR$/functions/_utils/requireServiceRole.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions/_utils/supabaseAdmin.ts" beforeDir="false" afterPath="$PROJECT_DIR$/functions/_utils/supabaseAdmin.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions/ai-insights/agent.ts" beforeDir="false" afterPath="$PROJECT_DIR$/functions/ai-insights/agent.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions/deno.lock" beforeDir="false" afterPath="$PROJECT_DIR$/functions/deno.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/migrations/20251003184113_automatic_embeddings.sql" beforeDir="false" afterPath="$PROJECT_DIR$/migrations/20251003184113_automatic_embeddings.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/seed.sql" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="package.json" />
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="origin/main" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/.." value="activity-date-2" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/Library/Caches/deno/deps/https/deno.land/a4b2166abb996911e764ec0c42385c50a275231ae159670c2c82c006687f2bab" root0="SKIP_INSPECTION" />
+    <setting file="file://$USER_HOME$/Library/Caches/deno/npm/registry.npmjs.org/@supabase/postgrest-js/1.16.1/dist/cjs/PostgrestQueryBuilder.d.ts" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2eA8I2EGE1Bb4eotjq6mFFBCtHo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;HTTP Request.scratch_95 | #1.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript Debug.search-activities.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;deno.use.library&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;revenue-cat&quot;,
+    &quot;js.last.introduce.type&quot;: &quot;CONST&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/robsnider/StudioProjects/logly_app/supabase/functions&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File&quot;: [
+      &quot;TypeScript&quot;,
+      &quot;JSON&quot;,
+      &quot;HTTP Request&quot;,
+      &quot;TEXT&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/functions" />
+      <recent name="$PROJECT_DIR$/scripts/enrich-activities" />
+      <recent name="$PROJECT_DIR$/functions/_utils" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/functions" />
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="HTTP Request.scratch_95 | #1">
+    <configuration name="scratch_95 | #1" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$APPLICATION_CONFIG_DIR$/scratches/scratch_95.http" executionIdentifier="#1" runType="Run single request">
+      <method v="2" />
+    </configuration>
+    <configuration name="search-activities" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://127.0.0.1:54321/functions/v1/search-activities">
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="HTTP Request.scratch_95 | #1" />
+        <item itemvalue="JavaScript Debug.search-activities" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.26053.12" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="bc870a32-6a92-4260-a766-fc0e7b2c35b4" name="Changes" comment="" />
+      <created>1711335938837</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1711335938837</updated>
+      <workItem from="1711335939920" duration="3840000" />
+      <workItem from="1732033872174" duration="78512000" />
+      <workItem from="1745193721303" duration="3875000" />
+      <workItem from="1745249040565" duration="1380000" />
+      <workItem from="1751297910599" duration="17658000" />
+      <workItem from="1760031719858" duration="41720000" />
+      <workItem from="1764604629558" duration="91982000" />
+      <workItem from="1768926674879" duration="6641000" />
+    </task>
+    <task id="LOCAL-00001" summary="wip">
+      <option name="closed" value="true" />
+      <created>1734917642250</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1734917642250</updated>
+    </task>
+    <task id="LOCAL-00002" summary="wip">
+      <option name="closed" value="true" />
+      <created>1734918043389</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734918043389</updated>
+    </task>
+    <task id="LOCAL-00003" summary="wip">
+      <option name="closed" value="true" />
+      <created>1734961541035</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734961541035</updated>
+    </task>
+    <task id="LOCAL-00004" summary="supabase rev cat">
+      <option name="closed" value="true" />
+      <created>1764941524967</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764941524967</updated>
+    </task>
+    <task id="LOCAL-00005" summary="wip">
+      <option name="closed" value="true" />
+      <created>1765572699723</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1765572699724</updated>
+    </task>
+    <task id="LOCAL-00006" summary="wip">
+      <option name="closed" value="true" />
+      <created>1765920618959</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1765920618959</updated>
+    </task>
+    <task id="LOCAL-00007" summary="ai insights from claude">
+      <option name="closed" value="true" />
+      <created>1765992553970</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1765992553970</updated>
+    </task>
+    <task id="LOCAL-00008" summary="missing rev cat fn">
+      <option name="closed" value="true" />
+      <created>1766541180114</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1766541180115</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fix sentry">
+      <option name="closed" value="true" />
+      <created>1766541999530</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1766541999530</updated>
+    </task>
+    <task id="LOCAL-00010" summary="db driven prompts">
+      <option name="closed" value="true" />
+      <created>1766592911033</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1766592911035</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="revenue-cat" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="supabase rev cat" />
+    <MESSAGE value="wip" />
+    <MESSAGE value="ai insights from claude" />
+    <MESSAGE value="missing rev cat fn" />
+    <MESSAGE value="fix sentry" />
+    <MESSAGE value="db driven prompts" />
+    <option name="LAST_COMMIT_MESSAGE" value="db driven prompts" />
+  </component>
+</project>

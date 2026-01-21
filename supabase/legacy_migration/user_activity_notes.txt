@@ -1,0 +1,36 @@
+select
+  id, -- PK
+  user_id, -- FK to users
+  activity_id, -- FK to activities
+  apple_health, -- 0 or 1 if apple health
+  user_activity_profile_id, -- mapping apple health to logly activities
+  activity_name, -- apple health
+  category_id, -- FK to categories (workouts, sports, etc)
+  streak, -- IGNORE always true
+  created_at,
+  updated_at,
+  distance,
+  distanceUnit, -- '' or mi, prolly from apple health
+  measurement_id, -- FK to measurements (mi, km, etc)
+  duration,
+  environment_id, -- IGNORE always null
+  comment,
+  title, -- IGNORE always null
+  pace, -- IGNORE
+  pace_x, -- IGNORE
+  pace_y, -- IGNORE
+  pace_unit_x, -- IGNORE
+  pace_unit_y, -- IGNORE
+  classification_id, -- FK to classifications (indoor, outdoor)
+  step_count, -- int value detail
+  calories, -- from apple health
+  location, -- location name from Google
+  is_hidden, -- ignore always null
+  sub_activity, -- csv of sub-activities
+  name_override,
+  latitude, -- if location is granted
+  longitude, -- if location is granted
+  start_date, -- apple health
+  end_date, -- apple health
+  is_deleted
+from user_activities ua
