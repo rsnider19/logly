@@ -175,9 +175,9 @@ Future<void> requestAccountDeletion() async {
 
 ### Integration Tests
 
-- [ ] Full sign-in flow with mock providers
-- [ ] Sign-out clears all local data
-- [ ] Route guards redirect correctly
+- [x] Full sign-in flow with mock providers
+- [x] Sign-out clears all local data
+- [x] Route guards redirect correctly
 
 ## Success Criteria
 
