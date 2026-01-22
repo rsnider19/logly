@@ -8,20 +8,20 @@ The core module provides foundational infrastructure that all other features dep
 
 ### Functional Requirements
 
-- [ ] Configure Supabase client with environment-specific credentials
-- [ ] Support three flavors: development, staging, production
-- [ ] Establish base patterns for Freezed domain models
-- [ ] Implement repository pattern for data access
-- [ ] Implement service pattern for business logic
-- [ ] Configure GoRouter with route guards
-- [ ] Set up Drift for local SQLite caching
+- [x] Configure Supabase client with environment-specific credentials
+- [x] Support three flavors: development, staging, production
+- [x] Establish base patterns for Freezed domain models
+- [x] Implement repository pattern for data access
+- [x] Implement service pattern for business logic
+- [x] Configure GoRouter with route guards
+- [x] Set up Drift for local SQLite caching
 - [ ] Implement activity_date migration support
 
 ### Non-Functional Requirements
 
-- [ ] Environment variables must not be committed to source control
-- [ ] All sensitive data must be loaded from `.env` files
-- [ ] Local cache must support offline read operations
+- [x] Environment variables must not be committed to source control
+- [x] All sensitive data must be loaded from `.env` files
+- [x] Local cache must support offline read operations
 - [ ] Navigation must support deep linking
 
 ## Architecture
@@ -222,21 +222,21 @@ await Supabase.initialize(
 
 ### Unit Tests
 
-- [ ] EnvService loads correct environment variables
-- [ ] Logger service formats messages correctly
-- [ ] Date utils handle timezone conversions
+- [x] EnvService loads correct environment variables
+- [x] Logger service formats messages correctly
+- [x] Date utils handle timezone conversions
 
 ### Integration Tests
 
-- [ ] Supabase client connects successfully
-- [ ] Drift database creates and migrates correctly
-- [ ] GoRouter navigates between routes
+- [x] Supabase client connects successfully
+- [x] Drift database creates and migrates correctly
+- [x] GoRouter navigates between routes
 
 ## Success Criteria
 
-- [ ] All three flavors can be built and run
-- [ ] Supabase client initializes without errors
-- [ ] Drift database creates schema on first launch
-- [ ] GoRouter handles all defined routes
+- [x] All three flavors can be built and run
+- [x] Supabase client initializes without errors
+- [x] Drift database creates schema on first launch
+- [x] GoRouter handles all defined routes
 - [ ] Offline mode detected and indicated to user
-- [ ] All base patterns documented and followed consistently
+- [x] All base patterns documented and followed consistently

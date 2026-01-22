@@ -8,20 +8,20 @@ The activity catalog manages the master list of activities users can log. Activi
 
 ### Functional Requirements
 
-- [ ] Load all activity categories from database
-- [ ] Load activities by category
-- [ ] Load subactivities for each activity
-- [ ] Load activity detail configurations
-- [ ] Search activities with semantic + FTS hybrid search
-- [ ] Get popular activities for onboarding/favorites
+- [x] Load all activity categories from database
+- [x] Load activities by category
+- [x] Load subactivities for each activity
+- [x] Load activity detail configurations
+- [x] Search activities with semantic + FTS hybrid search
+- [x] Get popular activities for onboarding/favorites
 - [ ] Create custom activities (premium feature)
-- [ ] Cache activities locally for offline access
+- [x] Cache activities locally for offline access
 
 ### Non-Functional Requirements
 
 - [ ] Initial catalog load must complete within 2 seconds
 - [ ] Search results must appear within 500ms
-- [ ] Categories and activities must be available offline
+- [x] Categories and activities must be available offline
 
 ## Architecture
 
@@ -239,11 +239,11 @@ Future<Activity> createCustomActivity({
 
 ## Success Criteria
 
-- [ ] All 6 categories load correctly
-- [ ] Activities display with correct details
-- [ ] Subactivities load for each activity
-- [ ] Search returns relevant results
-- [ ] Popular activities shown in onboarding
+- [x] All 6 categories load correctly
+- [x] Activities display with correct details
+- [x] Subactivities load for each activity
+- [x] Search returns relevant results
+- [x] Popular activities shown in onboarding
 - [ ] Custom activity creation works (premium)
-- [ ] Offline access via cached data
+- [x] Offline access via cached data
 - [ ] Detail configurations render correct widgets
