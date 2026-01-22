@@ -33,6 +33,15 @@ abstract class UserActivity with _$UserActivity {
 
   factory UserActivity.fromJson(Map<String, dynamic> json) => _$UserActivityFromJson(json);
 
+  /// Returns an empty UserActivity.
+  factory UserActivity.empty({String? name}) => UserActivity(
+    userActivityId: '',
+    userId: '',
+    activityId: '',
+    activityTimestamp: DateTime.now(),
+    activityNameOverride: name,
+  );
+
   /// Returns the effective display name, using override if set.
   String get displayName => activityNameOverride ?? activity?.name ?? 'Unknown Activity';
 
