@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/utils/date_utils.dart' as app_date_utils;
 
 /// String extensions for common operations.
@@ -79,4 +80,13 @@ extension NullableExtensions<T> on T? {
     final value = this;
     return value != null ? mapper(value) : null;
   }
+}
+
+/// Riverpod AsyncValue extensions for common operations.
+extension AsyncValueExtensions<T> on AsyncValue<T> {
+  /// Returns true if this is the first load (loading without any existing data).
+  ///
+  /// Useful for showing shimmer/skeleton loading states only on initial load,
+  /// not during pull-to-refresh when previous data should remain visible.
+  bool get isFirstLoad => isLoading && !hasValue;
 }
