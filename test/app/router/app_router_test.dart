@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/app_router.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
+import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -14,6 +16,18 @@ class MockSupabaseClient extends Mock implements SupabaseClient {}
 class MockGoTrueClient extends Mock implements GoTrueClient {}
 
 class MockUser extends Mock implements User {}
+
+/// Mock categories for testing.
+final _mockCategories = [
+  const ActivityCategory(
+    activityCategoryId: '1',
+    name: 'Fitness',
+    activityCategoryCode: 'fitness',
+    hexColor: '#FF6B6B',
+    icon: '🏋️',
+    sortOrder: 1,
+  ),
+];
 
 void main() {
   group('Route Paths', () {
@@ -61,6 +75,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
+          categoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       router = container.read(appRouterProvider);
@@ -154,6 +169,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       final container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
+          categoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       final router = container.read(appRouterProvider);
@@ -188,6 +204,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       final container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
+          categoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       final router = container.read(appRouterProvider);
