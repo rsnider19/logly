@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/app_router.dart';
 
-class App extends StatefulWidget {
+class App extends ConsumerWidget {
   const App({super.key});
 
   @override
-  State<App> createState() => _AppState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
 
-class _AppState extends State<App> {
-  late final GoRouter _router = createRouter();
-
-  @override
-  Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Logly',
       theme: ThemeData(
@@ -27,7 +22,7 @@ class _AppState extends State<App> {
         ),
         useMaterial3: true,
       ),
-      routerConfig: _router,
+      routerConfig: router,
     );
   }
 }

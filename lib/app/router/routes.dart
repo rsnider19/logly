@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'routes.g.dart';
@@ -25,7 +26,7 @@ class AuthRoute extends GoRouteData with $AuthRoute {
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const _PlaceholderScreen(title: 'Auth');
+    return const SignInScreen();
   }
 }
 
@@ -125,26 +126,6 @@ class _ConnectionTestScreenState extends State<_ConnectionTestScreen> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Placeholder screen for routes during initial development.
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          '$title Screen',
-          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
     );

@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-/// Creates and configures the app router.
-///
-/// Returns a GoRouter instance with all routes and redirect logic.
-GoRouter createRouter() {
+part 'app_router.g.dart';
+
+/// Provides the app router instance with auth-based redirects.
+@Riverpod(keepAlive: true)
+GoRouter appRouter(Ref ref) {
+  // Watch auth state to trigger router refresh on auth changes
+  final isAuthenticated = ref.watch(currentUserProvider) != null;
+
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
     routes: $appRoutes,
-    redirect: _handleRedirect,
+    redirect: (context, state) {
+      final isAuthRoute = state.matchedLocation == '/auth';
+
+      // Redirect to auth if not authenticated and not already on auth route
+      if (!isAuthenticated && !isAuthRoute) {
+        return '/auth';
+      }
+
+      // Redirect to home if authenticated and on auth route
+      if (isAuthenticated && isAuthRoute) {
+        return '/';
+      }
+
+      return null;
+    },
     errorBuilder: _errorBuilder,
   );
-}
-
-/// Handles route redirects based on authentication state.
-///
-/// Returns the path to redirect to, or null to allow the navigation.
-String? _handleRedirect(BuildContext context, GoRouterState state) {
-  // TODO(auth): Implement auth-based redirects in 02-auth feature
-  // final isAuthenticated = ...;
-  // final isAuthRoute = state.matchedLocation == '/auth';
-  //
-  // if (!isAuthenticated && !isAuthRoute) {
-  //   return '/auth';
-  // }
-  //
-  // if (isAuthenticated && isAuthRoute) {
-  //   return '/';
-  // }
-
-  return null;
 }
 
 /// Builds the error page for unknown routes.
