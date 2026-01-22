@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 /// Logger wrapper for consistent logging across the app.
@@ -10,7 +11,10 @@ class LoggerService {
               printer: PrettyPrinter(
                 methodCount: 0,
                 errorMethodCount: 5,
+                colors: false,
+                printEmojis: true,
               ),
+              level: kReleaseMode ? Level.warning : Level.debug,
             );
 
   final Logger _logger;
