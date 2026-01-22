@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +14,7 @@ import 'package:logly/features/activity_logging/presentation/screens/edit_activi
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'routes.g.dart';
@@ -67,6 +69,27 @@ class EditActivityRoute extends GoRouteData with $EditActivityRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return EditActivityScreen(userActivityId: userActivityId);
+  }
+}
+
+/// Developer route - debug tools and input testing.
+///
+/// Only accessible in debug mode.
+@TypedGoRoute<DeveloperRoute>(path: '/developer')
+class DeveloperRoute extends GoRouteData with $DeveloperRoute {
+  const DeveloperRoute();
+
+  @override
+  FutureOr<String?> redirect(BuildContext context, GoRouterState state) {
+    if (!kDebugMode) {
+      return '/';
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const DeveloperScreen();
   }
 }
 

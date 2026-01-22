@@ -11,6 +11,7 @@ List<RouteBase> get $appRoutes => [
   $authRoute,
   $activitySearchRoute,
   $editActivityRoute,
+  $developerRoute,
 ];
 
 RouteBase get $homeRoute =>
@@ -106,6 +107,30 @@ mixin $EditActivityRoute on GoRouteData {
   String get location => GoRouteData.$location(
     '/activities/edit/${Uri.encodeComponent(_self.userActivityId)}',
   );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $developerRoute =>
+    GoRouteData.$route(path: '/developer', factory: $DeveloperRoute._fromState);
+
+mixin $DeveloperRoute on GoRouteData {
+  static DeveloperRoute _fromState(GoRouterState state) =>
+      const DeveloperRoute();
+
+  @override
+  String get location => GoRouteData.$location('/developer');
 
   @override
   void go(BuildContext context) => context.go(location);
