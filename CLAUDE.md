@@ -31,6 +31,14 @@ fvm flutter analyze
 fvm dart run custom_lint
 ```
 
+## Development Workflow
+
+After you are all done making code changes and return to the user, always perform a hot restart on the running app using the `hot_restart` tool.
+
+If it fails, ask the user for the DTD Uri and run `connect_dart_tooling_daemon` with the DTD Uri. NEVER run `launch_app`. I will always have it running from my IDE for debugging.
+
+This ensures the user sees the changes immediately. If the hot restart fails due to compilation errors, fix the errors first and retry.
+
 ## Architecture
 
 ### State Management & Backend
