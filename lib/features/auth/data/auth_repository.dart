@@ -33,9 +33,11 @@ class AuthRepository {
   /// Throws [app_auth.AuthProviderException] on other errors.
   Future<AuthResponse> signInWithApple() async {
     try {
+      _logger.d('Requesting Apple credential...');
       final credential = await SignInWithApple.getAppleIDCredential(
         scopes: [AppleIDAuthorizationScopes.email],
       );
+      _logger.d('Apple credential received, hasIdToken: ${credential.identityToken != null}');
 
       if (credential.identityToken == null) {
         throw const app_auth.AuthProviderException(
@@ -44,20 +46,26 @@ class AuthRepository {
         );
       }
 
-      return await _supabase.auth.signInWithIdToken(
+      _logger.d('Calling Supabase signInWithIdToken...');
+      final response = await _supabase.auth.signInWithIdToken(
         provider: OAuthProvider.apple,
         idToken: credential.identityToken!,
       );
+      _logger.d('Supabase signInWithIdToken completed, user: ${response.user?.id}');
+      return response;
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code == AuthorizationErrorCode.canceled) {
         throw const app_auth.AuthSignInCancelledException();
       }
-      _logger.e('Apple sign-in failed', e);
+      _logger.e('Apple sign-in failed (SignInWithAppleAuthorizationException)', e);
+      throw app_auth.AuthProviderException('Apple sign-in failed', e.message);
+    } on AuthException catch (e) {
+      _logger.e('Apple sign-in failed (Supabase AuthException): ${e.message}', e);
       throw app_auth.AuthProviderException('Apple sign-in failed', e.message);
     } on app_auth.AuthException {
       rethrow;
     } catch (e, st) {
-      _logger.e('Apple sign-in failed', e, st);
+      _logger.e('Apple sign-in failed (unknown)', e, st);
       throw app_auth.AuthProviderException('Apple sign-in failed', e.toString());
     }
   }
