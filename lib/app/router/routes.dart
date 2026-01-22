@@ -8,6 +8,8 @@ import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
+import 'package:logly/features/activity_logging/presentation/screens/activity_search_screen.dart';
+import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
@@ -34,6 +36,37 @@ class AuthRoute extends GoRouteData with $AuthRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SignInScreen();
+  }
+}
+
+/// Activity search route - search and select activities to log.
+@TypedGoRoute<ActivitySearchRoute>(path: '/activities/search')
+class ActivitySearchRoute extends GoRouteData with $ActivitySearchRoute {
+  const ActivitySearchRoute({this.date});
+
+  /// Optional initial date for the activity (ISO 8601 string).
+  final String? date;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    DateTime? initialDate;
+    if (date != null) {
+      initialDate = DateTime.tryParse(date!);
+    }
+    return ActivitySearchScreen(initialDate: initialDate);
+  }
+}
+
+/// Edit activity route - edit an existing logged activity.
+@TypedGoRoute<EditActivityRoute>(path: '/activities/edit/:userActivityId')
+class EditActivityRoute extends GoRouteData with $EditActivityRoute {
+  const EditActivityRoute({required this.userActivityId});
+
+  final String userActivityId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return EditActivityScreen(userActivityId: userActivityId);
   }
 }
 
