@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
@@ -61,7 +62,7 @@ class DailyActivityRow extends StatelessWidget {
                       color: isFuture ? Colors.grey[400] : Colors.grey[600],
                       fontFeatures: [
                         const FontFeature.tabularFigures(),
-                      ]
+                      ],
                     ),
                   ).withSkeleton(placeholderText: '01/22'),
                 ],
@@ -97,12 +98,32 @@ class DailyActivityRow extends StatelessWidget {
         }
 
         // Add "Logly It" chip only for today
-        if (isToday && summary.userActivities.isEmpty) {
+        if (summary.userActivities.isEmpty) {
           chips.add(
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ActivityChip(
-                userActivity: UserActivity.empty(),
+            Opacity(
+              opacity: isToday ? 1 : 0,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: ActionChip(
+                  avatar: Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  label: Text(
+                    'Logly It!',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                  ),
+                  shape: const StadiumBorder(),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.surface.withAlpha(
+                      Color.getAlphaFromOpacity(0.25),
+                    ),
+                  ),
+                  onPressed: () => const ActivitySearchRoute().push<void>(context),
+                ),
               ),
             ),
           );
