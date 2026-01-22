@@ -1,14 +1,48 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/core/services/env_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
+/// Bootstraps the application with the given environment path.
+///
+/// This function:
+/// 1. Ensures Flutter is initialized
+/// 2. Loads environment variables
+/// 3. Initializes Supabase
+/// 4. Wraps the app in ProviderScope
+Future<void> bootstrap(
+  FutureOr<Widget> Function() builder, {
+  required String envPath,
+}) async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
-  // Add cross-flavor configuration here
+  // Load environment variables
+  await EnvService.load(envPath);
+  if (kDebugMode) {
+    debugPrint('✓ Loaded env from: $envPath');
+    debugPrint('✓ Supabase URL: ${EnvService.supabaseUrl}');
+  }
 
-  runApp(await builder());
+  // Initialize Supabase
+  await Supabase.initialize(
+    url: EnvService.supabaseUrl,
+    anonKey: EnvService.supabaseAnonKey,
+  );
+  if (kDebugMode) {
+    debugPrint('✓ Supabase initialized');
+  }
+
+  runApp(
+    ProviderScope(
+      child: await builder(),
+    ),
+  );
 }
