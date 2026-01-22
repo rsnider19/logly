@@ -79,7 +79,8 @@ class HomeService {
           activityCount: 0,
         ));
       }
-      current = current.add(const Duration(days: 1));
+      // Use DateTime constructor for proper calendar day arithmetic (DST-safe)
+      current = DateTime(current.year, current.month, current.day + 1);
     }
 
     // Sort by date descending (most recent first)
