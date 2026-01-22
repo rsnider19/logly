@@ -55,6 +55,22 @@ class EnvService {
     return value;
   }
 
+  /// Google OAuth Android client ID.
+  ///
+  /// Note: This is not used in code - Android uses package name + SHA-1
+  /// fingerprint configured in Google Cloud Console. This getter is for
+  /// reference only.
+  static String get googleAndroidClientId {
+    final value = dotenv.env['GOOGLE_ANDROID_CLIENT_ID'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'Google Android Client ID not configured',
+        'GOOGLE_ANDROID_CLIENT_ID is missing from env file',
+      );
+    }
+    return value;
+  }
+
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);
