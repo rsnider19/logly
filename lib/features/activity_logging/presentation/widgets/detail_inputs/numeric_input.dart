@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/snapping_slider.dart';
 
 /// Generic numeric input widget for integer and double values.
 ///
@@ -27,7 +28,7 @@ class _NumericInputState extends ConsumerState<NumericInput> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(text: _isInteger ? '0' : '0.00');
     _initializeFromState();
   }
 
@@ -41,12 +42,7 @@ class _NumericInputState extends ConsumerState<NumericInput> {
 
   double get _minValue => widget.activityDetail.minNumeric ?? 0;
   double get _maxValue => widget.activityDetail.maxNumeric ?? 100;
-
-  int get _divisions {
-    final range = _maxValue - _minValue;
-    final interval = widget.activityDetail.sliderInterval ?? (_isInteger ? 1 : 0.1);
-    return (range / interval).round().clamp(1, 1000);
-  }
+  double get _sliderInterval => widget.activityDetail.sliderInterval ?? (_isInteger ? 1 : 0.1);
 
   void _initializeFromState() {
     final formState = ref.read(activityFormStateProvider);
@@ -60,9 +56,6 @@ class _NumericInputState extends ConsumerState<NumericInput> {
 
   String _formatValue(double value) {
     if (_isInteger) {
-      return value.round().toString();
-    }
-    if (value == value.roundToDouble()) {
       return value.round().toString();
     }
     return value.toStringAsFixed(2);
@@ -85,9 +78,7 @@ class _NumericInputState extends ConsumerState<NumericInput> {
 
   void _onSliderChanged(double value) {
     final adjustedValue = _isInteger ? value.roundToDouble() : value;
-    setState(() {
-      _controller.text = _formatValue(adjustedValue);
-    });
+    _controller.text = _formatValue(adjustedValue);
 
     ref.read(activityFormStateProvider.notifier).setNumericValue(
           widget.activityDetail.activityDetailId,
@@ -105,53 +96,64 @@ class _NumericInputState extends ConsumerState<NumericInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.activityDetail.label,
-          style: theme.textTheme.titleSmall,
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _controller,
-          keyboardType: TextInputType.numberWithOptions(decimal: !_isInteger),
-          inputFormatters: [
-            if (_isInteger)
-              FilteringTextInputFormatter.digitsOnly
-            else
-              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-          ],
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            hintText: 'Enter ${widget.activityDetail.label.toLowerCase()}',
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          ),
-          onChanged: _updateValue,
-        ),
-        const SizedBox(height: 16),
         Row(
           children: [
-            Text(
-              _formatValue(_minValue),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
             Expanded(
-              child: Slider(
-                value: currentValue.clamp(_minValue, _maxValue),
-                min: _minValue,
-                max: _maxValue,
-                divisions: _divisions,
-                label: _formatValue(currentValue),
-                onChanged: _onSliderChanged,
+              flex: 3,
+              child: Text(
+                widget.activityDetail.label,
+                style: theme.textTheme.bodyLarge,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              _formatValue(_maxValue),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 5,
+              child: Row(
+                children: [
+                  const Spacer(),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      keyboardType: TextInputType.numberWithOptions(decimal: !_isInteger),
+                      textAlign: TextAlign.right,
+                      textAlignVertical: TextAlignVertical.center,
+                      style: theme.textTheme.bodyLarge,
+                      inputFormatters: [
+                        if (_isInteger)
+                          FilteringTextInputFormatter.digitsOnly
+                        else
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+                      ],
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        isDense: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: theme.colorScheme.outline),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide(color: theme.colorScheme.outline),
+                        ),
+                      ),
+                      onChanged: _updateValue,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
+        ),
+        const SizedBox(height: 8),
+        SnappingSlider(
+          value: currentValue,
+          min: _minValue,
+          max: _maxValue,
+          interval: _sliderInterval,
+          onChanged: _onSliderChanged,
         ),
       ],
     );

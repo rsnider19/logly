@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
@@ -22,37 +23,39 @@ class EnvironmentSelector extends ConsumerWidget {
     final detailValue = formState.detailValues[activityDetail.activityDetailId];
     final selectedEnvironment = detailValue?.environmentValue;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          activityDetail.label,
-          style: theme.textTheme.titleSmall,
+        Expanded(
+          flex: 3,
+          child: Text(
+            activityDetail.label,
+            style: theme.textTheme.bodyLarge,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-        const SizedBox(height: 8),
-        SegmentedButton<EnvironmentType?>(
-          segments: const [
-            ButtonSegment(
-              value: EnvironmentType.indoor,
-              label: Text('Indoor'),
-              icon: Icon(Icons.home_outlined),
-            ),
-            ButtonSegment(
-              value: EnvironmentType.outdoor,
-              label: Text('Outdoor'),
-              icon: Icon(Icons.park_outlined),
-            ),
-          ],
-          selected: selectedEnvironment != null ? {selectedEnvironment} : {},
-          onSelectionChanged: (Set<EnvironmentType?> selection) {
-            final value = selection.firstOrNull;
-            ref.read(activityFormStateProvider.notifier).setEnvironmentValue(
-                  activityDetail.activityDetailId,
-                  value,
-                );
-          },
-          emptySelectionAllowed: true,
-          showSelectedIcon: false,
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 5,
+          child: CupertinoSlidingSegmentedControl<EnvironmentType>(
+            groupValue: selectedEnvironment,
+            children: const {
+              EnvironmentType.indoor: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Indoor'),
+              ),
+              EnvironmentType.outdoor: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text('Outdoor'),
+              ),
+            },
+            onValueChanged: (EnvironmentType? value) {
+              ref.read(activityFormStateProvider.notifier).setEnvironmentValue(
+                    activityDetail.activityDetailId,
+                    value,
+                  );
+            },
+          ),
         ),
       ],
     );

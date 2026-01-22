@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/snapping_slider.dart';
 
 /// Input widget for duration values with hours, minutes, and seconds fields.
 ///
@@ -28,9 +29,9 @@ class _DurationInputState extends ConsumerState<DurationInput> {
   @override
   void initState() {
     super.initState();
-    _hoursController = TextEditingController();
-    _minutesController = TextEditingController();
-    _secondsController = TextEditingController();
+    _hoursController = TextEditingController(text: '00');
+    _minutesController = TextEditingController(text: '00');
+    _secondsController = TextEditingController(text: '00');
     _initializeFromState();
   }
 
@@ -46,14 +47,17 @@ class _DurationInputState extends ConsumerState<DurationInput> {
     final formState = ref.read(activityFormStateProvider);
     final detailValue = formState.detailValues[widget.activityDetail.activityDetailId];
     final totalSeconds = detailValue?.durationInSec ?? 0;
+    _updateControllersFromSeconds(totalSeconds);
+  }
 
+  void _updateControllersFromSeconds(int totalSeconds) {
     final hours = totalSeconds ~/ 3600;
     final minutes = (totalSeconds % 3600) ~/ 60;
     final seconds = totalSeconds % 60;
 
-    _hoursController.text = hours > 0 ? hours.toString() : '';
-    _minutesController.text = minutes > 0 || hours > 0 ? minutes.toString() : '';
-    _secondsController.text = seconds > 0 || minutes > 0 || hours > 0 ? seconds.toString() : '';
+    _hoursController.text = hours.toString().padLeft(2, '0');
+    _minutesController.text = minutes.toString().padLeft(2, '0');
+    _secondsController.text = seconds.toString().padLeft(2, '0');
   }
 
   int get _totalSeconds {
@@ -64,7 +68,8 @@ class _DurationInputState extends ConsumerState<DurationInput> {
   }
 
   int get _minSeconds => widget.activityDetail.minDurationInSec ?? 0;
-  int get _maxSeconds => widget.activityDetail.maxDurationInSec ?? 10800; // Default 3 hours
+  int get _maxSeconds => widget.activityDetail.maxDurationInSec ?? 10800;
+  double get _sliderInterval => widget.activityDetail.sliderInterval ?? 60;
 
   void _updateValue() {
     final totalSeconds = _totalSeconds;
@@ -76,34 +81,11 @@ class _DurationInputState extends ConsumerState<DurationInput> {
 
   void _onSliderChanged(double value) {
     final totalSeconds = value.round();
-    final hours = totalSeconds ~/ 3600;
-    final minutes = (totalSeconds % 3600) ~/ 60;
-    final seconds = totalSeconds % 60;
-
-    setState(() {
-      _hoursController.text = hours > 0 ? hours.toString() : '';
-      _minutesController.text = minutes > 0 || hours > 0 ? minutes.toString() : '';
-      _secondsController.text = seconds > 0 ? seconds.toString() : '';
-    });
-
+    _updateControllersFromSeconds(totalSeconds);
     ref.read(activityFormStateProvider.notifier).setDurationValue(
           widget.activityDetail.activityDetailId,
           totalSeconds > 0 ? totalSeconds : null,
         );
-  }
-
-  String _formatDuration(int seconds) {
-    final hours = seconds ~/ 3600;
-    final minutes = (seconds % 3600) ~/ 60;
-    final secs = seconds % 60;
-
-    if (hours > 0) {
-      return '${hours}h ${minutes}m';
-    } else if (minutes > 0) {
-      return '${minutes}m ${secs}s';
-    } else {
-      return '${secs}s';
-    }
   }
 
   @override
@@ -116,71 +98,60 @@ class _DurationInputState extends ConsumerState<DurationInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.activityDetail.label,
-          style: theme.textTheme.titleSmall,
+        Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Text(
+                widget.activityDetail.label,
+                style: theme.textTheme.bodyLarge,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 5,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _TimeField(
+                      controller: _hoursController,
+                      suffix: 'h',
+                      maxValue: 99,
+                      onChanged: (_) => _updateValue(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _TimeField(
+                      controller: _minutesController,
+                      suffix: 'm',
+                      maxValue: 59,
+                      onChanged: (_) => _updateValue(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: _TimeField(
+                      controller: _secondsController,
+                      suffix: 's',
+                      maxValue: 59,
+                      onChanged: (_) => _updateValue(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: _TimeField(
-                controller: _hoursController,
-                label: 'Hours',
-                maxValue: 99,
-                onChanged: (_) => _updateValue(),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(':', style: theme.textTheme.headlineSmall),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _TimeField(
-                controller: _minutesController,
-                label: 'Min',
-                maxValue: 59,
-                onChanged: (_) => _updateValue(),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Text(':', style: theme.textTheme.headlineSmall),
-            const SizedBox(width: 8),
-            Expanded(
-              child: _TimeField(
-                controller: _secondsController,
-                label: 'Sec',
-                maxValue: 59,
-                onChanged: (_) => _updateValue(),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Text(
-              _formatDuration(_minSeconds),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            Expanded(
-              child: Slider(
-                value: currentSeconds.toDouble().clamp(_minSeconds.toDouble(), _maxSeconds.toDouble()),
-                min: _minSeconds.toDouble(),
-                max: _maxSeconds.toDouble(),
-                divisions: _maxSeconds > _minSeconds ? (_maxSeconds - _minSeconds) ~/ 60 : 1,
-                label: _formatDuration(currentSeconds),
-                onChanged: _onSliderChanged,
-              ),
-            ),
-            Text(
-              _formatDuration(_maxSeconds),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ],
+        SnappingSlider(
+          value: currentSeconds.toDouble(),
+          min: _minSeconds.toDouble(),
+          max: _maxSeconds.toDouble(),
+          interval: _sliderInterval,
+          onChanged: _onSliderChanged,
         ),
       ],
     );
@@ -190,33 +161,48 @@ class _DurationInputState extends ConsumerState<DurationInput> {
 class _TimeField extends StatelessWidget {
   const _TimeField({
     required this.controller,
-    required this.label,
+    required this.suffix,
     required this.maxValue,
     required this.onChanged,
   });
 
   final TextEditingController controller;
-  final String label;
+  final String suffix;
   final int maxValue;
   final ValueChanged<String> onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return TextField(
-      controller: controller,
-      keyboardType: TextInputType.number,
-      textAlign: TextAlign.center,
-      inputFormatters: [
-        FilteringTextInputFormatter.digitsOnly,
-        _MaxValueInputFormatter(maxValue),
-      ],
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-      ),
-      onChanged: onChanged,
-    );
+        controller: controller,
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
+        style: theme.textTheme.bodyLarge,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(2),
+          _MaxValueInputFormatter(maxValue),
+        ],
+        decoration: InputDecoration(
+          suffixText: suffix,
+          suffixStyle: theme.textTheme.bodyMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          isDense: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: theme.colorScheme.outline),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: theme.colorScheme.outline),
+          ),
+        ),
+        onChanged: onChanged,
+      );
   }
 }
 
