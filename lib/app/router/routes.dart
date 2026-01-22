@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
+import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -31,17 +34,18 @@ class AuthRoute extends GoRouteData with $AuthRoute {
 }
 
 /// Screen to test Supabase connection.
-class _ConnectionTestScreen extends StatefulWidget {
+class _ConnectionTestScreen extends ConsumerStatefulWidget {
   const _ConnectionTestScreen();
 
   @override
-  State<_ConnectionTestScreen> createState() => _ConnectionTestScreenState();
+  ConsumerState<_ConnectionTestScreen> createState() => _ConnectionTestScreenState();
 }
 
-class _ConnectionTestScreenState extends State<_ConnectionTestScreen> {
+class _ConnectionTestScreenState extends ConsumerState<_ConnectionTestScreen> {
   String _status = 'Testing connection...';
   int? _trendingCount;
   String? _error;
+  bool _isSigningOut = false;
 
   @override
   void initState() {
@@ -70,9 +74,21 @@ class _ConnectionTestScreenState extends State<_ConnectionTestScreen> {
     }
   }
 
+  Future<void> _signOut() async {
+    setState(() => _isSigningOut = true);
+    try {
+      await ref.read(authServiceProvider).signOut();
+    } finally {
+      if (mounted) {
+        setState(() => _isSigningOut = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final user = ref.watch(currentUserProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Connection Test')),
@@ -93,6 +109,13 @@ class _ConnectionTestScreenState extends State<_ConnectionTestScreen> {
                 style: theme.textTheme.headlineMedium,
               ),
               const SizedBox(height: 24),
+              if (user != null) ...[
+                Text(
+                  user.email ?? 'No email',
+                  style: theme.textTheme.bodyLarge,
+                ),
+                const SizedBox(height: 16),
+              ],
               if (_trendingCount != null) ...[
                 Text(
                   'Trending activities: $_trendingCount',
@@ -123,6 +146,17 @@ class _ConnectionTestScreenState extends State<_ConnectionTestScreen> {
               ElevatedButton(
                 onPressed: _testConnection,
                 child: const Text('Retry'),
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton(
+                onPressed: _isSigningOut ? null : _signOut,
+                child: _isSigningOut
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Sign Out'),
               ),
             ],
           ),
