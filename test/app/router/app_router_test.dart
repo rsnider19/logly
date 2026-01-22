@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/app_router.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/core/providers/supabase_provider.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class MockSupabaseClient extends Mock implements SupabaseClient {}
+
+class MockGoTrueClient extends Mock implements GoTrueClient {}
+
+class MockUser extends Mock implements User {}
 
 void main() {
   group('Route Paths', () {
@@ -19,27 +29,55 @@ void main() {
   });
 
   group('GoRouter Navigation', () {
+    late MockSupabaseClient mockSupabase;
+    late MockGoTrueClient mockAuth;
+    late ProviderContainer container;
     late GoRouter router;
 
     setUp(() {
+      mockSupabase = MockSupabaseClient();
+      mockAuth = MockGoTrueClient();
+
       // Set up environment for _ConnectionTestScreen which uses EnvService
       dotenv.loadFromString(
         envString: '''
 SUPABASE_URL=https://test.supabase.co
 SUPABASE_ANON_KEY=test-anon-key
+GOOGLE_WEB_CLIENT_ID=test-web-client-id.apps.googleusercontent.com
+GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
 ''',
       );
-      router = createRouter();
+
+      // Mock auth to return a user (authenticated state)
+      final mockUser = MockUser();
+      when(() => mockAuth.currentUser).thenReturn(mockUser);
+      when(() => mockAuth.onAuthStateChange).thenAnswer(
+        (_) => Stream.value(
+          AuthState(AuthChangeEvent.signedIn, Session(accessToken: '', tokenType: '', user: mockUser)),
+        ),
+      );
+      when(() => mockSupabase.auth).thenReturn(mockAuth);
+
+      container = ProviderContainer(
+        overrides: [
+          supabaseProvider.overrideWithValue(mockSupabase),
+        ],
+      );
+      router = container.read(appRouterProvider);
     });
 
     tearDown(() {
+      container.dispose();
       dotenv.clean();
     });
 
-    testWidgets('navigates to home screen at /', (tester) async {
+    testWidgets('navigates to home screen at / when authenticated', (tester) async {
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: router,
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -48,27 +86,15 @@ SUPABASE_ANON_KEY=test-anon-key
       expect(find.text('Connection Test'), findsOneWidget);
     });
 
-    testWidgets('navigates to auth screen at /auth', (tester) async {
-      router.go('/auth');
-
-      await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: router,
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      // Auth route shows placeholder with "Auth" title
-      expect(find.text('Auth'), findsOneWidget);
-      expect(find.text('Auth Screen'), findsOneWidget);
-    });
-
     testWidgets('shows error page for unknown route', (tester) async {
       router.go('/unknown-route-that-does-not-exist');
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: router,
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+          ),
         ),
       );
       await tester.pumpAndSettle();
@@ -81,68 +107,108 @@ SUPABASE_ANON_KEY=test-anon-key
       router.go('/invalid');
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: router,
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+          ),
         ),
       );
       await tester.pumpAndSettle();
 
       expect(find.widgetWithText(ElevatedButton, 'Go Home'), findsOneWidget);
     });
+  });
 
-    testWidgets('Go Home button navigates to home', (tester) async {
-      router.go('/invalid');
+  group('Auth Redirects', () {
+    late MockSupabaseClient mockSupabase;
+    late MockGoTrueClient mockAuth;
+
+    setUp(() {
+      mockSupabase = MockSupabaseClient();
+      mockAuth = MockGoTrueClient();
+
+      dotenv.loadFromString(
+        envString: '''
+SUPABASE_URL=https://test.supabase.co
+SUPABASE_ANON_KEY=test-anon-key
+GOOGLE_WEB_CLIENT_ID=test-web-client-id.apps.googleusercontent.com
+GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
+''',
+      );
+
+      when(() => mockSupabase.auth).thenReturn(mockAuth);
+    });
+
+    tearDown(() {
+      dotenv.clean();
+    });
+
+    testWidgets('redirects unauthenticated user to /auth', (tester) async {
+      // No user - unauthenticated
+      when(() => mockAuth.currentUser).thenReturn(null);
+      when(() => mockAuth.onAuthStateChange).thenAnswer(
+        (_) => Stream.value(AuthState(AuthChangeEvent.signedOut, null)),
+      );
+
+      final container = ProviderContainer(
+        overrides: [
+          supabaseProvider.overrideWithValue(mockSupabase),
+        ],
+      );
+      final router = container.read(appRouterProvider);
 
       await tester.pumpWidget(
-        MaterialApp.router(
-          routerConfig: router,
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+          ),
         ),
       );
       await tester.pumpAndSettle();
 
-      await tester.tap(find.widgetWithText(ElevatedButton, 'Go Home'));
-      await tester.pumpAndSettle();
+      // Should be redirected to auth screen
+      expect(find.text('Logly'), findsOneWidget);
+      expect(find.text('Sign in with Google'), findsOneWidget);
 
-      // Should now be at home screen
-      expect(find.text('Connection Test'), findsOneWidget);
-    });
-  });
-
-  group('createRouter', () {
-    test('returns GoRouter instance', () {
-      dotenv.loadFromString(
-        envString: '''
-SUPABASE_URL=https://test.supabase.co
-SUPABASE_ANON_KEY=test-anon-key
-''',
-      );
-
-      final router = createRouter();
-
-      expect(router, isA<GoRouter>());
-
-      dotenv.clean();
+      container.dispose();
     });
 
-    testWidgets('starts at initial location /', (tester) async {
-      dotenv.loadFromString(
-        envString: '''
-SUPABASE_URL=https://test.supabase.co
-SUPABASE_ANON_KEY=test-anon-key
-''',
+    testWidgets('redirects authenticated user from /auth to /', (tester) async {
+      // Has user - authenticated
+      final mockUser = MockUser();
+      when(() => mockAuth.currentUser).thenReturn(mockUser);
+      when(() => mockAuth.onAuthStateChange).thenAnswer(
+        (_) => Stream.value(
+          AuthState(AuthChangeEvent.signedIn, Session(accessToken: '', tokenType: '', user: mockUser)),
+        ),
       );
 
-      final router = createRouter();
+      final container = ProviderContainer(
+        overrides: [
+          supabaseProvider.overrideWithValue(mockSupabase),
+        ],
+      );
+      final router = container.read(appRouterProvider);
+
+      // Try to go to /auth
+      router.go('/auth');
 
       await tester.pumpWidget(
-        MaterialApp.router(routerConfig: router),
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+          ),
+        ),
       );
       await tester.pumpAndSettle();
 
-      // Router should start at '/' showing the home screen
+      // Should be redirected to home screen
       expect(find.text('Connection Test'), findsOneWidget);
 
-      dotenv.clean();
+      container.dispose();
     });
   });
 }
