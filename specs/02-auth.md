@@ -8,19 +8,19 @@ Authentication is handled via Supabase Auth with Apple Sign-in and Google Sign-i
 
 ### Functional Requirements
 
-- [ ] Support Apple Sign-in (iOS and macOS)
-- [ ] Support Google Sign-in (all platforms)
+- [x] Support Apple Sign-in (iOS and macOS)
+- [x] Support Google Sign-in (all platforms)
 - [ ] Automatically create user profile on first sign-in
-- [ ] Persist authentication state across app restarts
-- [ ] Handle sign-out with state cleanup
-- [ ] Implement account deletion with 30-day soft delete
-- [ ] Redirect unauthenticated users to sign-in screen
+- [x] Persist authentication state across app restarts
+- [x] Handle sign-out with state cleanup
+- [x] Implement account deletion with 30-day soft delete
+- [x] Redirect unauthenticated users to sign-in screen
 
 ### Non-Functional Requirements
 
-- [ ] Auth state must be reactive (Riverpod stream)
+- [x] Auth state must be reactive (Riverpod stream)
 - [ ] Sign-in must complete within 10 seconds
-- [ ] Session tokens must be stored securely
+- [x] Session tokens must be stored securely
 
 ## Architecture
 
@@ -163,15 +163,15 @@ Future<void> requestAccountDeletion() async {
 
 ### Unit Tests
 
-- [ ] AuthRepository methods handle success/failure cases
-- [ ] AuthService validates inputs
-- [ ] Auth state updates propagate correctly
+- [x] AuthRepository methods handle success/failure cases
+- [x] AuthService validates inputs
+- [x] Auth state updates propagate correctly
 
 ### Widget Tests
 
-- [ ] Sign-in screen renders both provider buttons
-- [ ] Loading state shown during sign-in
-- [ ] Error messages display on failure
+- [x] Sign-in screen renders both provider buttons
+- [x] Loading state shown during sign-in
+- [x] Error messages display on failure
 
 ### Integration Tests
 
@@ -181,11 +181,11 @@ Future<void> requestAccountDeletion() async {
 
 ## Success Criteria
 
-- [ ] Apple Sign-in works on iOS
-- [ ] Google Sign-in works on all platforms
-- [ ] Auth state persists across app restarts
-- [ ] Sign-out clears all user data locally
-- [ ] Account deletion soft-deletes user
-- [ ] Unauthenticated routes redirect to sign-in
+- [x] Apple Sign-in works on iOS
+- [x] Google Sign-in works on all platforms
+- [x] Auth state persists across app restarts
+- [x] Sign-out clears all user data locally
+- [x] Account deletion soft-deletes user
+- [x] Unauthenticated routes redirect to sign-in
 - [ ] New users routed to onboarding
-- [ ] Existing users routed to home
+- [x] Existing users routed to home
