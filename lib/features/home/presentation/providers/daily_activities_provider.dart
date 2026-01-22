@@ -49,7 +49,8 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
 
     final today = DateTime.now();
     final endDate = DateTime(today.year, today.month, today.day);
-    final startDate = endDate.subtract(const Duration(days: _initialDays - 1));
+    // Use DateTime constructor for proper calendar day arithmetic (handles DST correctly)
+    final startDate = DateTime(endDate.year, endDate.month, endDate.day - (_initialDays - 1));
 
     final summaries = await service.getDailyActivities(
       startDate: startDate,
@@ -86,8 +87,23 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
     try {
       final service = ref.read(homeServiceProvider);
 
-      final newEndDate = currentState.oldestLoadedDate.subtract(const Duration(days: 1));
-      final newStartDate = newEndDate.subtract(const Duration(days: _daysToLoad));
+      // Normalize oldest date to midnight to avoid DST issues
+      final oldest = currentState.oldestLoadedDate;
+      final oldestNormalized = DateTime(oldest.year, oldest.month, oldest.day);
+
+      // Use DateTime constructor for proper calendar day arithmetic (handles DST correctly)
+      // Start from the day BEFORE the oldest loaded date
+      final newEndDate = DateTime(
+        oldestNormalized.year,
+        oldestNormalized.month,
+        oldestNormalized.day - 1,
+      );
+      // Go back _daysToLoad - 1 more days (for _daysToLoad total days)
+      final newStartDate = DateTime(
+        newEndDate.year,
+        newEndDate.month,
+        newEndDate.day - (_daysToLoad - 1),
+      );
 
       final moreSummaries = await service.getDailyActivities(
         startDate: newStartDate,
