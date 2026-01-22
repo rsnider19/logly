@@ -13,7 +13,7 @@ GoRouter appRouter(Ref ref) {
   final isAuthenticated = ref.watch(currentUserProvider) != null;
 
   return GoRouter(
-    initialLocation: '/developer',
+    initialLocation: '/',
     debugLogDiagnostics: true,
     routes: $appRoutes,
     redirect: (context, state) {
