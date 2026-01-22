@@ -31,6 +31,30 @@ class EnvService {
     return value;
   }
 
+  /// Google OAuth web client ID (used as serverClientId).
+  static String get googleWebClientId {
+    final value = dotenv.env['GOOGLE_WEB_CLIENT_ID'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'Google Web Client ID not configured',
+        'GOOGLE_WEB_CLIENT_ID is missing from env file',
+      );
+    }
+    return value;
+  }
+
+  /// Google OAuth iOS client ID.
+  static String get googleIosClientId {
+    final value = dotenv.env['GOOGLE_IOS_CLIENT_ID'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'Google iOS Client ID not configured',
+        'GOOGLE_IOS_CLIENT_ID is missing from env file',
+      );
+    }
+    return value;
+  }
+
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);

@@ -6,11 +6,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 void setUpTestEnv({
   String? supabaseUrl,
   String? supabaseAnonKey,
+  String? googleWebClientId,
+  String? googleIosClientId,
 }) {
   dotenv.loadFromString(
     envString: '''
 SUPABASE_URL=${supabaseUrl ?? 'https://test.supabase.co'}
 SUPABASE_ANON_KEY=${supabaseAnonKey ?? 'test-anon-key'}
+GOOGLE_WEB_CLIENT_ID=${googleWebClientId ?? 'test-web-client-id.apps.googleusercontent.com'}
+GOOGLE_IOS_CLIENT_ID=${googleIosClientId ?? 'test-ios-client-id.apps.googleusercontent.com'}
 ''',
   );
 }
