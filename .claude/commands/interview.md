@@ -6,7 +6,10 @@ i will answer any and all questions you have, but let's go one at a time.
 
 be very in-depth and continue interviewing me continually until it's complete.
 
+ALWAYS note your recommendations when presenting me with options.
+
 then create or update a @SPEC.md file in the feature directory. it SHOULD NOT contain any code implementations. Method signatures are ok:
+
 - Overview
 - Requirements
 - Architecture
