@@ -185,7 +185,6 @@
 				81DA741E96A9E09350605EB0 /* Pods-RunnerTests.profile-staging.xcconfig */,
 				C2C06A3635A79653AAC6ED83 /* Pods-RunnerTests.profile-development.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -517,6 +516,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Logly;
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
@@ -613,6 +613,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Logly;
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
@@ -704,6 +705,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = Logly;
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
@@ -800,6 +802,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-kqmf2pvt3rqcdflmags6aa4528mb0408";
@@ -894,6 +897,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-kqmf2pvt3rqcdflmags6aa4528mb0408";
@@ -987,6 +991,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[DEV] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-kqmf2pvt3rqcdflmags6aa4528mb0408";
@@ -1083,6 +1088,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
@@ -1179,6 +1185,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
@@ -1270,6 +1277,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = C322X58BV9;
 				ENABLE_BITCODE = NO;
 				FLAVOR_APP_NAME = "[STG] Logly";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.657560689249-9os7n0lpm5k11rs4u6sfh8v1r9tmofjt";
