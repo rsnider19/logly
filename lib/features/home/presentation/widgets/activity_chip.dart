@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/widgets/logly_icons.dart';
 
