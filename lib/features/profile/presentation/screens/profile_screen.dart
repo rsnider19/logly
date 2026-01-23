@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
+import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
+import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
+import 'package:logly/features/profile/presentation/widgets/streak_card.dart';
+import 'package:logly/features/profile/presentation/widgets/summary_card.dart';
 
-/// Placeholder profile screen showing user info and sign out option.
+/// Profile screen displaying user stats, graphs, and achievements.
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
@@ -35,68 +39,55 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       appBar: const CustomAppBar(
         title: 'Profile',
         showTrendingButton: false,
-        showSettingsButton: true,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 48,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                backgroundImage: user?.userMetadata?['avatar_url'] != null
-                    ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
-                    : null,
-                child: user?.userMetadata?['avatar_url'] == null
-                    ? Icon(
-                        Icons.person,
-                        size: 48,
-                        color: theme.colorScheme.onPrimaryContainer,
-                      )
-                    : null,
-              ),
-              const SizedBox(height: 24),
-              if (user?.email != null) ...[
-                Text(
-                  user!.email!,
-                  style: theme.textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-              ],
-              const SizedBox(height: 32),
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.construction,
-                      size: 48,
-                      color: Colors.grey[400],
-                    ),
-                    const SizedBox(height: 16),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // User info header
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: theme.colorScheme.primaryContainer,
+                    backgroundImage: user?.userMetadata?['avatar_url'] != null
+                        ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
+                        : null,
+                    child: user?.userMetadata?['avatar_url'] == null
+                        ? Icon(
+                            Icons.person,
+                            size: 48,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          )
+                        : null,
+                  ),
+                  const SizedBox(height: 16),
+                  if (user?.email != null)
                     Text(
-                      'Profile - Coming Soon',
-                      style: theme.textTheme.titleLarge,
+                      user!.email!,
+                      style: theme.textTheme.titleMedium,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Stats, graphs, and achievements will be displayed here.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                ],
               ),
-              const Spacer(),
-              SizedBox(
+            ),
+
+            // Streak card
+            const StreakCard(),
+
+            // Summary card with time period filter
+            const SummaryCard(),
+
+            // Contribution graph (GitHub-style)
+            const ContributionCard(),
+
+            // Monthly chart (12 month stacked bars)
+            const MonthlyChartCard(),
+
+            // Sign out button
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: _isSigningOut ? null : _signOut,
@@ -110,8 +101,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label: Text(_isSigningOut ? 'Signing out...' : 'Sign Out'),
                 ),
               ),
-            ],
-          ),
+            ),
+
+            // Bottom padding for safe area
+            const SizedBox(height: 24),
+          ],
         ),
       ),
     );
