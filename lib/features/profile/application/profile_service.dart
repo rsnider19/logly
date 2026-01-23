@@ -33,12 +33,8 @@ class ProfileService {
 
   /// Fetches category summary for a given time period.
   Future<List<CategorySummary>> getCategorySummary(TimePeriod period) async {
-    final dateRange = _getDateRangeForPeriod(period);
     _logger.d('Fetching category summary for period: $period');
-    return _dailyActivityRepository.getCategorySummary(
-      startDate: dateRange.$1,
-      endDate: dateRange.$2,
-    );
+    return _dailyActivityRepository.getCategorySummary(period);
   }
 
   /// Fetches contribution data for the last 365 days.
@@ -73,25 +69,6 @@ class ProfileService {
   }) async {
     _logger.d('Fetching monthly category data');
     return _dailyActivityRepository.getMonthlyData();
-  }
-
-  /// Converts a TimePeriod to a start/end date tuple.
-  ///
-  /// Returns (startDate, endDate) where null means no filter.
-  (DateTime?, DateTime?) _getDateRangeForPeriod(TimePeriod period) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    switch (period) {
-      case TimePeriod.oneWeek:
-        return (today.subtract(const Duration(days: 7)), today);
-      case TimePeriod.oneMonth:
-        return (DateTime(today.year, today.month - 1, today.day), today);
-      case TimePeriod.oneYear:
-        return (DateTime(today.year - 1, today.month, today.day), today);
-      case TimePeriod.all:
-        return (null, null);
-    }
   }
 }
 

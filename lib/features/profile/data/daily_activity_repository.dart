@@ -5,43 +5,40 @@ import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/domain/day_activity_count.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
 import 'package:logly/features/profile/domain/profile_exception.dart';
+import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 part 'daily_activity_repository.g.dart';
 
-/// Repository for fetching activity data from the daily_activity_counts_by_category view.
-///
-/// Uses PostgREST aggregate functions for server-side computation.
+/// Repository for fetching activity data from profile views.
 class DailyActivityRepository {
   DailyActivityRepository(this._supabase, this._logger);
 
   final SupabaseClient _supabase;
   final LoggerService _logger;
 
-  /// Fetches category summary using PostgREST aggregate (server-side grouping).
+  /// Fetches category summary from the time_period_activity_counts_by_category view.
   ///
-  /// If no dates are provided, returns all-time summary.
-  Future<List<CategorySummary>> getCategorySummary({
-    DateTime? startDate,
-    DateTime? endDate,
-  }) async {
+  /// The view pre-computes counts for all time periods, so we just select the
+  /// appropriate column based on the requested period.
+  Future<List<CategorySummary>> getCategorySummary(TimePeriod period) async {
     try {
-      var query = _supabase.from('daily_activity_counts_by_category').select('activity_category_id, count.sum()');
+      final response = await _supabase
+          .from('time_period_activity_counts_by_category')
+          .select('activity_category_id, week, month, year, all_time, activity_category(*)');
 
-      if (startDate != null) {
-        query = query.gte('activity_date', startDate.toIso8601String().split('T')[0]);
-      }
-      if (endDate != null) {
-        query = query.lte('activity_date', endDate.toIso8601String().split('T')[0]);
-      }
-
-      final response = await query;
+      final countField = switch (period) {
+        TimePeriod.oneWeek => 'week',
+        TimePeriod.oneMonth => 'month',
+        TimePeriod.oneYear => 'year',
+        TimePeriod.all => 'all_time',
+      };
 
       return (response as List).map((e) {
         return CategorySummary(
           activityCategoryId: e['activity_category_id'] as String,
-          activityCount: (e['sum'] as num?)?.toInt() ?? 0,
+          activityCount: (e[countField] as num?)?.toInt() ?? 0,
         );
       }).toList();
     } catch (e, st) {
@@ -50,7 +47,9 @@ class DailyActivityRepository {
     }
   }
 
-  /// Fetches daily totals for contribution graph (server-side grouping by date).
+  /// Fetches daily totals for contribution graph.
+  ///
+  /// Fetches raw data from the view and aggregates by date on client side.
   Future<List<DayActivityCount>> getDailyTotals({
     required DateTime startDate,
     required DateTime endDate,
@@ -58,14 +57,22 @@ class DailyActivityRepository {
     try {
       final response = await _supabase
           .from('daily_activity_counts_by_category')
-          .select('activity_date, count.sum()')
+          .select('activity_date, count')
           .gte('activity_date', startDate.toIso8601String().split('T')[0])
           .lte('activity_date', endDate.toIso8601String().split('T')[0]);
 
-      return (response as List).map((e) {
+      // Aggregate by date on client
+      final dailyTotals = <String, int>{};
+      for (final row in response as List) {
+        final date = row['activity_date'] as String;
+        final count = row['count'] as int;
+        dailyTotals.update(date, (v) => v + count, ifAbsent: () => count);
+      }
+
+      return dailyTotals.entries.map((e) {
         return DayActivityCount(
-          date: DateTime.parse(e['activity_date'] as String),
-          count: (e['sum'] as num?)?.toInt() ?? 0,
+          date: DateTime.parse(e.key),
+          count: e.value,
         );
       }).toList();
     } catch (e, st) {
