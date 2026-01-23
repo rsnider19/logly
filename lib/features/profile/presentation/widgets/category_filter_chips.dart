@@ -1,41 +1,75 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
 
-/// Horizontal scrollable row of category filter chips.
+/// Two-row grid of category filter chips for the monthly chart.
 class CategoryFilterChips extends ConsumerWidget {
   const CategoryFilterChips({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categoriesAsync = ref.watch(categoriesProvider);
-    final selectedFilters = ref.watch(selectedCategoryFiltersStateProvider);
+    final effectiveFiltersAsync = ref.watch(effectiveSelectedFiltersProvider);
     final notifier = ref.watch(selectedCategoryFiltersStateProvider.notifier);
 
     return categoriesAsync.when(
-      data: (categories) => SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: categories.map((category) {
+      data: (categories) {
+        // Sort categories by sortOrder
+        final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+        final allCategoryIds = sortedCategories.map((c) => c.activityCategoryId).toList();
+
+        // Get effective selection (defaults to all selected when loading or on error)
+        final effectiveFilters = effectiveFiltersAsync.when(
+          data: (filters) => filters,
+          loading: () => allCategoryIds.toSet(),
+          error: (_, _) => allCategoryIds.toSet(),
+        );
+
+        // Split into two rows of 3
+        final firstRow = sortedCategories.take(3).toList();
+        final secondRow = sortedCategories.skip(3).take(3).toList();
+
+        return Column(
+          children: [
+            _buildRow(firstRow, effectiveFilters, allCategoryIds, notifier),
+            const SizedBox(height: 8),
+            _buildRow(secondRow, effectiveFilters, allCategoryIds, notifier),
+          ],
+        );
+      },
+      loading: () => const _FilterChipsShimmer(),
+      error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildRow(
+    List<ActivityCategory> categories,
+    Set<String> selectedFilters,
+    List<String> allCategoryIds,
+    SelectedCategoryFiltersStateNotifier notifier,
+  ) {
+    return Row(
+      children: categories
+          .map((category) {
             final isSelected = selectedFilters.contains(category.activityCategoryId);
             final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
 
-            return Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: FilterChip(
-                label: Text(category.name),
-                selected: isSelected,
-                selectedColor: color.withValues(alpha: 0.3),
-                checkmarkColor: color,
-                onSelected: (_) => notifier.toggle(category.activityCategoryId),
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: FilterChip(
+                  label: Text(category.name),
+                  selected: isSelected,
+                  showCheckmark: false,
+                  selectedColor: color.withValues(alpha: 0.3),
+                  onSelected: (_) => notifier.toggle(category.activityCategoryId, allCategoryIds),
+                ),
               ),
             );
-          }).toList(),
-        ),
-      ),
-      loading: () => const _FilterChipsShimmer(),
-      error: (_, _) => const SizedBox.shrink(),
+          })
+          .toList(),
     );
   }
 }
@@ -47,15 +81,23 @@ class _FilterChipsShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(
-          4,
-          (index) => Padding(
-            padding: const EdgeInsets.only(right: 8),
+    return Column(
+      children: [
+        _buildShimmerRow(theme),
+        const SizedBox(height: 8),
+        _buildShimmerRow(theme),
+      ],
+    );
+  }
+
+  Widget _buildShimmerRow(ThemeData theme) {
+    return Row(
+      children: List.generate(
+        3,
+        (index) => Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
             child: Container(
-              width: 80,
               height: 32,
               decoration: BoxDecoration(
                 color: theme.colorScheme.surfaceContainerHighest,

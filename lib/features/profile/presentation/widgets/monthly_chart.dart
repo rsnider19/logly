@@ -15,8 +15,7 @@ class MonthlyChartCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
-    final isExpanded =
-        ref.watch(collapsibleSectionsStateProvider)[ProfileSections.monthly] ?? true;
+    final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.monthly] ?? true;
     final monthlyDataAsync = ref.watch(filteredMonthlyChartDataProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
 
@@ -38,7 +37,8 @@ class MonthlyChartCard extends ConsumerWidget {
               return categoriesAsync.when(
                 data: (categories) {
                   final categoryColors = {
-                    for (final c in categories) c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
+                    for (final c in categories)
+                      c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
                   };
 
                   return _MonthlyChart(

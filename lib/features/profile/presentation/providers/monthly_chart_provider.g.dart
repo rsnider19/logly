@@ -9,16 +9,25 @@ part of 'monthly_chart_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Notifier for selected category filters on the monthly chart.
+///
+/// An empty set means "all categories selected" (default state).
+/// When user deselects a category, we populate with all except that one.
 
 @ProviderFor(SelectedCategoryFiltersStateNotifier)
 final selectedCategoryFiltersStateProvider =
     SelectedCategoryFiltersStateNotifierProvider._();
 
 /// Notifier for selected category filters on the monthly chart.
+///
+/// An empty set means "all categories selected" (default state).
+/// When user deselects a category, we populate with all except that one.
 final class SelectedCategoryFiltersStateNotifierProvider
     extends
         $NotifierProvider<SelectedCategoryFiltersStateNotifier, Set<String>> {
   /// Notifier for selected category filters on the monthly chart.
+  ///
+  /// An empty set means "all categories selected" (default state).
+  /// When user deselects a category, we populate with all except that one.
   SelectedCategoryFiltersStateNotifierProvider._()
     : super(
         from: null,
@@ -49,9 +58,12 @@ final class SelectedCategoryFiltersStateNotifierProvider
 }
 
 String _$selectedCategoryFiltersStateNotifierHash() =>
-    r'ea8e4ca27a06bf6a11a637ec731f98e927a84489';
+    r'708634fc0aaf72c1ee0b68cb21504df309a488ee';
 
 /// Notifier for selected category filters on the monthly chart.
+///
+/// An empty set means "all categories selected" (default state).
+/// When user deselects a category, we populate with all except that one.
 
 abstract class _$SelectedCategoryFiltersStateNotifier
     extends $Notifier<Set<String>> {
@@ -71,6 +83,60 @@ abstract class _$SelectedCategoryFiltersStateNotifier
     element.handleCreate(ref, build);
   }
 }
+
+/// Provides the effective set of selected category IDs.
+///
+/// When raw state is empty, returns all category IDs (all selected by default).
+/// Otherwise returns the raw selection.
+
+@ProviderFor(effectiveSelectedFilters)
+final effectiveSelectedFiltersProvider = EffectiveSelectedFiltersProvider._();
+
+/// Provides the effective set of selected category IDs.
+///
+/// When raw state is empty, returns all category IDs (all selected by default).
+/// Otherwise returns the raw selection.
+
+final class EffectiveSelectedFiltersProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<Set<String>>,
+          Set<String>,
+          FutureOr<Set<String>>
+        >
+    with $FutureModifier<Set<String>>, $FutureProvider<Set<String>> {
+  /// Provides the effective set of selected category IDs.
+  ///
+  /// When raw state is empty, returns all category IDs (all selected by default).
+  /// Otherwise returns the raw selection.
+  EffectiveSelectedFiltersProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'effectiveSelectedFiltersProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$effectiveSelectedFiltersHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<Set<String>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<Set<String>> create(Ref ref) {
+    return effectiveSelectedFilters(ref);
+  }
+}
+
+String _$effectiveSelectedFiltersHash() =>
+    r'78dfbfde1dcc865949b6c31020b89ba6284f74bf';
 
 /// Provides monthly chart data for all categories.
 
@@ -163,4 +229,4 @@ final class FilteredMonthlyChartDataProvider
 }
 
 String _$filteredMonthlyChartDataHash() =>
-    r'204e82fb71fcc7696fc14805ae6535c99cfe173d';
+    r'aa7401a63bf0c1ab81d96b1b675f6ad2dff601d6';
