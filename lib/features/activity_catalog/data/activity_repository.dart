@@ -162,6 +162,39 @@ class ActivityRepository {
     }
   }
 
+  /// Fetches suggested favorite activities for a specific category.
+  Future<List<Activity>> getSuggestedFavoritesByCategory(String categoryId) async {
+    final cacheKey = 'suggested_favorites::$categoryId';
+
+    try {
+      final response = await _supabase
+          .from('activity')
+          .select('*, activity_category(*)')
+          .eq('is_suggested_favorite', true)
+          .eq('activity_category_id', categoryId)
+          .order('name');
+
+      final activities =
+          (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
+
+      // Cache the result
+      await _cacheActivities(cacheKey, activities);
+
+      return activities;
+    } catch (e, st) {
+      _logger.e('Failed to fetch suggested favorites for category $categoryId', e, st);
+
+      // Try to return cached data
+      final cached = await _getCachedActivities(cacheKey);
+      if (cached != null) {
+        _logger.d('Returning cached suggested favorites for category $categoryId');
+        return cached;
+      }
+
+      throw ActivityFetchException(e.toString());
+    }
+  }
+
   Future<void> _cacheActivities(String cacheKey, List<Activity> activities) async {
     try {
       final jsonList = activities.map((a) => a.toJson()).toList();

@@ -260,3 +260,90 @@ final class SuggestedFavoritesProvider
 
 String _$suggestedFavoritesHash() =>
     r'40d258c9a85580f3bb14e19685b9cae3de55e5e7';
+
+/// Provides suggested favorite activities for a specific category.
+
+@ProviderFor(suggestedFavoritesByCategory)
+final suggestedFavoritesByCategoryProvider =
+    SuggestedFavoritesByCategoryFamily._();
+
+/// Provides suggested favorite activities for a specific category.
+
+final class SuggestedFavoritesByCategoryProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<Activity>>,
+          List<Activity>,
+          FutureOr<List<Activity>>
+        >
+    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
+  /// Provides suggested favorite activities for a specific category.
+  SuggestedFavoritesByCategoryProvider._({
+    required SuggestedFavoritesByCategoryFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'suggestedFavoritesByCategoryProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$suggestedFavoritesByCategoryHash();
+
+  @override
+  String toString() {
+    return r'suggestedFavoritesByCategoryProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<Activity>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<Activity>> create(Ref ref) {
+    final argument = this.argument as String;
+    return suggestedFavoritesByCategory(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SuggestedFavoritesByCategoryProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$suggestedFavoritesByCategoryHash() =>
+    r'1f1784e71043f5ab6316a755a0e98486b27feddf';
+
+/// Provides suggested favorite activities for a specific category.
+
+final class SuggestedFavoritesByCategoryFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<Activity>>, String> {
+  SuggestedFavoritesByCategoryFamily._()
+    : super(
+        retry: null,
+        name: r'suggestedFavoritesByCategoryProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Provides suggested favorite activities for a specific category.
+
+  SuggestedFavoritesByCategoryProvider call(String categoryId) =>
+      SuggestedFavoritesByCategoryProvider._(argument: categoryId, from: this);
+
+  @override
+  String toString() => r'suggestedFavoritesByCategoryProvider';
+}

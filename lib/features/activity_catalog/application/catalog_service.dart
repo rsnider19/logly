@@ -69,6 +69,14 @@ class CatalogService {
     return _activityRepository.getSuggestedFavorites();
   }
 
+  /// Fetches suggested favorite activities for a specific category.
+  Future<List<Activity>> getSuggestedFavoritesByCategory(String categoryId) async {
+    if (categoryId.isEmpty) {
+      throw const ActivityFetchException('Category ID cannot be empty');
+    }
+    return _activityRepository.getSuggestedFavoritesByCategory(categoryId);
+  }
+
   /// Prefetches catalog data for faster subsequent access.
   ///
   /// Loads categories and popular activities in parallel.

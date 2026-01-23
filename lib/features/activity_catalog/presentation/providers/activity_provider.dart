@@ -31,3 +31,10 @@ Future<List<Activity>> suggestedFavorites(Ref ref) async {
   final service = ref.watch(catalogServiceProvider);
   return service.getSuggestedFavorites();
 }
+
+/// Provides suggested favorite activities for a specific category.
+@riverpod
+Future<List<Activity>> suggestedFavoritesByCategory(Ref ref, String categoryId) async {
+  final service = ref.watch(catalogServiceProvider);
+  return service.getSuggestedFavoritesByCategory(categoryId);
+}
