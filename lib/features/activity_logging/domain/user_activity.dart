@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logly/core/services/env_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity_detail.dart';
@@ -47,5 +47,5 @@ abstract class UserActivity with _$UserActivity {
   String get displayName => activityNameOverride ?? activity?.name ?? 'Unknown Activity';
 
   /// Returns the effective color from the activity or its category.
-  String get color => activity?.activityCategory?.hexColor ?? '#808080';
+  Color getColor(BuildContext context) => activity?.getColor(context) ?? Theme.of(context).colorScheme.onSurface;
 }

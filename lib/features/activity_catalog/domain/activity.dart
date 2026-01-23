@@ -39,6 +39,14 @@ abstract class Activity with _$Activity {
 
   factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
 
+  factory Activity.empty({String? name}) => Activity(
+    activityId: '',
+    activityCategoryId: '',
+    name: name ?? '',
+    activityCode: '',
+    activityDateType: ActivityDateType.single,
+  );
+
   Color getColor(BuildContext context) => activityCategory?.color ?? Theme.of(context).colorScheme.onSurface;
 
   /// The Supabase storage URL for this activity's icon.

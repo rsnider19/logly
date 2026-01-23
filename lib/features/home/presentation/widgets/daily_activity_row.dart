@@ -88,11 +88,14 @@ class DailyActivityRow extends StatelessWidget {
         final chips = <Widget>[];
 
         // Add activity chips
-        for (final activity in summary.userActivities) {
+        for (final userActivity in summary.userActivities) {
           chips.add(
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: ActivityChip(userActivity: activity),
+              child: UserActivityChip(
+                userActivity: userActivity,
+                onPressed: () => EditActivityRoute(userActivityId: userActivity.userActivityId),
+              ),
             ),
           );
         }
@@ -145,15 +148,15 @@ class DailyActivityRow extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: ActivityChip(userActivity: UserActivity.empty(name: 'Charizard')),
+                child: UserActivityChip(userActivity: UserActivity.empty(name: 'Charizard')),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: ActivityChip(userActivity: UserActivity.empty(name: 'Blastoise')),
+                child: UserActivityChip(userActivity: UserActivity.empty(name: 'Blastoise')),
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: ActivityChip(userActivity: UserActivity.empty(name: 'Venusaur')),
+                child: UserActivityChip(userActivity: UserActivity.empty(name: 'Venusaur')),
               ),
             ],
           ),
