@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "plan",
     "allow": [
       "Bash(fvm flutter pub get:*)",
       "Bash(fvm flutter analyze:*)",
