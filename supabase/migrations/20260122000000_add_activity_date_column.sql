@@ -671,3 +671,21 @@ group by user_id, ua.activity_date, activity_category_id;
 create function activity_category(activity_counts_by_date) returns setof activity_category rows 1 as $$
   select * from activity_category where activity_category_id = $1.activity_category_id
 $$ stable language sql;
+
+--- Mainly used for Activity Summary card
+create view time_period_activity_counts_by_category
+with (security_invoker = true)
+as
+select ua.user_id,
+  a.activity_category_id,
+  count(1) filter (where ua.activity_date >= current_date - interval '6 days') as week,
+  count(1) filter (where ua.activity_date >= current_date - interval '29 days') as month,
+  count(1) filter (where ua.activity_date >= current_date - interval '364 days') as year,
+  count(1) as all_time
+from user_activity ua
+  join activity a using (activity_id)
+group by ua.user_id, a.activity_category_id;
+
+create function activity_category(time_period_activity_counts_by_category) returns setof activity_category rows 1 as $$
+  select * from activity_category where activity_category_id = $1.activity_category_id
+$$ stable language sql;
