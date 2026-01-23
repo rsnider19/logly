@@ -9,6 +9,9 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [
   $appShellRoute,
   $authRoute,
+  $onboardingIntroRoute,
+  $onboardingFavoritesRoute,
+  $onboardingHealthRoute,
   $activitySearchRoute,
   $editActivityRoute,
   $developerRoute,
@@ -108,6 +111,84 @@ mixin $AuthRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/auth');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $onboardingIntroRoute => GoRouteData.$route(
+  path: '/onboarding',
+  factory: $OnboardingIntroRoute._fromState,
+);
+
+mixin $OnboardingIntroRoute on GoRouteData {
+  static OnboardingIntroRoute _fromState(GoRouterState state) =>
+      const OnboardingIntroRoute();
+
+  @override
+  String get location => GoRouteData.$location('/onboarding');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $onboardingFavoritesRoute => GoRouteData.$route(
+  path: '/onboarding/favorites',
+  factory: $OnboardingFavoritesRoute._fromState,
+);
+
+mixin $OnboardingFavoritesRoute on GoRouteData {
+  static OnboardingFavoritesRoute _fromState(GoRouterState state) =>
+      const OnboardingFavoritesRoute();
+
+  @override
+  String get location => GoRouteData.$location('/onboarding/favorites');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $onboardingHealthRoute => GoRouteData.$route(
+  path: '/onboarding/health',
+  factory: $OnboardingHealthRoute._fromState,
+);
+
+mixin $OnboardingHealthRoute on GoRouteData {
+  static OnboardingHealthRoute _fromState(GoRouterState state) =>
+      const OnboardingHealthRoute();
+
+  @override
+  String get location => GoRouteData.$location('/onboarding/health');
 
   @override
   void go(BuildContext context) => context.go(location);

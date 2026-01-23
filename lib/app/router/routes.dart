@@ -9,6 +9,9 @@ import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
 import 'package:logly/features/home/presentation/widgets/app_shell.dart';
+import 'package:logly/features/onboarding/presentation/screens/favorites_selection_screen.dart';
+import 'package:logly/features/onboarding/presentation/screens/health_permission_screen.dart';
+import 'package:logly/features/onboarding/presentation/screens/intro_pager_screen.dart';
 import 'package:logly/features/profile/presentation/screens/profile_screen.dart';
 import 'package:logly/features/settings/presentation/screens/settings_screen.dart';
 
@@ -100,6 +103,39 @@ class AuthRoute extends GoRouteData with $AuthRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const SignInScreen();
+  }
+}
+
+/// Onboarding intro route - intro pager for new users.
+@TypedGoRoute<OnboardingIntroRoute>(path: '/onboarding')
+class OnboardingIntroRoute extends GoRouteData with $OnboardingIntroRoute {
+  const OnboardingIntroRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const IntroPagerScreen();
+  }
+}
+
+/// Onboarding favorites route - favorite activity selection.
+@TypedGoRoute<OnboardingFavoritesRoute>(path: '/onboarding/favorites')
+class OnboardingFavoritesRoute extends GoRouteData with $OnboardingFavoritesRoute {
+  const OnboardingFavoritesRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const FavoritesSelectionScreen();
+  }
+}
+
+/// Onboarding health route - health permission request.
+@TypedGoRoute<OnboardingHealthRoute>(path: '/onboarding/health')
+class OnboardingHealthRoute extends GoRouteData with $OnboardingHealthRoute {
+  const OnboardingHealthRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const HealthPermissionScreen();
   }
 }
 
