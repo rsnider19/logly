@@ -28,3 +28,9 @@ class FetchMonthlyDataException extends ProfileException {
   const FetchMonthlyDataException([String? technicalDetails])
       : super('Unable to load monthly data. Please try again.', technicalDetails);
 }
+
+/// Thrown when fetching daily activity counts fails.
+class FetchDailyCountsException extends ProfileException {
+  const FetchDailyCountsException([String? technicalDetails])
+      : super('Unable to load activity data. Please try again.', technicalDetails);
+}

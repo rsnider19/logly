@@ -1,8 +1,7 @@
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
-import 'package:logly/features/profile/data/contribution_repository.dart';
+import 'package:logly/features/profile/data/daily_activity_repository.dart';
 import 'package:logly/features/profile/data/streak_repository.dart';
-import 'package:logly/features/profile/data/summary_repository.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
 import 'package:logly/features/profile/domain/streak_data.dart';
@@ -18,14 +17,12 @@ part 'profile_service.g.dart';
 class ProfileService {
   ProfileService(
     this._streakRepository,
-    this._summaryRepository,
-    this._contributionRepository,
+    this._dailyActivityRepository,
     this._logger,
   );
 
   final StreakRepository _streakRepository;
-  final SummaryRepository _summaryRepository;
-  final ContributionRepository _contributionRepository;
+  final DailyActivityRepository _dailyActivityRepository;
   final LoggerService _logger;
 
   /// Fetches the user's streak data.
@@ -38,7 +35,7 @@ class ProfileService {
   Future<List<CategorySummary>> getCategorySummary(TimePeriod period) async {
     final dateRange = _getDateRangeForPeriod(period);
     _logger.d('Fetching category summary for period: $period');
-    return _summaryRepository.getCategorySummary(
+    return _dailyActivityRepository.getCategorySummary(
       startDate: dateRange.$1,
       endDate: dateRange.$2,
     );
@@ -53,7 +50,7 @@ class ProfileService {
 
     _logger.d('Fetching contribution data from $startDate to $endDate');
 
-    final data = await _contributionRepository.getDayActivityCounts(
+    final data = await _dailyActivityRepository.getDailyTotals(
       startDate: startDate,
       endDate: endDate,
     );
@@ -75,8 +72,7 @@ class ProfileService {
     Set<String>? categoryFilters,
   }) async {
     _logger.d('Fetching monthly category data');
-    // The RPC returns all data; filtering happens in the provider/UI
-    return _contributionRepository.getMonthlyCategoryData();
+    return _dailyActivityRepository.getMonthlyData();
   }
 
   /// Converts a TimePeriod to a start/end date tuple.
@@ -104,8 +100,7 @@ class ProfileService {
 ProfileService profileService(Ref ref) {
   return ProfileService(
     ref.watch(streakRepositoryProvider),
-    ref.watch(summaryRepositoryProvider),
-    ref.watch(contributionRepositoryProvider),
+    ref.watch(dailyActivityRepositoryProvider),
     ref.watch(loggerProvider),
   );
 }

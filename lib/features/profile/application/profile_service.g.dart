@@ -52,4 +52,4 @@ final class ProfileServiceProvider
   }
 }
 
-String _$profileServiceHash() => r'1933ca6437e673ddfae07532fc3020a41c82cec8';
+String _$profileServiceHash() => r'03b92bc8252510d05536dae52c987b2de12c3493';
