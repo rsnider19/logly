@@ -1,12 +1,13 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/settings/application/settings_service.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
+import 'package:logly/features/settings/presentation/providers/notification_preferences_provider.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/features/settings/presentation/widgets/favorites_bottom_sheet.dart';
 import 'package:logly/features/settings/presentation/widgets/health_sync_bottom_sheet.dart';
@@ -24,7 +25,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isSigningOut = false;
   bool _isDeleting = false;
-  bool _notificationsEnabled = false;
+  bool _isTogglingNotifications = false;
 
   Future<void> _signOut() async {
     final confirmed = await _showConfirmDialog(
@@ -130,6 +131,127 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final uri = Uri.parse('https://www.mylogly.app');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.inAppWebView);
+    }
+  }
+
+  Future<void> _enableNotifications() async {
+    if (_isTogglingNotifications) return;
+
+    setState(() => _isTogglingNotifications = true);
+    try {
+      final result =
+          await ref.read(notificationPreferencesStateProvider.notifier).enableNotifications();
+
+      if (!mounted) return;
+
+      switch (result) {
+        case EnableNotificationsSuccess():
+          // Success - UI will update automatically
+          break;
+
+        case EnableNotificationsDenied():
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Notification permission denied'),
+            ),
+          );
+
+        case EnableNotificationsPermanentlyDenied():
+          await _showOpenSettingsDialog();
+
+        case EnableNotificationsError(:final message):
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to enable notifications: $message'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isTogglingNotifications = false);
+      }
+    }
+  }
+
+  Future<void> _disableNotifications() async {
+    if (_isTogglingNotifications) return;
+
+    setState(() => _isTogglingNotifications = true);
+    try {
+      await ref.read(notificationPreferencesStateProvider.notifier).disableNotifications();
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to disable notifications: $e'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isTogglingNotifications = false);
+      }
+    }
+  }
+
+  Future<void> _showTimePicker() async {
+    final notificationPrefs = ref.read(notificationPreferencesStateProvider);
+    final currentTime = notificationPrefs.reminderTime;
+
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: currentTime,
+    );
+
+    if (pickedTime != null && mounted) {
+      try {
+        await ref.read(notificationPreferencesStateProvider.notifier).setReminderTime(pickedTime);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to update reminder time: $e'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+      }
+    }
+  }
+
+  String _formatTime(TimeOfDay time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '$hour:$minute $period';
+  }
+
+  Future<void> _showOpenSettingsDialog() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Notifications Disabled'),
+        content: const Text(
+          'Notification permission is disabled. '
+          'Please enable it in your device settings to receive reminders.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true) {
+      await AppSettings.openAppSettings(type: AppSettingsType.notification);
     }
   }
 
@@ -263,15 +385,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
           // Notifications Section
           const _SectionHeader(title: 'Notifications'),
-          SwitchListTile(
-            title: const Text('Enable'),
-            value: _notificationsEnabled,
-            onChanged: (value) {
-              setState(() {
-                _notificationsEnabled = value;
-              });
-              // TODO: Persist notification preference and request permissions
-            },
+          _NotificationsSection(
+            isToggling: _isTogglingNotifications,
+            onEnable: _enableNotifications,
+            onDisable: _disableNotifications,
+            onTimeTap: _showTimePicker,
+            formatTime: _formatTime,
           ),
 
           const Divider(height: 1),
@@ -350,6 +469,60 @@ class _SectionHeader extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
+    );
+  }
+}
+
+class _NotificationsSection extends ConsumerWidget {
+  const _NotificationsSection({
+    required this.isToggling,
+    required this.onEnable,
+    required this.onDisable,
+    required this.onTimeTap,
+    required this.formatTime,
+  });
+
+  final bool isToggling;
+  final VoidCallback onEnable;
+  final VoidCallback onDisable;
+  final VoidCallback onTimeTap;
+  final String Function(TimeOfDay) formatTime;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notificationPrefs = ref.watch(notificationPreferencesStateProvider);
+    final enabled = notificationPrefs.enabled;
+    final reminderTime = notificationPrefs.reminderTime;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SwitchListTile(
+          title: const Text('Enable'),
+          value: enabled,
+          onChanged: isToggling
+              ? null
+              : (value) {
+                  if (value) {
+                    onEnable();
+                  } else {
+                    onDisable();
+                  }
+                },
+        ),
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: ListTile(
+            title: const Text('Reminder'),
+            trailing: TextButton(
+              onPressed: onTimeTap,
+              child: Text(formatTime(reminderTime)),
+            ),
+          ),
+          crossFadeState: enabled ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 200),
+        ),
+      ],
     );
   }
 }

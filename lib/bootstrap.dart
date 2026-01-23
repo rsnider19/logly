@@ -4,7 +4,9 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/core/providers/shared_preferences_provider.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Bootstraps the application with the given environment path.
@@ -13,7 +15,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 /// 1. Ensures Flutter is initialized
 /// 2. Loads environment variables
 /// 3. Initializes Supabase
-/// 4. Wraps the app in ProviderScope
+/// 4. Initializes SharedPreferences
+/// 5. Wraps the app in ProviderScope
 Future<void> bootstrap(
   FutureOr<Widget> Function() builder, {
   required String envPath,
@@ -40,8 +43,17 @@ Future<void> bootstrap(
     debugPrint('✓ Supabase initialized');
   }
 
+  // Initialize SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  if (kDebugMode) {
+    debugPrint('✓ SharedPreferences initialized');
+  }
+
   runApp(
     ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+      ],
       child: await builder(),
     ),
   );
