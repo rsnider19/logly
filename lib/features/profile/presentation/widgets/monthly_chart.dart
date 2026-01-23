@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
@@ -6,7 +7,6 @@ import 'package:logly/features/profile/presentation/providers/collapsible_sectio
 import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/category_filter_chips.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
-import 'package:logly/features/profile/presentation/widgets/stacked_bar.dart';
 
 /// Card displaying the last 12 months as stacked bar chart.
 class MonthlyChartCard extends ConsumerWidget {
@@ -71,15 +71,34 @@ class _MonthlyChart extends StatelessWidget {
   final Map<String, Color> categoryColors;
 
   static const List<String> monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  static const double chartHeight = 124;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     // Group data by month
     final monthlyGroups = <DateTime, List<MonthlyCategoryData>>{};
     for (final item in data) {
       final monthKey = DateTime(item.activityMonth.year, item.activityMonth.month);
       monthlyGroups.putIfAbsent(monthKey, () => []).add(item);
     }
+
+    // Calculate overall totals per category (for sorting segments)
+    final categoryTotals = <String, int>{};
+    for (final item in data) {
+      if (item.activityCategoryId != null) {
+        categoryTotals.update(
+          item.activityCategoryId!,
+          (v) => v + item.activityCount,
+          ifAbsent: () => item.activityCount,
+        );
+      }
+    }
+
+    // Sort categories by total (descending) - highest total at bottom of stack
+    final sortedCategories = categoryTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final categoryOrder = {for (var i = 0; i < sortedCategories.length; i++) sortedCategories[i].key: i};
 
     // Get last 12 months
     final now = DateTime.now();
@@ -88,37 +107,100 @@ class _MonthlyChart extends StatelessWidget {
       return DateTime(date.year, date.month);
     });
 
-    // Calculate max total for scaling
-    var maxTotal = 0;
+    // Calculate max total for Y axis
+    var maxTotal = 0.0;
     for (final month in months) {
       final items = monthlyGroups[month] ?? [];
       final total = items.fold(0, (sum, item) => sum + item.activityCount);
-      if (total > maxTotal) maxTotal = total;
+      if (total > maxTotal) maxTotal = total.toDouble();
+    }
+
+    // Build bar groups
+    final barGroups = <BarChartGroupData>[];
+    for (var i = 0; i < months.length; i++) {
+      final month = months[i];
+      final items = monthlyGroups[month] ?? [];
+
+      // Sort items by category order (highest total category first = bottom of stack)
+      final sortedItems = items.toList()
+        ..sort((a, b) {
+          final aOrder = categoryOrder[a.activityCategoryId] ?? 999;
+          final bOrder = categoryOrder[b.activityCategoryId] ?? 999;
+          return aOrder.compareTo(bOrder);
+        });
+
+      // Build stack items
+      final stackItems = <BarChartRodStackItem>[];
+      var fromY = 0.0;
+      for (final item in sortedItems) {
+        final toY = fromY + item.activityCount;
+        stackItems.add(
+          BarChartRodStackItem(
+            fromY,
+            toY,
+            item.activityCategoryId != null
+                ? categoryColors[item.activityCategoryId] ?? Colors.grey
+                : Colors.grey,
+          ),
+        );
+        fromY = toY;
+      }
+
+      barGroups.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: fromY,
+              width: 20,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+              rodStackItems: stackItems,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
+      );
     }
 
     return SizedBox(
-      height: StackedBar.maxBarHeight + 24,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: months.map((month) {
-          final items = monthlyGroups[month] ?? [];
-          final segments = items.map((item) {
-            return StackedBarSegment(
-              categoryId: item.activityCategoryId,
-              count: item.activityCount,
-              color: item.activityCategoryId != null
-                  ? categoryColors[item.activityCategoryId] ?? Colors.grey
-                  : Colors.grey,
-            );
-          }).toList();
-
-          return StackedBar(
-            monthLabel: monthLabels[month.month - 1],
-            segments: segments,
-            maxHeight: maxTotal.toDouble(),
-          );
-        }).toList(),
+      height: chartHeight,
+      child: BarChart(
+        BarChartData(
+          maxY: maxTotal > 0 ? maxTotal : 1,
+          barGroups: barGroups,
+          titlesData: FlTitlesData(
+            topTitles: const AxisTitles(),
+            rightTitles: const AxisTitles(),
+            leftTitles: const AxisTitles(),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 24,
+                getTitlesWidget: (value, meta) {
+                  final index = value.toInt();
+                  if (index < 0 || index >= months.length) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      monthLabels[months[index].month - 1],
+                      style: theme.textTheme.labelSmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          gridData: const FlGridData(show: false),
+          borderData: FlBorderData(show: false),
+          barTouchData: const BarTouchData(enabled: false),
+          alignment: BarChartAlignment.spaceAround,
+        ),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
       ),
     );
   }
@@ -162,7 +244,7 @@ class _MonthlyChartShimmer extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      height: StackedBar.maxBarHeight + 24,
+      height: _MonthlyChart.chartHeight,
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(4),
