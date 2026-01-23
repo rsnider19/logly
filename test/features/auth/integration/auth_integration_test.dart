@@ -20,7 +20,6 @@ final _mockCategories = [
     name: 'Fitness',
     activityCategoryCode: 'fitness',
     hexColor: '#FF6B6B',
-    icon: '🏋️',
     sortOrder: 1,
   ),
 ];

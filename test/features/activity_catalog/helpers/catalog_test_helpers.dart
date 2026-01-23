@@ -55,7 +55,6 @@ ActivityCategory fakeActivityCategory({
     activityCategoryCode: activityCategoryCode ?? 'TEST',
     description: description,
     hexColor: hexColor ?? '#FF5733',
-    icon: icon ?? 'fitness_center',
     sortOrder: sortOrder ?? 1,
   );
 }
@@ -81,8 +80,6 @@ Activity fakeActivity({
     name: name ?? 'Test Activity',
     activityCode: activityCode ?? 'TEST_ACT',
     description: description,
-    hexColor: hexColor,
-    icon: icon,
     activityDateType: activityDateType ?? ActivityDateType.single,
     isSuggestedFavorite: isSuggestedFavorite ?? false,
     activityCategory: activityCategory,
@@ -125,7 +122,6 @@ SubActivity fakeSubActivity({
     activityId: activityId ?? 'act-1',
     name: name ?? 'Test Sub Activity',
     subActivityCode: subActivityCode ?? 'TEST_SUB',
-    icon: icon,
   );
 }
 
