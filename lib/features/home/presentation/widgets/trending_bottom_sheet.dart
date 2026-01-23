@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/home/domain/trending_activity.dart';
 import 'package:logly/features/home/presentation/providers/trending_provider.dart';
+import 'package:logly/widgets/logly_icons.dart';
 
 /// Bottom sheet displaying global trending activities.
 class TrendingBottomSheet extends ConsumerWidget {
@@ -135,7 +136,6 @@ class _TrendingActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final activityData = activity.activity;
-    final color = _parseColor(activityData?.effectiveColor ?? '#808080');
 
     return ListTile(
       leading: Row(
@@ -155,22 +155,15 @@ class _TrendingActivityTile extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           // Activity icon
-          CircleAvatar(
-            backgroundColor: color.withValues(alpha: 0.2),
-            child: activityData?.effectiveIcon != null
-                ? Text(activityData!.effectiveIcon!, style: const TextStyle(fontSize: 18))
-                : Icon(Icons.fitness_center, color: color, size: 20),
-          ),
+          if (activityData != null)
+            ActivityIcon(activity: activityData, size: 40)
+          else
+            const Icon(Icons.fitness_center, size: 40),
         ],
       ),
       title: Text(activityData?.name ?? 'Unknown Activity'),
       trailing: _RankChangeIndicator(rankChange: activity.rankChange),
     );
-  }
-
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
   }
 }
 

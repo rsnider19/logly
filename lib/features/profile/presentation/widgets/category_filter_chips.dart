@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
+import 'package:logly/widgets/logly_icons.dart';
 
 /// Two-row grid of category filter chips for the monthly chart.
 class CategoryFilterChips extends ConsumerWidget {
@@ -28,14 +29,37 @@ class CategoryFilterChips extends ConsumerWidget {
         );
 
         // Split into two rows of 3
-        final firstRow = sortedCategories.take(3).toList();
-        final secondRow = sortedCategories.skip(3).take(3).toList();
-
-        return Column(
+        return Row(
+          spacing: 8,
           children: [
-            _buildRow(firstRow, effectiveFilters, allCategoryIds, notifier),
-            const SizedBox(height: 8),
-            _buildRow(secondRow, effectiveFilters, allCategoryIds, notifier),
+            for (final category in sortedCategories)
+              Expanded(
+                child: Builder(
+                  builder: (context) {
+                    final isSelected = effectiveFilters.contains(category.activityCategoryId);
+                    return IconButton.outlined(
+                      onPressed: () => notifier.toggle(category.activityCategoryId, allCategoryIds),
+                      color: Color(int.parse(category.hexColor.replaceFirst('#', 'FF'), radix: 16)),
+                      style: IconButton.styleFrom(
+                        shape: const CircleBorder(),
+                        side: BorderSide(
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.54))
+                              : category.color,
+                        ),
+                        backgroundColor: isSelected ? category.color : null,
+                      ),
+                      icon: Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: ActivityCategoryIcon(
+                          activityCategory: category,
+                          color: isSelected ? Theme.of(context).colorScheme.onSurface : category.color,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
           ],
         );
       },
@@ -51,25 +75,31 @@ class CategoryFilterChips extends ConsumerWidget {
     SelectedCategoryFiltersStateNotifier notifier,
   ) {
     return Row(
-      children: categories
-          .map((category) {
-            final isSelected = selectedFilters.contains(category.activityCategoryId);
-            final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
+      spacing: 8,
+      children: categories.map((category) {
+        final isSelected = selectedFilters.contains(category.activityCategoryId);
+        final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
 
-            return Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: FilterChip(
-                  label: Text(category.name),
-                  selected: isSelected,
-                  showCheckmark: false,
-                  selectedColor: color.withValues(alpha: 0.3),
-                  onSelected: (_) => notifier.toggle(category.activityCategoryId, allCategoryIds),
+        return Expanded(
+          child: FilterChip(
+            label: Row(
+              children: [
+                Expanded(
+                  child: Center(child: Text(category.name)),
                 ),
-              ),
-            );
-          })
-          .toList(),
+              ],
+            ),
+            selected: isSelected,
+            showCheckmark: false,
+            shape: const StadiumBorder(),
+            side: BorderSide(
+              color: color,
+            ),
+            selectedColor: color,
+            onSelected: (_) => notifier.toggle(category.activityCategoryId, allCategoryIds),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -84,7 +114,6 @@ class _FilterChipsShimmer extends StatelessWidget {
     return Column(
       children: [
         _buildShimmerRow(theme),
-        const SizedBox(height: 8),
         _buildShimmerRow(theme),
       ],
     );

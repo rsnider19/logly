@@ -10,6 +10,7 @@ import 'package:logly/features/activity_catalog/presentation/providers/search_pr
 import 'package:logly/features/activity_logging/domain/favorite_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
 import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
+import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for searching and selecting an activity to log.
 ///
@@ -310,26 +311,15 @@ class _ActivityListTile extends StatelessWidget {
   final Activity activity;
   final VoidCallback onTap;
 
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _parseColor(activity.effectiveColor);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         onTap: onTap,
-        leading: CircleAvatar(
-          backgroundColor: color.withValues(alpha: 0.2),
-          child: activity.effectiveIcon != null
-              ? Text(activity.effectiveIcon!, style: const TextStyle(fontSize: 18))
-              : Icon(Icons.fitness_center, color: color),
-        ),
+        leading: ActivityIcon(activity: activity, size: 40),
         title: Text(activity.name),
         subtitle: activity.activityCategory != null
             ? Text(
@@ -354,15 +344,9 @@ class _FavoriteActivityCard extends StatelessWidget {
   final Activity activity;
   final VoidCallback onTap;
 
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _parseColor(activity.effectiveColor);
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -375,13 +359,7 @@ class _FavoriteActivityCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundColor: color.withValues(alpha: 0.2),
-                radius: 20,
-                child: activity.effectiveIcon != null
-                    ? Text(activity.effectiveIcon!, style: const TextStyle(fontSize: 16))
-                    : Icon(Icons.fitness_center, color: color, size: 18),
-              ),
+              ActivityIcon(activity: activity, size: 40),
               const SizedBox(height: 8),
               Text(
                 activity.name,
@@ -407,21 +385,12 @@ class _CategoryExpansionTile extends ConsumerWidget {
   final ActivityCategory category;
   final void Function(Activity) onActivitySelected;
 
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final color = _parseColor(category.hexColor);
 
     return ExpansionTile(
-      leading: CircleAvatar(
-        backgroundColor: color.withValues(alpha: 0.2),
-        child: Text(category.icon, style: const TextStyle(fontSize: 18)),
-      ),
+      leading: ActivityCategoryIcon(activityCategory: category, size: 40),
       title: Text(category.name),
       children: [
         Consumer(
@@ -446,9 +415,7 @@ class _CategoryExpansionTile extends ConsumerWidget {
                   children: activities.map((activity) {
                     return ListTile(
                       contentPadding: const EdgeInsets.only(left: 72, right: 16),
-                      leading: activity.icon != null
-                          ? Text(activity.icon!, style: const TextStyle(fontSize: 18))
-                          : null,
+                      leading: ActivityIcon(activity: activity, size: 24),
                       title: Text(activity.name),
                       onTap: () => onActivitySelected(activity),
                       trailing: const Icon(Icons.chevron_right, size: 20),

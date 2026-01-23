@@ -19,6 +19,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
+import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for logging a new activity.
 ///
@@ -95,7 +96,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
         ) ??
         false;
 
-    final activityColor = _parseColor(widget.activity.effectiveColor);
+    final activityColor = widget.activity.getColor(context);
     final sortedDetails = List<ActivityDetail>.from(widget.activity.activityDetail)
       ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
@@ -105,10 +106,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            if (widget.activity.effectiveIcon != null) ...[
-              Text(widget.activity.effectiveIcon!, style: const TextStyle(fontSize: 24)),
-              const SizedBox(width: 8),
-            ],
+            ActivityIcon(activity: widget.activity, size: 24),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 widget.activity.name,
@@ -145,15 +144,9 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                   ),
                   child: Row(
                     children: [
-                      CircleAvatar(
-                        backgroundColor: activityColor.withValues(alpha: 0.2),
-                        radius: 24,
-                        child: widget.activity.effectiveIcon != null
-                            ? Text(
-                                widget.activity.effectiveIcon!,
-                                style: const TextStyle(fontSize: 24),
-                              )
-                            : Icon(Icons.fitness_center, color: activityColor),
+                      ActivityIcon(
+                        activity: widget.activity,
+                        size: 48,
                       ),
                       const SizedBox(width: 16),
                       Expanded(

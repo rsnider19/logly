@@ -20,6 +20,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
+import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for editing an existing logged activity.
 ///
@@ -156,11 +157,6 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
     }
   }
 
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -232,7 +228,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
         ) ??
         false;
 
-    final activityColor = _parseColor(activity.effectiveColor);
+    final activityColor = activity.getColor(context);
     final sortedDetails = List<ActivityDetail>.from(activity.activityDetail)
       ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
@@ -242,10 +238,8 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            if (activity.effectiveIcon != null) ...[
-              Text(activity.effectiveIcon!, style: const TextStyle(fontSize: 24)),
-              const SizedBox(width: 8),
-            ],
+            ActivityIcon(activity: activity, size: 24),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
                 'Edit ${activity.name}',
@@ -291,15 +285,9 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
             ),
             child: Row(
               children: [
-                CircleAvatar(
-                  backgroundColor: activityColor.withValues(alpha: 0.2),
-                  radius: 24,
-                  child: activity.effectiveIcon != null
-                      ? Text(
-                          activity.effectiveIcon!,
-                          style: const TextStyle(fontSize: 24),
-                        )
-                      : Icon(Icons.fitness_center, color: activityColor),
+                ActivityIcon(
+                  activity: activity,
+                  size: 48,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
