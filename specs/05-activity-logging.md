@@ -8,23 +8,23 @@ Activity logging is the core user interaction in Logly. Users select an activity
 
 ### Functional Requirements
 
-- [ ] Display activity search/selection screen
+- [x] Display activity search/selection screen
 - [ ] Show already-logged activities for the selected date
-- [ ] Render conditional detail fields based on activity type
-- [ ] Support subactivity multi-select
-- [ ] Allow custom name override (premium)
-- [ ] Handle multi-day activities (date range)
-- [ ] Calculate and display pace when applicable
-- [ ] Save log entries to database
-- [ ] Edit existing log entries
-- [ ] Delete log entries with confirmation
-- [ ] Favorite/unfavorite activities
+- [x] Render conditional detail fields based on activity type
+- [x] Support subactivity multi-select
+- [x] Allow custom name override (premium)
+- [x] Handle multi-day activities (date range)
+- [x] Calculate and display pace when applicable
+- [x] Save log entries to database
+- [x] Edit existing log entries
+- [x] Delete log entries with confirmation
+- [x] Favorite/unfavorite activities
 
 ### Non-Functional Requirements
 
 - [ ] Log save must complete within 2 seconds
-- [ ] Detail fields must be responsive to slider/input changes
-- [ ] Form state must not be lost on keyboard dismiss
+- [x] Detail fields must be responsive to slider/input changes
+- [x] Form state must not be lost on keyboard dismiss
 
 ## Architecture
 
@@ -272,14 +272,14 @@ Future<void> toggleFavorite(String activityId, bool isFavorite) async {
 
 ## Success Criteria
 
-- [ ] Activity search returns relevant results
-- [ ] All detail field types render correctly
-- [ ] Sliders and inputs stay in sync
-- [ ] Pace displays when duration and distance present
-- [ ] Subactivities can be multi-selected
-- [ ] Multi-day activities create N entries
-- [ ] Log saves successfully
-- [ ] Edit updates correctly
-- [ ] Delete confirms and removes
-- [ ] Favorites toggle works
-- [ ] Name override works (premium only)
+- [x] Activity search returns relevant results
+- [x] All detail field types render correctly
+- [x] Sliders and inputs stay in sync
+- [x] Pace displays when duration and distance present
+- [x] Subactivities can be multi-selected
+- [x] Multi-day activities create N entries
+- [x] Log saves successfully
+- [x] Edit updates correctly
+- [x] Delete confirms and removes
+- [x] Favorites toggle works
+- [x] Name override works (premium only)

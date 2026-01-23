@@ -8,20 +8,20 @@ The profile screen displays user statistics and progress visualizations. It feat
 
 ### Functional Requirements
 
-- [ ] Display current and longest streak
-- [ ] Show category summary with progress bars
-- [ ] Support time period filtering (1W, 1M, 1Y, All)
-- [ ] Display GitHub-style contribution graph for last year
-- [ ] Show last 12 months as stacked bar chart
-- [ ] Support category filtering on 12-month chart
-- [ ] Make all sections collapsible
-- [ ] Animate progress bars and charts
+- [x] Display current and longest streak
+- [x] Show category summary with progress bars
+- [x] Support time period filtering (1W, 1M, 1Y, All)
+- [x] Display GitHub-style contribution graph for last year
+- [x] Show last 12 months as stacked bar chart
+- [x] Support category filtering on 12-month chart
+- [x] Make all sections collapsible
+- [x] Animate progress bars and charts
 
 ### Non-Functional Requirements
 
 - [ ] Stats must load within 2 seconds
-- [ ] Charts must render smoothly
-- [ ] Collapsing animations must be fluid
+- [x] Charts must render smoothly
+- [x] Collapsing animations must be fluid
 
 ## Architecture
 
@@ -217,14 +217,14 @@ Future<List<MonthlyCategoryData>> getMonthlyData({
 
 ## Success Criteria
 
-- [ ] Streak displays current and longest values
-- [ ] Summary shows all categories with progress bars
-- [ ] Time period filter updates summary data
-- [ ] Contribution graph shows last year
-- [ ] Correct colors based on activity count
-- [ ] Legend displays color scale
-- [ ] 12-month chart shows stacked bars
-- [ ] Category filter chips work
-- [ ] All sections collapsible
-- [ ] Animations are smooth
-- [ ] Horizontal scroll for contribution graph
+- [x] Streak displays current and longest values
+- [x] Summary shows all categories with progress bars
+- [x] Time period filter updates summary data
+- [x] Contribution graph shows last year
+- [x] Correct colors based on activity count
+- [x] Legend displays color scale
+- [x] 12-month chart shows stacked bars
+- [x] Category filter chips work
+- [x] All sections collapsible
+- [x] Animations are smooth
+- [x] Horizontal scroll for contribution graph

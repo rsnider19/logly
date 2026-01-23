@@ -8,22 +8,22 @@ The home screen is the primary interface users see after authentication. It disp
 
 ### Functional Requirements
 
-- [ ] Display shell route with consistent app bar and bottom nav
-- [ ] Show daily activity list with infinite scroll
-- [ ] Load ~30 days initially, paginate on scroll
-- [ ] Display empty rows for days with no activities
-- [ ] Allow future dates
-- [ ] Show activity chips with category colors and icons
-- [ ] Tap chip to edit logged activity
-- [ ] Tap row (outside chip) to log new activity for that date
-- [ ] Display Global Trending Activities bottom sheet
-- [ ] Navigate between Home, Profile, and Settings
+- [x] Display shell route with consistent app bar and bottom nav
+- [x] Show daily activity list with infinite scroll
+- [x] Load ~30 days initially, paginate on scroll
+- [x] Display empty rows for days with no activities
+- [x] Allow future dates
+- [x] Show activity chips with category colors and icons
+- [x] Tap chip to edit logged activity
+- [x] Tap row (outside chip) to log new activity for that date
+- [x] Display Global Trending Activities bottom sheet
+- [x] Navigate between Home, Profile, and Settings
 
 ### Non-Functional Requirements
 
 - [ ] Initial load must complete within 2 seconds
-- [ ] Scroll must be smooth (60fps)
-- [ ] List must support thousands of days without performance degradation
+- [x] Scroll must be smooth (60fps)
+- [x] List must support thousands of days without performance degradation
 
 ## Architecture
 
@@ -204,15 +204,15 @@ class DailyActivitiesNotifier extends AsyncNotifier<List<DailyActivitySummary>> 
 
 ## Success Criteria
 
-- [ ] Shell route displays consistent navigation
-- [ ] Daily list loads with ~30 days
-- [ ] Infinite scroll loads more days
-- [ ] Empty days display correctly
-- [ ] Future dates accessible
-- [ ] Activity chips colored by category
-- [ ] Chip tap opens edit screen
-- [ ] Row tap opens log screen for date
-- [ ] Trending bottom sheet shows top 25
-- [ ] Trending icons show up/down/same
-- [ ] Navigation between Home/Profile/Settings works
-- [ ] Log button opens full screen modal
+- [x] Shell route displays consistent navigation
+- [x] Daily list loads with ~30 days
+- [x] Infinite scroll loads more days
+- [x] Empty days display correctly
+- [x] Future dates accessible
+- [x] Activity chips colored by category
+- [x] Chip tap opens edit screen
+- [x] Row tap opens log screen for date
+- [x] Trending bottom sheet shows top 25
+- [x] Trending icons show up/down/same
+- [x] Navigation between Home/Profile/Settings works
+- [x] Log button opens full screen modal
