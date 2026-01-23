@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
@@ -9,29 +8,11 @@ import 'package:logly/features/profile/presentation/widgets/streak_card.dart';
 import 'package:logly/features/profile/presentation/widgets/summary_card.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
-class ProfileScreen extends ConsumerStatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  bool _isSigningOut = false;
-
-  Future<void> _signOut() async {
-    setState(() => _isSigningOut = true);
-    try {
-      await ref.read(authServiceProvider).signOut();
-    } finally {
-      if (mounted) {
-        setState(() => _isSigningOut = false);
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final user = ref.watch(currentUserProvider);
 
@@ -83,25 +64,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
             // Monthly chart (12 month stacked bars)
             const MonthlyChartCard(),
-
-            // Sign out button
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: _isSigningOut ? null : _signOut,
-                  icon: _isSigningOut
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.logout),
-                  label: Text(_isSigningOut ? 'Signing out...' : 'Sign Out'),
-                ),
-              ),
-            ),
 
             // Bottom padding for safe area
             const SizedBox(height: 24),
