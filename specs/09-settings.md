@@ -8,22 +8,22 @@ The settings screen provides access to all user preferences, account management,
 
 ### Functional Requirements
 
-- [ ] Display account info (email, profile picture)
-- [ ] Allow unit preference selection (metric/imperial)
-- [ ] Provide edit favorites shortcut
-- [ ] Configure notification preferences
-- [ ] Set appearance/theme (light/dark/system)
-- [ ] Toggle Health Connect integration
-- [ ] Export user data
-- [ ] Send feedback
-- [ ] Sign out with confirmation
-- [ ] Delete account with confirmation
+- [x] Display account info (email, profile picture)
+- [x] Allow unit preference selection (metric/imperial)
+- [x] Provide edit favorites shortcut
+- [x] Configure notification preferences
+- [x] Set appearance/theme (light/dark/system)
+- [x] Toggle Health Connect integration
+- [x] Export user data
+- [x] Send feedback
+- [x] Sign out with confirmation
+- [x] Delete account with confirmation
 
 ### Non-Functional Requirements
 
-- [ ] Settings must persist across sessions
-- [ ] Changes must apply immediately
-- [ ] Export must complete within 30 seconds
+- [x] Settings must persist across sessions
+- [x] Changes must apply immediately
+- [x] Export must complete within 30 seconds
 
 ## Architecture
 
@@ -233,14 +233,14 @@ Future<void> deleteAccount() async {
 
 ## Success Criteria
 
-- [ ] Account info displays correctly
-- [ ] Unit preference toggles metric/imperial
-- [ ] Edit favorites opens selection screen
-- [ ] Notification settings configurable
-- [ ] Theme changes apply immediately
-- [ ] Health toggle enables/disables sync
-- [ ] Export generates downloadable file
-- [ ] Feedback opens email client
-- [ ] Sign out clears local data
-- [ ] Account deletion confirms and soft deletes
-- [ ] All changes persist across app restarts
+- [x] Account info displays correctly
+- [x] Unit preference toggles metric/imperial
+- [x] Edit favorites opens selection screen
+- [x] Notification settings configurable
+- [x] Theme changes apply immediately
+- [x] Health toggle enables/disables sync
+- [x] Export generates downloadable file
+- [x] Feedback opens email client
+- [x] Sign out clears local data
+- [x] Account deletion confirms and soft deletes
+- [x] All changes persist across app restarts
