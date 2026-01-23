@@ -46,36 +46,6 @@ abstract class UserActivity with _$UserActivity {
   /// Returns the effective display name, using override if set.
   String get displayName => activityNameOverride ?? activity?.name ?? 'Unknown Activity';
 
-  /// Returns the effective icon from the activity or its category.
-  String? get effectiveIcon => activity?.effectiveIcon;
-
   /// Returns the effective color from the activity or its category.
-  String get effectiveColor => activity?.effectiveColor ?? '#808080';
-
-  /// Returns the effective icon URL from Supabase storage.
-  ///
-  /// Priority:
-  /// 1. If only one subactivity was selected, use subactivity's icon
-  /// 2. If multiple or no subactivities, use activity's icon
-  /// 3. If activity has no icon, use category's icon
-  String? get effectiveIconUrl {
-    final baseUrl = EnvService.supabaseUrl;
-
-    // Priority 1: Single subactivity icon
-    if (subActivity.length == 1 && subActivity.first.icon != null) {
-      return '$baseUrl/storage/v1/object/public/sub_activity_icons/${subActivity.first.subActivityId}.png';
-    }
-
-    // Priority 2: Activity icon
-    if (activity?.icon != null) {
-      return '$baseUrl/storage/v1/object/public/activity_icons/${activity!.activityId}.png';
-    }
-
-    // Priority 3: Category icon
-    if (activity?.activityCategory?.icon != null) {
-      return '$baseUrl/storage/v1/object/public/activity_category_icons/${activity!.activityCategory!.activityCategoryId}.png';
-    }
-
-    return null;
-  }
+  String get color => activity?.activityCategory?.hexColor ?? '#808080';
 }

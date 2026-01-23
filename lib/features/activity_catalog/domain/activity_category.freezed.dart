@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ActivityCategory {
 
- String get activityCategoryId; String get name; String get activityCategoryCode; String? get description; String get hexColor; String get icon; int get sortOrder;
+ String get activityCategoryId; String get name; String get activityCategoryCode; String? get description; String get hexColor; int get sortOrder;
 /// Create a copy of ActivityCategory
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ActivityCategoryCopyWith<ActivityCategory> get copyWith => _$ActivityCategoryCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivityCategory&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCategoryCode, activityCategoryCode) || other.activityCategoryCode == activityCategoryCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.hexColor, hexColor) || other.hexColor == hexColor)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivityCategory&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCategoryCode, activityCategoryCode) || other.activityCategoryCode == activityCategoryCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.hexColor, hexColor) || other.hexColor == hexColor)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityCategoryId,name,activityCategoryCode,description,hexColor,icon,sortOrder);
+int get hashCode => Object.hash(runtimeType,activityCategoryId,name,activityCategoryCode,description,hexColor,sortOrder);
 
 @override
 String toString() {
-  return 'ActivityCategory(activityCategoryId: $activityCategoryId, name: $name, activityCategoryCode: $activityCategoryCode, description: $description, hexColor: $hexColor, icon: $icon, sortOrder: $sortOrder)';
+  return 'ActivityCategory(activityCategoryId: $activityCategoryId, name: $name, activityCategoryCode: $activityCategoryCode, description: $description, hexColor: $hexColor, sortOrder: $sortOrder)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ActivityCategoryCopyWith<$Res>  {
   factory $ActivityCategoryCopyWith(ActivityCategory value, $Res Function(ActivityCategory) _then) = _$ActivityCategoryCopyWithImpl;
 @useResult
 $Res call({
- String activityCategoryId, String name, String activityCategoryCode, String? description, String hexColor, String icon, int sortOrder
+ String activityCategoryId, String name, String activityCategoryCode, String? description, String hexColor, int sortOrder
 });
 
 
@@ -65,14 +65,13 @@ class _$ActivityCategoryCopyWithImpl<$Res>
 
 /// Create a copy of ActivityCategory
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activityCategoryId = null,Object? name = null,Object? activityCategoryCode = null,Object? description = freezed,Object? hexColor = null,Object? icon = null,Object? sortOrder = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activityCategoryId = null,Object? name = null,Object? activityCategoryCode = null,Object? description = freezed,Object? hexColor = null,Object? sortOrder = null,}) {
   return _then(_self.copyWith(
 activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryCode: null == activityCategoryCode ? _self.activityCategoryCode : activityCategoryCode // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,hexColor: null == hexColor ? _self.hexColor : hexColor // ignore: cast_nullable_to_non_nullable
-as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -159,10 +158,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  String icon,  int sortOrder)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  int sortOrder)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ActivityCategory() when $default != null:
-return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.icon,_that.sortOrder);case _:
+return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.sortOrder);case _:
   return orElse();
 
 }
@@ -180,10 +179,10 @@ return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  String icon,  int sortOrder)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  int sortOrder)  $default,) {final _that = this;
 switch (_that) {
 case _ActivityCategory():
-return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.icon,_that.sortOrder);case _:
+return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.sortOrder);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +199,10 @@ return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  String icon,  int sortOrder)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityCategoryId,  String name,  String activityCategoryCode,  String? description,  String hexColor,  int sortOrder)?  $default,) {final _that = this;
 switch (_that) {
 case _ActivityCategory() when $default != null:
-return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.icon,_that.sortOrder);case _:
+return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_that.description,_that.hexColor,_that.sortOrder);case _:
   return null;
 
 }
@@ -214,8 +213,8 @@ return $default(_that.activityCategoryId,_that.name,_that.activityCategoryCode,_
 /// @nodoc
 @JsonSerializable()
 
-class _ActivityCategory implements ActivityCategory {
-  const _ActivityCategory({required this.activityCategoryId, required this.name, required this.activityCategoryCode, this.description, required this.hexColor, required this.icon, required this.sortOrder});
+class _ActivityCategory extends ActivityCategory {
+  const _ActivityCategory({required this.activityCategoryId, required this.name, required this.activityCategoryCode, this.description, required this.hexColor, required this.sortOrder}): super._();
   factory _ActivityCategory.fromJson(Map<String, dynamic> json) => _$ActivityCategoryFromJson(json);
 
 @override final  String activityCategoryId;
@@ -223,7 +222,6 @@ class _ActivityCategory implements ActivityCategory {
 @override final  String activityCategoryCode;
 @override final  String? description;
 @override final  String hexColor;
-@override final  String icon;
 @override final  int sortOrder;
 
 /// Create a copy of ActivityCategory
@@ -239,16 +237,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivityCategory&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCategoryCode, activityCategoryCode) || other.activityCategoryCode == activityCategoryCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.hexColor, hexColor) || other.hexColor == hexColor)&&(identical(other.icon, icon) || other.icon == icon)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivityCategory&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCategoryCode, activityCategoryCode) || other.activityCategoryCode == activityCategoryCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.hexColor, hexColor) || other.hexColor == hexColor)&&(identical(other.sortOrder, sortOrder) || other.sortOrder == sortOrder));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityCategoryId,name,activityCategoryCode,description,hexColor,icon,sortOrder);
+int get hashCode => Object.hash(runtimeType,activityCategoryId,name,activityCategoryCode,description,hexColor,sortOrder);
 
 @override
 String toString() {
-  return 'ActivityCategory(activityCategoryId: $activityCategoryId, name: $name, activityCategoryCode: $activityCategoryCode, description: $description, hexColor: $hexColor, icon: $icon, sortOrder: $sortOrder)';
+  return 'ActivityCategory(activityCategoryId: $activityCategoryId, name: $name, activityCategoryCode: $activityCategoryCode, description: $description, hexColor: $hexColor, sortOrder: $sortOrder)';
 }
 
 
@@ -259,7 +257,7 @@ abstract mixin class _$ActivityCategoryCopyWith<$Res> implements $ActivityCatego
   factory _$ActivityCategoryCopyWith(_ActivityCategory value, $Res Function(_ActivityCategory) _then) = __$ActivityCategoryCopyWithImpl;
 @override @useResult
 $Res call({
- String activityCategoryId, String name, String activityCategoryCode, String? description, String hexColor, String icon, int sortOrder
+ String activityCategoryId, String name, String activityCategoryCode, String? description, String hexColor, int sortOrder
 });
 
 
@@ -276,14 +274,13 @@ class __$ActivityCategoryCopyWithImpl<$Res>
 
 /// Create a copy of ActivityCategory
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activityCategoryId = null,Object? name = null,Object? activityCategoryCode = null,Object? description = freezed,Object? hexColor = null,Object? icon = null,Object? sortOrder = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activityCategoryId = null,Object? name = null,Object? activityCategoryCode = null,Object? description = freezed,Object? hexColor = null,Object? sortOrder = null,}) {
   return _then(_ActivityCategory(
 activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryCode: null == activityCategoryCode ? _self.activityCategoryCode : activityCategoryCode // ignore: cast_nullable_to_non_nullable
 as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String?,hexColor: null == hexColor ? _self.hexColor : hexColor // ignore: cast_nullable_to_non_nullable
-as String,icon: null == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
 as String,sortOrder: null == sortOrder ? _self.sortOrder : sortOrder // ignore: cast_nullable_to_non_nullable
 as int,
   ));

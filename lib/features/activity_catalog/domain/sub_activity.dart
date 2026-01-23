@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logly/core/services/env_service.dart';
 
 part 'sub_activity.freezed.dart';
 part 'sub_activity.g.dart';
@@ -11,8 +12,12 @@ abstract class SubActivity with _$SubActivity {
     required String activityId,
     required String name,
     required String subActivityCode,
-    String? icon,
   }) = _SubActivity;
 
+  const SubActivity._();
+
   factory SubActivity.fromJson(Map<String, dynamic> json) => _$SubActivityFromJson(json);
+
+  /// The Supabase storage URL for this subactivity's icon.
+  String get icon => '${EnvService.supabaseUrl}/storage/v1/object/public/sub_activity_icons/$subActivityId.png';
 }

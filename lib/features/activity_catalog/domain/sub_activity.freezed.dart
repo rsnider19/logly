@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SubActivity {
 
- String get subActivityId; String get activityId; String get name; String get subActivityCode; String? get icon;
+ String get subActivityId; String get activityId; String get name; String get subActivityCode;
 /// Create a copy of SubActivity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $SubActivityCopyWith<SubActivity> get copyWith => _$SubActivityCopyWithImpl<SubA
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubActivity&&(identical(other.subActivityId, subActivityId) || other.subActivityId == subActivityId)&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.subActivityCode, subActivityCode) || other.subActivityCode == subActivityCode)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SubActivity&&(identical(other.subActivityId, subActivityId) || other.subActivityId == subActivityId)&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.subActivityCode, subActivityCode) || other.subActivityCode == subActivityCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,subActivityId,activityId,name,subActivityCode,icon);
+int get hashCode => Object.hash(runtimeType,subActivityId,activityId,name,subActivityCode);
 
 @override
 String toString() {
-  return 'SubActivity(subActivityId: $subActivityId, activityId: $activityId, name: $name, subActivityCode: $subActivityCode, icon: $icon)';
+  return 'SubActivity(subActivityId: $subActivityId, activityId: $activityId, name: $name, subActivityCode: $subActivityCode)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $SubActivityCopyWith<$Res>  {
   factory $SubActivityCopyWith(SubActivity value, $Res Function(SubActivity) _then) = _$SubActivityCopyWithImpl;
 @useResult
 $Res call({
- String subActivityId, String activityId, String name, String subActivityCode, String? icon
+ String subActivityId, String activityId, String name, String subActivityCode
 });
 
 
@@ -65,14 +65,13 @@ class _$SubActivityCopyWithImpl<$Res>
 
 /// Create a copy of SubActivity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? subActivityId = null,Object? activityId = null,Object? name = null,Object? subActivityCode = null,Object? icon = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? subActivityId = null,Object? activityId = null,Object? name = null,Object? subActivityCode = null,}) {
   return _then(_self.copyWith(
 subActivityId: null == subActivityId ? _self.subActivityId : subActivityId // ignore: cast_nullable_to_non_nullable
 as String,activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,subActivityCode: null == subActivityCode ? _self.subActivityCode : subActivityCode // ignore: cast_nullable_to_non_nullable
-as String,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,
   ));
 }
 
@@ -157,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String subActivityId,  String activityId,  String name,  String subActivityCode,  String? icon)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String subActivityId,  String activityId,  String name,  String subActivityCode)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SubActivity() when $default != null:
-return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode,_that.icon);case _:
+return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode);case _:
   return orElse();
 
 }
@@ -178,10 +177,10 @@ return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivit
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String subActivityId,  String activityId,  String name,  String subActivityCode,  String? icon)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String subActivityId,  String activityId,  String name,  String subActivityCode)  $default,) {final _that = this;
 switch (_that) {
 case _SubActivity():
-return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode,_that.icon);case _:
+return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -198,10 +197,10 @@ return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivit
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String subActivityId,  String activityId,  String name,  String subActivityCode,  String? icon)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String subActivityId,  String activityId,  String name,  String subActivityCode)?  $default,) {final _that = this;
 switch (_that) {
 case _SubActivity() when $default != null:
-return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode,_that.icon);case _:
+return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivityCode);case _:
   return null;
 
 }
@@ -212,15 +211,14 @@ return $default(_that.subActivityId,_that.activityId,_that.name,_that.subActivit
 /// @nodoc
 @JsonSerializable()
 
-class _SubActivity implements SubActivity {
-  const _SubActivity({required this.subActivityId, required this.activityId, required this.name, required this.subActivityCode, this.icon});
+class _SubActivity extends SubActivity {
+  const _SubActivity({required this.subActivityId, required this.activityId, required this.name, required this.subActivityCode}): super._();
   factory _SubActivity.fromJson(Map<String, dynamic> json) => _$SubActivityFromJson(json);
 
 @override final  String subActivityId;
 @override final  String activityId;
 @override final  String name;
 @override final  String subActivityCode;
-@override final  String? icon;
 
 /// Create a copy of SubActivity
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubActivity&&(identical(other.subActivityId, subActivityId) || other.subActivityId == subActivityId)&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.subActivityCode, subActivityCode) || other.subActivityCode == subActivityCode)&&(identical(other.icon, icon) || other.icon == icon));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SubActivity&&(identical(other.subActivityId, subActivityId) || other.subActivityId == subActivityId)&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.name, name) || other.name == name)&&(identical(other.subActivityCode, subActivityCode) || other.subActivityCode == subActivityCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,subActivityId,activityId,name,subActivityCode,icon);
+int get hashCode => Object.hash(runtimeType,subActivityId,activityId,name,subActivityCode);
 
 @override
 String toString() {
-  return 'SubActivity(subActivityId: $subActivityId, activityId: $activityId, name: $name, subActivityCode: $subActivityCode, icon: $icon)';
+  return 'SubActivity(subActivityId: $subActivityId, activityId: $activityId, name: $name, subActivityCode: $subActivityCode)';
 }
 
 
@@ -255,7 +253,7 @@ abstract mixin class _$SubActivityCopyWith<$Res> implements $SubActivityCopyWith
   factory _$SubActivityCopyWith(_SubActivity value, $Res Function(_SubActivity) _then) = __$SubActivityCopyWithImpl;
 @override @useResult
 $Res call({
- String subActivityId, String activityId, String name, String subActivityCode, String? icon
+ String subActivityId, String activityId, String name, String subActivityCode
 });
 
 
@@ -272,14 +270,13 @@ class __$SubActivityCopyWithImpl<$Res>
 
 /// Create a copy of SubActivity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? subActivityId = null,Object? activityId = null,Object? name = null,Object? subActivityCode = null,Object? icon = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? subActivityId = null,Object? activityId = null,Object? name = null,Object? subActivityCode = null,}) {
   return _then(_SubActivity(
 subActivityId: null == subActivityId ? _self.subActivityId : subActivityId // ignore: cast_nullable_to_non_nullable
 as String,activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,subActivityCode: null == subActivityCode ? _self.subActivityCode : subActivityCode // ignore: cast_nullable_to_non_nullable
-as String,icon: freezed == icon ? _self.icon : icon // ignore: cast_nullable_to_non_nullable
-as String?,
+as String,
   ));
 }
 

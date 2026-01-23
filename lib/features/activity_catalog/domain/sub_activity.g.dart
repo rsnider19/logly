@@ -11,7 +11,6 @@ _SubActivity _$SubActivityFromJson(Map<String, dynamic> json) => _SubActivity(
   activityId: json['activity_id'] as String,
   name: json['name'] as String,
   subActivityCode: json['sub_activity_code'] as String,
-  icon: json['icon'] as String?,
 );
 
 Map<String, dynamic> _$SubActivityToJson(_SubActivity instance) =>
@@ -20,5 +19,4 @@ Map<String, dynamic> _$SubActivityToJson(_SubActivity instance) =>
       'activity_id': instance.activityId,
       'name': instance.name,
       'sub_activity_code': instance.subActivityCode,
-      'icon': instance.icon,
     };

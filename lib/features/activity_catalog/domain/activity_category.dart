@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logly/core/services/env_service.dart';
 
 part 'activity_category.freezed.dart';
 part 'activity_category.g.dart';
@@ -12,9 +15,15 @@ abstract class ActivityCategory with _$ActivityCategory {
     required String activityCategoryCode,
     String? description,
     required String hexColor,
-    required String icon,
     required int sortOrder,
   }) = _ActivityCategory;
 
+  const ActivityCategory._();
+
   factory ActivityCategory.fromJson(Map<String, dynamic> json) => _$ActivityCategoryFromJson(json);
+
+  /// The Supabase storage URL for this activity category's icon.
+  String get icon => '${EnvService.supabaseUrl}/storage/v1/object/public/activity_category_icons/$activityCategoryId.png';
+
+  Color get color => Color(int.parse(hexColor.replaceFirst('#', 'FF'), radix: 16));
 }

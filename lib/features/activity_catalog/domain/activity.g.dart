@@ -12,8 +12,6 @@ _Activity _$ActivityFromJson(Map<String, dynamic> json) => _Activity(
   name: json['name'] as String,
   activityCode: json['activity_code'] as String,
   description: json['description'] as String?,
-  hexColor: json['hex_color'] as String?,
-  icon: json['icon'] as String?,
   activityDateType: $enumDecode(
     _$ActivityDateTypeEnumMap,
     json['activity_date_type'],
@@ -43,8 +41,6 @@ Map<String, dynamic> _$ActivityToJson(_Activity instance) => <String, dynamic>{
   'name': instance.name,
   'activity_code': instance.activityCode,
   'description': instance.description,
-  'hex_color': instance.hexColor,
-  'icon': instance.icon,
   'activity_date_type': _$ActivityDateTypeEnumMap[instance.activityDateType]!,
   'pace_type': _$PaceTypeEnumMap[instance.paceType],
   'is_suggested_favorite': instance.isSuggestedFavorite,

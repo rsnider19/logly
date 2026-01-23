@@ -1,4 +1,8 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logly/core/services/env_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
@@ -19,8 +23,6 @@ abstract class Activity with _$Activity {
     required String name,
     required String activityCode,
     String? description,
-    String? hexColor,
-    String? icon,
     required ActivityDateType activityDateType,
     PaceType? paceType,
     @Default(false) bool isSuggestedFavorite,
@@ -37,9 +39,8 @@ abstract class Activity with _$Activity {
 
   factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
 
-  /// The effective display color, falling back to category color then default.
-  String get effectiveColor => hexColor ?? activityCategory?.hexColor ?? '#808080';
+  Color getColor(BuildContext context) => activityCategory?.color ?? Theme.of(context).colorScheme.onSurface;
 
-  /// The effective display icon, falling back to category icon.
-  String? get effectiveIcon => icon ?? activityCategory?.icon;
+  /// The Supabase storage URL for this activity's icon.
+  String get icon => '${EnvService.supabaseUrl}/storage/v1/object/public/activity_icons/$activityId.png';
 }
