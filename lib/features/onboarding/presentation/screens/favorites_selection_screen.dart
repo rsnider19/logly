@@ -36,6 +36,7 @@ class _FavoritesSelectionScreenState extends ConsumerState<FavoritesSelectionScr
           SnackBar(
             content: Text('Failed to save favorites: $e'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }

@@ -41,6 +41,7 @@ class _HealthPermissionScreenState extends ConsumerState<HealthPermissionScreen>
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Health permissions were not granted. You can enable them later in Settings.'),
+              behavior: SnackBarBehavior.floating,
             ),
           );
           await _completeOnboarding();
@@ -52,6 +53,7 @@ class _HealthPermissionScreenState extends ConsumerState<HealthPermissionScreen>
           SnackBar(
             content: Text('Failed to request permissions: $e'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
         setState(() {
@@ -82,6 +84,7 @@ class _HealthPermissionScreenState extends ConsumerState<HealthPermissionScreen>
           SnackBar(
             content: Text('Failed to complete onboarding: $e'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
         setState(() {

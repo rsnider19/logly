@@ -132,14 +132,20 @@ class _InsightsFab extends ConsumerWidget {
     if (hasAccess) {
       // Navigate to AI Insights screen (not yet implemented)
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('AI Insights coming soon!')),
+        const SnackBar(
+          content: Text('AI Insights coming soon!'),
+          behavior: SnackBarBehavior.floating,
+        ),
       );
     } else {
       // Show paywall - no manual invalidation needed, StateNotifier listens for updates
       final purchased = await ref.read(subscriptionServiceProvider).showPaywall();
       if (purchased && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Welcome to Premium!')),
+          const SnackBar(
+            content: Text('Welcome to Premium!'),
+            behavior: SnackBarBehavior.floating,
+          ),
         );
       }
     }

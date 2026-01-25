@@ -68,6 +68,7 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
               SnackBar(
                 content: Text('$_platformName connected successfully'),
                 backgroundColor: Theme.of(context).colorScheme.primary,
+                behavior: SnackBarBehavior.floating,
               ),
             );
           }
@@ -79,6 +80,7 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
           SnackBar(
             content: Text('Failed to connect: $e'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
         setState(() {
@@ -417,6 +419,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
             SnackBar(
               content: Text(next.errorMessage!),
               backgroundColor: theme.colorScheme.error,
+              behavior: SnackBarBehavior.floating,
             ),
           );
         } else if (next.lastSyncResult != null) {
@@ -428,6 +431,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
               SnackBar(
                 content: Text(next.lastSyncResult!.summary),
                 backgroundColor: theme.colorScheme.primary,
+                behavior: SnackBarBehavior.floating,
               ),
             );
           }

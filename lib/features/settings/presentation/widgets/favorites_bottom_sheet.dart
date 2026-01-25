@@ -32,6 +32,7 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
           SnackBar(
             content: const Text('Favorites saved'),
             backgroundColor: Theme.of(context).colorScheme.primary,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
@@ -41,6 +42,7 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
           SnackBar(
             content: Text('Failed to save favorites: $e'),
             backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
           ),
         );
       }
