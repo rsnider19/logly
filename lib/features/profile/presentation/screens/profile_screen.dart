@@ -65,6 +65,7 @@ class ProfileScreen extends ConsumerWidget {
 
             // Streak card
             const StreakCard(),
+            const SizedBox(height: 8),
 
             // Summary card with time period filter
             const SummaryCard(),
@@ -90,8 +91,18 @@ class ProfileScreen extends ConsumerWidget {
 String _formatMemberSince(String createdAt) {
   final date = DateTime.parse(createdAt);
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   return '${months[date.month - 1]} ${date.year}';
 }

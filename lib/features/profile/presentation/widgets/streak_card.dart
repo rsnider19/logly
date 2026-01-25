@@ -1,9 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
-import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 
 /// Card displaying current and longest streak information.
 class StreakCard extends ConsumerWidget {
@@ -11,35 +10,30 @@ class StreakCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
-    final isExpanded =
-        ref.watch(collapsibleSectionsStateProvider)[ProfileSections.streak] ?? true;
     final streakAsync = ref.watch(streakProvider);
     final consistencyAsync = ref.watch(consistencyScoreProvider);
 
-    return CollapsibleSection(
-      title: 'Streak',
-      isExpanded: isExpanded,
-      onToggle: () => sectionsNotifier.toggle(ProfileSections.streak),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: switch ((streakAsync, consistencyAsync)) {
         (AsyncData(:final value), AsyncData(value: final consistencyScore)) => _StreakContent(
-            currentStreak: value.currentStreak,
-            longestStreak: value.longestStreak,
-            consistencyScore: consistencyScore,
-          ),
+          currentStreak: value.currentStreak,
+          longestStreak: value.longestStreak,
+          consistencyScore: consistencyScore,
+        ),
         (AsyncError(), _) => _StreakError(
-            onRetry: () => ref.invalidate(streakProvider),
-          ),
+          onRetry: () => ref.invalidate(streakProvider),
+        ),
         (_, AsyncError()) => _StreakError(
-            onRetry: () => ref.invalidate(consistencyScoreProvider),
-          ),
+          onRetry: () => ref.invalidate(consistencyScoreProvider),
+        ),
         _ => const _StreakContentShimmer(),
       },
     );
   }
 }
 
-class _StreakContent extends StatelessWidget {
+class _StreakContent extends StatefulWidget {
   const _StreakContent({
     required this.currentStreak,
     required this.longestStreak,
@@ -51,34 +45,44 @@ class _StreakContent extends StatelessWidget {
   final int consistencyScore;
 
   @override
+  State<_StreakContent> createState() => _StreakContentState();
+}
+
+class _StreakContentState extends State<_StreakContent> {
+  final autoSizeGroup = AutoSizeGroup();
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: _StreakStatBox(
             label: 'Current',
-            value: currentStreak,
+            value: widget.currentStreak,
             icon: Icons.local_fire_department,
             iconColor: Colors.orange,
+            autoSizeGroup: autoSizeGroup,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         Expanded(
           child: _StreakStatBox(
             label: 'Longest',
-            value: longestStreak,
+            value: widget.longestStreak,
             icon: Icons.emoji_events,
             iconColor: Colors.amber,
+            autoSizeGroup: autoSizeGroup,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 16),
         Expanded(
           child: _StreakStatBox(
             label: 'Consistency',
-            value: consistencyScore,
+            value: widget.consistencyScore,
             icon: Icons.show_chart,
             iconColor: Colors.teal,
             suffix: '%',
+            autoSizeGroup: autoSizeGroup,
           ),
         ),
       ],
@@ -92,6 +96,7 @@ class _StreakStatBox extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.iconColor,
+    required this.autoSizeGroup,
     this.suffix,
   });
 
@@ -100,6 +105,7 @@ class _StreakStatBox extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String? suffix;
+  final AutoSizeGroup autoSizeGroup;
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +129,10 @@ class _StreakStatBox extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text(
+          AutoSizeText(
             displayLabel,
+            maxLines: 1,
+            group: autoSizeGroup,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
