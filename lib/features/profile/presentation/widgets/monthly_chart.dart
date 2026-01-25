@@ -70,7 +70,7 @@ class _MonthlyChart extends StatelessWidget {
   final List<MonthlyCategoryData> data;
   final Map<String, Color> categoryColors;
 
-  static const List<String> monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+  static const List<String> monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   static const double chartHeight = 124;
 
   @override
@@ -100,10 +100,10 @@ class _MonthlyChart extends StatelessWidget {
     final sortedCategories = categoryTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     final categoryOrder = {for (var i = 0; i < sortedCategories.length; i++) sortedCategories[i].key: i};
 
-    // Get last 12 months
+    // Get last 12 months (most recent first)
     final now = DateTime.now();
     final months = List.generate(12, (i) {
-      final date = DateTime(now.year, now.month - 11 + i);
+      final date = DateTime(now.year, now.month - i);
       return DateTime(date.year, date.month);
     });
 
@@ -156,6 +156,11 @@ class _MonthlyChart extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
               rodStackItems: stackItems,
               color: Colors.transparent,
+              backDrawRodData: BackgroundBarChartRodData(
+                show: true,
+                toY: maxTotal > 0 ? maxTotal : 1,
+                color: theme.colorScheme.surfaceContainerHighest,
+              ),
             ),
           ],
         ),
@@ -181,6 +186,10 @@ class _MonthlyChart extends StatelessWidget {
                   if (index < 0 || index >= months.length) {
                     return const SizedBox.shrink();
                   }
+                  // Skip every other month label
+                  if (index % 2 != 0) {
+                    return const SizedBox.shrink();
+                  }
                   return Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
@@ -195,7 +204,14 @@ class _MonthlyChart extends StatelessWidget {
             ),
           ),
           gridData: const FlGridData(show: false),
-          borderData: FlBorderData(show: false),
+          borderData: FlBorderData(
+            show: true,
+            border: Border(
+              bottom: BorderSide(
+                color: theme.colorScheme.outlineVariant,
+              ),
+            ),
+          ),
           barTouchData: const BarTouchData(enabled: false),
           alignment: BarChartAlignment.spaceAround,
         ),

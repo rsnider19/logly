@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
@@ -56,7 +57,7 @@ class DailyActivityRepository {
   }) async {
     try {
       final response = await _supabase
-          .from('daily_activity_counts_by_category')
+          .from('activity_counts_by_date')
           .select('activity_date, count')
           .gte('activity_date', startDate.toIso8601String().split('T')[0])
           .lte('activity_date', endDate.toIso8601String().split('T')[0]);
@@ -91,7 +92,7 @@ class DailyActivityRepository {
       final startDate = DateTime(endDate.year - 1, endDate.month, 1);
 
       final response = await _supabase
-          .from('daily_activity_counts_by_category')
+          .from('activity_counts_by_date')
           .select('activity_date, activity_category_id, count')
           .gte('activity_date', startDate.toIso8601String().split('T')[0])
           .lte('activity_date', endDate.toIso8601String().split('T')[0]);
@@ -106,15 +107,16 @@ class DailyActivityRepository {
         monthlyTotals.update(key, (v) => v + count, ifAbsent: () => count);
       }
 
-      final result = monthlyTotals.entries.map((e) {
-        final (year, month, categoryId) = e.key;
-        return MonthlyCategoryData(
-          activityMonth: DateTime(year, month),
-          activityCount: e.value,
-          activityCategoryId: categoryId,
-        );
-      }).toList()
-        ..sort((a, b) => a.activityMonth.compareTo(b.activityMonth));
+      final result = monthlyTotals.entries
+          .map((e) {
+            final (year, month, categoryId) = e.key;
+            return MonthlyCategoryData(
+              activityMonth: DateTime(year, month),
+              activityCount: e.value,
+              activityCategoryId: categoryId,
+            );
+          })
+          .sortedByDescending((a) => a.activityMonth);
 
       return result;
     } catch (e, st) {

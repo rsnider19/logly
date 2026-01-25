@@ -18,7 +18,7 @@ class ContributionLegend extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 4),
-        ...ContributionColors.levels.map((color) {
+        ...ContributionColors.getLevels(emptyColor: theme.colorScheme.surfaceContainerHighest).map((color) {
           return Container(
             width: 16,
             height: 16,

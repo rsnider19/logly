@@ -7,21 +7,24 @@ import 'package:logly/features/profile/presentation/widgets/contribution_legend.
 
 /// GitHub-style contribution graph color mapping.
 abstract class ContributionColors {
-  static const Color level0 = Color(0xFF333333);
   static const Color level1 = Color(0xFF033A16);
   static const Color level2 = Color(0xFF196C2E);
   static const Color level3 = Color(0xFF2EA043);
   static const Color level4 = Color(0xFF56D364);
 
-  static const List<Color> levels = [level0, level1, level2, level3, level4];
-
   /// Returns the appropriate color for a given activity count.
-  static Color getColorForCount(int count) {
-    if (count == 0) return level0;
+  /// [emptyColor] is used for count == 0 (typically from theme).
+  static Color getColorForCount(int count, {required Color emptyColor}) {
+    if (count == 0) return emptyColor;
     if (count <= 2) return level1;
     if (count <= 4) return level2;
     if (count <= 6) return level3;
     return level4;
+  }
+
+  /// Returns all levels including the empty color for legend display.
+  static List<Color> getLevels({required Color emptyColor}) {
+    return [emptyColor, level1, level2, level3, level4];
   }
 }
 
@@ -164,7 +167,10 @@ class _ContributionGraph extends StatelessWidget {
                       }
 
                       final count = data[normalizedDate] ?? 0;
-                      final color = ContributionColors.getColorForCount(count);
+                      final color = ContributionColors.getColorForCount(
+                        count,
+                        emptyColor: theme.colorScheme.surfaceContainerHighest,
+                      );
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: cellGap),
