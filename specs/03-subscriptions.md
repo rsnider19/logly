@@ -8,17 +8,17 @@ Premium features are gated via RevenueCat. The app uses RevenueCat's native UI f
 
 ### Functional Requirements
 
-- [ ] Initialize RevenueCat SDK on app launch
-- [ ] Display RevenueCat paywall UI when accessing premium features
-- [ ] Check entitlements before accessing gated features
+- [x] Initialize RevenueCat SDK on app launch
+- [x] Display RevenueCat paywall UI when accessing premium features
+- [x] Check entitlements before accessing gated features
 - [ ] Sync entitlements to Supabase via webhook
-- [ ] Support restore purchases functionality
-- [ ] Handle subscription expiration gracefully
+- [x] Support restore purchases functionality
+- [x] Handle subscription expiration gracefully
 
 ### Non-Functional Requirements
 
-- [ ] Entitlement checks must be fast (cached locally)
-- [ ] Paywall must be displayed within 500ms
+- [x] Entitlement checks must be fast (cached locally)
+- [x] Paywall must be displayed within 500ms
 - [ ] Webhook must process within 5 seconds
 
 ## Architecture
@@ -178,10 +178,10 @@ Future<void> restorePurchases() async {
 
 ## Success Criteria
 
-- [ ] RevenueCat SDK initializes without errors
-- [ ] Entitlement checks work online and offline (cached)
-- [ ] Paywall displays correctly
+- [x] RevenueCat SDK initializes without errors
+- [x] Entitlement checks work online and offline (cached)
+- [x] Paywall displays correctly
 - [ ] Purchases sync to Supabase
-- [ ] Restore purchases works
-- [ ] Subscription expiration handled gracefully
-- [ ] All three premium features properly gated
+- [x] Restore purchases works
+- [x] Subscription expiration handled gracefully
+- [x] All three premium features properly gated
