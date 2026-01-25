@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/providers/shared_preferences_provider.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -41,6 +42,12 @@ Future<void> bootstrap(
   );
   if (kDebugMode) {
     debugPrint('✓ Supabase initialized');
+  }
+
+  // Initialize RevenueCat
+  await Purchases.configure(PurchasesConfiguration(EnvService.revenueCatApiKey));
+  if (kDebugMode) {
+    debugPrint('✓ RevenueCat configured');
   }
 
   // Initialize SharedPreferences

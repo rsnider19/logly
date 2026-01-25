@@ -71,6 +71,39 @@ class EnvService {
     return value;
   }
 
+  /// RevenueCat API key.
+  ///
+  /// Uses REVENUE_CAT_API_KEY_TEST for sandbox testing in development,
+  /// or platform-specific keys (REVENUECAT_IOS_API_KEY / REVENUECAT_ANDROID_API_KEY)
+  /// for production.
+  static String get revenueCatApiKey {
+    // First check for test key (used in development/sandbox)
+    final testKey = dotenv.env['REVENUE_CAT_API_KEY_TEST'];
+    if (testKey != null && testKey.isNotEmpty) {
+      return testKey;
+    }
+
+    // Fall back to platform-specific production keys
+    final iosKey = dotenv.env['REVENUECAT_IOS_API_KEY'];
+    final androidKey = dotenv.env['REVENUECAT_ANDROID_API_KEY'];
+
+    if ((iosKey == null || iosKey.isEmpty) && (androidKey == null || androidKey.isEmpty)) {
+      throw const EnvironmentException(
+        'RevenueCat API key not configured',
+        'REVENUE_CAT_API_KEY_TEST or platform-specific keys are missing from env file',
+      );
+    }
+
+    // Return platform-specific key (caller should handle platform selection)
+    return iosKey ?? androidKey ?? '';
+  }
+
+  /// RevenueCat API key for iOS (production).
+  static String? get revenueCatIosApiKey => dotenv.env['REVENUECAT_IOS_API_KEY'];
+
+  /// RevenueCat API key for Android (production).
+  static String? get revenueCatAndroidApiKey => dotenv.env['REVENUECAT_ANDROID_API_KEY'];
+
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);
