@@ -50,6 +50,15 @@ class ProfileScreen extends ConsumerWidget {
                       user!.email!,
                       style: theme.textTheme.titleMedium,
                     ),
+                  if (user?.createdAt != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      'Member since ${_formatMemberSince(user!.createdAt)}',
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -76,4 +85,13 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
   }
+}
+
+String _formatMemberSince(String createdAt) {
+  final date = DateTime.parse(createdAt);
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+  return '${months[date.month - 1]} ${date.year}';
 }
