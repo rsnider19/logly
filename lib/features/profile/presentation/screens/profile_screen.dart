@@ -7,6 +7,9 @@ import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/streak_card.dart';
 import 'package:logly/features/profile/presentation/widgets/summary_card.dart';
 import 'package:logly/features/profile/presentation/widgets/weekly_radar_chart.dart';
+import 'package:logly/features/subscriptions/domain/feature_code.dart';
+import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
+import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
 class ProfileScreen extends ConsumerWidget {
@@ -22,6 +25,7 @@ class ProfileScreen extends ConsumerWidget {
         title: 'Profile',
         showTrendingButton: false,
       ),
+      floatingActionButton: _InsightsFab(),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -85,6 +89,60 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+class _InsightsFab extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final entitlements = ref.watch(entitlementStateProvider);
+    final hasAccess = entitlements.hasFeature(FeatureCode.aiInsights);
+
+    return FloatingActionButton(
+      onPressed: () => _onPressed(context, ref, hasAccess),
+      tooltip: 'AI Insights',
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          const Icon(Icons.auto_awesome),
+          if (!hasAccess && !entitlements.isLoading)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.lock,
+                  size: 8,
+                  color: Theme.of(context).colorScheme.onTertiary,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _onPressed(BuildContext context, WidgetRef ref, bool hasAccess) async {
+    if (hasAccess) {
+      // Navigate to AI Insights screen (not yet implemented)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('AI Insights coming soon!')),
+      );
+    } else {
+      // Show paywall - no manual invalidation needed, StateNotifier listens for updates
+      final purchased = await ref.read(subscriptionServiceProvider).showPaywall();
+      if (purchased && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Welcome to Premium!')),
+        );
+      }
+    }
   }
 }
 

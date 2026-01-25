@@ -20,15 +20,8 @@ final consistencyScoreProvider = ConsistencyScoreProvider._();
 /// Derives from [activityCountsByDateProvider] single source of truth.
 
 final class ConsistencyScoreProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<int>,
-          int,
-          FutureOr<int>
-        >
-    with
-        $FutureModifier<int>,
-        $FutureProvider<int> {
+    extends $FunctionalProvider<AsyncValue<int>, int, FutureOr<int>>
+    with $FutureModifier<int>, $FutureProvider<int> {
   /// Provides consistency score (% of days active in last 30 days).
   ///
   /// Derives from [activityCountsByDateProvider] single source of truth.
@@ -48,9 +41,8 @@ final class ConsistencyScoreProvider
 
   @$internal
   @override
-  $FutureProviderElement<int> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
+  $FutureProviderElement<int> $createElement($ProviderPointer pointer) =>
+      $FutureProviderElement(pointer);
 
   @override
   FutureOr<int> create(Ref ref) {
@@ -58,4 +50,4 @@ final class ConsistencyScoreProvider
   }
 }
 
-String _$consistencyScoreHash() => r'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0';
+String _$consistencyScoreHash() => r'a90f57094a7cf8d08d07d793bf1fe41996eaad59';

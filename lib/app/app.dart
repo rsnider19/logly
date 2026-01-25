@@ -4,6 +4,7 @@ import 'package:logly/app/router/app_router.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:logly/features/subscriptions/application/subscription_initializer.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
@@ -21,6 +22,8 @@ class _AppState extends ConsumerState<App> {
       ref.read(notificationServiceProvider).initialize();
       // Initialize health sync (auto-syncs after auth if enabled)
       ref.read(healthSyncInitializerProvider).initialize();
+      // Initialize subscription listener (syncs RevenueCat with auth state)
+      ref.read(subscriptionInitializerProvider).initialize();
     });
   }
 
