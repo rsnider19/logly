@@ -94,7 +94,7 @@ class DailyActivityRow extends StatelessWidget {
               padding: const EdgeInsets.only(right: 8),
               child: UserActivityChip(
                 userActivity: userActivity,
-                onPressed: () => EditActivityRoute(userActivityId: userActivity.userActivityId),
+                onPressed: () => EditActivityRoute(userActivityId: userActivity.userActivityId).push<void>(context),
               ),
             ),
           );

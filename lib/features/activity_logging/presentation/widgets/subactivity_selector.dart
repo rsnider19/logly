@@ -38,19 +38,7 @@ class SubActivitySelector extends ConsumerWidget {
           children: subActivities.map((subActivity) {
             final isSelected = selectedIds.contains(subActivity.subActivityId);
             return FilterChip(
-              label: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (subActivity.icon != null) ...[
-                    Text(
-                      subActivity.icon!,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(width: 4),
-                  ],
-                  Text(subActivity.name),
-                ],
-              ),
+              label: Text(subActivity.name),
               selected: isSelected,
               onSelected: (_) {
                 ref.read(activityFormStateProvider.notifier).toggleSubActivity(
