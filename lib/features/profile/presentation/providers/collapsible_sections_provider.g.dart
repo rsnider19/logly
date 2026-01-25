@@ -48,7 +48,7 @@ final class CollapsibleSectionsStateNotifierProvider
 }
 
 String _$collapsibleSectionsStateNotifierHash() =>
-    r'8714f961e8a73976fea9c72e66b3d9cffab6594b';
+    r'6e7824f9f49a72d31c4d1df2ab83637c388e00bc';
 
 /// Notifier for managing collapsible section states.
 

@@ -125,9 +125,8 @@ class DailyActivityRepository {
       throw FetchMonthlyDataException(e.toString());
     }
   }
-}
 
-/// Fetches all activity counts by date - single source of truth.
+  /// Fetches all activity counts by date - single source of truth.
   ///
   /// This data is used by multiple derived providers (monthly chart,
   /// weekly radar, contribution graph). Fetching once and deriving from
