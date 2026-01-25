@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
+import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 
@@ -14,21 +15,26 @@ class StreakCard extends ConsumerWidget {
     final isExpanded =
         ref.watch(collapsibleSectionsStateProvider)[ProfileSections.streak] ?? true;
     final streakAsync = ref.watch(streakProvider);
+    final consistencyAsync = ref.watch(consistencyScoreProvider);
 
     return CollapsibleSection(
       title: 'Streak',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.streak),
-      child: streakAsync.when(
-        data: (streak) => _StreakContent(
-          currentStreak: streak.currentStreak,
-          longestStreak: streak.longestStreak,
-        ),
-        loading: () => const _StreakContentShimmer(),
-        error: (error, _) => _StreakError(
-          onRetry: () => ref.invalidate(streakProvider),
-        ),
-      ),
+      child: switch ((streakAsync, consistencyAsync)) {
+        (AsyncData(:final value), AsyncData(value: final consistencyScore)) => _StreakContent(
+            currentStreak: value.currentStreak,
+            longestStreak: value.longestStreak,
+            consistencyScore: consistencyScore,
+          ),
+        (AsyncError(), _) => _StreakError(
+            onRetry: () => ref.invalidate(streakProvider),
+          ),
+        (_, AsyncError()) => _StreakError(
+            onRetry: () => ref.invalidate(consistencyScoreProvider),
+          ),
+        _ => const _StreakContentShimmer(),
+      },
     );
   }
 }
@@ -37,10 +43,12 @@ class _StreakContent extends StatelessWidget {
   const _StreakContent({
     required this.currentStreak,
     required this.longestStreak,
+    required this.consistencyScore,
   });
 
   final int currentStreak;
   final int longestStreak;
+  final int consistencyScore;
 
   @override
   Widget build(BuildContext context) {
@@ -54,13 +62,23 @@ class _StreakContent extends StatelessWidget {
             iconColor: Colors.orange,
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
         Expanded(
           child: _StreakStatBox(
             label: 'Longest',
             value: longestStreak,
             icon: Icons.emoji_events,
             iconColor: Colors.amber,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: _StreakStatBox(
+            label: 'Consistency',
+            value: consistencyScore,
+            icon: Icons.show_chart,
+            iconColor: Colors.teal,
+            suffix: '%',
           ),
         ),
       ],
@@ -74,16 +92,20 @@ class _StreakStatBox extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.iconColor,
+    this.suffix,
   });
 
   final String label;
   final int value;
   final IconData icon;
   final Color iconColor;
+  final String? suffix;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final displayValue = suffix != null ? '$value$suffix' : '$value';
+    final displayLabel = suffix != null ? label : '$label days';
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -96,13 +118,13 @@ class _StreakStatBox extends StatelessWidget {
           Icon(icon, color: iconColor, size: 32),
           const SizedBox(height: 8),
           Text(
-            '$value',
+            displayValue,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           Text(
-            '$label days',
+            displayLabel,
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -121,7 +143,9 @@ class _StreakContentShimmer extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: _ShimmerBox()),
-        const SizedBox(width: 16),
+        const SizedBox(width: 12),
+        Expanded(child: _ShimmerBox()),
+        const SizedBox(width: 12),
         Expanded(child: _ShimmerBox()),
       ],
     );
