@@ -2,6 +2,7 @@ import 'package:dartx/dartx.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
+import 'package:logly/features/profile/domain/activity_count_by_date.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/domain/day_activity_count.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
@@ -122,6 +123,31 @@ class DailyActivityRepository {
     } catch (e, st) {
       _logger.e('Failed to fetch monthly data', e, st);
       throw FetchMonthlyDataException(e.toString());
+    }
+  }
+}
+
+/// Fetches all activity counts by date - single source of truth.
+  ///
+  /// This data is used by multiple derived providers (monthly chart,
+  /// weekly radar, contribution graph). Fetching once and deriving from
+  /// this single source enables efficient invalidation.
+  Future<List<ActivityCountByDate>> getAllActivityCounts() async {
+    try {
+      final response = await _supabase
+          .from('activity_counts_by_date')
+          .select('activity_date, activity_category_id, count');
+
+      return (response as List).map((e) {
+        return ActivityCountByDate(
+          activityDate: DateTime.parse(e['activity_date'] as String),
+          activityCategoryId: e['activity_category_id'] as String,
+          count: e['count'] as int,
+        );
+      }).toList();
+    } catch (e, st) {
+      _logger.e('Failed to fetch all activity counts', e, st);
+      throw FetchDailyCountsException(e.toString());
     }
   }
 }

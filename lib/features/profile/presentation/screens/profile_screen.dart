@@ -6,6 +6,7 @@ import 'package:logly/features/profile/presentation/widgets/contribution_graph.d
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/streak_card.dart';
 import 'package:logly/features/profile/presentation/widgets/summary_card.dart';
+import 'package:logly/features/profile/presentation/widgets/weekly_radar_chart.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
 class ProfileScreen extends ConsumerWidget {
@@ -61,6 +62,9 @@ class ProfileScreen extends ConsumerWidget {
 
             // Contribution graph (GitHub-style)
             const ContributionCard(),
+
+            // Weekly radar chart (activity by day of week)
+            const WeeklyRadarChartCard(),
 
             // Monthly chart (12 month stacked bars)
             const MonthlyChartCard(),

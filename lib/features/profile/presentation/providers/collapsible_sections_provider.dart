@@ -7,6 +7,7 @@ abstract class ProfileSections {
   static const String streak = 'streak';
   static const String summary = 'summary';
   static const String contribution = 'contribution';
+  static const String weeklyRadar = 'weeklyRadar';
   static const String monthly = 'monthly';
 }
 
@@ -20,6 +21,7 @@ class CollapsibleSectionsStateNotifier extends _$CollapsibleSectionsStateNotifie
       ProfileSections.streak: true,
       ProfileSections.summary: true,
       ProfileSections.contribution: true,
+      ProfileSections.weeklyRadar: true,
       ProfileSections.monthly: true,
     };
   }
