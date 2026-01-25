@@ -49,8 +49,9 @@ class _CategoryProgressBarState extends State<CategoryProgressBar> with SingleTi
   void didUpdateWidget(CategoryProgressBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.count != widget.count || oldWidget.maxCount != widget.maxCount) {
-      final oldPercentage = oldWidget.maxCount > 0 ? oldWidget.count / oldWidget.maxCount : 0.0;
-      _updateAnimation(from: oldPercentage, to: _targetPercentage);
+      // Use current animation value (not old target) for smooth mid-animation transitions
+      final currentValue = _animation.value;
+      _updateAnimation(from: currentValue, to: _targetPercentage);
       unawaited(_controller.forward(from: 0));
     }
   }
@@ -100,6 +101,7 @@ class _CategoryProgressBarState extends State<CategoryProgressBar> with SingleTi
             builder: (context, child) {
               return Container(
                 height: 8,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(4),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
+import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
@@ -16,66 +17,102 @@ class SummaryCard extends ConsumerWidget {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded =
         ref.watch(collapsibleSectionsStateProvider)[ProfileSections.summary] ?? true;
-    final summaryAsync = ref.watch(categorySummaryProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
 
     return CollapsibleSection(
       title: 'Summary',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.summary),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _TimePeriodSelector(),
-          const SizedBox(height: 16),
-          summaryAsync.when(
-            data: (summaries) {
-              if (summaries.isEmpty) {
-                return const _EmptyState();
-              }
-
-              final maxCount = summaries.map((s) => s.activityCount).fold(0, (a, b) => a > b ? a : b);
-
-              return categoriesAsync.when(
-                data: (categories) {
-                  final categoryMap = {for (final c in categories) c.activityCategoryId: c};
-
-                  // Sort summaries by category sortOrder
-                  final sortedSummaries = [...summaries]..sort((a, b) {
-                      final catA = categoryMap[a.activityCategoryId];
-                      final catB = categoryMap[b.activityCategoryId];
-                      final orderA = catA?.sortOrder ?? 999;
-                      final orderB = catB?.sortOrder ?? 999;
-                      return orderA.compareTo(orderB);
-                    });
-
-                  return Column(
-                    children: sortedSummaries.map((summary) {
-                      final category = categoryMap[summary.activityCategoryId];
-                      final color = category != null
-                          ? Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16))
-                          : Colors.grey;
-
-                      return CategoryProgressBar(
-                        categoryName: category?.name ?? 'Unknown',
-                        count: summary.activityCount,
-                        maxCount: maxCount,
-                        color: color,
-                      );
-                    }).toList(),
-                  );
-                },
-                loading: () => const _SummaryShimmer(),
-                error: (_, _) => const _SummaryShimmer(),
-              );
-            },
-            loading: () => const _SummaryShimmer(),
-            error: (error, _) => _SummaryError(
-              onRetry: () => ref.invalidate(categorySummaryProvider),
-            ),
-          ),
+          _TimePeriodSelector(),
+          SizedBox(height: 16),
+          _SummaryContent(),
         ],
       ),
+    );
+  }
+}
+
+/// Content widget that maintains previous data during loading transitions
+/// to enable smooth animations between time periods.
+class _SummaryContent extends ConsumerStatefulWidget {
+  const _SummaryContent();
+
+  @override
+  ConsumerState<_SummaryContent> createState() => _SummaryContentState();
+}
+
+class _SummaryContentState extends ConsumerState<_SummaryContent> {
+  /// Cached summary data to show during loading transitions.
+  List<CategorySummary>? _cachedSummaries;
+
+  /// Cached max count for consistent scaling during transitions.
+  int _cachedMaxCount = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    final summaryAsync = ref.watch(categorySummaryProvider);
+    final categoriesAsync = ref.watch(categoriesProvider);
+
+    return categoriesAsync.when(
+      data: (categories) {
+        // Get current or cached summaries
+        final summaries = summaryAsync.value ?? _cachedSummaries;
+        final isLoading = summaryAsync.isLoading && _cachedSummaries != null;
+        final hasError = summaryAsync.hasError && _cachedSummaries == null;
+
+        // Update cache when we have new data
+        if (summaryAsync.hasValue) {
+          _cachedSummaries = summaryAsync.value;
+          _cachedMaxCount = summaryAsync.value!.isEmpty
+              ? 1
+              : summaryAsync.value!.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b);
+        }
+
+        // Show shimmer only on initial load
+        if (summaries == null) {
+          return const _SummaryShimmer();
+        }
+
+        // Show error only if we have no cached data
+        if (hasError) {
+          return _SummaryError(
+            onRetry: () => ref.invalidate(categorySummaryProvider),
+          );
+        }
+
+        // Create a map of category ID to activity count
+        final summaryMap = {for (final s in summaries) s.activityCategoryId: s.activityCount};
+
+        // Use cached max count during loading to prevent bar scaling jumps
+        final maxCount = isLoading
+            ? _cachedMaxCount
+            : (summaries.isEmpty
+                ? 1
+                : summaries.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b));
+
+        // Sort categories by sortOrder
+        final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
+        return Column(
+          children: sortedCategories.map((category) {
+            final count = summaryMap[category.activityCategoryId] ?? 0;
+            final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
+
+            return CategoryProgressBar(
+              // Key ensures Flutter updates existing widget instead of rebuilding
+              key: ValueKey(category.activityCategoryId),
+              categoryName: category.name,
+              count: count,
+              maxCount: maxCount,
+              color: color,
+            );
+          }).toList(),
+        );
+      },
+      loading: () => const _SummaryShimmer(),
+      error: (_, __) => const _SummaryShimmer(),
     );
   }
 }
@@ -126,36 +163,6 @@ class _TimePeriodSelector extends ConsumerWidget {
       case TimePeriod.all:
         return 'All';
     }
-  }
-}
-
-class _EmptyState extends StatelessWidget {
-  const _EmptyState();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      padding: const EdgeInsets.all(24),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Icon(
-            Icons.bar_chart_outlined,
-            size: 48,
-            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'No activities logged',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
