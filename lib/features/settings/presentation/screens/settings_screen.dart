@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
+import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/settings/application/settings_service.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
@@ -11,6 +12,7 @@ import 'package:logly/features/settings/presentation/providers/notification_pref
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/features/settings/presentation/widgets/favorites_bottom_sheet.dart';
 import 'package:logly/features/settings/presentation/widgets/health_sync_bottom_sheet.dart';
+import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -369,17 +371,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               );
             },
           ),
-          ListTile(
-            title: const Text('Sync health data'),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () {
-              showModalBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                builder: (context) => const HealthSyncBottomSheet(),
-              );
-            },
-          ),
+          _HealthSyncListTile(),
 
           const Divider(height: 1),
 
@@ -523,6 +515,247 @@ class _NotificationsSection extends ConsumerWidget {
           duration: const Duration(milliseconds: 200),
         ),
       ],
+    );
+  }
+}
+
+/// List tile for health sync with smart behavior based on sync state.
+class _HealthSyncListTile extends ConsumerWidget {
+  Future<void> _handleTap(BuildContext context, WidgetRef ref, {required bool healthSyncEnabled}) async {
+    // If health sync is not enabled, show the setup bottom sheet
+    if (!healthSyncEnabled) {
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => const HealthSyncBottomSheet(),
+      );
+      return;
+    }
+
+    // Otherwise, trigger sync directly
+    final syncState = ref.read(healthSyncStateProvider);
+
+    // If this is the first sync (no last sync date), show the date selection dialog
+    if (syncState.lastSyncDate == null) {
+      final selectedDate = await _showFirstSyncDialog(context);
+      if (selectedDate != null) {
+        ref.read(healthSyncStateProvider.notifier).sync(fromDate: selectedDate);
+      }
+    } else {
+      ref.read(healthSyncStateProvider.notifier).sync();
+    }
+  }
+
+  /// Minimum date for syncing (January 1, 2015).
+  static final DateTime _minimumSyncDate = DateTime(2015);
+
+  Future<DateTime?> _showFirstSyncDialog(BuildContext context) async {
+    final theme = Theme.of(context);
+
+    return showDialog<DateTime>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('First Time Sync'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'How far back would you like to sync your workout history?',
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Note: Syncing a large history may take longer.',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now().subtract(const Duration(days: 30)),
+                firstDate: _minimumSyncDate,
+                lastDate: DateTime.now(),
+                helpText: 'Sync workouts from this date',
+              );
+              if (pickedDate != null && context.mounted) {
+                Navigator.of(context).pop(pickedDate);
+              }
+            },
+            child: const Text('Pick a Date'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(_minimumSyncDate),
+            child: const Text('Sync All History'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final syncState = ref.watch(healthSyncStateProvider);
+    final preferencesAsync = ref.watch(preferencesStateProvider);
+
+    final isSyncing = syncState.isSyncing;
+    final lastSyncDate = syncState.lastSyncDate;
+
+    final healthSyncEnabled = switch (preferencesAsync) {
+      AsyncData(:final value) => value.healthSyncEnabled,
+      _ => false,
+    };
+
+    // Listen for sync completion to show appropriate feedback
+    ref.listen(healthSyncStateProvider, (previous, next) {
+      if (previous?.isSyncing == true && !next.isSyncing) {
+        if (next.errorMessage != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(next.errorMessage!),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        } else if (next.lastSyncResult != null) {
+          // If no activities were synced and this was a sync attempt, show the no activities sheet
+          if (next.lastSyncResult!.total == 0) {
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (context) => const _NoActivitiesFoundBottomSheet(),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(next.lastSyncResult!.summary),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+              ),
+            );
+          }
+        }
+      }
+    });
+
+    // Build subtitle based on state
+    Widget? subtitle;
+    if (isSyncing && syncState.showProgress) {
+      // Show progress bar when syncing multiple months
+      subtitle = Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: LinearProgressIndicator(value: syncState.progress),
+      );
+    } else if (lastSyncDate != null) {
+      subtitle = Text('Last synced ${timeago.format(lastSyncDate)}');
+    }
+
+    return ListTile(
+      title: const Text('Sync health data'),
+      subtitle: subtitle,
+      trailing: const Icon(Icons.chevron_right),
+      onTap: isSyncing ? null : () => _handleTap(context, ref, healthSyncEnabled: healthSyncEnabled),
+    );
+  }
+}
+
+/// Bottom sheet shown when sync completes with no activities found.
+class _NoActivitiesFoundBottomSheet extends StatelessWidget {
+  const _NoActivitiesFoundBottomSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Handle
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.outlineVariant,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Icon
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.search_off,
+              size: 40,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
+          // Title
+          Text(
+            'No Workouts Found',
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 12),
+
+          // Description
+          Text(
+            "We couldn't find any workouts to sync from your health app. "
+            'If you were expecting some, you may need to grant Logly access to your health data in Settings.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            textAlign: TextAlign.center,
+          ),
+
+          const SizedBox(height: 24),
+
+          // Action buttons
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                AppSettings.openAppSettings();
+              },
+              child: const Text('Open Settings'),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ),
+
+          // Bottom padding for safe area
+          SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
+        ],
+      ),
     );
   }
 }

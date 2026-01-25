@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/app_router.dart';
+import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 
@@ -15,9 +16,11 @@ class _AppState extends ConsumerState<App> {
   @override
   void initState() {
     super.initState();
-    // Initialize notification service
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Initialize notification service
       ref.read(notificationServiceProvider).initialize();
+      // Initialize health sync (auto-syncs after auth if enabled)
+      ref.read(healthSyncInitializerProvider).initialize();
     });
   }
 
@@ -36,6 +39,9 @@ class _AppState extends ConsumerState<App> {
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
           brightness: Brightness.dark,
+        ),
+        progressIndicatorTheme: Theme.of(context).progressIndicatorTheme.copyWith(
+          linearTrackColor: Theme.of(context).colorScheme.surfaceContainerHighest
         ),
         useMaterial3: true,
       ),
