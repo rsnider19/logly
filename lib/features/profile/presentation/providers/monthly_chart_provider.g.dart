@@ -139,11 +139,17 @@ String _$effectiveSelectedFiltersHash() =>
     r'78dfbfde1dcc865949b6c31020b89ba6284f74bf';
 
 /// Provides monthly chart data for all categories.
+///
+/// Derives from the single source [activityCountsByDateProvider] and
+/// aggregates by month + category for the last 12 months.
 
 @ProviderFor(monthlyChartData)
 final monthlyChartDataProvider = MonthlyChartDataProvider._();
 
 /// Provides monthly chart data for all categories.
+///
+/// Derives from the single source [activityCountsByDateProvider] and
+/// aggregates by month + category for the last 12 months.
 
 final class MonthlyChartDataProvider
     extends
@@ -156,6 +162,9 @@ final class MonthlyChartDataProvider
         $FutureModifier<List<MonthlyCategoryData>>,
         $FutureProvider<List<MonthlyCategoryData>> {
   /// Provides monthly chart data for all categories.
+  ///
+  /// Derives from the single source [activityCountsByDateProvider] and
+  /// aggregates by month + category for the last 12 months.
   MonthlyChartDataProvider._()
     : super(
         from: null,
@@ -182,7 +191,7 @@ final class MonthlyChartDataProvider
   }
 }
 
-String _$monthlyChartDataHash() => r'687540b3f695dc954a49d7eb6dd4cd9185ba8cda';
+String _$monthlyChartDataHash() => r'b0a547e18af712cb11a240d2914f6aae1d0b2441';
 
 /// Provides filtered monthly chart data based on selected category filters.
 
