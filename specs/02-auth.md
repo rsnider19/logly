@@ -10,7 +10,7 @@ Authentication is handled via Supabase Auth with Apple Sign-in and Google Sign-i
 
 - [x] Support Apple Sign-in (iOS and macOS)
 - [x] Support Google Sign-in (all platforms)
-- [ ] Automatically create user profile on first sign-in
+- [x] Automatically create user profile on first sign-in
 - [x] Persist authentication state across app restarts
 - [x] Handle sign-out with state cleanup
 - [x] Implement account deletion with 30-day soft delete
@@ -187,5 +187,5 @@ Future<void> requestAccountDeletion() async {
 - [x] Sign-out clears all user data locally
 - [x] Account deletion soft-deletes user
 - [x] Unauthenticated routes redirect to sign-in
-- [ ] New users routed to onboarding
+- [x] New users routed to onboarding
 - [x] Existing users routed to home

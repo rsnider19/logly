@@ -8,21 +8,21 @@ Health integration enables automatic syncing of workout data from Apple Health (
 
 ### Functional Requirements
 
-- [ ] Request health data permissions (WORKOUT type)
-- [ ] Sync workout data from Apple Health (iOS)
-- [ ] Sync workout data from Google Fit (Android)
-- [ ] Map external workout types to Logly activities
-- [ ] Auto-create log entries from synced workouts
-- [ ] Track last sync date per user
-- [ ] Handle unmapped workout types gracefully
-- [ ] Support manual sync trigger
-- [ ] Show sync status in UI
+- [x] Request health data permissions (WORKOUT type)
+- [x] Sync workout data from Apple Health (iOS)
+- [x] Sync workout data from Health Connect (Android)
+- [x] Map external workout types to Logly activities (via DB trigger)
+- [x] Auto-create log entries from synced workouts (via DB trigger)
+- [x] Track last sync date per user
+- [x] Handle unmapped workout types gracefully
+- [x] Support manual sync trigger
+- [x] Show sync status in UI
 
 ### Non-Functional Requirements
 
-- [ ] Sync must complete within 30 seconds for typical data
+- [x] Sync must complete within 30 seconds for typical data
 - [ ] Background sync should not impact app performance
-- [ ] Duplicate detection must prevent duplicate entries
+- [x] Duplicate detection must prevent duplicate entries (via composite key check)
 
 ## Architecture
 
@@ -314,13 +314,13 @@ Future<void> _createUserActivity(
 
 ## Success Criteria
 
-- [ ] Permissions requested correctly per platform
-- [ ] Workouts fetched from health platform
-- [ ] Workout types mapped to Logly activities
-- [ ] Unmapped types handled gracefully
-- [ ] User activities created from workouts
-- [ ] Raw data stored in external_data
-- [ ] Last sync date updated
-- [ ] Duplicates prevented
-- [ ] Manual sync trigger works
-- [ ] Sync status displayed in UI
+- [x] Permissions requested correctly per platform
+- [x] Workouts fetched from health platform
+- [x] Workout types mapped to Logly activities (via DB trigger)
+- [x] Unmapped types handled gracefully (tracked in SyncResult)
+- [x] User activities created from workouts (via DB trigger)
+- [x] Raw data stored in external_data
+- [x] Last sync date updated
+- [x] Duplicates prevented (via composite key check)
+- [x] Manual sync trigger works
+- [x] Sync status displayed in UI

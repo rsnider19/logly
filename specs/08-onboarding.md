@@ -8,20 +8,20 @@ Onboarding guides new users through an intro pager, favorite activity selection,
 
 ### Functional Requirements
 
-- [ ] Display 3-page intro pager for first-time users
-- [ ] Show favorite activity selection screen
-- [ ] Pre-populate favorites for returning users
-- [ ] Suggest 3+ favorites without enforcing
-- [ ] Display popular activities section
-- [ ] Show activities organized by category
-- [ ] Present Health Connect permission screen
-- [ ] Track onboarding completion
-- [ ] Allow skipping health permissions
+- [x] Display 3-page intro pager for first-time users
+- [x] Show favorite activity selection screen
+- [x] Pre-populate favorites for returning users
+- [x] Suggest 3+ favorites without enforcing
+- [x] Display popular activities section
+- [x] Show activities organized by category
+- [x] Present Health Connect permission screen
+- [x] Track onboarding completion
+- [x] Allow skipping health permissions
 
 ### Non-Functional Requirements
 
-- [ ] Onboarding must complete within 3 screen transitions
-- [ ] Activity selection must support scrolling through all activities
+- [x] Onboarding must complete within 3 screen transitions
+- [x] Activity selection must support scrolling through all activities
 - [ ] Pre-population must load within 1 second
 
 ## Architecture
@@ -223,13 +223,13 @@ Future<bool> requestHealthPermissions() async {
 
 ## Success Criteria
 
-- [ ] Intro pager displays 3 pages with correct content
-- [ ] Favorites selection shows popular activities
-- [ ] Favorites selection shows all categories
-- [ ] Activity chips toggle on tap
-- [ ] Selected row shows up to 3 favorites (or empty chips)
-- [ ] Continue navigates to Health Connect screen
-- [ ] Health Connect explains platform-specific integration
-- [ ] Skip button bypasses health permissions
-- [ ] Onboarding completion tracked in database
-- [ ] Returning users see existing favorites pre-selected
+- [x] Intro pager displays 3 pages with correct content
+- [x] Favorites selection shows popular activities
+- [x] Favorites selection shows all categories
+- [x] Activity chips toggle on tap
+- [x] Selected row shows up to 3 favorites (or empty chips)
+- [x] Continue navigates to Health Connect screen
+- [x] Health Connect explains platform-specific integration
+- [x] Skip button bypasses health permissions
+- [x] Onboarding completion tracked in database
+- [x] Returning users see existing favorites pre-selected
