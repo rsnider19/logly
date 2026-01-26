@@ -27,7 +27,7 @@ final class DailyActivitiesStateNotifierProvider
         argument: null,
         retry: null,
         name: r'dailyActivitiesStateProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -41,7 +41,7 @@ final class DailyActivitiesStateNotifierProvider
 }
 
 String _$dailyActivitiesStateNotifierHash() =>
-    r'893693984e0b67a29b00c80611e25bd551b13767';
+    r'da28b7f278fb22ca39298d8a1be75710f0e1ba76';
 
 /// Notifier for managing daily activities with infinite scroll pagination.
 
