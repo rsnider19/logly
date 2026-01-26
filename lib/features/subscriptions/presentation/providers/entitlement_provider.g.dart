@@ -146,7 +146,7 @@ final class HasFeatureProvider extends $FunctionalProvider<bool, bool, bool>
   }
 }
 
-String _$hasFeatureHash() => r'5f0b3247611d01f4f9b5516b677285c327fde452';
+String _$hasFeatureHash() => r'e80f4002c842a81538daeba0496caa1eac1f9013';
 
 /// Provides whether the user has access to a specific premium feature.
 ///
