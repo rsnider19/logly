@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/features/home/application/home_service.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,13 +40,27 @@ class DailyActivitiesState {
 }
 
 /// Notifier for managing daily activities with infinite scroll pagination.
-@riverpod
+@Riverpod(keepAlive: true)
 class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
   static const int _daysToLoad = 30;
   static const int _initialDays = 30;
 
   @override
   Future<DailyActivitiesState> build() async {
+    final logger = ref.read(loggerProvider);
+    ref
+      ..onDispose(() {
+        logger.d('DailyActivitiesStateNotifier disposed');
+      })
+      ..onAddListener(() {
+        logger.d('DailyActivitiesStateNotifier added listener');
+      })
+      ..onRemoveListener(() {
+        logger.d('DailyActivitiesStateNotifier removed listener');
+      });
+
+    logger.d('DailyActivitiesStateNotifier: Building');
+
     final service = ref.watch(homeServiceProvider);
 
     final today = DateTime.now();
@@ -119,11 +135,13 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
       // Combine with existing summaries (new ones go at the end since they're older)
       final combined = [...currentState.summaries, ...filledSummaries];
 
-      state = AsyncData(currentState.copyWith(
-        summaries: combined,
-        oldestLoadedDate: newStartDate,
-        isLoadingMore: false,
-      ));
+      state = AsyncData(
+        currentState.copyWith(
+          summaries: combined,
+          oldestLoadedDate: newStartDate,
+          isLoadingMore: false,
+        ),
+      );
     } catch (e, st) {
       state = AsyncData(currentState.copyWith(isLoadingMore: false));
       // Re-throw to let error handlers deal with it

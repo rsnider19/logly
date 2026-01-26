@@ -49,7 +49,9 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
     // Initialize form state after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(activityFormStateProvider.notifier).initForCreate(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .initForCreate(
             widget.activity,
             initialDate: widget.initialDate,
           );
@@ -64,26 +66,77 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
   Future<void> _saveActivity() async {
     final notifier = ref.read(activityFormStateProvider.notifier);
-    final success = await notifier.submit();
+    final result = await notifier.submit();
 
-    if (success && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Activity logged successfully'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
-      context.pop(true);
+    if (!mounted) return;
+
+    switch (result) {
+      case SubmitResult.success:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Activity logged successfully'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        context.pop(true);
+      case SubmitResult.partialSuccess:
+        // Show dialog for partial success
+        final formState = ref.read(activityFormStateProvider);
+        final multiDayResult = formState.multiDayResult;
+        if (multiDayResult != null) {
+          await showDialog<void>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Partial Success'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${multiDayResult.successCount} of ${multiDayResult.totalDays} days logged successfully.',
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Failed days:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  ...multiDayResult.failures.map(
+                    (failure) => Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        '${_formatDate(failure.date)}: ${failure.errorMessage}',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          );
+        }
+        // Still pop since some activities were logged
+        if (mounted) {
+          context.pop(true);
+        }
+      case SubmitResult.failure:
+        // Error is shown in the form UI
+        break;
     }
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.month}/${date.day}/${date.year}';
   }
 
   void _toggleFavorite() {
     unawaited(ref.read(favoriteStateProvider.notifier).toggle(widget.activity.activityId));
-  }
-
-  Color _parseColor(String hexColor) {
-    final hex = hexColor.replaceFirst('#', '');
-    return Color(int.parse('FF$hex', radix: 16));
   }
 
   @override
@@ -91,7 +144,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
     final theme = Theme.of(context);
     final formState = ref.watch(activityFormStateProvider);
     final favoritesState = ref.watch(favoriteStateProvider);
-    final isFavorited = favoritesState.whenOrNull(
+    final isFavorited =
+        favoritesState.whenOrNull(
           data: (ids) => ids.contains(widget.activity.activityId),
         ) ??
         false;
@@ -179,10 +233,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Date picker
-                        if (showDateRange)
-                          const DateRangePicker()
-                        else
-                          const DatePickerField(),
+                        if (showDateRange) const DateRangePicker() else const DatePickerField(),
 
                         const SizedBox(height: 24),
 
@@ -220,7 +271,9 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                             border: OutlineInputBorder(),
                           ),
                           onChanged: (value) {
-                            ref.read(activityFormStateProvider.notifier).setComments(
+                            ref
+                                .read(activityFormStateProvider.notifier)
+                                .setComments(
                                   value.isEmpty ? null : value,
                                 );
                           },
@@ -313,7 +366,9 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
             border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
-            ref.read(activityFormStateProvider.notifier).setTextValue(
+            ref
+                .read(activityFormStateProvider.notifier)
+                .setTextValue(
                   detail.activityDetailId,
                   value.isEmpty ? null : value,
                 );

@@ -142,7 +142,7 @@ final class CategorySummaryProvider
         argument: null,
         retry: null,
         name: r'categorySummaryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -162,4 +162,4 @@ final class CategorySummaryProvider
   }
 }
 
-String _$categorySummaryHash() => r'f2c671c0815ba22feee2e13192493fcbaf8ffc75';
+String _$categorySummaryHash() => r'79799c34c256abe507c7767367f07837f474e06f';

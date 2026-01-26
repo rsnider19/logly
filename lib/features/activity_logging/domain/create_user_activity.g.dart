@@ -9,8 +9,8 @@ part of 'create_user_activity.dart';
 _CreateUserActivity _$CreateUserActivityFromJson(Map<String, dynamic> json) =>
     _CreateUserActivity(
       activityId: json['activity_id'] as String,
-      activityStartDate: DateTime.parse(json['activity_start_date'] as String),
-      activityEndDate: DateTime.parse(json['activity_end_date'] as String),
+      activityTimestamp: DateTime.parse(json['activity_timestamp'] as String),
+      activityDate: DateTime.parse(json['activity_date'] as String),
       comments: json['comments'] as String?,
       activityNameOverride: json['activity_name_override'] as String?,
       subActivityIds:
@@ -32,8 +32,8 @@ _CreateUserActivity _$CreateUserActivityFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CreateUserActivityToJson(_CreateUserActivity instance) =>
     <String, dynamic>{
       'activity_id': instance.activityId,
-      'activity_start_date': instance.activityStartDate.toIso8601String(),
-      'activity_end_date': instance.activityEndDate.toIso8601String(),
+      'activity_timestamp': instance.activityTimestamp.toIso8601String(),
+      'activity_date': instance.activityDate.toIso8601String(),
       'comments': instance.comments,
       'activity_name_override': instance.activityNameOverride,
       'sub_activity_ids': instance.subActivityIds,

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
@@ -123,24 +121,18 @@ class UserActivityRepository {
     }
   }
 
-  /// Creates a new user activity using the log_activity_with_details RPC.
+  /// Creates a new user activity using the create_user_activity RPC.
   ///
-  /// This handles creating the activity and its details atomically,
-  /// and supports multi-day logging via date range.
-  Future<void> create(CreateUserActivity activity) async {
+  /// This handles creating the activity and its details atomically.
+  /// For single day only - multi-day logging is handled by the service layer.
+  Future<UserActivity> create(CreateUserActivity activity) async {
     try {
-      final activityJson = {
-        'activity_id': activity.activityId,
-        'activity_start_date': activity.activityStartDate.toIso8601String(),
-        'activity_end_date': activity.activityEndDate.toIso8601String(),
-        'comments': activity.comments,
-        'activity_name_override': activity.activityNameOverride,
-        'sub_activity_ids': activity.subActivityIds,
-      };
-
+      final userActivityJson = activity.toUserActivityJson();
       final detailsJson = activity.details
+          .where((d) => d.hasValue)
           .map((d) => {
                 'activity_detail_id': d.activityDetailId,
+                'activity_detail_type': d.activityDetailType.name,
                 'text_value': d.textValue,
                 'environment_value': d.environmentValue?.name,
                 'numeric_value': d.numericValue,
@@ -148,37 +140,50 @@ class UserActivityRepository {
                 'distance_in_meters': d.distanceInMeters,
                 'liquid_volume_in_liters': d.liquidVolumeInLiters,
                 'weight_in_kilograms': d.weightInKilograms,
-                'lat_lng': d.latLng,
               })
           .toList();
 
-      await _supabase.rpc<void>(
-        'log_activity_with_details',
-        params: {
-          'p_user_activity': jsonEncode(activityJson),
-          'p_user_activity_details': jsonEncode(detailsJson),
-        },
-      );
+      _logger.d('=== CREATE USER ACTIVITY RPC ===');
+      _logger.d('p_user_activity: $userActivityJson');
+      _logger.d('p_details: $detailsJson');
+      _logger.d('p_sub_activity_ids: ${activity.subActivityIds}');
+
+      final response = await _supabase
+          .rpc(
+            'create_user_activity',
+            params: {
+              'p_user_activity': userActivityJson,
+              'p_details': detailsJson,
+              'p_sub_activity_ids': activity.subActivityIds,
+            },
+          )
+          .select(_selectWithRelations)
+          .single();
+
+      _logger.d('=== RPC RESPONSE ===');
+      _logger.d('Response: $response');
+
+      final userActivity = UserActivity.fromJson(response);
+      _logger.d('Parsed UserActivity ID: ${userActivity.userActivityId}');
+
+      return userActivity;
     } catch (e, st) {
+      _logger.e('=== CREATE USER ACTIVITY FAILED ===');
+      _logger.e('Error type: ${e.runtimeType}');
+      _logger.e('Error: $e');
       _logger.e('Failed to create user activity', e, st);
       throw LogActivityException(e.toString());
     }
   }
 
-  /// Updates an existing user activity using the update_activity_with_details RPC.
-  Future<void> update(UpdateUserActivity activity) async {
+  /// Updates an existing user activity using the update_user_activity RPC.
+  Future<UserActivity> update(UpdateUserActivity activity) async {
     try {
-      final activityJson = {
-        'user_activity_id': activity.userActivityId,
-        'activity_timestamp': activity.activityTimestamp.toIso8601String(),
-        'comments': activity.comments,
-        'activity_name_override': activity.activityNameOverride,
-        'sub_activity_ids': activity.subActivityIds,
-      };
-
       final detailsJson = activity.details
+          .where((d) => d.hasValue)
           .map((d) => {
                 'activity_detail_id': d.activityDetailId,
+                'activity_detail_type': d.activityDetailType.name,
                 'text_value': d.textValue,
                 'environment_value': d.environmentValue?.name,
                 'numeric_value': d.numericValue,
@@ -186,17 +191,22 @@ class UserActivityRepository {
                 'distance_in_meters': d.distanceInMeters,
                 'liquid_volume_in_liters': d.liquidVolumeInLiters,
                 'weight_in_kilograms': d.weightInKilograms,
-                'lat_lng': d.latLng,
               })
           .toList();
 
-      await _supabase.rpc<void>(
-        'update_activity_with_details',
-        params: {
-          'p_user_activity': jsonEncode(activityJson),
-          'p_user_activity_details': jsonEncode(detailsJson),
-        },
-      );
+      final response = await _supabase
+          .rpc(
+            'update_user_activity',
+            params: {
+              'p_user_activity': activity.toUserActivityJson(),
+              'p_details': detailsJson,
+              'p_sub_activity_ids': activity.subActivityIds,
+            },
+          )
+          .select(_selectWithRelations)
+          .single();
+
+      return UserActivity.fromJson(response);
     } catch (e, st) {
       _logger.e('Failed to update user activity ${activity.userActivityId}', e, st);
       throw UpdateActivityException(e.toString());

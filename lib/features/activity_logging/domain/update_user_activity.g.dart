@@ -10,6 +10,7 @@ _UpdateUserActivity _$UpdateUserActivityFromJson(Map<String, dynamic> json) =>
     _UpdateUserActivity(
       userActivityId: json['user_activity_id'] as String,
       activityTimestamp: DateTime.parse(json['activity_timestamp'] as String),
+      activityDate: DateTime.parse(json['activity_date'] as String),
       comments: json['comments'] as String?,
       activityNameOverride: json['activity_name_override'] as String?,
       subActivityIds:
@@ -32,6 +33,7 @@ Map<String, dynamic> _$UpdateUserActivityToJson(_UpdateUserActivity instance) =>
     <String, dynamic>{
       'user_activity_id': instance.userActivityId,
       'activity_timestamp': instance.activityTimestamp.toIso8601String(),
+      'activity_date': instance.activityDate.toIso8601String(),
       'comments': instance.comments,
       'activity_name_override': instance.activityNameOverride,
       'sub_activity_ids': instance.subActivityIds,
