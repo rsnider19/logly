@@ -6,11 +6,31 @@ import 'package:logly/features/activity_logging/application/activity_logging_ser
 import 'package:logly/features/activity_logging/domain/create_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/create_user_activity_detail.dart';
 import 'package:logly/features/activity_logging/domain/environment_type.dart';
+import 'package:logly/features/activity_logging/domain/log_multi_day_result.dart';
 import 'package:logly/features/activity_logging/domain/update_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
+import 'package:logly/features/home/presentation/providers/daily_activities_provider.dart';
+import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
+import 'package:logly/features/profile/presentation/providers/contribution_provider.dart';
+import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
+import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
+import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
+import 'package:logly/features/profile/presentation/providers/weekly_radar_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'activity_form_provider.g.dart';
+
+/// Result of form submission.
+enum SubmitResult {
+  /// All activities were logged successfully.
+  success,
+
+  /// Some activities were logged, but some failed (multi-day only).
+  partialSuccess,
+
+  /// No activities were logged.
+  failure,
+}
 
 /// Represents the state of the activity logging form.
 @immutable
@@ -26,6 +46,7 @@ class ActivityFormState {
     this.detailValues = const {},
     this.isSubmitting = false,
     this.errorMessage,
+    this.multiDayResult,
   });
 
   /// The activity being logged.
@@ -58,11 +79,17 @@ class ActivityFormState {
   /// Error message if submission failed.
   final String? errorMessage;
 
+  /// Result of multi-day logging (for partial success scenarios).
+  final LogMultiDayResult? multiDayResult;
+
   /// Whether this is editing an existing activity.
   bool get isEditing => existingUserActivity != null;
 
   /// Whether multi-day logging is enabled.
   bool get isMultiDay => endDate != null && !_isSameDay(activityDate, endDate!);
+
+  /// Whether the last submission had partial success.
+  bool get hasPartialSuccess => multiDayResult?.isPartialSuccess ?? false;
 
   /// Creates a copy with updated values.
   ActivityFormState copyWith({
@@ -76,8 +103,10 @@ class ActivityFormState {
     Map<String, DetailValue>? detailValues,
     bool? isSubmitting,
     String? errorMessage,
+    LogMultiDayResult? multiDayResult,
     bool clearError = false,
     bool clearEndDate = false,
+    bool clearMultiDayResult = false,
   }) {
     return ActivityFormState(
       activity: activity ?? this.activity,
@@ -90,6 +119,7 @@ class ActivityFormState {
       detailValues: detailValues ?? this.detailValues,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      multiDayResult: clearMultiDayResult ? null : (multiDayResult ?? this.multiDayResult),
     );
   }
 
@@ -140,6 +170,7 @@ class DetailValue {
   CreateUserActivityDetail toCreateDetail() {
     return CreateUserActivityDetail(
       activityDetailId: activityDetailId,
+      activityDetailType: type,
       textValue: textValue,
       environmentValue: environmentValue,
       numericValue: numericValue,
@@ -356,54 +387,164 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
     }
   }
 
+  /// Refreshes activity-related providers to update home and profile screens.
+  Future<void> _refreshActivityProviders() async {
+    // Use refresh instead of invalidate to force immediate rebuild
+    // This ensures data is loaded even if screens are not mounted
+
+    // First refresh the source providers
+    await Future.wait([
+      // Home screen
+      ref.refresh(dailyActivitiesStateProvider.future),
+      // Profile screen - streak card
+      ref.refresh(streakProvider.future),
+      // Profile screen - source for summary
+      ref.refresh(allPeriodSummariesProvider.future),
+      // Profile screen - source for charts
+      ref.refresh(activityCountsByDateProvider.future),
+    ]);
+
+    // Then refresh the derived providers that widgets watch directly
+    // These have keepAlive:true and may not auto-rebuild
+    await Future.wait([
+      // Summary card watches this
+      ref.refresh(categorySummaryProvider.future),
+      // Contribution graph watches this
+      ref.refresh(contributionDataProvider.future),
+      // Weekly radar chart watches normalizedRadarDataProvider
+      ref.refresh(normalizedRadarDataProvider.future),
+      // Monthly chart watches this
+      ref.refresh(filteredMonthlyChartDataProvider.future),
+    ]);
+  }
+
   /// Submits the form.
-  Future<bool> submit() async {
+  ///
+  /// Returns a [SubmitResult] indicating success, partial success, or failure.
+  Future<SubmitResult> submit() async {
+    debugPrint('=== FORM PROVIDER: submit() ===');
+    debugPrint('activity: ${state.activity?.activityId}');
+    debugPrint('activityDate: ${state.activityDate}');
+    debugPrint('endDate: ${state.endDate}');
+    debugPrint('isEditing: ${state.isEditing}');
+    debugPrint('isMultiDay: ${state.isMultiDay}');
+    debugPrint('comments: ${state.comments}');
+    debugPrint('selectedSubActivityIds: ${state.selectedSubActivityIds}');
+    debugPrint('detailValues count: ${state.detailValues.length}');
+
     if (state.activity == null) {
+      debugPrint('ERROR: Activity is null');
       state = state.copyWith(errorMessage: 'Activity must be selected');
-      return false;
+      return SubmitResult.failure;
     }
 
-    state = state.copyWith(isSubmitting: true, clearError: true);
+    state = state.copyWith(isSubmitting: true, clearError: true, clearMultiDayResult: true);
 
     try {
       final service = ref.read(activityLoggingServiceProvider);
       final details = state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
+      debugPrint('Details with values: ${details.length}');
+
+      late SubmitResult result;
 
       if (state.isEditing) {
+        debugPrint('=== UPDATING EXISTING ACTIVITY ===');
         // Update existing activity
+        final activityDate = DateTime(
+          state.activityDate.year,
+          state.activityDate.month,
+          state.activityDate.day,
+        );
+
         await service.updateActivity(
           UpdateUserActivity(
             userActivityId: state.existingUserActivity!.userActivityId,
             activityTimestamp: state.activityDate,
+            activityDate: activityDate,
             comments: state.comments,
             activityNameOverride: state.activityNameOverride,
             subActivityIds: state.selectedSubActivityIds.toList(),
             details: details,
           ),
         );
+
+        debugPrint('=== UPDATE SUCCESS ===');
+        result = SubmitResult.success;
+      } else if (state.isMultiDay) {
+        debugPrint('=== MULTI-DAY LOGGING ===');
+        // Multi-day logging
+        final multiDayResult = await service.logMultiDayActivity(
+          activityId: state.activity!.activityId,
+          startDate: state.activityDate,
+          endDate: state.endDate!,
+          comments: state.comments,
+          activityNameOverride: state.activityNameOverride,
+          subActivityIds: state.selectedSubActivityIds.toList(),
+          details: details,
+        );
+
+        debugPrint('Multi-day result: ${multiDayResult.successCount} success, ${multiDayResult.failureCount} failures');
+
+        if (multiDayResult.isFullSuccess) {
+          state = state.copyWith(isSubmitting: false, multiDayResult: multiDayResult);
+          result = SubmitResult.success;
+        } else if (multiDayResult.isPartialSuccess) {
+          state = state.copyWith(
+            isSubmitting: false,
+            multiDayResult: multiDayResult,
+            errorMessage: '${multiDayResult.failureCount} of ${multiDayResult.totalDays} days failed to log',
+          );
+          result = SubmitResult.partialSuccess;
+        } else {
+          state = state.copyWith(
+            isSubmitting: false,
+            multiDayResult: multiDayResult,
+            errorMessage: 'Failed to log activity for all days',
+          );
+          result = SubmitResult.failure;
+        }
       } else {
-        // Create new activity
+        debugPrint('=== SINGLE DAY LOGGING ===');
+        // Single day logging
+        final activityDate = DateTime(
+          state.activityDate.year,
+          state.activityDate.month,
+          state.activityDate.day,
+        );
+
+        debugPrint('Calling service.logActivity...');
+        debugPrint('activityId: ${state.activity!.activityId}');
+        debugPrint('activityTimestamp: ${state.activityDate}');
+        debugPrint('activityDate: $activityDate');
+
         await service.logActivity(
           CreateUserActivity(
             activityId: state.activity!.activityId,
-            activityStartDate: state.activityDate,
-            activityEndDate: state.endDate ?? state.activityDate,
+            activityTimestamp: state.activityDate,
+            activityDate: activityDate,
             comments: state.comments,
             activityNameOverride: state.activityNameOverride,
             subActivityIds: state.selectedSubActivityIds.toList(),
             details: details,
           ),
         );
+
+        debugPrint('=== SINGLE DAY SUCCESS ===');
+        state = state.copyWith(isSubmitting: false);
+        result = SubmitResult.success;
       }
 
-      state = state.copyWith(isSubmitting: false);
-      return true;
-    } catch (e) {
+      await _refreshActivityProviders();
+      return result;
+    } catch (e, st) {
+      debugPrint('=== FORM PROVIDER: submit() FAILED ===');
+      debugPrint('Error: $e');
+      debugPrint('Stack trace: $st');
       state = state.copyWith(
         isSubmitting: false,
         errorMessage: e.toString(),
       );
-      return false;
+      return SubmitResult.failure;
     }
   }
 
