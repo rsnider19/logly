@@ -1,6 +1,8 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { runPipeline } from "./agent.ts";
 import { isEntitledTo } from "../_utils/isEntitledTo.ts";
+import { AuthMiddleware } from "../_utils/verifyJwt.ts";
+import { supabaseAdminClient } from "../_utils/supabaseAdmin.ts";
 
 /**
  * Edge function entry point for the NL-to-SQL agent.
@@ -13,92 +15,65 @@ import { isEntitledTo } from "../_utils/isEntitledTo.ts";
  *
  * Returns: Server-Sent Events stream with progress, response, and responseId for follow-ups
  */
-Deno.serve(async (req) => {
-  // Handle CORS preflight
-  if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
-    });
-  }
-
-  // Only accept POST requests
-  if (req.method !== "POST") {
-    return new Response("Method not allowed", { status: 405 });
-  }
-
-  // Extract user ID from JWT
-  const authHeader = req.headers.get("Authorization");
-  if (!authHeader) {
-    return new Response("Unauthorized", { status: 401 });
-  }
-
-  let userId: string;
-  try {
-    // Decode JWT to get user ID (sub claim)
-    const token = authHeader.replace("Bearer ", "");
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    userId = payload.sub;
+Deno.serve((r) =>
+  AuthMiddleware(r, async (req, userId) => {
+    // Only accept POST requests
+    if (req.method !== "POST") {
+      return new Response("Method not allowed", { status: 405 });
+    }
 
     if (!userId) {
-      return new Response("Invalid token: missing user ID", {
-        status: 401,
-      });
-    }
-  } catch {
-    return new Response("Invalid token", { status: 401 });
-  }
-
-  // TODO: Add entitlement check here if needed
-  // Example:
-  const isEntitled = true || await isEntitledTo({ req, entitlement: "ai-insights" });
-  if (!isEntitled) {
-    return new Response(
-      JSON.stringify({ message: "Forbidden", code: "premium_required" }),
-      { status: 403 }
-    );
-  }
-
-  // Parse request body
-  let query: string;
-  let previousResponseId: string | undefined;
-  let previousConversionId: string | undefined;
-  try {
-    const body = await req.json();
-    query = body.query;
-    previousResponseId = body.previousResponseId; // Optional for follow-ups (Friendly Agent)
-    previousConversionId = body.previousConversionId; // Optional for follow-ups (SQL Agent)
-
-    if (!query || typeof query !== "string") {
       return new Response(
-        JSON.stringify({ error: "Missing or invalid 'query' field" }),
+        JSON.stringify({ message: "Forbidden", code: "premium_required" }),
+        { status: 403 }
+      );
+    }
+
+    const isEntitled = await isEntitledTo({ userId, entitlement: "ai-insights" });
+    if (!isEntitled) {
+      return new Response(
+        JSON.stringify({ message: "Forbidden", code: "premium_required" }),
+        { status: 403 }
+      );
+    }
+
+    // Parse request body
+    let query: string;
+    let previousResponseId: string | undefined;
+    let previousConversionId: string | undefined;
+    try {
+      const body = await req.json();
+      query = body.query;
+      previousResponseId = body.previousResponseId; // Optional for follow-ups (Friendly Agent)
+      previousConversionId = body.previousConversionId; // Optional for follow-ups (SQL Agent)
+
+      if (!query || typeof query !== "string") {
+        return new Response(
+          JSON.stringify({ error: "Missing or invalid 'query' field" }),
+          { status: 400 },
+        );
+      }
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Invalid JSON body" }),
         { status: 400 },
       );
     }
-  } catch {
-    return new Response(
-      JSON.stringify({ error: "Invalid JSON body" }),
-      { status: 400 },
+
+    console.log(
+      `[AI Insights New] Request from user ${userId}: "${query}"${previousResponseId ? ` (follow-up to ${previousResponseId})` : ""
+      }`,
     );
-  }
 
-  console.log(
-    `[AI Insights New] Request from user ${userId}: "${query}"${
-      previousResponseId ? ` (follow-up to ${previousResponseId})` : ""
-    }`,
-  );
-
-  // Run the pipeline and return streaming response
-  return runPipeline({
-    query,
-    userId,
-    previousResponseId,
-    previousConversionId,
-  });
-});
+    // Run the pipeline and return streaming response
+    return runPipeline({
+      query,
+      userId,
+      previousResponseId,
+      previousConversionId,
+    });
+  }))
+);
 
 /* To invoke locally:
 

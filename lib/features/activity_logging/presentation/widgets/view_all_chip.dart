@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+
+/// A chip that navigates to view all activities in a category.
+///
+/// Displays "View all" text with a trailing chevron icon.
+/// The outline and text are colored with the category color.
+class ViewAllChip extends StatelessWidget {
+  const ViewAllChip({
+    required this.categoryColor,
+    required this.onPressed,
+    super.key,
+  });
+
+  /// The color to use for the chip outline and text.
+  final Color categoryColor;
+
+  /// Called when the chip is pressed.
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ActionChip(
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'View all',
+            style: TextStyle(color: categoryColor),
+          ),
+          const SizedBox(width: 4),
+          Icon(
+            Icons.chevron_right,
+            size: 18,
+            color: categoryColor,
+          ),
+        ],
+      ),
+      shape: const StadiumBorder(),
+      backgroundColor: Colors.transparent,
+      side: BorderSide(color: categoryColor),
+      onPressed: onPressed,
+    );
+  }
+}

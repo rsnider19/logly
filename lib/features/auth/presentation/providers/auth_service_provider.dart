@@ -1,6 +1,7 @@
 import 'package:logly/app/database/database_provider.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
+import 'package:logly/features/activity_logging/presentation/providers/search_section_expansion_provider.dart';
 import 'package:logly/features/auth/data/auth_repository.dart';
 import 'package:logly/features/auth/domain/auth_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -49,6 +50,10 @@ class AuthService {
 
     // Clear local database
     await _ref.read(appDatabaseProvider).clearAllCache();
+
+    // Clear search section expansion preferences
+    await _ref.read(searchSectionExpansionStateProvider.notifier).reset();
+
     _logger.i('Sign out complete, local data cleared');
   }
 

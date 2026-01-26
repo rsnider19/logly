@@ -1,0 +1,11 @@
+{
+  "version": "4",
+  "specifiers": {
+    "jsr:@hono/hono@*": "4.11.6"
+  },
+  "jsr": {
+    "@hono/hono@4.11.6": {
+      "integrity": "e5833f86c819d564793f1f3548634ea53f4c94c0979b9ebdb51690becc9e1f11"
+    }
+  }
+}
