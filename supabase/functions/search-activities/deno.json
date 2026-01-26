@@ -1,5 +1,6 @@
 {
   "imports": {
-    "@supabase/functions-js": "jsr:@supabase/functions-js"
+    "@supabase/functions-js": "jsr:@supabase/functions-js",
+    "@oak/oak": "jsr:@oak/oak@^17"
   }
 }
