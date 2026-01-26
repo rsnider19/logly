@@ -80,7 +80,7 @@ class ActivityRepository {
   Future<List<Activity>> search(String query) async {
     try {
       final response = await _supabase.functions.invoke(
-        'search-activities',
+        'activity/search',
         body: {'query': query},
       );
 

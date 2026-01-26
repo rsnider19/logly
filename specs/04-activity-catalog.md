@@ -131,7 +131,7 @@ Future<List<Activity>> getActivitiesByCategory(String categoryId) async {
 ```dart
 Future<List<Activity>> searchActivities(String query) async {
   final response = await _supabase.functions.invoke(
-    'search-activities',
+    'activity/search',
     body: {'query': query, 'limit': 20},
   );
   return (response.data as List).map((e) => Activity.fromJson(e)).toList();

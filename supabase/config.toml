@@ -295,13 +295,13 @@ entrypoint = "./functions/embed/index.ts"
 
 [functions.search-activities]
 enabled = true
-verify_jwt = true
+verify_jwt = false  # Manual verification via requireAuth middleware
 import_map = "./functions/search-activities/deno.json"
 entrypoint = "./functions/search-activities/index.ts"
 
 [functions.ai-insights]
 enabled = true
-verify_jwt = true
+verify_jwt = false  # Manual verification via requireAuth middleware
 import_map = "./functions/ai-insights/deno.json"
 entrypoint = "./functions/ai-insights/index.ts"
 
@@ -310,3 +310,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/revenue-cat/deno.json"
 entrypoint = "./functions/revenue-cat/index.ts"
+
+[functions.activity]
+enabled = true
+verify_jwt = false
+import_map = "./functions/activity/deno.json"
+entrypoint = "./functions/activity/index.ts"
