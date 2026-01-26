@@ -8,6 +8,62 @@ part of 'category_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// Provides all activity categories sorted by sort_order.
+///
+/// This is a keepAlive provider for reuse across the app.
+/// Categories are fetched once and cached for the lifetime of the app.
+
+@ProviderFor(activityCategories)
+final activityCategoriesProvider = ActivityCategoriesProvider._();
+
+/// Provides all activity categories sorted by sort_order.
+///
+/// This is a keepAlive provider for reuse across the app.
+/// Categories are fetched once and cached for the lifetime of the app.
+
+final class ActivityCategoriesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ActivityCategory>>,
+          List<ActivityCategory>,
+          FutureOr<List<ActivityCategory>>
+        >
+    with
+        $FutureModifier<List<ActivityCategory>>,
+        $FutureProvider<List<ActivityCategory>> {
+  /// Provides all activity categories sorted by sort_order.
+  ///
+  /// This is a keepAlive provider for reuse across the app.
+  /// Categories are fetched once and cached for the lifetime of the app.
+  ActivityCategoriesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'activityCategoriesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$activityCategoriesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<ActivityCategory>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<ActivityCategory>> create(Ref ref) {
+    return activityCategories(ref);
+  }
+}
+
+String _$activityCategoriesHash() =>
+    r'38a3c626a0f0e6d67853d0c9aa4fa56044579040';
+
 /// Provides all activity categories.
 
 @ProviderFor(categories)
