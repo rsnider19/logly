@@ -50,4 +50,4 @@ final class ConsistencyScoreProvider
   }
 }
 
-String _$consistencyScoreHash() => r'a90f57094a7cf8d08d07d793bf1fe41996eaad59';
+String _$consistencyScoreHash() => r'be380a4ac7d4a278c0d85e0462de4423f0aeb050';
