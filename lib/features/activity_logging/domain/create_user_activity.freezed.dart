@@ -15,7 +15,14 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateUserActivity {
 
- String get activityId; DateTime get activityStartDate; DateTime get activityEndDate; String? get comments; String? get activityNameOverride; List<String> get subActivityIds; List<CreateUserActivityDetail> get details;
+/// The activity type to log.
+ String get activityId;/// The timestamp of the activity (includes time component).
+ DateTime get activityTimestamp;/// The date of the activity (date only, calculated client-side).
+ DateTime get activityDate;/// Optional comments/notes for this activity.
+ String? get comments;/// Optional custom name override for this activity.
+ String? get activityNameOverride;/// Selected sub-activity IDs.
+ List<String> get subActivityIds;/// Detail values for this activity.
+ List<CreateUserActivityDetail> get details;
 /// Create a copy of CreateUserActivity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +35,16 @@ $CreateUserActivityCopyWith<CreateUserActivity> get copyWith => _$CreateUserActi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateUserActivity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityStartDate, activityStartDate) || other.activityStartDate == activityStartDate)&&(identical(other.activityEndDate, activityEndDate) || other.activityEndDate == activityEndDate)&&(identical(other.comments, comments) || other.comments == comments)&&(identical(other.activityNameOverride, activityNameOverride) || other.activityNameOverride == activityNameOverride)&&const DeepCollectionEquality().equals(other.subActivityIds, subActivityIds)&&const DeepCollectionEquality().equals(other.details, details));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateUserActivity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityTimestamp, activityTimestamp) || other.activityTimestamp == activityTimestamp)&&(identical(other.activityDate, activityDate) || other.activityDate == activityDate)&&(identical(other.comments, comments) || other.comments == comments)&&(identical(other.activityNameOverride, activityNameOverride) || other.activityNameOverride == activityNameOverride)&&const DeepCollectionEquality().equals(other.subActivityIds, subActivityIds)&&const DeepCollectionEquality().equals(other.details, details));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityStartDate,activityEndDate,comments,activityNameOverride,const DeepCollectionEquality().hash(subActivityIds),const DeepCollectionEquality().hash(details));
+int get hashCode => Object.hash(runtimeType,activityId,activityTimestamp,activityDate,comments,activityNameOverride,const DeepCollectionEquality().hash(subActivityIds),const DeepCollectionEquality().hash(details));
 
 @override
 String toString() {
-  return 'CreateUserActivity(activityId: $activityId, activityStartDate: $activityStartDate, activityEndDate: $activityEndDate, comments: $comments, activityNameOverride: $activityNameOverride, subActivityIds: $subActivityIds, details: $details)';
+  return 'CreateUserActivity(activityId: $activityId, activityTimestamp: $activityTimestamp, activityDate: $activityDate, comments: $comments, activityNameOverride: $activityNameOverride, subActivityIds: $subActivityIds, details: $details)';
 }
 
 
@@ -48,7 +55,7 @@ abstract mixin class $CreateUserActivityCopyWith<$Res>  {
   factory $CreateUserActivityCopyWith(CreateUserActivity value, $Res Function(CreateUserActivity) _then) = _$CreateUserActivityCopyWithImpl;
 @useResult
 $Res call({
- String activityId, DateTime activityStartDate, DateTime activityEndDate, String? comments, String? activityNameOverride, List<String> subActivityIds, List<CreateUserActivityDetail> details
+ String activityId, DateTime activityTimestamp, DateTime activityDate, String? comments, String? activityNameOverride, List<String> subActivityIds, List<CreateUserActivityDetail> details
 });
 
 
@@ -65,11 +72,11 @@ class _$CreateUserActivityCopyWithImpl<$Res>
 
 /// Create a copy of CreateUserActivity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityStartDate = null,Object? activityEndDate = null,Object? comments = freezed,Object? activityNameOverride = freezed,Object? subActivityIds = null,Object? details = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityTimestamp = null,Object? activityDate = null,Object? comments = freezed,Object? activityNameOverride = freezed,Object? subActivityIds = null,Object? details = null,}) {
   return _then(_self.copyWith(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
-as String,activityStartDate: null == activityStartDate ? _self.activityStartDate : activityStartDate // ignore: cast_nullable_to_non_nullable
-as DateTime,activityEndDate: null == activityEndDate ? _self.activityEndDate : activityEndDate // ignore: cast_nullable_to_non_nullable
+as String,activityTimestamp: null == activityTimestamp ? _self.activityTimestamp : activityTimestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,activityDate: null == activityDate ? _self.activityDate : activityDate // ignore: cast_nullable_to_non_nullable
 as DateTime,comments: freezed == comments ? _self.comments : comments // ignore: cast_nullable_to_non_nullable
 as String?,activityNameOverride: freezed == activityNameOverride ? _self.activityNameOverride : activityNameOverride // ignore: cast_nullable_to_non_nullable
 as String?,subActivityIds: null == subActivityIds ? _self.subActivityIds : subActivityIds // ignore: cast_nullable_to_non_nullable
@@ -159,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  DateTime activityStartDate,  DateTime activityEndDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  DateTime activityTimestamp,  DateTime activityDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateUserActivity() when $default != null:
-return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
+return $default(_that.activityId,_that.activityTimestamp,_that.activityDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
   return orElse();
 
 }
@@ -180,10 +187,10 @@ return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  DateTime activityStartDate,  DateTime activityEndDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  DateTime activityTimestamp,  DateTime activityDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)  $default,) {final _that = this;
 switch (_that) {
 case _CreateUserActivity():
-return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
+return $default(_that.activityId,_that.activityTimestamp,_that.activityDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +207,10 @@ return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  DateTime activityStartDate,  DateTime activityEndDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  DateTime activityTimestamp,  DateTime activityDate,  String? comments,  String? activityNameOverride,  List<String> subActivityIds,  List<CreateUserActivityDetail> details)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateUserActivity() when $default != null:
-return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
+return $default(_that.activityId,_that.activityTimestamp,_that.activityDate,_that.comments,_that.activityNameOverride,_that.subActivityIds,_that.details);case _:
   return null;
 
 }
@@ -214,23 +221,32 @@ return $default(_that.activityId,_that.activityStartDate,_that.activityEndDate,_
 /// @nodoc
 @JsonSerializable()
 
-class _CreateUserActivity implements CreateUserActivity {
-  const _CreateUserActivity({required this.activityId, required this.activityStartDate, required this.activityEndDate, this.comments, this.activityNameOverride, final  List<String> subActivityIds = const [], final  List<CreateUserActivityDetail> details = const []}): _subActivityIds = subActivityIds,_details = details;
+class _CreateUserActivity extends CreateUserActivity {
+  const _CreateUserActivity({required this.activityId, required this.activityTimestamp, required this.activityDate, this.comments, this.activityNameOverride, final  List<String> subActivityIds = const [], final  List<CreateUserActivityDetail> details = const []}): _subActivityIds = subActivityIds,_details = details,super._();
   factory _CreateUserActivity.fromJson(Map<String, dynamic> json) => _$CreateUserActivityFromJson(json);
 
+/// The activity type to log.
 @override final  String activityId;
-@override final  DateTime activityStartDate;
-@override final  DateTime activityEndDate;
+/// The timestamp of the activity (includes time component).
+@override final  DateTime activityTimestamp;
+/// The date of the activity (date only, calculated client-side).
+@override final  DateTime activityDate;
+/// Optional comments/notes for this activity.
 @override final  String? comments;
+/// Optional custom name override for this activity.
 @override final  String? activityNameOverride;
+/// Selected sub-activity IDs.
  final  List<String> _subActivityIds;
+/// Selected sub-activity IDs.
 @override@JsonKey() List<String> get subActivityIds {
   if (_subActivityIds is EqualUnmodifiableListView) return _subActivityIds;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_subActivityIds);
 }
 
+/// Detail values for this activity.
  final  List<CreateUserActivityDetail> _details;
+/// Detail values for this activity.
 @override@JsonKey() List<CreateUserActivityDetail> get details {
   if (_details is EqualUnmodifiableListView) return _details;
   // ignore: implicit_dynamic_type
@@ -251,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateUserActivity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityStartDate, activityStartDate) || other.activityStartDate == activityStartDate)&&(identical(other.activityEndDate, activityEndDate) || other.activityEndDate == activityEndDate)&&(identical(other.comments, comments) || other.comments == comments)&&(identical(other.activityNameOverride, activityNameOverride) || other.activityNameOverride == activityNameOverride)&&const DeepCollectionEquality().equals(other._subActivityIds, _subActivityIds)&&const DeepCollectionEquality().equals(other._details, _details));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateUserActivity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityTimestamp, activityTimestamp) || other.activityTimestamp == activityTimestamp)&&(identical(other.activityDate, activityDate) || other.activityDate == activityDate)&&(identical(other.comments, comments) || other.comments == comments)&&(identical(other.activityNameOverride, activityNameOverride) || other.activityNameOverride == activityNameOverride)&&const DeepCollectionEquality().equals(other._subActivityIds, _subActivityIds)&&const DeepCollectionEquality().equals(other._details, _details));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityStartDate,activityEndDate,comments,activityNameOverride,const DeepCollectionEquality().hash(_subActivityIds),const DeepCollectionEquality().hash(_details));
+int get hashCode => Object.hash(runtimeType,activityId,activityTimestamp,activityDate,comments,activityNameOverride,const DeepCollectionEquality().hash(_subActivityIds),const DeepCollectionEquality().hash(_details));
 
 @override
 String toString() {
-  return 'CreateUserActivity(activityId: $activityId, activityStartDate: $activityStartDate, activityEndDate: $activityEndDate, comments: $comments, activityNameOverride: $activityNameOverride, subActivityIds: $subActivityIds, details: $details)';
+  return 'CreateUserActivity(activityId: $activityId, activityTimestamp: $activityTimestamp, activityDate: $activityDate, comments: $comments, activityNameOverride: $activityNameOverride, subActivityIds: $subActivityIds, details: $details)';
 }
 
 
@@ -271,7 +287,7 @@ abstract mixin class _$CreateUserActivityCopyWith<$Res> implements $CreateUserAc
   factory _$CreateUserActivityCopyWith(_CreateUserActivity value, $Res Function(_CreateUserActivity) _then) = __$CreateUserActivityCopyWithImpl;
 @override @useResult
 $Res call({
- String activityId, DateTime activityStartDate, DateTime activityEndDate, String? comments, String? activityNameOverride, List<String> subActivityIds, List<CreateUserActivityDetail> details
+ String activityId, DateTime activityTimestamp, DateTime activityDate, String? comments, String? activityNameOverride, List<String> subActivityIds, List<CreateUserActivityDetail> details
 });
 
 
@@ -288,11 +304,11 @@ class __$CreateUserActivityCopyWithImpl<$Res>
 
 /// Create a copy of CreateUserActivity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityStartDate = null,Object? activityEndDate = null,Object? comments = freezed,Object? activityNameOverride = freezed,Object? subActivityIds = null,Object? details = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityTimestamp = null,Object? activityDate = null,Object? comments = freezed,Object? activityNameOverride = freezed,Object? subActivityIds = null,Object? details = null,}) {
   return _then(_CreateUserActivity(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
-as String,activityStartDate: null == activityStartDate ? _self.activityStartDate : activityStartDate // ignore: cast_nullable_to_non_nullable
-as DateTime,activityEndDate: null == activityEndDate ? _self.activityEndDate : activityEndDate // ignore: cast_nullable_to_non_nullable
+as String,activityTimestamp: null == activityTimestamp ? _self.activityTimestamp : activityTimestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,activityDate: null == activityDate ? _self.activityDate : activityDate // ignore: cast_nullable_to_non_nullable
 as DateTime,comments: freezed == comments ? _self.comments : comments // ignore: cast_nullable_to_non_nullable
 as String?,activityNameOverride: freezed == activityNameOverride ? _self.activityNameOverride : activityNameOverride // ignore: cast_nullable_to_non_nullable
 as String?,subActivityIds: null == subActivityIds ? _self._subActivityIds : subActivityIds // ignore: cast_nullable_to_non_nullable

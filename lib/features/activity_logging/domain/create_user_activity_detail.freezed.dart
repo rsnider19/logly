@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CreateUserActivityDetail {
 
- String get activityDetailId; String? get textValue; EnvironmentType? get environmentValue; double? get numericValue; int? get durationInSec; double? get distanceInMeters; double? get liquidVolumeInLiters; double? get weightInKilograms; String? get latLng;
+ String get activityDetailId; ActivityDetailType get activityDetailType; String? get textValue; EnvironmentType? get environmentValue; double? get numericValue; int? get durationInSec; double? get distanceInMeters; double? get liquidVolumeInLiters; double? get weightInKilograms; String? get latLng;
 /// Create a copy of CreateUserActivityDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CreateUserActivityDetailCopyWith<CreateUserActivityDetail> get copyWith => _$Cr
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateUserActivityDetail&&(identical(other.activityDetailId, activityDetailId) || other.activityDetailId == activityDetailId)&&(identical(other.textValue, textValue) || other.textValue == textValue)&&(identical(other.environmentValue, environmentValue) || other.environmentValue == environmentValue)&&(identical(other.numericValue, numericValue) || other.numericValue == numericValue)&&(identical(other.durationInSec, durationInSec) || other.durationInSec == durationInSec)&&(identical(other.distanceInMeters, distanceInMeters) || other.distanceInMeters == distanceInMeters)&&(identical(other.liquidVolumeInLiters, liquidVolumeInLiters) || other.liquidVolumeInLiters == liquidVolumeInLiters)&&(identical(other.weightInKilograms, weightInKilograms) || other.weightInKilograms == weightInKilograms)&&(identical(other.latLng, latLng) || other.latLng == latLng));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateUserActivityDetail&&(identical(other.activityDetailId, activityDetailId) || other.activityDetailId == activityDetailId)&&(identical(other.activityDetailType, activityDetailType) || other.activityDetailType == activityDetailType)&&(identical(other.textValue, textValue) || other.textValue == textValue)&&(identical(other.environmentValue, environmentValue) || other.environmentValue == environmentValue)&&(identical(other.numericValue, numericValue) || other.numericValue == numericValue)&&(identical(other.durationInSec, durationInSec) || other.durationInSec == durationInSec)&&(identical(other.distanceInMeters, distanceInMeters) || other.distanceInMeters == distanceInMeters)&&(identical(other.liquidVolumeInLiters, liquidVolumeInLiters) || other.liquidVolumeInLiters == liquidVolumeInLiters)&&(identical(other.weightInKilograms, weightInKilograms) || other.weightInKilograms == weightInKilograms)&&(identical(other.latLng, latLng) || other.latLng == latLng));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityDetailId,textValue,environmentValue,numericValue,durationInSec,distanceInMeters,liquidVolumeInLiters,weightInKilograms,latLng);
+int get hashCode => Object.hash(runtimeType,activityDetailId,activityDetailType,textValue,environmentValue,numericValue,durationInSec,distanceInMeters,liquidVolumeInLiters,weightInKilograms,latLng);
 
 @override
 String toString() {
-  return 'CreateUserActivityDetail(activityDetailId: $activityDetailId, textValue: $textValue, environmentValue: $environmentValue, numericValue: $numericValue, durationInSec: $durationInSec, distanceInMeters: $distanceInMeters, liquidVolumeInLiters: $liquidVolumeInLiters, weightInKilograms: $weightInKilograms, latLng: $latLng)';
+  return 'CreateUserActivityDetail(activityDetailId: $activityDetailId, activityDetailType: $activityDetailType, textValue: $textValue, environmentValue: $environmentValue, numericValue: $numericValue, durationInSec: $durationInSec, distanceInMeters: $distanceInMeters, liquidVolumeInLiters: $liquidVolumeInLiters, weightInKilograms: $weightInKilograms, latLng: $latLng)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CreateUserActivityDetailCopyWith<$Res>  {
   factory $CreateUserActivityDetailCopyWith(CreateUserActivityDetail value, $Res Function(CreateUserActivityDetail) _then) = _$CreateUserActivityDetailCopyWithImpl;
 @useResult
 $Res call({
- String activityDetailId, String? textValue, EnvironmentType? environmentValue, double? numericValue, int? durationInSec, double? distanceInMeters, double? liquidVolumeInLiters, double? weightInKilograms, String? latLng
+ String activityDetailId, ActivityDetailType activityDetailType, String? textValue, EnvironmentType? environmentValue, double? numericValue, int? durationInSec, double? distanceInMeters, double? liquidVolumeInLiters, double? weightInKilograms, String? latLng
 });
 
 
@@ -65,10 +65,11 @@ class _$CreateUserActivityDetailCopyWithImpl<$Res>
 
 /// Create a copy of CreateUserActivityDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activityDetailId = null,Object? textValue = freezed,Object? environmentValue = freezed,Object? numericValue = freezed,Object? durationInSec = freezed,Object? distanceInMeters = freezed,Object? liquidVolumeInLiters = freezed,Object? weightInKilograms = freezed,Object? latLng = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activityDetailId = null,Object? activityDetailType = null,Object? textValue = freezed,Object? environmentValue = freezed,Object? numericValue = freezed,Object? durationInSec = freezed,Object? distanceInMeters = freezed,Object? liquidVolumeInLiters = freezed,Object? weightInKilograms = freezed,Object? latLng = freezed,}) {
   return _then(_self.copyWith(
 activityDetailId: null == activityDetailId ? _self.activityDetailId : activityDetailId // ignore: cast_nullable_to_non_nullable
-as String,textValue: freezed == textValue ? _self.textValue : textValue // ignore: cast_nullable_to_non_nullable
+as String,activityDetailType: null == activityDetailType ? _self.activityDetailType : activityDetailType // ignore: cast_nullable_to_non_nullable
+as ActivityDetailType,textValue: freezed == textValue ? _self.textValue : textValue // ignore: cast_nullable_to_non_nullable
 as String?,environmentValue: freezed == environmentValue ? _self.environmentValue : environmentValue // ignore: cast_nullable_to_non_nullable
 as EnvironmentType?,numericValue: freezed == numericValue ? _self.numericValue : numericValue // ignore: cast_nullable_to_non_nullable
 as double?,durationInSec: freezed == durationInSec ? _self.durationInSec : durationInSec // ignore: cast_nullable_to_non_nullable
@@ -161,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityDetailId,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityDetailId,  ActivityDetailType activityDetailType,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CreateUserActivityDetail() when $default != null:
-return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
+return $default(_that.activityDetailId,_that.activityDetailType,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
   return orElse();
 
 }
@@ -182,10 +183,10 @@ return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityDetailId,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityDetailId,  ActivityDetailType activityDetailType,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)  $default,) {final _that = this;
 switch (_that) {
 case _CreateUserActivityDetail():
-return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
+return $default(_that.activityDetailId,_that.activityDetailType,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +203,10 @@ return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityDetailId,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityDetailId,  ActivityDetailType activityDetailType,  String? textValue,  EnvironmentType? environmentValue,  double? numericValue,  int? durationInSec,  double? distanceInMeters,  double? liquidVolumeInLiters,  double? weightInKilograms,  String? latLng)?  $default,) {final _that = this;
 switch (_that) {
 case _CreateUserActivityDetail() when $default != null:
-return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
+return $default(_that.activityDetailId,_that.activityDetailType,_that.textValue,_that.environmentValue,_that.numericValue,_that.durationInSec,_that.distanceInMeters,_that.liquidVolumeInLiters,_that.weightInKilograms,_that.latLng);case _:
   return null;
 
 }
@@ -216,11 +217,12 @@ return $default(_that.activityDetailId,_that.textValue,_that.environmentValue,_t
 /// @nodoc
 @JsonSerializable()
 
-class _CreateUserActivityDetail implements CreateUserActivityDetail {
-  const _CreateUserActivityDetail({required this.activityDetailId, this.textValue, this.environmentValue, this.numericValue, this.durationInSec, this.distanceInMeters, this.liquidVolumeInLiters, this.weightInKilograms, this.latLng});
+class _CreateUserActivityDetail extends CreateUserActivityDetail {
+  const _CreateUserActivityDetail({required this.activityDetailId, required this.activityDetailType, this.textValue, this.environmentValue, this.numericValue, this.durationInSec, this.distanceInMeters, this.liquidVolumeInLiters, this.weightInKilograms, this.latLng}): super._();
   factory _CreateUserActivityDetail.fromJson(Map<String, dynamic> json) => _$CreateUserActivityDetailFromJson(json);
 
 @override final  String activityDetailId;
+@override final  ActivityDetailType activityDetailType;
 @override final  String? textValue;
 @override final  EnvironmentType? environmentValue;
 @override final  double? numericValue;
@@ -243,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateUserActivityDetail&&(identical(other.activityDetailId, activityDetailId) || other.activityDetailId == activityDetailId)&&(identical(other.textValue, textValue) || other.textValue == textValue)&&(identical(other.environmentValue, environmentValue) || other.environmentValue == environmentValue)&&(identical(other.numericValue, numericValue) || other.numericValue == numericValue)&&(identical(other.durationInSec, durationInSec) || other.durationInSec == durationInSec)&&(identical(other.distanceInMeters, distanceInMeters) || other.distanceInMeters == distanceInMeters)&&(identical(other.liquidVolumeInLiters, liquidVolumeInLiters) || other.liquidVolumeInLiters == liquidVolumeInLiters)&&(identical(other.weightInKilograms, weightInKilograms) || other.weightInKilograms == weightInKilograms)&&(identical(other.latLng, latLng) || other.latLng == latLng));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateUserActivityDetail&&(identical(other.activityDetailId, activityDetailId) || other.activityDetailId == activityDetailId)&&(identical(other.activityDetailType, activityDetailType) || other.activityDetailType == activityDetailType)&&(identical(other.textValue, textValue) || other.textValue == textValue)&&(identical(other.environmentValue, environmentValue) || other.environmentValue == environmentValue)&&(identical(other.numericValue, numericValue) || other.numericValue == numericValue)&&(identical(other.durationInSec, durationInSec) || other.durationInSec == durationInSec)&&(identical(other.distanceInMeters, distanceInMeters) || other.distanceInMeters == distanceInMeters)&&(identical(other.liquidVolumeInLiters, liquidVolumeInLiters) || other.liquidVolumeInLiters == liquidVolumeInLiters)&&(identical(other.weightInKilograms, weightInKilograms) || other.weightInKilograms == weightInKilograms)&&(identical(other.latLng, latLng) || other.latLng == latLng));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityDetailId,textValue,environmentValue,numericValue,durationInSec,distanceInMeters,liquidVolumeInLiters,weightInKilograms,latLng);
+int get hashCode => Object.hash(runtimeType,activityDetailId,activityDetailType,textValue,environmentValue,numericValue,durationInSec,distanceInMeters,liquidVolumeInLiters,weightInKilograms,latLng);
 
 @override
 String toString() {
-  return 'CreateUserActivityDetail(activityDetailId: $activityDetailId, textValue: $textValue, environmentValue: $environmentValue, numericValue: $numericValue, durationInSec: $durationInSec, distanceInMeters: $distanceInMeters, liquidVolumeInLiters: $liquidVolumeInLiters, weightInKilograms: $weightInKilograms, latLng: $latLng)';
+  return 'CreateUserActivityDetail(activityDetailId: $activityDetailId, activityDetailType: $activityDetailType, textValue: $textValue, environmentValue: $environmentValue, numericValue: $numericValue, durationInSec: $durationInSec, distanceInMeters: $distanceInMeters, liquidVolumeInLiters: $liquidVolumeInLiters, weightInKilograms: $weightInKilograms, latLng: $latLng)';
 }
 
 
@@ -263,7 +265,7 @@ abstract mixin class _$CreateUserActivityDetailCopyWith<$Res> implements $Create
   factory _$CreateUserActivityDetailCopyWith(_CreateUserActivityDetail value, $Res Function(_CreateUserActivityDetail) _then) = __$CreateUserActivityDetailCopyWithImpl;
 @override @useResult
 $Res call({
- String activityDetailId, String? textValue, EnvironmentType? environmentValue, double? numericValue, int? durationInSec, double? distanceInMeters, double? liquidVolumeInLiters, double? weightInKilograms, String? latLng
+ String activityDetailId, ActivityDetailType activityDetailType, String? textValue, EnvironmentType? environmentValue, double? numericValue, int? durationInSec, double? distanceInMeters, double? liquidVolumeInLiters, double? weightInKilograms, String? latLng
 });
 
 
@@ -280,10 +282,11 @@ class __$CreateUserActivityDetailCopyWithImpl<$Res>
 
 /// Create a copy of CreateUserActivityDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activityDetailId = null,Object? textValue = freezed,Object? environmentValue = freezed,Object? numericValue = freezed,Object? durationInSec = freezed,Object? distanceInMeters = freezed,Object? liquidVolumeInLiters = freezed,Object? weightInKilograms = freezed,Object? latLng = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activityDetailId = null,Object? activityDetailType = null,Object? textValue = freezed,Object? environmentValue = freezed,Object? numericValue = freezed,Object? durationInSec = freezed,Object? distanceInMeters = freezed,Object? liquidVolumeInLiters = freezed,Object? weightInKilograms = freezed,Object? latLng = freezed,}) {
   return _then(_CreateUserActivityDetail(
 activityDetailId: null == activityDetailId ? _self.activityDetailId : activityDetailId // ignore: cast_nullable_to_non_nullable
-as String,textValue: freezed == textValue ? _self.textValue : textValue // ignore: cast_nullable_to_non_nullable
+as String,activityDetailType: null == activityDetailType ? _self.activityDetailType : activityDetailType // ignore: cast_nullable_to_non_nullable
+as ActivityDetailType,textValue: freezed == textValue ? _self.textValue : textValue // ignore: cast_nullable_to_non_nullable
 as String?,environmentValue: freezed == environmentValue ? _self.environmentValue : environmentValue // ignore: cast_nullable_to_non_nullable
 as EnvironmentType?,numericValue: freezed == numericValue ? _self.numericValue : numericValue // ignore: cast_nullable_to_non_nullable
 as double?,durationInSec: freezed == durationInSec ? _self.durationInSec : durationInSec // ignore: cast_nullable_to_non_nullable
