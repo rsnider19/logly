@@ -43,7 +43,7 @@ Future<AllPeriodSummaries> allPeriodSummaries(Ref ref) async {
 
 /// Provides category summary data for the selected time period.
 /// Uses cached data from allPeriodSummaries.
-@riverpod
+@Riverpod(keepAlive: true)
 Future<List<CategorySummary>> categorySummary(Ref ref) async {
   final period = ref.watch(selectedTimePeriodStateProvider);
   final allSummaries = await ref.watch(allPeriodSummariesProvider.future);
