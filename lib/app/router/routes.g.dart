@@ -13,6 +13,8 @@ List<RouteBase> get $appRoutes => [
   $onboardingFavoritesRoute,
   $onboardingHealthRoute,
   $activitySearchRoute,
+  $logActivityRoute,
+  $categoryDetailRoute,
   $editActivityRoute,
   $developerRoute,
 ];
@@ -218,6 +220,76 @@ mixin $ActivitySearchRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/activities/search',
+    queryParams: {if (_self.date != null) 'date': _self.date},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $logActivityRoute => GoRouteData.$route(
+  path: '/activities/log/:activityId',
+  factory: $LogActivityRoute._fromState,
+);
+
+mixin $LogActivityRoute on GoRouteData {
+  static LogActivityRoute _fromState(GoRouterState state) => LogActivityRoute(
+    activityId: state.pathParameters['activityId']!,
+    date: state.uri.queryParameters['date'],
+    $extra: state.extra as Activity?,
+  );
+
+  LogActivityRoute get _self => this as LogActivityRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/activities/log/${Uri.encodeComponent(_self.activityId)}',
+    queryParams: {if (_self.date != null) 'date': _self.date},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location, extra: _self.$extra);
+
+  @override
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: _self.$extra);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location, extra: _self.$extra);
+
+  @override
+  void replace(BuildContext context) =>
+      context.replace(location, extra: _self.$extra);
+}
+
+RouteBase get $categoryDetailRoute => GoRouteData.$route(
+  path: '/activities/category/:categoryId',
+  factory: $CategoryDetailRoute._fromState,
+);
+
+mixin $CategoryDetailRoute on GoRouteData {
+  static CategoryDetailRoute _fromState(GoRouterState state) =>
+      CategoryDetailRoute(
+        categoryId: state.pathParameters['categoryId']!,
+        date: state.uri.queryParameters['date'],
+      );
+
+  CategoryDetailRoute get _self => this as CategoryDetailRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/activities/category/${Uri.encodeComponent(_self.categoryId)}',
     queryParams: {if (_self.date != null) 'date': _self.date},
   );
 

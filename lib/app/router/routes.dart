@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_logging/presentation/screens/activity_search_screen.dart';
+import 'package:logly/features/activity_logging/presentation/screens/category_detail_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
+import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
@@ -154,6 +157,75 @@ class ActivitySearchRoute extends GoRouteData with $ActivitySearchRoute {
       initialDate = DateTime.tryParse(date!);
     }
     return ActivitySearchScreen(initialDate: initialDate);
+  }
+}
+
+/// Log activity route - log a new activity.
+@TypedGoRoute<LogActivityRoute>(path: '/activities/log/:activityId')
+class LogActivityRoute extends GoRouteData with $LogActivityRoute {
+  const LogActivityRoute({
+    required this.activityId,
+    this.date,
+    this.$extra,
+  });
+
+  /// The ID of the activity to log.
+  final String activityId;
+
+  /// Optional initial date for the activity (ISO 8601 string).
+  final String? date;
+
+  /// The Activity object (passed as extra to avoid re-fetching).
+  final Activity? $extra;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    DateTime? initialDate;
+    if (date != null) {
+      initialDate = DateTime.tryParse(date!);
+    }
+
+    // Activity must be provided via $extra
+    final activity = $extra;
+    if (activity == null) {
+      // This shouldn't happen in normal flow - navigate back if it does
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('Activity not found')),
+      );
+    }
+
+    return LogActivityScreen(
+      activity: activity,
+      initialDate: initialDate,
+    );
+  }
+}
+
+/// Category detail route - view all activities in a category.
+@TypedGoRoute<CategoryDetailRoute>(path: '/activities/category/:categoryId')
+class CategoryDetailRoute extends GoRouteData with $CategoryDetailRoute {
+  const CategoryDetailRoute({
+    required this.categoryId,
+    this.date,
+  });
+
+  /// The ID of the category to display.
+  final String categoryId;
+
+  /// Optional initial date for logging activities (ISO 8601 string).
+  final String? date;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    DateTime? initialDate;
+    if (date != null) {
+      initialDate = DateTime.tryParse(date!);
+    }
+    return CategoryDetailScreen(
+      categoryId: categoryId,
+      initialDate: initialDate,
+    );
   }
 }
 

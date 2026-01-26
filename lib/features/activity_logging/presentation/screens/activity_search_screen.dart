@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
@@ -9,12 +8,16 @@ import 'package:logly/features/activity_catalog/presentation/providers/category_
 import 'package:logly/features/activity_catalog/presentation/providers/search_provider.dart';
 import 'package:logly/features/activity_logging/domain/favorite_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
-import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
-import 'package:logly/widgets/logly_icons.dart';
+import 'package:logly/features/activity_logging/presentation/providers/search_section_expansion_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/search_section_tile.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/view_all_chip.dart';
+import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
+import 'package:logly/widgets/logly_icons.dart' show ActivityCategoryIcon;
 
 /// Screen for searching and selecting an activity to log.
 ///
-/// Shows search results, categories, and favorite activities.
+/// Shows search results, favorites section, and category sections.
+/// Uses push replacement navigation to LogActivityScreen.
 class ActivitySearchScreen extends ConsumerStatefulWidget {
   const ActivitySearchScreen({
     this.initialDate,
@@ -54,21 +57,20 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
   }
 
   void _selectActivity(Activity activity) {
-    unawaited(
-      Navigator.push(
-        context,
-        MaterialPageRoute<bool>(
-          builder: (context) => LogActivityScreen(
-            activity: activity,
-            initialDate: widget.initialDate,
-          ),
-        ),
-      ).then((result) {
-        if (result == true && mounted) {
-          Navigator.pop(context, true);
-        }
-      }),
-    );
+    // Use push replacement to navigate to LogActivityScreen
+    // This replaces the search screen so save just pops once
+    LogActivityRoute(
+      activityId: activity.activityId,
+      date: widget.initialDate?.toIso8601String(),
+      $extra: activity,
+    ).pushReplacement(context);
+  }
+
+  void _navigateToCategory(ActivityCategory category) {
+    CategoryDetailRoute(
+      categoryId: category.activityCategoryId,
+      date: widget.initialDate?.toIso8601String(),
+    ).push<void>(context);
   }
 
   @override
@@ -77,7 +79,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     final searchQuery = ref.watch(searchQueryProvider);
     final searchResultsAsync = ref.watch(searchResultsProvider);
     final favoritesAsync = ref.watch(favoriteActivitiesProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     final isSearching = searchQuery.trim().length >= 2;
 
@@ -156,16 +158,22 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
           );
         }
 
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          itemCount: activities.length,
-          itemBuilder: (context, index) {
-            final activity = activities[index];
-            return _ActivityListTile(
-              activity: activity,
-              onTap: () => _selectActivity(activity),
-            );
-          },
+        // Display search results as chips in a Wrap
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: Wrap(
+              spacing: 8,
+              children: activities.map((activity) {
+                return ActivityChip(
+                  activity: activity,
+                  showIcon: false,
+                  onPressed: () => _selectActivity(activity),
+                );
+              }).toList(),
+            ),
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
@@ -194,49 +202,33 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Favorites section
+          // Favorites section (hidden when empty)
           favoritesAsync.when(
             data: (favorites) {
-              if (favorites.isEmpty) {
+              // Filter out favorites with null activities
+              final validFavorites = favorites.where((f) => f.activity != null).toList();
+              if (validFavorites.isEmpty) {
                 return const SizedBox.shrink();
               }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              return SearchSectionTile(
+                sectionId: favoritesSectionId,
+                title: 'Favorites',
+                leading: const Icon(Icons.favorite, color: Colors.red, size: 24),
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.star, color: Colors.amber, size: 20),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Favorites',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 100,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: favorites.length,
-                      itemBuilder: (context, index) {
-                        final favorite = favorites[index];
-                        if (favorite.activity == null) return const SizedBox.shrink();
-                        return _FavoriteActivityCard(
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Wrap(
+                      spacing: 8,
+                      children: validFavorites.map((favorite) {
+                        return ActivityChip(
                           activity: favorite.activity!,
-                          onTap: () => _selectActivity(favorite.activity!),
+                          showIcon: false,
+                          onPressed: () => _selectActivity(favorite.activity!),
                         );
-                      },
+                      }).toList(),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Divider(),
                 ],
               );
             },
@@ -247,28 +239,16 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
             error: (_, __) => const SizedBox.shrink(),
           ),
 
-          // Categories section
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              'Categories',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          // Category sections
           categoriesAsync.when(
-            data: (categories) => ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return _CategoryExpansionTile(
+            data: (categories) => Column(
+              children: categories.map((category) {
+                return _CategorySection(
                   category: category,
                   onActivitySelected: _selectActivity,
+                  onViewAll: () => _navigateToCategory(category),
                 );
-              },
+              }).toList(),
             ),
             loading: () => const Padding(
               padding: EdgeInsets.all(32),
@@ -302,140 +282,79 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
   }
 }
 
-class _ActivityListTile extends StatelessWidget {
-  const _ActivityListTile({
-    required this.activity,
-    required this.onTap,
-  });
-
-  final Activity activity;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      child: ListTile(
-        onTap: onTap,
-        leading: ActivityIcon(activity: activity, size: 40),
-        title: Text(activity.name),
-        subtitle: activity.activityCategory != null
-            ? Text(
-                activity.activityCategory!.name,
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              )
-            : null,
-        trailing: const Icon(Icons.chevron_right),
-      ),
-    );
-  }
-}
-
-class _FavoriteActivityCard extends StatelessWidget {
-  const _FavoriteActivityCard({
-    required this.activity,
-    required this.onTap,
-  });
-
-  final Activity activity;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          width: 100,
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ActivityIcon(activity: activity, size: 40),
-              const SizedBox(height: 8),
-              Text(
-                activity.name,
-                style: theme.textTheme.bodySmall,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CategoryExpansionTile extends ConsumerWidget {
-  const _CategoryExpansionTile({
+/// A category section showing suggested favorite activities.
+class _CategorySection extends ConsumerWidget {
+  const _CategorySection({
     required this.category,
     required this.onActivitySelected,
+    required this.onViewAll,
   });
 
   final ActivityCategory category;
   final void Function(Activity) onActivitySelected;
+  final VoidCallback onViewAll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final activitiesAsync = ref.watch(
+      suggestedFavoritesByCategoryProvider(category.activityCategoryId),
+    );
 
-    return ExpansionTile(
-      leading: ActivityCategoryIcon(activityCategory: category, size: 40),
-      title: Text(category.name),
+    return SearchSectionTile(
+      sectionId: categorySectionId(category.activityCategoryId),
+      title: category.name,
+      leading: ActivityCategoryIcon(activityCategory: category, size: 24),
       children: [
-        Consumer(
-          builder: (context, ref, _) {
-            final activitiesAsync = ref.watch(activitiesByCategoryProvider(category.activityCategoryId));
-
-            return activitiesAsync.when(
-              data: (activities) {
-                if (activities.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'No activities in this category',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  );
-                }
-
-                return Column(
-                  children: activities.map((activity) {
-                    return ListTile(
-                      contentPadding: const EdgeInsets.only(left: 72, right: 16),
-                      leading: ActivityIcon(activity: activity, size: 24),
-                      title: Text(activity.name),
-                      onTap: () => onActivitySelected(activity),
-                      trailing: const Icon(Icons.chevron_right, size: 20),
-                    );
-                  }).toList(),
-                );
-              },
-              loading: () => const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: CircularProgressIndicator()),
-              ),
-              error: (error, _) => Padding(
-                padding: const EdgeInsets.all(16),
+        activitiesAsync.when(
+          data: (activities) {
+            if (activities.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  'Failed to load: $error',
-                  style: TextStyle(color: theme.colorScheme.error),
+                  'No activities in this category',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
+              );
+            }
+
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Wrap(
+                spacing: 8,
+                children: [
+                  // Activity chips
+                  ...activities.map((activity) {
+                    return ActivityChip(
+                      activity: activity,
+                      showIcon: false,
+                      onPressed: () => onActivitySelected(activity),
+                    );
+                  }),
+                  // View all chip at the end
+                  ViewAllChip(
+                    categoryColor: category.color,
+                    onPressed: onViewAll,
+                  ),
+                ],
               ),
             );
           },
+          loading: () => const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          error: (error, _) => Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              'Failed to load activities',
+              style: TextStyle(color: theme.colorScheme.error),
+            ),
+          ),
         ),
       ],
     );
