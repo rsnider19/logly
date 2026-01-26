@@ -84,9 +84,12 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
 
   Future<void> _saveActivity() async {
     final notifier = ref.read(activityFormStateProvider.notifier);
-    final success = await notifier.submit();
+    final result = await notifier.submit();
 
-    if (success && mounted) {
+    if (!mounted) return;
+
+    // Editing only supports single day, so we only care about success or failure
+    if (result == SubmitResult.success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Activity updated successfully'),
@@ -95,6 +98,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       );
       context.pop(true);
     }
+    // On failure, error is shown in the form UI
   }
 
   Future<void> _deleteActivity() async {
@@ -223,7 +227,8 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
     }
 
     final favoritesState = ref.watch(favoriteStateProvider);
-    final isFavorited = favoritesState.whenOrNull(
+    final isFavorited =
+        favoritesState.whenOrNull(
           data: (ids) => ids.contains(activity.activityId),
         ) ??
         false;
@@ -320,10 +325,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Date picker
-                  if (showDateRange)
-                    const DateRangePicker()
-                  else
-                    const DatePickerField(),
+                  if (showDateRange) const DateRangePicker() else const DatePickerField(),
 
                   const SizedBox(height: 24),
 
@@ -361,7 +363,9 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                       border: OutlineInputBorder(),
                     ),
                     onChanged: (value) {
-                      ref.read(activityFormStateProvider.notifier).setComments(
+                      ref
+                          .read(activityFormStateProvider.notifier)
+                          .setComments(
                             value.isEmpty ? null : value,
                           );
                     },
@@ -458,7 +462,9 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
             border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
-            ref.read(activityFormStateProvider.notifier).setTextValue(
+            ref
+                .read(activityFormStateProvider.notifier)
+                .setTextValue(
                   detail.activityDetailId,
                   value.isEmpty ? null : value,
                 );
