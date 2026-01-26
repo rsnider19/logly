@@ -1,5 +1,6 @@
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
+import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
 import 'package:logly/features/activity_logging/data/favorite_repository.dart';
 import 'package:logly/features/activity_logging/data/user_activity_repository.dart';
 import 'package:logly/features/activity_logging/domain/activity_logging_exception.dart';
@@ -7,6 +8,7 @@ import 'package:logly/features/activity_logging/domain/create_user_activity.dart
 import 'package:logly/features/activity_logging/domain/create_user_activity_detail.dart';
 import 'package:logly/features/activity_logging/domain/environment_type.dart';
 import 'package:logly/features/activity_logging/domain/favorite_activity.dart';
+import 'package:logly/features/activity_logging/domain/log_multi_day_result.dart';
 import 'package:logly/features/activity_logging/domain/update_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -59,62 +61,139 @@ class ActivityLoggingService {
     return _userActivityRepository.getRecent(limit: limit);
   }
 
-  /// Logs a new activity.
+  /// Logs a new activity for a single day.
   ///
   /// Validates the input and creates the activity via the repository.
-  /// Supports multi-day logging when start and end dates differ.
-  Future<void> logActivity(CreateUserActivity activity) async {
+  /// Returns the created UserActivity.
+  Future<UserActivity> logActivity(CreateUserActivity activity) async {
+    _logger.d('=== SERVICE: logActivity ===');
+    _logger.d('activityId: ${activity.activityId}');
+    _logger.d('activityTimestamp: ${activity.activityTimestamp}');
+    _logger.d('activityDate: ${activity.activityDate}');
+    _logger.d('comments: ${activity.comments}');
+    _logger.d('activityNameOverride: ${activity.activityNameOverride}');
+    _logger.d('subActivityIds: ${activity.subActivityIds}');
+    _logger.d('details count: ${activity.details.length}');
+
     // Validation
     if (activity.activityId.isEmpty) {
+      _logger.e('Validation failed: Activity must be selected');
       throw const ActivityLoggingValidationException('Activity must be selected');
     }
 
-    if (activity.activityEndDate.isBefore(activity.activityStartDate)) {
-      throw const ActivityLoggingValidationException('End date must be after start date');
+    _logger.d('Validation passed, calling repository.create()...');
+
+    try {
+      final result = await _userActivityRepository.create(activity);
+      _logger.d('=== SERVICE: logActivity SUCCESS ===');
+      _logger.d('Created UserActivity ID: ${result.userActivityId}');
+      return result;
+    } catch (e, st) {
+      _logger.e('=== SERVICE: logActivity FAILED ===');
+      _logger.e('Error: $e', e, st);
+      rethrow;
     }
-
-    _logger.d(
-      'Logging activity ${activity.activityId} '
-      'from ${activity.activityStartDate} to ${activity.activityEndDate}',
-    );
-
-    await _userActivityRepository.create(activity);
   }
 
-  /// Logs an activity for multiple days.
+  /// Logs an activity across multiple days.
   ///
-  /// Convenience method that creates a CreateUserActivity with a date range.
-  Future<void> logMultiDayActivity({
+  /// Creates one activity per day in the date range. Uses fail-fast approach:
+  /// if a day fails, already successful days are kept, but remaining days
+  /// are not attempted.
+  ///
+  /// Returns a [LogMultiDayResult] containing successes and failures.
+  Future<LogMultiDayResult> logMultiDayActivity({
     required String activityId,
     required DateTime startDate,
     required DateTime endDate,
     String? comments,
     String? activityNameOverride,
     List<String> subActivityIds = const [],
+    List<CreateUserActivityDetail> details = const [],
+  }) async {
+    if (activityId.isEmpty) {
+      throw const ActivityLoggingValidationException('Activity must be selected');
+    }
+
+    if (endDate.isBefore(startDate)) {
+      throw const ActivityLoggingValidationException('End date must be after start date');
+    }
+
+    final successes = <UserActivity>[];
+    final failures = <FailedDay>[];
+
+    var currentDate = DateTime(startDate.year, startDate.month, startDate.day);
+    final endDateOnly = DateTime(endDate.year, endDate.month, endDate.day);
+
+    while (!currentDate.isAfter(endDateOnly)) {
+      try {
+        final activity = CreateUserActivity(
+          activityId: activityId,
+          activityTimestamp: currentDate,
+          activityDate: currentDate,
+          comments: comments,
+          activityNameOverride: activityNameOverride,
+          subActivityIds: subActivityIds,
+          details: details,
+        );
+
+        final result = await _userActivityRepository.create(activity);
+        successes.add(result);
+      } catch (e) {
+        _logger.e('Failed to log activity for date $currentDate', e, StackTrace.current);
+        failures.add(FailedDay(date: currentDate, errorMessage: e.toString()));
+        // Continue to next day instead of fail-fast to maximize successes
+      }
+
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+
+    _logger.d(
+      'Multi-day logging complete: ${successes.length} successes, ${failures.length} failures',
+    );
+
+    return LogMultiDayResult(successes: successes, failures: failures);
+  }
+
+  /// Convenience method to log a single-day activity from UI parameters.
+  Future<UserActivity> logSingleDayActivity({
+    required String activityId,
+    required DateTime activityTimestamp,
+    String? comments,
+    String? activityNameOverride,
+    List<String> subActivityIds = const [],
     List<CreateUserActivityDetailInput> details = const [],
   }) async {
+    final activityDate = DateTime(
+      activityTimestamp.year,
+      activityTimestamp.month,
+      activityTimestamp.day,
+    );
+
     final activity = CreateUserActivity(
       activityId: activityId,
-      activityStartDate: startDate,
-      activityEndDate: endDate,
+      activityTimestamp: activityTimestamp,
+      activityDate: activityDate,
       comments: comments,
       activityNameOverride: activityNameOverride,
       subActivityIds: subActivityIds,
       details: details.map((d) => d.toCreateUserActivityDetail()).toList(),
     );
 
-    await logActivity(activity);
+    return logActivity(activity);
   }
 
   /// Updates an existing activity log.
-  Future<void> updateActivity(UpdateUserActivity activity) async {
+  ///
+  /// Returns the updated UserActivity.
+  Future<UserActivity> updateActivity(UpdateUserActivity activity) async {
     if (activity.userActivityId.isEmpty) {
       throw const ActivityLoggingValidationException('Activity log ID cannot be empty');
     }
 
     _logger.d('Updating activity ${activity.userActivityId}');
 
-    await _userActivityRepository.update(activity);
+    return _userActivityRepository.update(activity);
   }
 
   /// Deletes an activity log.
@@ -193,6 +272,7 @@ ActivityLoggingService activityLoggingService(Ref ref) {
 class CreateUserActivityDetailInput {
   CreateUserActivityDetailInput({
     required this.activityDetailId,
+    required this.activityDetailType,
     this.textValue,
     this.environmentValue,
     this.numericValue,
@@ -204,6 +284,7 @@ class CreateUserActivityDetailInput {
   });
 
   final String activityDetailId;
+  final ActivityDetailType activityDetailType;
   final String? textValue;
   final String? environmentValue;
   final double? numericValue;
@@ -217,6 +298,7 @@ class CreateUserActivityDetailInput {
   CreateUserActivityDetail toCreateUserActivityDetail() {
     return CreateUserActivityDetail(
       activityDetailId: activityDetailId,
+      activityDetailType: activityDetailType,
       textValue: textValue,
       environmentValue: environmentValue != null ? EnvironmentType.values.byName(environmentValue!) : null,
       numericValue: numericValue,
