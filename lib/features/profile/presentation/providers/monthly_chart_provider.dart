@@ -44,9 +44,11 @@ class SelectedCategoryFiltersStateNotifier extends _$SelectedCategoryFiltersStat
 @riverpod
 Future<Set<String>> effectiveSelectedFilters(Ref ref) async {
   final rawFilters = ref.watch(selectedCategoryFiltersStateProvider);
-  final categories = await ref.watch(categoriesProvider.future);
+  // Watch the future before the async gap
+  final categoriesFuture = ref.watch(categoriesProvider.future);
 
   if (rawFilters.isEmpty) {
+    final categories = await categoriesFuture;
     return categories.map((c) => c.activityCategoryId).toSet();
   }
   return rawFilters;
@@ -91,9 +93,13 @@ List<MonthlyCategoryData> _aggregateByMonth(List<ActivityCountByDate> rawData) {
 /// Provides filtered monthly chart data based on selected category filters.
 @riverpod
 Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
-  final effectiveFilters = await ref.watch(effectiveSelectedFiltersProvider.future);
-  final allData = await ref.watch(monthlyChartDataProvider.future);
-  final categories = await ref.watch(categoriesProvider.future);
+  // Watch all futures before any async gap to avoid disposal between awaits
+  final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
+  final allDataFuture = ref.watch(monthlyChartDataProvider.future);
+  final categoriesFuture = ref.watch(categoriesProvider.future);
+
+  final (effectiveFilters, allData, categories) =
+      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
 
   // If all categories are selected, return all data (optimization)
   if (effectiveFilters.length == categories.length) {

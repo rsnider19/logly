@@ -34,9 +34,13 @@ Future<List<WeeklyCategoryData>> weeklyRadarData(Ref ref) async {
 /// Reuses the same category filter state as the monthly chart.
 @riverpod
 Future<List<WeeklyCategoryData>> filteredWeeklyRadarData(Ref ref) async {
-  final effectiveFilters = await ref.watch(effectiveSelectedFiltersProvider.future);
-  final allData = await ref.watch(weeklyRadarDataProvider.future);
-  final categories = await ref.watch(categoriesProvider.future);
+  // Watch all futures before any async gap to avoid disposal between awaits
+  final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
+  final allDataFuture = ref.watch(weeklyRadarDataProvider.future);
+  final categoriesFuture = ref.watch(categoriesProvider.future);
+
+  final (effectiveFilters, allData, categories) =
+      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
 
   // If all categories are selected, return all data
   if (effectiveFilters.length == categories.length) {

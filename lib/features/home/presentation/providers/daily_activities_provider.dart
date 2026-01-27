@@ -47,20 +47,6 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
 
   @override
   Future<DailyActivitiesState> build() async {
-    final logger = ref.read(loggerProvider);
-    ref
-      ..onDispose(() {
-        logger.d('DailyActivitiesStateNotifier disposed');
-      })
-      ..onAddListener(() {
-        logger.d('DailyActivitiesStateNotifier added listener');
-      })
-      ..onRemoveListener(() {
-        logger.d('DailyActivitiesStateNotifier removed listener');
-      });
-
-    logger.d('DailyActivitiesStateNotifier: Building');
-
     final service = ref.watch(homeServiceProvider);
 
     final today = DateTime.now();
