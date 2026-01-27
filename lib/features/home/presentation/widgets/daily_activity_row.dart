@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -88,7 +89,7 @@ class DailyActivityRow extends StatelessWidget {
         final chips = <Widget>[];
 
         // Add activity chips
-        for (final userActivity in summary.userActivities) {
+        for (final userActivity in summary.userActivities.sortedBy((a) => a.createdAt!)) {
           chips.add(
             Padding(
               padding: const EdgeInsets.only(right: 8),
