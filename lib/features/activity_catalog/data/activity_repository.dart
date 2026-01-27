@@ -6,6 +6,7 @@ import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/domain/catalog_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -14,6 +15,12 @@ part 'activity_repository.g.dart';
 
 /// Cache type for activities.
 const String _cacheType = 'activity';
+
+/// Cache type for activity summaries.
+const String _summaryCacheType = 'activity_summary';
+
+/// Select statement for summary-only queries (no detail/subactivity joins).
+const String _summarySelect = '*, activity_category:activity_category(*)';
 
 /// Repository for fetching activities.
 class ActivityRepository {
@@ -192,6 +199,184 @@ class ActivityRepository {
       }
 
       throw ActivityFetchException(e.toString());
+    }
+  }
+
+  // ==================== Summary Methods ====================
+
+  /// Fetches activity summaries by category (no detail/subactivity data).
+  Future<List<ActivitySummary>> getByCategorySummary(String categoryId) async {
+    final cacheKey = 'summary::category::$categoryId';
+
+    try {
+      final response = await _supabase
+          .from('activity')
+          .select(_summarySelect)
+          .eq('activity_category_id', categoryId)
+          .order('name');
+
+      final summaries =
+          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+
+      await _cacheSummaries(cacheKey, summaries);
+
+      return summaries;
+    } catch (e, st) {
+      _logger.e('Failed to fetch activity summaries for category $categoryId', e, st);
+
+      final cached = await _getCachedSummaries(cacheKey);
+      if (cached != null) {
+        _logger.d('Returning cached activity summaries for category $categoryId');
+        return cached;
+      }
+
+      throw ActivityFetchException(e.toString());
+    }
+  }
+
+  /// Searches activities using the edge function and returns summaries.
+  Future<List<ActivitySummary>> searchSummary(String query) async {
+    try {
+      final response = await _supabase.functions.invoke(
+        'activity/search',
+        body: {'query': query},
+      );
+
+      if (response.status != 200) {
+        throw ActivitySearchException('Search returned status ${response.status}');
+      }
+
+      final data = response.data;
+      if (data is List) {
+        return data.map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+      }
+
+      return [];
+    } catch (e, st) {
+      _logger.e('Failed to search activity summaries for "$query"', e, st);
+      if (e is CatalogException) rethrow;
+      throw ActivitySearchException(e.toString());
+    }
+  }
+
+  /// Fetches suggested favorite activity summaries.
+  Future<List<ActivitySummary>> getSuggestedFavoritesSummary() async {
+    const cacheKey = 'summary::suggested_favorites';
+
+    try {
+      final response = await _supabase
+          .from('activity')
+          .select(_summarySelect)
+          .eq('is_suggested_favorite', true)
+          .order('name');
+
+      final summaries =
+          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+
+      await _cacheSummaries(cacheKey, summaries);
+
+      return summaries;
+    } catch (e, st) {
+      _logger.e('Failed to fetch suggested favorite summaries', e, st);
+
+      final cached = await _getCachedSummaries(cacheKey);
+      if (cached != null) {
+        _logger.d('Returning cached suggested favorite summaries');
+        return cached;
+      }
+
+      throw ActivityFetchException(e.toString());
+    }
+  }
+
+  /// Fetches suggested favorite activity summaries for a specific category.
+  Future<List<ActivitySummary>> getSuggestedFavoritesByCategorySummary(String categoryId) async {
+    final cacheKey = 'summary::suggested_favorites::$categoryId';
+
+    try {
+      final response = await _supabase
+          .from('activity')
+          .select(_summarySelect)
+          .eq('is_suggested_favorite', true)
+          .eq('activity_category_id', categoryId)
+          .order('name');
+
+      final summaries =
+          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+
+      await _cacheSummaries(cacheKey, summaries);
+
+      return summaries;
+    } catch (e, st) {
+      _logger.e('Failed to fetch suggested favorite summaries for category $categoryId', e, st);
+
+      final cached = await _getCachedSummaries(cacheKey);
+      if (cached != null) {
+        _logger.d('Returning cached suggested favorite summaries for category $categoryId');
+        return cached;
+      }
+
+      throw ActivityFetchException(e.toString());
+    }
+  }
+
+  /// Fetches popular activity summaries.
+  Future<List<ActivitySummary>> getPopularSummary() async {
+    const cacheKey = 'summary::popular';
+
+    try {
+      final response =
+          await _supabase.rpc<List<dynamic>>('popular_activities').select(_summarySelect);
+
+      final summaries =
+          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+
+      await _cacheSummaries(cacheKey, summaries);
+
+      return summaries;
+    } catch (e, st) {
+      _logger.e('Failed to fetch popular activity summaries', e, st);
+
+      final cached = await _getCachedSummaries(cacheKey);
+      if (cached != null) {
+        _logger.d('Returning cached popular activity summaries');
+        return cached;
+      }
+
+      throw ActivityFetchException(e.toString());
+    }
+  }
+
+  // ==================== Cache Helpers ====================
+
+  Future<void> _cacheSummaries(String cacheKey, List<ActivitySummary> summaries) async {
+    try {
+      final jsonList = summaries.map((s) => s.toJson()).toList();
+      await _database.upsertCachedData(
+        id: cacheKey,
+        type: _summaryCacheType,
+        data: jsonEncode(jsonList),
+        expiresAt: DateTime.now().add(const Duration(hours: 24)),
+      );
+    } catch (e, st) {
+      _logger.e('Failed to cache activity summaries', e, st);
+    }
+  }
+
+  Future<List<ActivitySummary>?> _getCachedSummaries(String cacheKey) async {
+    try {
+      final cached = await _database.getCachedData(cacheKey, _summaryCacheType);
+      if (cached == null) return null;
+
+      if (cached.expiresAt != null && cached.expiresAt!.isBefore(DateTime.now())) {
+        return null;
+      }
+
+      final jsonList = jsonDecode(cached.data) as List;
+      return jsonList.map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+    } catch (e, st) {
+      _logger.e('Failed to read cached activity summaries', e, st);
+      return null;
     }
   }
 

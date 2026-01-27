@@ -4,6 +4,7 @@ import 'package:logly/features/activity_catalog/data/activity_repository.dart';
 import 'package:logly/features/activity_catalog/data/category_repository.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/domain/catalog_exception.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -75,6 +76,43 @@ class CatalogService {
       throw const ActivityFetchException('Category ID cannot be empty');
     }
     return _activityRepository.getSuggestedFavoritesByCategory(categoryId);
+  }
+
+  // ==================== Summary Methods ====================
+
+  /// Fetches activity summaries for a specific category.
+  Future<List<ActivitySummary>> getActivitiesByCategorySummary(String categoryId) async {
+    if (categoryId.isEmpty) {
+      throw const ActivityFetchException('Category ID cannot be empty');
+    }
+    return _activityRepository.getByCategorySummary(categoryId);
+  }
+
+  /// Searches activities and returns summaries.
+  Future<List<ActivitySummary>> searchActivitiesSummary(String query) async {
+    final trimmed = query.trim();
+    if (trimmed.length < 2) {
+      return [];
+    }
+    return _activityRepository.searchSummary(trimmed);
+  }
+
+  /// Fetches suggested favorite activity summaries.
+  Future<List<ActivitySummary>> getSuggestedFavoritesSummary() async {
+    return _activityRepository.getSuggestedFavoritesSummary();
+  }
+
+  /// Fetches suggested favorite activity summaries for a specific category.
+  Future<List<ActivitySummary>> getSuggestedFavoritesByCategorySummary(String categoryId) async {
+    if (categoryId.isEmpty) {
+      throw const ActivityFetchException('Category ID cannot be empty');
+    }
+    return _activityRepository.getSuggestedFavoritesByCategorySummary(categoryId);
+  }
+
+  /// Fetches popular activity summaries.
+  Future<List<ActivitySummary>> getPopularActivitiesSummary() async {
+    return _activityRepository.getPopularSummary();
   }
 
   /// Prefetches catalog data for faster subsequent access.
