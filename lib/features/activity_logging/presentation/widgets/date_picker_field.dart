@@ -28,7 +28,7 @@ class DatePickerField extends ConsumerWidget {
           onTap: () => _selectDate(context, ref, selectedDate),
           borderRadius: BorderRadius.circular(8),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               border: Border.all(color: theme.colorScheme.outline),
               borderRadius: BorderRadius.circular(8),

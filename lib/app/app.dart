@@ -46,9 +46,12 @@ class _AppState extends ConsumerState<App> {
         progressIndicatorTheme: Theme.of(context).progressIndicatorTheme.copyWith(
           linearTrackColor: Theme.of(context).colorScheme.surfaceContainerHighest
         ),
+        inputDecorationTheme: const InputDecorationTheme(
+          contentPadding: EdgeInsets.all(8),
+        ),
         useMaterial3: true,
       ),
-      themeMode: themeMode,
+      themeMode: ThemeMode.dark,
       routerConfig: router,
     );
   }
