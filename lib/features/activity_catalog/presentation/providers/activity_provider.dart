@@ -9,7 +9,8 @@ part 'activity_provider.g.dart';
 @riverpod
 Future<List<ActivitySummary>> activitiesByCategorySummary(Ref ref, String categoryId) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getActivitiesByCategorySummary(categoryId);
+  final activities = await service.getActivitiesByCategorySummary(categoryId);
+  return activities..sort((a, b) => a.name.compareTo(b.name));
 }
 
 /// Provides a single activity by ID with full details (for log/edit screens).
