@@ -13,7 +13,7 @@ _FavoriteActivity _$FavoriteActivityFromJson(Map<String, dynamic> json) =>
       createdAt: DateTime.parse(json['created_at'] as String),
       activity: json['activity'] == null
           ? null
-          : Activity.fromJson(json['activity'] as Map<String, dynamic>),
+          : ActivitySummary.fromJson(json['activity'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$FavoriteActivityToJson(_FavoriteActivity instance) =>

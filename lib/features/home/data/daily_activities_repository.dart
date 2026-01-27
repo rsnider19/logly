@@ -17,15 +17,13 @@ class DailyActivitiesRepository {
   final LoggerService _logger;
 
   /// The select statement for fetching user activities with related data.
+  ///
+  /// Excludes activity_detail and user_activity_detail since the home screen
+  /// only needs activity name, category, and selected subactivities for display.
   static const String _selectWithRelations = '''
     *,
     activity:activity(*,
-      activity_category:activity_category(*),
-      activity_detail:activity_detail(*),
-      sub_activity:sub_activity(*)
-    ),
-    user_activity_detail:user_activity_detail(*,
-      activity_detail:activity_detail(*)
+      activity_category:activity_category(*)
     ),
     sub_activity:user_activity_sub_activity(
       ...sub_activity(*)

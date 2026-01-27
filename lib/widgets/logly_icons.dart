@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 
@@ -87,6 +88,58 @@ class ActivityIcon extends StatelessWidget {
           if (activity.activityCategory != null) {
             return ActivityCategoryIcon(
               activityCategory: activity.activityCategory!,
+              size: size,
+              fit: fit,
+              borderRadius: effectiveBorderRadius,
+              color: color,
+            );
+          }
+          return Icon(
+            Icons.category_outlined,
+            size: size,
+            color: color,
+          );
+        },
+      ),
+    );
+  }
+}
+
+/// Displays an icon for an [ActivitySummary] from Supabase Storage.
+///
+/// Falls back to [ActivityCategoryIcon] if category exists, else [Icons.fitness_center].
+class ActivitySummaryIcon extends StatelessWidget {
+  const ActivitySummaryIcon({
+    required this.activitySummary,
+    this.size = 24,
+    this.fit = BoxFit.cover,
+    this.borderRadius,
+    this.color,
+    super.key,
+  });
+
+  final ActivitySummary activitySummary;
+  final double size;
+  final BoxFit fit;
+  final BorderRadius? borderRadius;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
+
+    return ClipRRect(
+      borderRadius: effectiveBorderRadius,
+      child: CachedNetworkImage(
+        imageUrl: activitySummary.icon,
+        width: size,
+        height: size,
+        fit: fit,
+        placeholder: (context, url) => SizedBox(width: size, height: size),
+        errorWidget: (context, url, error) {
+          if (activitySummary.activityCategory != null) {
+            return ActivityCategoryIcon(
+              activityCategory: activitySummary.activityCategory!,
               size: size,
               fit: fit,
               borderRadius: effectiveBorderRadius,

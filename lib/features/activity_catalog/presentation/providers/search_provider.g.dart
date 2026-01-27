@@ -65,26 +65,28 @@ abstract class _$SearchQuery extends $Notifier<String> {
   }
 }
 
-/// Provides debounced search results.
+/// Provides debounced search results as lightweight summaries.
 ///
 /// Debounces by 300ms and requires minimum 2 characters.
 
 @ProviderFor(searchResults)
 final searchResultsProvider = SearchResultsProvider._();
 
-/// Provides debounced search results.
+/// Provides debounced search results as lightweight summaries.
 ///
 /// Debounces by 300ms and requires minimum 2 characters.
 
 final class SearchResultsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<Activity>>,
-          List<Activity>,
-          FutureOr<List<Activity>>
+          AsyncValue<List<ActivitySummary>>,
+          List<ActivitySummary>,
+          FutureOr<List<ActivitySummary>>
         >
-    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
-  /// Provides debounced search results.
+    with
+        $FutureModifier<List<ActivitySummary>>,
+        $FutureProvider<List<ActivitySummary>> {
+  /// Provides debounced search results as lightweight summaries.
   ///
   /// Debounces by 300ms and requires minimum 2 characters.
   SearchResultsProvider._()
@@ -103,14 +105,14 @@ final class SearchResultsProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<Activity>> $createElement(
+  $FutureProviderElement<List<ActivitySummary>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<Activity>> create(Ref ref) {
+  FutureOr<List<ActivitySummary>> create(Ref ref) {
     return searchResults(ref);
   }
 }
 
-String _$searchResultsHash() => r'562fcd467c69ea8f1ba83d11cceb6c27a37196f2';
+String _$searchResultsHash() => r'5c67170f72878ab0c83208479a1a5bc2745e0aab';

@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FavoriteActivity {
 
- String get userId; String get activityId; DateTime get createdAt;/// The activity details (populated via join).
- Activity? get activity;
+ String get userId; String get activityId; DateTime get createdAt;/// The activity summary (populated via join).
+ ActivitySummary? get activity;
 /// Create a copy of FavoriteActivity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,11 +49,11 @@ abstract mixin class $FavoriteActivityCopyWith<$Res>  {
   factory $FavoriteActivityCopyWith(FavoriteActivity value, $Res Function(FavoriteActivity) _then) = _$FavoriteActivityCopyWithImpl;
 @useResult
 $Res call({
- String userId, String activityId, DateTime createdAt, Activity? activity
+ String userId, String activityId, DateTime createdAt, ActivitySummary? activity
 });
 
 
-$ActivityCopyWith<$Res>? get activity;
+$ActivitySummaryCopyWith<$Res>? get activity;
 
 }
 /// @nodoc
@@ -72,19 +72,19 @@ userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_n
 as String,activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,activity: freezed == activity ? _self.activity : activity // ignore: cast_nullable_to_non_nullable
-as Activity?,
+as ActivitySummary?,
   ));
 }
 /// Create a copy of FavoriteActivity
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ActivityCopyWith<$Res>? get activity {
+$ActivitySummaryCopyWith<$Res>? get activity {
     if (_self.activity == null) {
     return null;
   }
 
-  return $ActivityCopyWith<$Res>(_self.activity!, (value) {
+  return $ActivitySummaryCopyWith<$Res>(_self.activity!, (value) {
     return _then(_self.copyWith(activity: value));
   });
 }
@@ -169,7 +169,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String activityId,  DateTime createdAt,  Activity? activity)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  String activityId,  DateTime createdAt,  ActivitySummary? activity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FavoriteActivity() when $default != null:
 return $default(_that.userId,_that.activityId,_that.createdAt,_that.activity);case _:
@@ -190,7 +190,7 @@ return $default(_that.userId,_that.activityId,_that.createdAt,_that.activity);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String activityId,  DateTime createdAt,  Activity? activity)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  String activityId,  DateTime createdAt,  ActivitySummary? activity)  $default,) {final _that = this;
 switch (_that) {
 case _FavoriteActivity():
 return $default(_that.userId,_that.activityId,_that.createdAt,_that.activity);case _:
@@ -210,7 +210,7 @@ return $default(_that.userId,_that.activityId,_that.createdAt,_that.activity);ca
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String activityId,  DateTime createdAt,  Activity? activity)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  String activityId,  DateTime createdAt,  ActivitySummary? activity)?  $default,) {final _that = this;
 switch (_that) {
 case _FavoriteActivity() when $default != null:
 return $default(_that.userId,_that.activityId,_that.createdAt,_that.activity);case _:
@@ -231,8 +231,8 @@ class _FavoriteActivity implements FavoriteActivity {
 @override final  String userId;
 @override final  String activityId;
 @override final  DateTime createdAt;
-/// The activity details (populated via join).
-@override final  Activity? activity;
+/// The activity summary (populated via join).
+@override final  ActivitySummary? activity;
 
 /// Create a copy of FavoriteActivity
 /// with the given fields replaced by the non-null parameter values.
@@ -267,11 +267,11 @@ abstract mixin class _$FavoriteActivityCopyWith<$Res> implements $FavoriteActivi
   factory _$FavoriteActivityCopyWith(_FavoriteActivity value, $Res Function(_FavoriteActivity) _then) = __$FavoriteActivityCopyWithImpl;
 @override @useResult
 $Res call({
- String userId, String activityId, DateTime createdAt, Activity? activity
+ String userId, String activityId, DateTime createdAt, ActivitySummary? activity
 });
 
 
-@override $ActivityCopyWith<$Res>? get activity;
+@override $ActivitySummaryCopyWith<$Res>? get activity;
 
 }
 /// @nodoc
@@ -290,7 +290,7 @@ userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_n
 as String,activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,activity: freezed == activity ? _self.activity : activity // ignore: cast_nullable_to_non_nullable
-as Activity?,
+as ActivitySummary?,
   ));
 }
 
@@ -298,12 +298,12 @@ as Activity?,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ActivityCopyWith<$Res>? get activity {
+$ActivitySummaryCopyWith<$Res>? get activity {
     if (_self.activity == null) {
     return null;
   }
 
-  return $ActivityCopyWith<$Res>(_self.activity!, (value) {
+  return $ActivitySummaryCopyWith<$Res>(_self.activity!, (value) {
     return _then(_self.copyWith(activity: value));
   });
 }

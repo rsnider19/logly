@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
-import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/widgets/logly_icons.dart';
 
@@ -34,6 +33,9 @@ class UserActivityChip extends StatelessWidget {
   }
 }
 
+/// A chip displaying an activity summary with icon and name.
+///
+/// Used in search results, category lists, and favorites.
 class ActivityChip extends StatelessWidget {
   const ActivityChip({
     required this.activity,
@@ -45,7 +47,7 @@ class ActivityChip extends StatelessWidget {
   });
 
   factory ActivityChip.filled({
-    required Activity activity,
+    required ActivitySummary activity,
     VoidCallback? onPressed,
     bool showIcon = true,
   }) => ActivityChip(
@@ -55,7 +57,7 @@ class ActivityChip extends StatelessWidget {
     showIcon: showIcon,
   );
 
-  final Activity activity;
+  final ActivitySummary activity;
   final VoidCallback? onPressed;
   final bool isFilled;
   final bool showIcon;
@@ -66,7 +68,7 @@ class ActivityChip extends StatelessWidget {
     final color = activity.getColor(context);
 
     return ActionChip(
-      avatar: showIcon ? ActivityIcon(activity: activity) : null,
+      avatar: showIcon ? ActivitySummaryIcon(activitySummary: activity) : null,
       label: Text(activity.name),
       shape: const StadiumBorder(),
       backgroundColor: isFilled ? color : null,

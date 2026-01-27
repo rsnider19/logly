@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 
 part 'favorite_activity.freezed.dart';
 part 'favorite_activity.g.dart';
@@ -12,8 +12,8 @@ abstract class FavoriteActivity with _$FavoriteActivity {
     required String activityId,
     required DateTime createdAt,
 
-    /// The activity details (populated via join).
-    Activity? activity,
+    /// The activity summary (populated via join).
+    ActivitySummary? activity,
   }) = _FavoriteActivity;
 
   factory FavoriteActivity.fromJson(Map<String, dynamic> json) => _$FavoriteActivityFromJson(json);

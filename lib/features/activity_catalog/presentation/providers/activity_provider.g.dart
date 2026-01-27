@@ -8,58 +8,62 @@ part of 'activity_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Provides activities for a specific category.
+/// Provides activity summaries for a specific category (lightweight, for chips/lists).
 
-@ProviderFor(activitiesByCategory)
-final activitiesByCategoryProvider = ActivitiesByCategoryFamily._();
+@ProviderFor(activitiesByCategorySummary)
+final activitiesByCategorySummaryProvider =
+    ActivitiesByCategorySummaryFamily._();
 
-/// Provides activities for a specific category.
+/// Provides activity summaries for a specific category (lightweight, for chips/lists).
 
-final class ActivitiesByCategoryProvider
+final class ActivitiesByCategorySummaryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<Activity>>,
-          List<Activity>,
-          FutureOr<List<Activity>>
+          AsyncValue<List<ActivitySummary>>,
+          List<ActivitySummary>,
+          FutureOr<List<ActivitySummary>>
         >
-    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
-  /// Provides activities for a specific category.
-  ActivitiesByCategoryProvider._({
-    required ActivitiesByCategoryFamily super.from,
+    with
+        $FutureModifier<List<ActivitySummary>>,
+        $FutureProvider<List<ActivitySummary>> {
+  /// Provides activity summaries for a specific category (lightweight, for chips/lists).
+  ActivitiesByCategorySummaryProvider._({
+    required ActivitiesByCategorySummaryFamily super.from,
     required String super.argument,
   }) : super(
          retry: null,
-         name: r'activitiesByCategoryProvider',
+         name: r'activitiesByCategorySummaryProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$activitiesByCategoryHash();
+  String debugGetCreateSourceHash() => _$activitiesByCategorySummaryHash();
 
   @override
   String toString() {
-    return r'activitiesByCategoryProvider'
+    return r'activitiesByCategorySummaryProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  $FutureProviderElement<List<Activity>> $createElement(
+  $FutureProviderElement<List<ActivitySummary>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<Activity>> create(Ref ref) {
+  FutureOr<List<ActivitySummary>> create(Ref ref) {
     final argument = this.argument as String;
-    return activitiesByCategory(ref, argument);
+    return activitiesByCategorySummary(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is ActivitiesByCategoryProvider && other.argument == argument;
+    return other is ActivitiesByCategorySummaryProvider &&
+        other.argument == argument;
   }
 
   @override
@@ -68,43 +72,43 @@ final class ActivitiesByCategoryProvider
   }
 }
 
-String _$activitiesByCategoryHash() =>
-    r'18ee82016175ea35251eac018a49b2fb36611723';
+String _$activitiesByCategorySummaryHash() =>
+    r'fe46816f38dd83e5be451b9b411e79b98731725b';
 
-/// Provides activities for a specific category.
+/// Provides activity summaries for a specific category (lightweight, for chips/lists).
 
-final class ActivitiesByCategoryFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<Activity>>, String> {
-  ActivitiesByCategoryFamily._()
+final class ActivitiesByCategorySummaryFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<ActivitySummary>>, String> {
+  ActivitiesByCategorySummaryFamily._()
     : super(
         retry: null,
-        name: r'activitiesByCategoryProvider',
+        name: r'activitiesByCategorySummaryProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  /// Provides activities for a specific category.
+  /// Provides activity summaries for a specific category (lightweight, for chips/lists).
 
-  ActivitiesByCategoryProvider call(String categoryId) =>
-      ActivitiesByCategoryProvider._(argument: categoryId, from: this);
+  ActivitiesByCategorySummaryProvider call(String categoryId) =>
+      ActivitiesByCategorySummaryProvider._(argument: categoryId, from: this);
 
   @override
-  String toString() => r'activitiesByCategoryProvider';
+  String toString() => r'activitiesByCategorySummaryProvider';
 }
 
-/// Provides a single activity by ID with full details.
+/// Provides a single activity by ID with full details (for log/edit screens).
 
 @ProviderFor(activityById)
 final activityByIdProvider = ActivityByIdFamily._();
 
-/// Provides a single activity by ID with full details.
+/// Provides a single activity by ID with full details (for log/edit screens).
 
 final class ActivityByIdProvider
     extends
         $FunctionalProvider<AsyncValue<Activity>, Activity, FutureOr<Activity>>
     with $FutureModifier<Activity>, $FutureProvider<Activity> {
-  /// Provides a single activity by ID with full details.
+  /// Provides a single activity by ID with full details (for log/edit screens).
   ActivityByIdProvider._({
     required ActivityByIdFamily super.from,
     required String super.argument,
@@ -150,7 +154,7 @@ final class ActivityByIdProvider
 
 String _$activityByIdHash() => r'af2b766c1ecbf51daf4e8f5897704dadaa30513f';
 
-/// Provides a single activity by ID with full details.
+/// Provides a single activity by ID with full details (for log/edit screens).
 
 final class ActivityByIdFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<Activity>, String> {
@@ -163,7 +167,7 @@ final class ActivityByIdFamily extends $Family
         isAutoDispose: true,
       );
 
-  /// Provides a single activity by ID with full details.
+  /// Provides a single activity by ID with full details (for log/edit screens).
 
   ActivityByIdProvider call(String activityId) =>
       ActivityByIdProvider._(argument: activityId, from: this);
@@ -172,148 +176,156 @@ final class ActivityByIdFamily extends $Family
   String toString() => r'activityByIdProvider';
 }
 
-/// Provides popular activities for onboarding.
+/// Provides popular activity summaries for onboarding.
 
-@ProviderFor(popularActivities)
-final popularActivitiesProvider = PopularActivitiesProvider._();
+@ProviderFor(popularActivitiesSummary)
+final popularActivitiesSummaryProvider = PopularActivitiesSummaryProvider._();
 
-/// Provides popular activities for onboarding.
+/// Provides popular activity summaries for onboarding.
 
-final class PopularActivitiesProvider
+final class PopularActivitiesSummaryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<Activity>>,
-          List<Activity>,
-          FutureOr<List<Activity>>
+          AsyncValue<List<ActivitySummary>>,
+          List<ActivitySummary>,
+          FutureOr<List<ActivitySummary>>
         >
-    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
-  /// Provides popular activities for onboarding.
-  PopularActivitiesProvider._()
+    with
+        $FutureModifier<List<ActivitySummary>>,
+        $FutureProvider<List<ActivitySummary>> {
+  /// Provides popular activity summaries for onboarding.
+  PopularActivitiesSummaryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'popularActivitiesProvider',
+        name: r'popularActivitiesSummaryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$popularActivitiesHash();
+  String debugGetCreateSourceHash() => _$popularActivitiesSummaryHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<Activity>> $createElement(
+  $FutureProviderElement<List<ActivitySummary>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<Activity>> create(Ref ref) {
-    return popularActivities(ref);
+  FutureOr<List<ActivitySummary>> create(Ref ref) {
+    return popularActivitiesSummary(ref);
   }
 }
 
-String _$popularActivitiesHash() => r'090df661a9cc5a657aa383a3d4878d3c4cd63ea8';
+String _$popularActivitiesSummaryHash() =>
+    r'a4c51aa83633ff4b4d0a753589ddff1b2015eb18';
 
-/// Provides suggested favorite activities.
+/// Provides suggested favorite activity summaries.
 
-@ProviderFor(suggestedFavorites)
-final suggestedFavoritesProvider = SuggestedFavoritesProvider._();
+@ProviderFor(suggestedFavoritesSummary)
+final suggestedFavoritesSummaryProvider = SuggestedFavoritesSummaryProvider._();
 
-/// Provides suggested favorite activities.
+/// Provides suggested favorite activity summaries.
 
-final class SuggestedFavoritesProvider
+final class SuggestedFavoritesSummaryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<Activity>>,
-          List<Activity>,
-          FutureOr<List<Activity>>
+          AsyncValue<List<ActivitySummary>>,
+          List<ActivitySummary>,
+          FutureOr<List<ActivitySummary>>
         >
-    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
-  /// Provides suggested favorite activities.
-  SuggestedFavoritesProvider._()
+    with
+        $FutureModifier<List<ActivitySummary>>,
+        $FutureProvider<List<ActivitySummary>> {
+  /// Provides suggested favorite activity summaries.
+  SuggestedFavoritesSummaryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'suggestedFavoritesProvider',
+        name: r'suggestedFavoritesSummaryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$suggestedFavoritesHash();
+  String debugGetCreateSourceHash() => _$suggestedFavoritesSummaryHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<Activity>> $createElement(
+  $FutureProviderElement<List<ActivitySummary>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<Activity>> create(Ref ref) {
-    return suggestedFavorites(ref);
+  FutureOr<List<ActivitySummary>> create(Ref ref) {
+    return suggestedFavoritesSummary(ref);
   }
 }
 
-String _$suggestedFavoritesHash() =>
-    r'40d258c9a85580f3bb14e19685b9cae3de55e5e7';
+String _$suggestedFavoritesSummaryHash() =>
+    r'5cf345b50037df68036497ed4259b98e9c7a8e26';
 
-/// Provides suggested favorite activities for a specific category.
+/// Provides suggested favorite activity summaries for a specific category.
 
-@ProviderFor(suggestedFavoritesByCategory)
-final suggestedFavoritesByCategoryProvider =
-    SuggestedFavoritesByCategoryFamily._();
+@ProviderFor(suggestedFavoritesByCategorySummary)
+final suggestedFavoritesByCategorySummaryProvider =
+    SuggestedFavoritesByCategorySummaryFamily._();
 
-/// Provides suggested favorite activities for a specific category.
+/// Provides suggested favorite activity summaries for a specific category.
 
-final class SuggestedFavoritesByCategoryProvider
+final class SuggestedFavoritesByCategorySummaryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<Activity>>,
-          List<Activity>,
-          FutureOr<List<Activity>>
+          AsyncValue<List<ActivitySummary>>,
+          List<ActivitySummary>,
+          FutureOr<List<ActivitySummary>>
         >
-    with $FutureModifier<List<Activity>>, $FutureProvider<List<Activity>> {
-  /// Provides suggested favorite activities for a specific category.
-  SuggestedFavoritesByCategoryProvider._({
-    required SuggestedFavoritesByCategoryFamily super.from,
+    with
+        $FutureModifier<List<ActivitySummary>>,
+        $FutureProvider<List<ActivitySummary>> {
+  /// Provides suggested favorite activity summaries for a specific category.
+  SuggestedFavoritesByCategorySummaryProvider._({
+    required SuggestedFavoritesByCategorySummaryFamily super.from,
     required String super.argument,
   }) : super(
          retry: null,
-         name: r'suggestedFavoritesByCategoryProvider',
+         name: r'suggestedFavoritesByCategorySummaryProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$suggestedFavoritesByCategoryHash();
+  String debugGetCreateSourceHash() =>
+      _$suggestedFavoritesByCategorySummaryHash();
 
   @override
   String toString() {
-    return r'suggestedFavoritesByCategoryProvider'
+    return r'suggestedFavoritesByCategorySummaryProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  $FutureProviderElement<List<Activity>> $createElement(
+  $FutureProviderElement<List<ActivitySummary>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<Activity>> create(Ref ref) {
+  FutureOr<List<ActivitySummary>> create(Ref ref) {
     final argument = this.argument as String;
-    return suggestedFavoritesByCategory(ref, argument);
+    return suggestedFavoritesByCategorySummary(ref, argument);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SuggestedFavoritesByCategoryProvider &&
+    return other is SuggestedFavoritesByCategorySummaryProvider &&
         other.argument == argument;
   }
 
@@ -323,27 +335,30 @@ final class SuggestedFavoritesByCategoryProvider
   }
 }
 
-String _$suggestedFavoritesByCategoryHash() =>
-    r'1f1784e71043f5ab6316a755a0e98486b27feddf';
+String _$suggestedFavoritesByCategorySummaryHash() =>
+    r'da7c494100fbdac3fa5b104734fea5a610ade523';
 
-/// Provides suggested favorite activities for a specific category.
+/// Provides suggested favorite activity summaries for a specific category.
 
-final class SuggestedFavoritesByCategoryFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<Activity>>, String> {
-  SuggestedFavoritesByCategoryFamily._()
+final class SuggestedFavoritesByCategorySummaryFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<ActivitySummary>>, String> {
+  SuggestedFavoritesByCategorySummaryFamily._()
     : super(
         retry: null,
-        name: r'suggestedFavoritesByCategoryProvider',
+        name: r'suggestedFavoritesByCategorySummaryProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  /// Provides suggested favorite activities for a specific category.
+  /// Provides suggested favorite activity summaries for a specific category.
 
-  SuggestedFavoritesByCategoryProvider call(String categoryId) =>
-      SuggestedFavoritesByCategoryProvider._(argument: categoryId, from: this);
+  SuggestedFavoritesByCategorySummaryProvider call(String categoryId) =>
+      SuggestedFavoritesByCategorySummaryProvider._(
+        argument: categoryId,
+        from: this,
+      );
 
   @override
-  String toString() => r'suggestedFavoritesByCategoryProvider';
+  String toString() => r'suggestedFavoritesByCategorySummaryProvider';
 }

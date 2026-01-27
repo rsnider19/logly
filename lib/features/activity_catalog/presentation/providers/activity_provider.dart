@@ -1,40 +1,41 @@
 import 'package:logly/features/activity_catalog/application/catalog_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'activity_provider.g.dart';
 
-/// Provides activities for a specific category.
+/// Provides activity summaries for a specific category (lightweight, for chips/lists).
 @riverpod
-Future<List<Activity>> activitiesByCategory(Ref ref, String categoryId) async {
+Future<List<ActivitySummary>> activitiesByCategorySummary(Ref ref, String categoryId) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getActivitiesByCategory(categoryId);
+  return service.getActivitiesByCategorySummary(categoryId);
 }
 
-/// Provides a single activity by ID with full details.
+/// Provides a single activity by ID with full details (for log/edit screens).
 @riverpod
 Future<Activity> activityById(Ref ref, String activityId) async {
   final service = ref.watch(catalogServiceProvider);
   return service.getActivityById(activityId);
 }
 
-/// Provides popular activities for onboarding.
+/// Provides popular activity summaries for onboarding.
 @riverpod
-Future<List<Activity>> popularActivities(Ref ref) async {
+Future<List<ActivitySummary>> popularActivitiesSummary(Ref ref) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getPopularActivities();
+  return service.getPopularActivitiesSummary();
 }
 
-/// Provides suggested favorite activities.
+/// Provides suggested favorite activity summaries.
 @riverpod
-Future<List<Activity>> suggestedFavorites(Ref ref) async {
+Future<List<ActivitySummary>> suggestedFavoritesSummary(Ref ref) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getSuggestedFavorites();
+  return service.getSuggestedFavoritesSummary();
 }
 
-/// Provides suggested favorite activities for a specific category.
+/// Provides suggested favorite activity summaries for a specific category.
 @riverpod
-Future<List<Activity>> suggestedFavoritesByCategory(Ref ref, String categoryId) async {
+Future<List<ActivitySummary>> suggestedFavoritesByCategorySummary(Ref ref, String categoryId) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getSuggestedFavoritesByCategory(categoryId);
+  return service.getSuggestedFavoritesByCategorySummary(categoryId);
 }

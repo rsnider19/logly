@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:logly/features/activity_catalog/application/catalog_service.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_provider.g.dart';
@@ -21,11 +21,11 @@ class SearchQuery extends _$SearchQuery {
   }
 }
 
-/// Provides debounced search results.
+/// Provides debounced search results as lightweight summaries.
 ///
 /// Debounces by 300ms and requires minimum 2 characters.
 @riverpod
-Future<List<Activity>> searchResults(Ref ref) async {
+Future<List<ActivitySummary>> searchResults(Ref ref) async {
   final query = ref.watch(searchQueryProvider);
 
   // Don't search if query is too short
@@ -42,5 +42,5 @@ Future<List<Activity>> searchResults(Ref ref) async {
   }
 
   final service = ref.watch(catalogServiceProvider);
-  return service.searchActivities(query);
+  return service.searchActivitiesSummary(query);
 }
