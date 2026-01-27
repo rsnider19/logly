@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/routes.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/search_provider.dart';
@@ -56,13 +56,12 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     ref.read(searchQueryProvider.notifier).clear();
   }
 
-  void _selectActivity(Activity activity) {
+  void _selectActivity(ActivitySummary activity) {
     // Use push replacement to navigate to LogActivityScreen
     // This replaces the search screen so save just pops once
     LogActivityRoute(
       activityId: activity.activityId,
       date: widget.initialDate?.toIso8601String(),
-      $extra: activity,
     ).pushReplacement(context);
   }
 
@@ -124,7 +123,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     );
   }
 
-  Widget _buildSearchResults(AsyncValue<List<Activity>> searchResultsAsync) {
+  Widget _buildSearchResults(AsyncValue<List<ActivitySummary>> searchResultsAsync) {
     final theme = Theme.of(context);
 
     return searchResultsAsync.when(
@@ -291,14 +290,14 @@ class _CategorySection extends ConsumerWidget {
   });
 
   final ActivityCategory category;
-  final void Function(Activity) onActivitySelected;
+  final void Function(ActivitySummary) onActivitySelected;
   final VoidCallback onViewAll;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final activitiesAsync = ref.watch(
-      suggestedFavoritesByCategoryProvider(category.activityCategoryId),
+      suggestedFavoritesByCategorySummaryProvider(category.activityCategoryId),
     );
 
     return SearchSectionTile(

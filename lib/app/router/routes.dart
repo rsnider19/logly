@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_logging/presentation/screens/activity_search_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/category_detail_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
@@ -161,12 +160,13 @@ class ActivitySearchRoute extends GoRouteData with $ActivitySearchRoute {
 }
 
 /// Log activity route - log a new activity.
+///
+/// Fetches the full Activity on screen load by activityId.
 @TypedGoRoute<LogActivityRoute>(path: '/activities/log/:activityId')
 class LogActivityRoute extends GoRouteData with $LogActivityRoute {
   const LogActivityRoute({
     required this.activityId,
     this.date,
-    this.$extra,
   });
 
   /// The ID of the activity to log.
@@ -175,9 +175,6 @@ class LogActivityRoute extends GoRouteData with $LogActivityRoute {
   /// Optional initial date for the activity (ISO 8601 string).
   final String? date;
 
-  /// The Activity object (passed as extra to avoid re-fetching).
-  final Activity? $extra;
-
   @override
   Widget build(BuildContext context, GoRouterState state) {
     DateTime? initialDate;
@@ -185,18 +182,8 @@ class LogActivityRoute extends GoRouteData with $LogActivityRoute {
       initialDate = DateTime.tryParse(date!);
     }
 
-    // Activity must be provided via $extra
-    final activity = $extra;
-    if (activity == null) {
-      // This shouldn't happen in normal flow - navigate back if it does
-      return Scaffold(
-        appBar: AppBar(title: const Text('Error')),
-        body: const Center(child: Text('Activity not found')),
-      );
-    }
-
     return LogActivityScreen(
-      activity: activity,
+      activityId: activityId,
       initialDate: initialDate,
     );
   }

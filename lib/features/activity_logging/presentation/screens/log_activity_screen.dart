@@ -7,6 +7,7 @@ import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
+import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_picker_field.dart';
@@ -23,16 +24,16 @@ import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for logging a new activity.
 ///
-/// Receives an [Activity] and optional initial [DateTime] and renders
+/// Fetches the full [Activity] by ID on load, then renders
 /// dynamic detail fields based on the activity's configuration.
 class LogActivityScreen extends ConsumerStatefulWidget {
   const LogActivityScreen({
-    required this.activity,
+    required this.activityId,
     this.initialDate,
     super.key,
   });
 
-  final Activity activity;
+  final String activityId;
   final DateTime? initialDate;
 
   @override
@@ -41,27 +42,32 @@ class LogActivityScreen extends ConsumerStatefulWidget {
 
 class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
   late TextEditingController _commentsController;
+  bool _formInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _commentsController = TextEditingController();
-
-    // Initialize form state after the first frame
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(activityFormStateProvider.notifier)
-          .initForCreate(
-            widget.activity,
-            initialDate: widget.initialDate,
-          );
-    });
   }
 
   @override
   void dispose() {
     _commentsController.dispose();
     super.dispose();
+  }
+
+  void _initFormIfNeeded(Activity activity) {
+    if (!_formInitialized) {
+      _formInitialized = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref
+            .read(activityFormStateProvider.notifier)
+            .initForCreate(
+              activity,
+              initialDate: widget.initialDate,
+            );
+      });
+    }
   }
 
   Future<void> _saveActivity() async {
@@ -136,35 +142,87 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
   }
 
   void _toggleFavorite() {
-    unawaited(ref.read(favoriteStateProvider.notifier).toggle(widget.activity.activityId));
+    unawaited(ref.read(favoriteStateProvider.notifier).toggle(widget.activityId));
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final activityAsync = ref.watch(activityByIdProvider(widget.activityId));
+
+    return activityAsync.when(
+      loading: () => Scaffold(
+        appBar: AppBar(title: const Text('Log Activity')),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, _) => Scaffold(
+        appBar: AppBar(title: const Text('Log Activity')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: theme.colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'Failed to load activity',
+                  style: theme.textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                FilledButton(
+                  onPressed: () => ref.invalidate(activityByIdProvider(widget.activityId)),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      data: (activity) {
+        _initFormIfNeeded(activity);
+        return _buildForm(context, activity);
+      },
+    );
+  }
+
+  Widget _buildForm(BuildContext context, Activity activity) {
+    final theme = Theme.of(context);
     final formState = ref.watch(activityFormStateProvider);
     final favoritesState = ref.watch(favoriteStateProvider);
     final isFavorited =
         favoritesState.whenOrNull(
-          data: (ids) => ids.contains(widget.activity.activityId),
+          data: (ids) => ids.contains(widget.activityId),
         ) ??
         false;
 
-    final activityColor = widget.activity.getColor(context);
-    final sortedDetails = List<ActivityDetail>.from(widget.activity.activityDetail)
+    final activityColor = activity.getColor(context);
+    final sortedDetails = List<ActivityDetail>.from(activity.activityDetail)
       ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
-    final showDateRange = widget.activity.activityDateType == ActivityDateType.range;
+    final showDateRange = activity.activityDateType == ActivityDateType.range;
 
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            ActivityIcon(activity: widget.activity, size: 24),
+            ActivityIcon(activity: activity, size: 24),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                widget.activity.name,
+                activity.name,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -199,7 +257,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                   child: Row(
                     children: [
                       ActivityIcon(
-                        activity: widget.activity,
+                        activity: activity,
                         size: 48,
                       ),
                       const SizedBox(width: 16),
@@ -208,14 +266,14 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.activity.name,
+                              activity.name,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            if (widget.activity.activityCategory != null)
+                            if (activity.activityCategory != null)
                               Text(
-                                widget.activity.activityCategory!.name,
+                                activity.activityCategory!.name,
                                 style: theme.textTheme.bodySmall?.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
@@ -238,8 +296,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                         const SizedBox(height: 24),
 
                         // Subactivity selector
-                        if (widget.activity.subActivity.isNotEmpty) ...[
-                          SubActivitySelector(subActivities: widget.activity.subActivity),
+                        if (activity.subActivity.isNotEmpty) ...[
+                          SubActivitySelector(subActivities: activity.subActivity),
                           const SizedBox(height: 24),
                         ],
 
@@ -252,8 +310,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                         }),
 
                         // Pace display (if applicable)
-                        if (widget.activity.paceType != null) ...[
-                          PaceDisplay(paceType: widget.activity.paceType!),
+                        if (activity.paceType != null) ...[
+                          PaceDisplay(paceType: activity.paceType!),
                           const SizedBox(height: 24),
                         ],
 

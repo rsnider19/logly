@@ -3,7 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/application/catalog_service.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
 
 /// Displays a grid of selected favorite activities with placeholder slots.
@@ -59,7 +60,7 @@ class _SelectedActivityChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activityAsync = ref.watch(_activityByIdProvider(activityId));
+    final activityAsync = ref.watch(_activitySummaryByIdProvider(activityId));
 
     return activityAsync.when(
       data: (activity) => ActivityChip.filled(
@@ -80,7 +81,7 @@ class _EmptyPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActivityChip(
-      activity: Activity.empty(name: '          '),
+      activity: _emptySummary,
       showIcon: false,
     );
   }
@@ -93,7 +94,7 @@ class _LoadingPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActivityChip(
-      activity: Activity.empty(name: '          '),
+      activity: _emptySummary,
       showIcon: false,
     );
   }
@@ -106,15 +107,34 @@ class _ErrorPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActivityChip(
-      activity: Activity.empty(name: '          '),
+      activity: _emptySummary,
       showIcon: false,
     );
   }
 }
 
-/// Internal provider to fetch activity by ID for the chip display.
+const _emptySummary = ActivitySummary(
+  activityId: '',
+  activityCategoryId: '',
+  name: '          ',
+  activityCode: '',
+  activityDateType: ActivityDateType.single,
+);
+
+/// Internal provider to fetch activity summary by ID for chip display.
 // ignore: specify_nonobvious_property_types
-final _activityByIdProvider = FutureProvider.autoDispose.family<Activity, String>((ref, activityId) async {
+final _activitySummaryByIdProvider =
+    FutureProvider.autoDispose.family<ActivitySummary, String>((ref, activityId) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getActivityById(activityId);
+  final activity = await service.getActivityById(activityId);
+  return ActivitySummary(
+    activityId: activity.activityId,
+    activityCategoryId: activity.activityCategoryId,
+    name: activity.name,
+    activityCode: activity.activityCode,
+    description: activity.description,
+    activityDateType: activity.activityDateType,
+    isSuggestedFavorite: activity.isSuggestedFavorite,
+    activityCategory: activity.activityCategory,
+  );
 });

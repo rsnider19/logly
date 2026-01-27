@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
@@ -63,7 +64,7 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final selectedIdsAsync = ref.watch(onboardingFavoritesStateProvider);
-    final popularAsync = ref.watch(popularActivitiesProvider);
+    final popularAsync = ref.watch(popularActivitiesSummaryProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
 
     final selectedIds = switch (selectedIdsAsync) {
@@ -238,7 +239,7 @@ class _ActivityChipsWrap extends StatelessWidget {
     required this.onToggle,
   });
 
-  final List<Activity> activities;
+  final List<ActivitySummary> activities;
   final Set<String> selectedIds;
   final void Function(String activityId) onToggle;
 
@@ -278,7 +279,7 @@ class _CategorySection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final activitiesAsync = ref.watch(suggestedFavoritesByCategoryProvider(category.activityCategoryId));
+    final activitiesAsync = ref.watch(suggestedFavoritesByCategorySummaryProvider(category.activityCategoryId));
 
     return activitiesAsync.when(
       data: (activities) {
@@ -363,7 +364,7 @@ class _SelectedActivityChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activityAsync = ref.watch(_activityByIdProvider(activityId));
+    final activityAsync = ref.watch(_activitySummaryByIdProvider(activityId));
 
     return activityAsync.when(
       data: (activity) => ActivityChip.filled(
@@ -382,14 +383,31 @@ class _EmptyPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActivityChip(
-      activity: Activity.empty(name: '          '),
+      activity: ActivitySummary(
+        activityId: '',
+        activityCategoryId: '',
+        name: '          ',
+        activityCode: '',
+        activityDateType: ActivityDateType.single,
+      ),
       showIcon: false,
     );
   }
 }
 
-/// Provider to fetch activity by ID.
-final _activityByIdProvider = FutureProvider.autoDispose.family<Activity, String>((ref, activityId) async {
+/// Provider to fetch activity summary by ID.
+final _activitySummaryByIdProvider =
+    FutureProvider.autoDispose.family<ActivitySummary, String>((ref, activityId) async {
   final service = ref.watch(catalogServiceProvider);
-  return service.getActivityById(activityId);
+  final activity = await service.getActivityById(activityId);
+  return ActivitySummary(
+    activityId: activity.activityId,
+    activityCategoryId: activity.activityCategoryId,
+    name: activity.name,
+    activityCode: activity.activityCode,
+    description: activity.description,
+    activityDateType: activity.activityDateType,
+    isSuggestedFavorite: activity.isSuggestedFavorite,
+    activityCategory: activity.activityCategory,
+  );
 });

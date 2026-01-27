@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/routes.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
@@ -23,13 +23,12 @@ class CategoryDetailScreen extends ConsumerWidget {
   /// Optional initial date for logging activities.
   final DateTime? initialDate;
 
-  void _selectActivity(BuildContext context, Activity activity) {
+  void _selectActivity(BuildContext context, ActivitySummary activity) {
     // Replace entire modal stack with LogActivityScreen
     // This ensures save just pops once to return to initial screen
     LogActivityRoute(
       activityId: activity.activityId,
       date: initialDate?.toIso8601String(),
-      $extra: activity,
     ).go(context);
   }
 
@@ -37,7 +36,7 @@ class CategoryDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final categoryAsync = ref.watch(categoryByIdProvider(categoryId));
-    final activitiesAsync = ref.watch(activitiesByCategoryProvider(categoryId));
+    final activitiesAsync = ref.watch(activitiesByCategorySummaryProvider(categoryId));
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +104,7 @@ class CategoryDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () => ref.invalidate(activitiesByCategoryProvider(categoryId)),
+                onPressed: () => ref.invalidate(activitiesByCategorySummaryProvider(categoryId)),
                 child: const Text('Retry'),
               ),
             ],

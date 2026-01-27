@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
@@ -57,7 +57,7 @@ class _FavoritesSelectionScreenState extends ConsumerState<FavoritesSelectionScr
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final selectedIdsAsync = ref.watch(onboardingFavoritesStateProvider);
-    final popularAsync = ref.watch(popularActivitiesProvider);
+    final popularAsync = ref.watch(popularActivitiesSummaryProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
 
     final selectedIds = switch (selectedIdsAsync) {
@@ -199,7 +199,7 @@ class _ActivityChipsWrap extends StatelessWidget {
     required this.onToggle,
   });
 
-  final List<Activity> activities;
+  final List<ActivitySummary> activities;
   final Set<String> selectedIds;
   final void Function(String activityId) onToggle;
 
@@ -238,7 +238,7 @@ class _CategorySection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final activitiesAsync = ref.watch(suggestedFavoritesByCategoryProvider(category.activityCategoryId));
+    final activitiesAsync = ref.watch(suggestedFavoritesByCategorySummaryProvider(category.activityCategoryId));
 
     return activitiesAsync.when(
       data: (activities) {
