@@ -43,8 +43,14 @@ abstract class UserActivity with _$UserActivity {
     activityNameOverride: name,
   );
 
-  /// Returns the effective display name, using override if set.
-  String get displayName => activityNameOverride ?? activity?.name ?? 'Unknown Activity';
+  /// Returns the effective display name.
+  ///
+  /// Priority: activityNameOverride > single subactivity name > activity name.
+  String get displayName =>
+      activityNameOverride ??
+      (subActivity.length == 1 ? subActivity.first.name : null) ??
+      activity?.name ??
+      'Unknown Activity';
 
   /// Returns the effective color from the activity or its category.
   Color getColor(BuildContext context) => activity?.getColor(context) ?? Theme.of(context).colorScheme.onSurface;
