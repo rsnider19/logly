@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
@@ -10,7 +11,7 @@ import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
 ///
 /// Activities are displayed as outlined chips in a scrollable Wrap.
 /// Selecting an activity replaces the entire modal stack with LogActivityScreen.
-class CategoryDetailScreen extends ConsumerWidget {
+class CategoryDetailScreen extends ConsumerStatefulWidget {
   const CategoryDetailScreen({
     required this.categoryId,
     this.initialDate,
@@ -23,20 +24,45 @@ class CategoryDetailScreen extends ConsumerWidget {
   /// Optional initial date for logging activities.
   final DateTime? initialDate;
 
-  void _selectActivity(BuildContext context, ActivitySummary activity) {
+  @override
+  ConsumerState<CategoryDetailScreen> createState() => _CategoryDetailScreenState();
+}
+
+class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
+  late DateTime _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.initialDate ?? DateTime.now();
+  }
+
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
+  void _selectActivity(ActivitySummary activity) {
     // Replace entire modal stack with LogActivityScreen
     // This ensures save just pops once to return to initial screen
     LogActivityRoute(
       activityId: activity.activityId,
-      date: initialDate?.toIso8601String(),
+      date: _selectedDate.toIso8601String(),
     ).pushReplacement(context);
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final categoryAsync = ref.watch(categoryByIdProvider(categoryId));
-    final activitiesAsync = ref.watch(activitiesByCategorySummaryProvider(categoryId));
+    final categoryAsync = ref.watch(categoryByIdProvider(widget.categoryId));
+    final activitiesAsync = ref.watch(activitiesByCategorySummaryProvider(widget.categoryId));
 
     return Scaffold(
       appBar: AppBar(
@@ -45,6 +71,12 @@ class CategoryDetailScreen extends ConsumerWidget {
           loading: () => const Text('Loading...'),
           error: (_, __) => const Text('Category'),
         ),
+        actions: [
+          TextButton(
+            onPressed: _pickDate,
+            child: Text(DateFormat.yMMMd().format(_selectedDate)),
+          ),
+        ],
       ),
       body: activitiesAsync.when(
         data: (activities) {
@@ -80,7 +112,7 @@ class CategoryDetailScreen extends ConsumerWidget {
                   return ActivityChip(
                     activity: activity,
                     showIcon: false,
-                    onPressed: () => _selectActivity(context, activity),
+                    onPressed: () => _selectActivity(activity),
                   );
                 }).toList(),
               ),
@@ -104,7 +136,7 @@ class CategoryDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () => ref.invalidate(activitiesByCategorySummaryProvider(categoryId)),
+                onPressed: () => ref.invalidate(activitiesByCategorySummaryProvider(widget.categoryId)),
                 child: const Text('Retry'),
               ),
             ],

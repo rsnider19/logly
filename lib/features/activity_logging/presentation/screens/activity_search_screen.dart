@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
@@ -32,12 +33,14 @@ class ActivitySearchScreen extends ConsumerStatefulWidget {
 
 class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
   late TextEditingController _searchController;
+  late DateTime _selectedDate;
   final FocusNode _searchFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _selectedDate = widget.initialDate ?? DateTime.now();
   }
 
   @override
@@ -56,19 +59,31 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     ref.read(searchQueryProvider.notifier).clear();
   }
 
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() => _selectedDate = picked);
+    }
+  }
+
   void _selectActivity(ActivitySummary activity) {
     // Use push replacement to navigate to LogActivityScreen
     // This replaces the search screen so save just pops once
     LogActivityRoute(
       activityId: activity.activityId,
-      date: widget.initialDate?.toIso8601String(),
+      date: _selectedDate.toIso8601String(),
     ).pushReplacement(context);
   }
 
   void _navigateToCategory(ActivityCategory category) {
     CategoryDetailRoute(
       categoryId: category.activityCategoryId,
-      date: widget.initialDate?.toIso8601String(),
+      date: _selectedDate.toIso8601String(),
     ).pushReplacement(context);
   }
 
@@ -85,6 +100,12 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log Activity'),
+        actions: [
+          TextButton(
+            onPressed: _pickDate,
+            child: Text(DateFormat.yMMMd().format(_selectedDate)),
+          ),
+        ],
       ),
       body: Column(
         children: [
