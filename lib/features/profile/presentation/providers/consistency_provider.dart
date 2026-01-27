@@ -17,7 +17,7 @@ Future<int> consistencyScore(Ref ref) async {
   final userJoinedDate = profile.createdAt.date;
 
   final startDate = userJoinedDate.isBefore(thirtyDaysAgo) ? thirtyDaysAgo : userJoinedDate;
-  final daysInPeriod = DateTime.now().date.difference(startDate).inDays.coerceAtLeast(1);
+  final daysInPeriod = DateTime.now().date.difference(startDate).inDays.coerceAtLeast(1) + 1;
 
   final activeDays = data
       .where((e) => !e.activityDate.isBefore(startDate))
