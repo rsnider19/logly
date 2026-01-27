@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
+import 'package:logly/widgets/skeleton_loader.dart';
 
 /// Card displaying current and longest streak information.
 class StreakCard extends ConsumerWidget {
@@ -13,22 +16,31 @@ class StreakCard extends ConsumerWidget {
     final streakAsync = ref.watch(streakProvider);
     final consistencyAsync = ref.watch(consistencyScoreProvider);
 
+    if (streakAsync is AsyncError) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: _StreakError(onRetry: () => ref.invalidate(streakProvider)),
+      );
+    }
+    if (consistencyAsync is AsyncError) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: _StreakError(onRetry: () => ref.invalidate(consistencyScoreProvider)),
+      );
+    }
+
+    final isLoading = streakAsync is! AsyncData || consistencyAsync is! AsyncData;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: switch ((streakAsync, consistencyAsync)) {
-        (AsyncData(:final value), AsyncData(value: final consistencyScore)) => _StreakContent(
-          currentStreak: value.currentStreak,
-          longestStreak: value.longestStreak,
-          consistencyScore: consistencyScore,
+      child: SkellyWrapper(
+        isLoading: isLoading,
+        child: _StreakContent(
+          currentStreak: streakAsync.value?.currentStreak ?? 0,
+          longestStreak: streakAsync.value?.longestStreak ?? 0,
+          consistencyScore: consistencyAsync.value ?? 0,
         ),
-        (AsyncError(), _) => _StreakError(
-          onRetry: () => ref.invalidate(streakProvider),
-        ),
-        (_, AsyncError()) => _StreakError(
-          onRetry: () => ref.invalidate(consistencyScoreProvider),
-        ),
-        _ => const _StreakContentShimmer(),
-      },
+      ),
     );
   }
 }
@@ -62,6 +74,7 @@ class _StreakContentState extends State<_StreakContent> {
             icon: Icons.local_fire_department,
             iconColor: Colors.orange,
             autoSizeGroup: autoSizeGroup,
+            placeholderText: '888',
           ),
         ),
         const SizedBox(width: 16),
@@ -72,6 +85,7 @@ class _StreakContentState extends State<_StreakContent> {
             icon: Icons.emoji_events,
             iconColor: Colors.amber,
             autoSizeGroup: autoSizeGroup,
+            placeholderText: '888',
           ),
         ),
         const SizedBox(width: 16),
@@ -83,6 +97,7 @@ class _StreakContentState extends State<_StreakContent> {
             iconColor: Colors.teal,
             suffix: '%',
             autoSizeGroup: autoSizeGroup,
+            placeholderText: '88%',
           ),
         ),
       ],
@@ -97,6 +112,7 @@ class _StreakStatBox extends StatelessWidget {
     required this.icon,
     required this.iconColor,
     required this.autoSizeGroup,
+    required this.placeholderText,
     this.suffix,
   });
 
@@ -106,6 +122,7 @@ class _StreakStatBox extends StatelessWidget {
   final Color iconColor;
   final String? suffix;
   final AutoSizeGroup autoSizeGroup;
+  final String placeholderText;
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +144,11 @@ class _StreakStatBox extends StatelessWidget {
             displayValue,
             style: theme.textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
+              fontFeatures: [
+                const FontFeature.tabularFigures(),
+              ],
             ),
-          ),
+          ).withSkeleton(placeholderText: placeholderText),
           AutoSizeText(
             displayLabel,
             maxLines: 1,
@@ -138,38 +158,6 @@ class _StreakStatBox extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StreakContentShimmer extends StatelessWidget {
-  const _StreakContentShimmer();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: _ShimmerBox()),
-        const SizedBox(width: 12),
-        Expanded(child: _ShimmerBox()),
-        const SizedBox(width: 12),
-        Expanded(child: _ShimmerBox()),
-      ],
-    );
-  }
-}
-
-class _ShimmerBox extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Container(
-      height: 110,
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
       ),
     );
   }
