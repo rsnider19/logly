@@ -28,5 +28,9 @@ class $EnvGen {
 class Assets {
   const Assets._();
 
+  static const String logoLight = 'assets/logo-light.svg';
   static const $EnvGen env = $EnvGen();
+
+  /// List of all assets
+  static List<String> get values => [logoLight];
 }
