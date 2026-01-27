@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:logly/gen/assets.gen.dart';
 
 /// Custom bottom navigation bar with profile, home, and log buttons.
 ///
@@ -45,7 +47,7 @@ class CustomBottomNav extends ConsumerWidget {
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
                 child: CircleAvatar(
-                  radius: 18,
+                  radius: 20,
                   backgroundColor: theme.colorScheme.primaryContainer,
                   backgroundImage: user?.userMetadata?['avatar_url'] != null
                       ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
@@ -64,10 +66,9 @@ class CustomBottomNav extends ConsumerWidget {
               _NavButton(
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
-                child: Icon(
-                  Icons.home,
-                  size: 32,
-                  color: currentIndex == 1 ? theme.colorScheme.primary : theme.colorScheme.onSurfaceVariant,
+                child: SvgPicture.asset(
+                  Assets.logoLight,
+                  height: 28,
                 ),
               ),
 
@@ -79,7 +80,7 @@ class CustomBottomNav extends ConsumerWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
+                    shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.add,
