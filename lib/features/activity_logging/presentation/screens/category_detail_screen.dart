@@ -29,7 +29,7 @@ class CategoryDetailScreen extends ConsumerWidget {
     LogActivityRoute(
       activityId: activity.activityId,
       date: initialDate?.toIso8601String(),
-    ).go(context);
+    ).pushReplacement(context);
   }
 
   @override

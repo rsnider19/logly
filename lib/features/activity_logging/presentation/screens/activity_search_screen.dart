@@ -69,7 +69,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     CategoryDetailRoute(
       categoryId: category.activityCategoryId,
       date: widget.initialDate?.toIso8601String(),
-    ).push<void>(context);
+    ).pushReplacement(context);
   }
 
   @override
