@@ -61,7 +61,6 @@ class ActivityIcon extends StatelessWidget {
     required this.activity,
     this.size = 24,
     this.fit = BoxFit.cover,
-    this.borderRadius,
     this.color,
     super.key,
   });
@@ -69,38 +68,31 @@ class ActivityIcon extends StatelessWidget {
   final Activity activity;
   final double size;
   final BoxFit fit;
-  final BorderRadius? borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
-
-    return ClipRRect(
-      borderRadius: effectiveBorderRadius,
-      child: CachedNetworkImage(
-        imageUrl: activity.icon,
-        width: size,
-        height: size,
-        fit: fit,
-        placeholder: (context, url) => SizedBox(width: size, height: size),
-        errorWidget: (context, url, error) {
-          if (activity.activityCategory != null) {
-            return ActivityCategoryIcon(
-              activityCategory: activity.activityCategory!,
-              size: size,
-              fit: fit,
-              borderRadius: effectiveBorderRadius,
-              color: color,
-            );
-          }
-          return Icon(
-            Icons.category_outlined,
+    return CachedNetworkImage(
+      imageUrl: activity.icon,
+      width: size,
+      height: size,
+      fit: fit,
+      placeholder: (context, url) => SizedBox(width: size, height: size),
+      errorWidget: (context, url, error) {
+        if (activity.activityCategory != null) {
+          return ActivityCategoryIcon(
+            activityCategory: activity.activityCategory!,
             size: size,
+            fit: fit,
             color: color,
           );
-        },
-      ),
+        }
+        return Icon(
+          Icons.category_outlined,
+          size: size,
+          color: color,
+        );
+      },
     );
   }
 }
@@ -166,7 +158,6 @@ class SubActivityIcon extends StatelessWidget {
     this.fallbackActivity,
     this.size = 24,
     this.fit = BoxFit.cover,
-    this.borderRadius,
     this.color,
     super.key,
   });
@@ -175,15 +166,12 @@ class SubActivityIcon extends StatelessWidget {
   final Activity? fallbackActivity;
   final double size;
   final BoxFit fit;
-  final BorderRadius? borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
-
     return ClipRRect(
-      borderRadius: effectiveBorderRadius,
+      borderRadius: BorderRadius.circular(size / 2),
       child: CachedNetworkImage(
         imageUrl: subActivity.icon,
         width: size,
@@ -196,7 +184,6 @@ class SubActivityIcon extends StatelessWidget {
               activity: fallbackActivity!,
               size: size,
               fit: fit,
-              borderRadius: effectiveBorderRadius,
               color: color,
             );
           }
@@ -222,7 +209,6 @@ class UserActivityIcon extends StatelessWidget {
     required this.userActivity,
     this.size = 24,
     this.fit = BoxFit.cover,
-    this.borderRadius,
     this.color,
     super.key,
   });
@@ -230,22 +216,17 @@ class UserActivityIcon extends StatelessWidget {
   final UserActivity userActivity;
   final double size;
   final BoxFit fit;
-  final BorderRadius? borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
     final activity = userActivity.activity;
 
     // No activity -> generic icon
     if (activity == null) {
-      return ClipRRect(
-        borderRadius: effectiveBorderRadius,
-        child: Icon(
-          Icons.category_outlined,
-          size: size,
-        ),
+      return Icon(
+        Icons.category_outlined,
+        size: size,
       );
     }
 
@@ -256,7 +237,6 @@ class UserActivityIcon extends StatelessWidget {
         fallbackActivity: activity,
         size: size,
         fit: fit,
-        borderRadius: effectiveBorderRadius,
         color: color,
       );
     }
@@ -266,7 +246,6 @@ class UserActivityIcon extends StatelessWidget {
       activity: activity,
       size: size,
       fit: fit,
-      borderRadius: effectiveBorderRadius,
       color: color,
     );
   }
