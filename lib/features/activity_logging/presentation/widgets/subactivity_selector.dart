@@ -6,7 +6,8 @@ import 'package:logly/features/activity_logging/presentation/providers/activity_
 /// Multi-select chip list for choosing subactivities.
 ///
 /// Uses [ActivityFormStateNotifier.toggleSubActivity] to update selection.
-class SubActivitySelector extends ConsumerWidget {
+/// Displayed in a collapsible section that is collapsed by default.
+class SubActivitySelector extends ConsumerStatefulWidget {
   const SubActivitySelector({
     required this.subActivities,
     super.key,
@@ -15,42 +16,106 @@ class SubActivitySelector extends ConsumerWidget {
   final List<SubActivity> subActivities;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SubActivitySelector> createState() => _SubActivitySelectorState();
+}
+
+class _SubActivitySelectorState extends ConsumerState<SubActivitySelector> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final formState = ref.watch(activityFormStateProvider);
     final selectedIds = formState.selectedSubActivityIds;
+    final activityColor = formState.activity?.getColor(context);
 
-    if (subActivities.isEmpty) {
+    if (widget.subActivities.isEmpty) {
       return const SizedBox.shrink();
     }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Type',
-          style: theme.textTheme.titleSmall,
+        InkWell(
+          onTap: () => setState(() => _isExpanded = !_isExpanded),
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Type',
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                ),
+                Icon(
+                  _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+              ],
+            ),
+          ),
         ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: subActivities.map((subActivity) {
-            final isSelected = selectedIds.contains(subActivity.subActivityId);
-            return FilterChip(
-              label: Text(subActivity.name),
-              selected: isSelected,
-              onSelected: (_) {
-                ref.read(activityFormStateProvider.notifier).toggleSubActivity(
-                      subActivity.subActivityId,
-                    );
-              },
-              showCheckmark: true,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            );
-          }).toList(),
+        AnimatedCrossFade(
+          firstChild: const SizedBox.shrink(),
+          secondChild: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: widget.subActivities.map((subActivity) {
+                final isSelected = selectedIds.contains(subActivity.subActivityId);
+                return SubActivityChip(
+                  subActivity: subActivity,
+                  isSelected: isSelected,
+                  selectedColor: activityColor,
+                  onPressed: () {
+                    ref.read(activityFormStateProvider.notifier).toggleSubActivity(
+                          subActivity.subActivityId,
+                        );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          crossFadeState: _isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 200),
         ),
       ],
+    );
+  }
+}
+
+/// A chip displaying a subactivity name.
+///
+/// Filled with activity color when selected, outlined when not selected.
+class SubActivityChip extends StatelessWidget {
+  const SubActivityChip({
+    required this.subActivity,
+    required this.isSelected,
+    this.selectedColor,
+    this.onPressed,
+    super.key,
+  });
+
+  final SubActivity subActivity;
+  final bool isSelected;
+  final Color? selectedColor;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ActionChip(
+      label: Text(subActivity.name),
+      shape: const StadiumBorder(),
+      backgroundColor: isSelected ? selectedColor : null,
+      side: BorderSide(
+        color: theme.colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.25)),
+      ),
+      onPressed: onPressed,
     );
   }
 }
