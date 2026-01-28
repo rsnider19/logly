@@ -463,6 +463,58 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
     );
   }
 
+  /// Prepares a [PendingUpdateRequest] for optimistic editing if applicable.
+  ///
+  /// Returns `null` if not editing or has no activity,
+  /// in which case the caller should fall back to the synchronous [submit] flow.
+  PendingUpdateRequest? prepareOptimisticUpdate() {
+    if (!state.isEditing || state.activity == null || state.existingUserActivity == null) {
+      return null;
+    }
+
+    final activity = state.activity!;
+    final existing = state.existingUserActivity!;
+
+    final activityDate = DateTime(
+      state.activityDate.year,
+      state.activityDate.month,
+      state.activityDate.day,
+    );
+
+    final details =
+        state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
+
+    final updatePayload = UpdateUserActivity(
+      userActivityId: existing.userActivityId,
+      activityTimestamp: state.activityDate,
+      activityDate: activityDate,
+      comments: state.comments,
+      activityNameOverride: state.activityNameOverride,
+      subActivityIds: state.selectedSubActivityIds.toList(),
+      details: details,
+    );
+
+    // Resolve selected SubActivity objects from the activity's subactivities
+    final selectedSubActivities = activity.subActivity
+        .where((s) => state.selectedSubActivityIds.contains(s.subActivityId))
+        .toList();
+
+    // Build the optimistic entry reflecting edited values
+    final optimisticEntry = existing.copyWith(
+      activityTimestamp: state.activityDate,
+      comments: state.comments,
+      activityNameOverride: state.activityNameOverride,
+      activity: activity,
+      subActivity: selectedSubActivities,
+    );
+
+    return PendingUpdateRequest(
+      updateUserActivity: updatePayload,
+      originalEntry: existing,
+      optimisticEntry: optimisticEntry,
+    );
+  }
+
   /// Submits the form.
   ///
   /// Returns a [SubmitResult] indicating success, partial success, or failure.

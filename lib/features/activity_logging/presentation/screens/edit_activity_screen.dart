@@ -11,6 +11,7 @@ import 'package:logly/features/activity_logging/application/activity_logging_ser
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
+import 'package:logly/features/activity_logging/presentation/providers/pending_save_provider.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_picker_field.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_range_picker.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/distance_input.dart';
@@ -86,6 +87,25 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
 
   Future<void> _saveActivity() async {
     final notifier = ref.read(activityFormStateProvider.notifier);
+
+    // Try optimistic update first
+    final request = notifier.prepareOptimisticUpdate();
+    if (request != null) {
+      ref.read(pendingSaveStateProvider.notifier).submitOptimisticUpdate(request);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Activity updated'),
+            behavior: SnackBarBehavior.floating,
+            duration: Duration(seconds: 1),
+          ),
+        );
+        context.pop(true);
+      }
+      return;
+    }
+
+    // Fallback to sync save
     final result = await notifier.submit();
 
     if (!mounted) return;
