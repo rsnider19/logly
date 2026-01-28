@@ -73,7 +73,7 @@ final class ActivitiesByCategorySummaryProvider
 }
 
 String _$activitiesByCategorySummaryHash() =>
-    r'fe46816f38dd83e5be451b9b411e79b98731725b';
+    r'aa1faa966e9cf5bb0242a95eb9f0024fb2125d71';
 
 /// Provides activity summaries for a specific category (lightweight, for chips/lists).
 

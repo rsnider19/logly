@@ -136,7 +136,7 @@ final class EffectiveSelectedFiltersProvider
 }
 
 String _$effectiveSelectedFiltersHash() =>
-    r'78dfbfde1dcc865949b6c31020b89ba6284f74bf';
+    r'6b0fe4947b992276a0d853c212d26aedf44de3f0';
 
 /// Provides monthly chart data for all categories.
 ///
@@ -238,4 +238,4 @@ final class FilteredMonthlyChartDataProvider
 }
 
 String _$filteredMonthlyChartDataHash() =>
-    r'aa7401a63bf0c1ab81d96b1b675f6ad2dff601d6';
+    r'5f1d1eb541353259c23517ae8651186123c65ed1';

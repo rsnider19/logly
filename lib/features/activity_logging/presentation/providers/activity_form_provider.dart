@@ -9,6 +9,7 @@ import 'package:logly/features/activity_logging/domain/environment_type.dart';
 import 'package:logly/features/activity_logging/domain/log_multi_day_result.dart';
 import 'package:logly/features/activity_logging/domain/update_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
+import 'package:logly/features/activity_logging/presentation/providers/pending_save_provider.dart';
 import 'package:logly/features/home/presentation/providers/daily_activities_provider.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
 import 'package:logly/features/profile/presentation/providers/contribution_provider.dart';
@@ -416,6 +417,50 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       // Monthly chart watches this
       ref.refresh(filteredMonthlyChartDataProvider.future),
     ]);
+  }
+
+  /// Prepares a [PendingSaveRequest] for optimistic saving if applicable.
+  ///
+  /// Returns `null` if the form is editing, multi-day, or has no activity,
+  /// in which case the caller should fall back to the synchronous [submit] flow.
+  PendingSaveRequest? prepareOptimisticSave(String userId) {
+    if (state.activity == null || state.isEditing || state.isMultiDay) {
+      return null;
+    }
+
+    final activity = state.activity!;
+    final activityDate = DateTime(
+      state.activityDate.year,
+      state.activityDate.month,
+      state.activityDate.day,
+    );
+
+    final details = state.detailValues.values
+        .where((d) => d.hasValue)
+        .map((d) => d.toCreateDetail())
+        .toList();
+
+    final createUserActivity = CreateUserActivity(
+      activityId: activity.activityId,
+      activityTimestamp: state.activityDate,
+      activityDate: activityDate,
+      comments: state.comments,
+      activityNameOverride: state.activityNameOverride,
+      subActivityIds: state.selectedSubActivityIds.toList(),
+      details: details,
+    );
+
+    // Resolve selected SubActivity objects from the activity's subactivities
+    final selectedSubActivities = activity.subActivity
+        .where((s) => state.selectedSubActivityIds.contains(s.subActivityId))
+        .toList();
+
+    return PendingSaveRequest(
+      activity: activity,
+      createUserActivity: createUserActivity,
+      userId: userId,
+      selectedSubActivities: selectedSubActivities,
+    );
   }
 
   /// Submits the form.

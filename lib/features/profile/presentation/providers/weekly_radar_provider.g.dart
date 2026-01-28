@@ -178,7 +178,7 @@ final class FilteredWeeklyRadarDataProvider
 }
 
 String _$filteredWeeklyRadarDataHash() =>
-    r'f6f57ca7068b0bafd6799f6dbff6a2885b4178dd';
+    r'7c36ee2bb2fc19284613796cbccdecad72104b85';
 
 /// Provides normalized radar data (0-100%) per category.
 ///

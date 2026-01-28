@@ -45,7 +45,7 @@ final class ActivityFormStateNotifierProvider
 }
 
 String _$activityFormStateNotifierHash() =>
-    r'55c46f6d77546e6bef76758f8a7fbbfe8c54c778';
+    r'82243b6c6c1257e6e7a543b512b7803147882571';
 
 /// State notifier for managing the activity logging form.
 

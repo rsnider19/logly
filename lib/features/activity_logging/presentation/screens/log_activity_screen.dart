@@ -10,6 +10,7 @@ import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
+import 'package:logly/features/activity_logging/presentation/providers/pending_save_provider.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_picker_field.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_range_picker.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/distance_input.dart';
@@ -20,6 +21,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
+import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for logging a new activity.
@@ -72,6 +74,28 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
   Future<void> _saveActivity() async {
     final notifier = ref.read(activityFormStateProvider.notifier);
+
+    // Try optimistic save for single-day creates
+    final currentUser = ref.read(currentUserProvider);
+    if (currentUser != null) {
+      final request = notifier.prepareOptimisticSave(currentUser.id);
+      if (request != null) {
+        ref.read(pendingSaveStateProvider.notifier).submitOptimistic(request);
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Activity logged'),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(seconds: 1),
+            ),
+          );
+          context.pop(true);
+        }
+        return;
+      }
+    }
+
+    // Fallback: synchronous save for edits / multi-day / no user
     final result = await notifier.submit();
 
     if (!mounted) return;
