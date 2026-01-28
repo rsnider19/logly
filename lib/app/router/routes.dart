@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/activity_logging/presentation/screens/activity_search_screen.dart';
+import 'package:logly/features/activity_logging/presentation/screens/activity_statistics_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/category_detail_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
@@ -212,6 +213,43 @@ class CategoryDetailRoute extends GoRouteData with $CategoryDetailRoute {
     return CategoryDetailScreen(
       categoryId: categoryId,
       initialDate: initialDate,
+    );
+  }
+}
+
+/// Activity statistics route - view monthly statistics for an activity.
+@TypedGoRoute<ActivityStatisticsRoute>(path: '/activities/statistics/:activityId')
+class ActivityStatisticsRoute extends GoRouteData with $ActivityStatisticsRoute {
+  const ActivityStatisticsRoute({
+    required this.activityId,
+    this.activityName,
+    this.initialMonth,
+    this.colorHex,
+  });
+
+  /// The ID of the activity to show statistics for.
+  final String activityId;
+
+  /// The display name of the activity.
+  final String? activityName;
+
+  /// Optional initial month to display (ISO 8601 string).
+  final String? initialMonth;
+
+  /// The hex color of the activity category (e.g. "#FF5733").
+  final String? colorHex;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    DateTime? parsedMonth;
+    if (initialMonth != null) {
+      parsedMonth = DateTime.tryParse(initialMonth!);
+    }
+    return ActivityStatisticsScreen(
+      activityId: activityId,
+      activityName: activityName ?? 'Statistics',
+      initialMonth: parsedMonth,
+      colorHex: colorHex,
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
@@ -254,6 +255,18 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
           ],
         ),
         actions: [
+          IconButton(
+            onPressed: () {
+              ActivityStatisticsRoute(
+                activityId: activity.activityId,
+                activityName: activity.name,
+                initialMonth: _userActivity!.activityTimestamp.toIso8601String(),
+                colorHex: activity.activityCategory?.hexColor,
+              ).go(context);
+            },
+            icon: const Icon(Icons.query_stats),
+            tooltip: 'View statistics',
+          ),
           IconButton(
             onPressed: _toggleFavorite,
             icon: Icon(
