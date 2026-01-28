@@ -89,6 +89,31 @@ class UserActivityRepository {
     }
   }
 
+  /// Fetches user activities for a specific activity within a date range.
+  Future<List<UserActivity>> getByActivityIdAndDateRange(
+    String activityId,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    try {
+      final start = DateTime(startDate.year, startDate.month, startDate.day);
+      final end = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
+
+      final response = await _supabase
+          .from('user_activity')
+          .select(_selectWithRelations)
+          .eq('activity_id', activityId)
+          .gte('activity_timestamp', start.toIso8601String())
+          .lt('activity_timestamp', end.toIso8601String())
+          .order('activity_timestamp', ascending: false);
+
+      return (response as List).map((e) => UserActivity.fromJson(e as Map<String, dynamic>)).toList();
+    } catch (e, st) {
+      _logger.e('Failed to fetch user activities for activity $activityId in range $startDate - $endDate', e, st);
+      throw FetchUserActivitiesException(e.toString());
+    }
+  }
+
   /// Fetches user activities for a specific activity.
   Future<List<UserActivity>> getByActivityId(String activityId) async {
     try {

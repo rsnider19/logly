@@ -15,6 +15,7 @@ List<RouteBase> get $appRoutes => [
   $activitySearchRoute,
   $logActivityRoute,
   $categoryDetailRoute,
+  $activityStatisticsRoute,
   $editActivityRoute,
   $developerRoute,
 ];
@@ -288,6 +289,46 @@ mixin $CategoryDetailRoute on GoRouteData {
   String get location => GoRouteData.$location(
     '/activities/category/${Uri.encodeComponent(_self.categoryId)}',
     queryParams: {if (_self.date != null) 'date': _self.date},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $activityStatisticsRoute => GoRouteData.$route(
+  path: '/activities/statistics/:activityId',
+  factory: $ActivityStatisticsRoute._fromState,
+);
+
+mixin $ActivityStatisticsRoute on GoRouteData {
+  static ActivityStatisticsRoute _fromState(GoRouterState state) =>
+      ActivityStatisticsRoute(
+        activityId: state.pathParameters['activityId']!,
+        activityName: state.uri.queryParameters['activity-name'],
+        initialMonth: state.uri.queryParameters['initial-month'],
+        colorHex: state.uri.queryParameters['color-hex'],
+      );
+
+  ActivityStatisticsRoute get _self => this as ActivityStatisticsRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/activities/statistics/${Uri.encodeComponent(_self.activityId)}',
+    queryParams: {
+      if (_self.activityName != null) 'activity-name': _self.activityName,
+      if (_self.initialMonth != null) 'initial-month': _self.initialMonth,
+      if (_self.colorHex != null) 'color-hex': _self.colorHex,
+    },
   );
 
   @override

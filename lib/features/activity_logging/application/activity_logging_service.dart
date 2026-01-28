@@ -48,6 +48,21 @@ class ActivityLoggingService {
     return _userActivityRepository.getByDateRange(startDate, endDate);
   }
 
+  /// Fetches user activities for a specific activity within a date range.
+  Future<List<UserActivity>> getUserActivitiesByActivityIdAndDateRange(
+    String activityId,
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    if (activityId.isEmpty) {
+      throw const ActivityLoggingValidationException('Activity ID cannot be empty');
+    }
+    if (endDate.isBefore(startDate)) {
+      throw const ActivityLoggingValidationException('End date must be after start date');
+    }
+    return _userActivityRepository.getByActivityIdAndDateRange(activityId, startDate, endDate);
+  }
+
   /// Fetches user activities for a specific activity type.
   Future<List<UserActivity>> getUserActivitiesByActivityId(String activityId) async {
     if (activityId.isEmpty) {
