@@ -62,24 +62,24 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
           style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
-        TextField(
-          controller: _controller,
-          enabled: hasAccess,
-          maxLength: 50,
-          decoration: InputDecoration(
-            hintText: 'e.g. Morning Run',
-            border: const OutlineInputBorder(),
-            counterText: hasAccess ? null : '',
-            suffixIcon: hasAccess
-                ? null
-                : IconButton(
-                    icon: const Icon(Icons.lock_outline),
-                    onPressed: _showPaywall,
-                    tooltip: 'Premium feature',
-                  ),
-          ),
-          onChanged: hasAccess ? _onChanged : null,
+        GestureDetector(
+          behavior: !hasAccess ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
           onTap: hasAccess ? null : () => unawaited(_showPaywall()),
+          child: IgnorePointer(
+            ignoring: !hasAccess,
+            child: TextField(
+              controller: _controller,
+              enabled: hasAccess,
+              maxLength: 50,
+              decoration: InputDecoration(
+                hintText: 'e.g. Morning Run',
+                border: const OutlineInputBorder(),
+                counterText: hasAccess ? null : '',
+                suffixIcon: hasAccess ? null : const Icon(Icons.lock_outline),
+              ),
+              onChanged: hasAccess ? _onChanged : null,
+            ),
+          ),
         ),
       ],
     );
