@@ -6,6 +6,8 @@ import 'package:logly/widgets/logly_icons.dart';
 /// A chip displaying a logged activity with icon and name.
 ///
 /// Tapping the chip navigates to the edit activity screen.
+/// Shows a loading state with spinner when the activity is optimistically
+/// added (userActivityId starts with 'optimistic_').
 class UserActivityChip extends StatelessWidget {
   const UserActivityChip({
     required this.userActivity,
@@ -16,19 +18,38 @@ class UserActivityChip extends StatelessWidget {
   final UserActivity userActivity;
   final VoidCallback? onPressed;
 
+  bool get _isPending => userActivity.userActivityId.startsWith('optimistic_');
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = userActivity.getColor(context);
+
     return ActionChip(
-      avatar: UserActivityIcon(userActivity: userActivity),
-      label: Text(userActivity.displayName),
+      avatar: _isPending
+          ? SizedBox(
+              width: 18,
+              height: 18,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            )
+          : UserActivityIcon(userActivity: userActivity),
+      label: Text(
+        userActivity.displayName,
+        style: _isPending
+            ? TextStyle(color: theme.colorScheme.onSurfaceVariant)
+            : null,
+      ),
       shape: const StadiumBorder(),
-      backgroundColor: userActivity.getColor(context),
+      backgroundColor: _isPending ? theme.colorScheme.surfaceContainerHighest : color,
       side: BorderSide(
-        color: Theme.of(context).colorScheme.onSurface.withAlpha(
+        color: theme.colorScheme.onSurface.withAlpha(
           Color.getAlphaFromOpacity(0.25),
         ),
       ),
-      onPressed: onPressed,
+      onPressed: _isPending ? null : onPressed,
     );
   }
 }
