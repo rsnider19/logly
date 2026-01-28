@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/app_router.dart';
+import 'package:logly/core/providers/scaffold_messenger_provider.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
@@ -33,6 +34,7 @@ class _AppState extends ConsumerState<App> {
     final themeMode = ref.watch(currentThemeModeProvider);
 
     return MaterialApp.router(
+      scaffoldMessengerKey: scaffoldMessengerKey,
       title: 'Logly',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
