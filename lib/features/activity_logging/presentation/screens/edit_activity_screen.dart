@@ -20,6 +20,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/numeric_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/custom_name_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
 import 'package:logly/widgets/logly_icons.dart';
 
@@ -298,6 +299,11 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                 children: [
                   // Date picker
                   if (showDateRange) const DateRangePicker() else const DatePickerField(),
+
+                  const SizedBox(height: 24),
+
+                  // Custom name
+                  CustomNameInput(initialValue: _userActivity!.activityNameOverride),
 
                   const SizedBox(height: 24),
 
