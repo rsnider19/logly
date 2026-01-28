@@ -242,18 +242,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            ActivityIcon(activity: activity),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                'Edit ${activity.name}',
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
@@ -262,7 +251,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                 activityName: activity.name,
                 initialMonth: _userActivity!.activityTimestamp.toIso8601String(),
                 colorHex: activity.activityCategory?.hexColor,
-              ).push(context);
+              ).push<void>(context);
             },
             icon: const Icon(Icons.query_stats),
             tooltip: 'View statistics',
@@ -289,46 +278,16 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Activity header
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: activityColor.withValues(alpha: 0.1),
-              border: Border(
-                bottom: BorderSide(
-                  color: activityColor.withValues(alpha: 0.3),
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              _userActivity!.displayName,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-            ),
-            child: Row(
-              children: [
-                ActivityIcon(
-                  activity: activity,
-                  size: 48,
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _userActivity!.displayName,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (activity.activityCategory != null)
-                        Text(
-                          activity.activityCategory!.name,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
             ),
           ),
           Expanded(
@@ -365,7 +324,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                   // Comments field
                   Text(
                     'Notes',
-                    style: theme.textTheme.titleSmall,
+                    style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 8),
                   TextField(
@@ -465,7 +424,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       children: [
         Text(
           detail.label,
-          style: theme.textTheme.titleSmall,
+          style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -494,7 +453,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       children: [
         Text(
           detail.label,
-          style: theme.textTheme.titleSmall,
+          style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
         Container(
