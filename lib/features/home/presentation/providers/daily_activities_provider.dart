@@ -197,6 +197,114 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
     state = AsyncData(currentState.copyWith(summaries: updatedSummaries));
   }
 
+  /// Replaces an existing entry with an optimistic version for edit operations.
+  ///
+  /// Removes the entry with [originalId] and adds [optimisticEntry] to the
+  /// correct day summary (handles date changes between original and edited).
+  void replaceWithOptimisticEntry(String originalId, UserActivity optimisticEntry) {
+    final currentStateValue = state;
+    if (currentStateValue is! AsyncData<DailyActivitiesState>) return;
+
+    final currentState = currentStateValue.value;
+
+    // Remove the original entry from whichever day it belongs to
+    var updatedSummaries = currentState.summaries.map((summary) {
+      final filtered = summary.userActivities.where((ua) => ua.userActivityId != originalId).toList();
+      if (filtered.length == summary.userActivities.length) return summary;
+      return summary.copyWith(
+        activityCount: filtered.length,
+        userActivities: filtered,
+      );
+    }).toList();
+
+    // Add the optimistic entry to the correct day
+    final activityDate = DateTime(
+      optimisticEntry.activityTimestamp.year,
+      optimisticEntry.activityTimestamp.month,
+      optimisticEntry.activityTimestamp.day,
+    );
+
+    final existingIndex = updatedSummaries.indexWhere(
+      (s) =>
+          s.activityDate.year == activityDate.year &&
+          s.activityDate.month == activityDate.month &&
+          s.activityDate.day == activityDate.day,
+    );
+
+    if (existingIndex >= 0) {
+      final existing = updatedSummaries[existingIndex];
+      updatedSummaries[existingIndex] = existing.copyWith(
+        activityCount: existing.activityCount + 1,
+        userActivities: [...existing.userActivities, optimisticEntry],
+      );
+    } else {
+      updatedSummaries = List.from(updatedSummaries)
+        ..insert(
+          0,
+          DailyActivitySummary(
+            activityDate: activityDate,
+            activityCount: 1,
+            userActivities: [optimisticEntry],
+          ),
+        );
+    }
+
+    state = AsyncData(currentState.copyWith(summaries: updatedSummaries));
+  }
+
+  /// Reverts an optimistic edit by removing the optimistic entry and
+  /// re-adding the original entry.
+  void revertOptimisticUpdate(String optimisticId, UserActivity originalEntry) {
+    final currentStateValue = state;
+    if (currentStateValue is! AsyncData<DailyActivitiesState>) return;
+
+    final currentState = currentStateValue.value;
+
+    // Remove the optimistic entry
+    var updatedSummaries = currentState.summaries.map((summary) {
+      final filtered = summary.userActivities.where((ua) => ua.userActivityId != optimisticId).toList();
+      if (filtered.length == summary.userActivities.length) return summary;
+      return summary.copyWith(
+        activityCount: filtered.length,
+        userActivities: filtered,
+      );
+    }).toList();
+
+    // Re-add the original entry to its day
+    final activityDate = DateTime(
+      originalEntry.activityTimestamp.year,
+      originalEntry.activityTimestamp.month,
+      originalEntry.activityTimestamp.day,
+    );
+
+    final existingIndex = updatedSummaries.indexWhere(
+      (s) =>
+          s.activityDate.year == activityDate.year &&
+          s.activityDate.month == activityDate.month &&
+          s.activityDate.day == activityDate.day,
+    );
+
+    if (existingIndex >= 0) {
+      final existing = updatedSummaries[existingIndex];
+      updatedSummaries[existingIndex] = existing.copyWith(
+        activityCount: existing.activityCount + 1,
+        userActivities: [...existing.userActivities, originalEntry],
+      );
+    } else {
+      updatedSummaries = List.from(updatedSummaries)
+        ..insert(
+          0,
+          DailyActivitySummary(
+            activityDate: activityDate,
+            activityCount: 1,
+            userActivities: [originalEntry],
+          ),
+        );
+    }
+
+    state = AsyncData(currentState.copyWith(summaries: updatedSummaries));
+  }
+
   /// Refreshes the data, reloading from the current date range.
   Future<void> refresh() async {
     ref.invalidateSelf();

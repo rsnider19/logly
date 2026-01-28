@@ -6,6 +6,7 @@ import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/application/activity_logging_service.dart';
 import 'package:logly/features/activity_logging/domain/create_user_activity.dart';
+import 'package:logly/features/activity_logging/domain/update_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/home/presentation/providers/daily_activities_provider.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
@@ -33,6 +34,20 @@ class PendingSaveRequest {
   final CreateUserActivity createUserActivity;
   final String userId;
   final List<SubActivity> selectedSubActivities;
+}
+
+/// Holds the data needed to perform an optimistic update in the background.
+@immutable
+class PendingUpdateRequest {
+  const PendingUpdateRequest({
+    required this.updateUserActivity,
+    required this.originalEntry,
+    required this.optimisticEntry,
+  });
+
+  final UpdateUserActivity updateUserActivity;
+  final UserActivity originalEntry;
+  final UserActivity optimisticEntry;
 }
 
 /// Orchestrates optimistic background saving for single-day activity creation.
@@ -92,6 +107,56 @@ class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
             action: SnackBarAction(
               label: 'Retry',
               onPressed: () => submitOptimistic(request),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  /// Replaces an existing entry with an optimistic version and fires the real
+  /// update in the background.
+  void submitOptimisticUpdate(PendingUpdateRequest request) {
+    final tempId = 'optimistic_${request.originalEntry.userActivityId}';
+
+    // Build the optimistic entry with a temp ID
+    final optimisticEntry = request.optimisticEntry.copyWith(userActivityId: tempId);
+
+    // Replace the original entry on the home screen
+    ref.read(dailyActivitiesStateProvider.notifier).replaceWithOptimisticEntry(
+          request.originalEntry.userActivityId,
+          optimisticEntry,
+        );
+
+    // Fire background update (intentionally not awaited)
+    unawaited(_performUpdate(request, tempId));
+  }
+
+  Future<void> _performUpdate(PendingUpdateRequest request, String tempId) async {
+    try {
+      final service = ref.read(activityLoggingServiceProvider);
+      await service.updateActivity(request.updateUserActivity);
+
+      // Refresh all activity providers with the real data
+      await _refreshActivityProviders();
+    } catch (e) {
+      // Revert to the original entry on failure
+      ref.read(dailyActivitiesStateProvider.notifier).revertOptimisticUpdate(
+            tempId,
+            request.originalEntry,
+          );
+
+      // Show error snackbar with retry
+      final messengerKey = ref.read(scaffoldMessengerKeyProviderProvider);
+      final messengerState = messengerKey.currentState;
+      if (messengerState != null) {
+        messengerState.showSnackBar(
+          SnackBar(
+            content: const Text('Failed to update activity'),
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => submitOptimisticUpdate(request),
             ),
           ),
         );
