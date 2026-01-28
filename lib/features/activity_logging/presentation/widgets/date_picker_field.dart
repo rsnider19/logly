@@ -21,7 +21,7 @@ class DatePickerField extends ConsumerWidget {
       children: [
         Text(
           'Date',
-          style: theme.textTheme.titleSmall,
+          style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
         InkWell(

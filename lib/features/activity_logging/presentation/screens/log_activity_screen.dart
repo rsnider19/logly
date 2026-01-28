@@ -342,7 +342,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                         // Comments field
                         Text(
                           'Notes',
-                          style: theme.textTheme.titleSmall,
+                          style: theme.textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 8),
                         TextField(
@@ -439,7 +439,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       children: [
         Text(
           detail.label,
-          style: theme.textTheme.titleSmall,
+          style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
         TextField(
@@ -468,7 +468,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       children: [
         Text(
           detail.label,
-          style: theme.textTheme.titleSmall,
+          style: theme.textTheme.bodyLarge,
         ),
         const SizedBox(height: 8),
         Container(

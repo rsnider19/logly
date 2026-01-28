@@ -27,7 +27,7 @@ class DateRangePicker extends ConsumerWidget {
             Expanded(
               child: Text(
                 'Date',
-                style: theme.textTheme.titleSmall,
+                style: theme.textTheme.bodyLarge,
               ),
             ),
             Row(
