@@ -5,7 +5,6 @@ import 'package:logly/app/theme/app_theme.dart';
 import 'package:logly/core/providers/scaffold_messenger_provider.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
-import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/features/subscriptions/application/subscription_initializer.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -32,14 +31,13 @@ class _AppState extends ConsumerState<App> {
   @override
   Widget build(BuildContext context) {
     final router = ref.watch(appRouterProvider);
-    final themeMode = ref.watch(currentThemeModeProvider);
 
     return MaterialApp.router(
       scaffoldMessengerKey: scaffoldMessengerKey,
       title: 'Logly',
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      themeMode: themeMode,
+      themeMode: ThemeMode.dark,
       routerConfig: router,
     );
   }

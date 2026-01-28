@@ -37,7 +37,7 @@ abstract final class AppTheme {
   );
 
   // The FlexColorScheme defined dark mode ThemeData.
-  static ThemeData dark = FlexThemeData.dark(
+  static final ThemeData _dark = FlexThemeData.dark(
     // Using FlexColorScheme built-in FlexScheme enum based colors.
     scheme: FlexScheme.shadNeutral,
     // Component theme configurations for dark mode.
@@ -54,5 +54,13 @@ abstract final class AppTheme {
     // Direct ThemeData properties.
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
     cupertinoOverrideTheme: const CupertinoThemeData(applyThemeToAll: true),
+  );
+
+  static ThemeData dark = _dark.copyWith(
+    chipTheme: _dark.chipTheme.copyWith(
+      labelStyle: _dark.chipTheme.labelStyle?.copyWith(
+        color: _dark.colorScheme.onSurface,
+      ),
+    ),
   );
 }
