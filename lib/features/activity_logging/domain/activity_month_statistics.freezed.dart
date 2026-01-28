@@ -18,7 +18,8 @@ mixin _$ActivityMonthStatistics {
 /// Map of date (year/month/day only) to log count for that day.
  Map<DateTime, int> get dailyActivityCounts;/// Subactivity counts sorted by count descending.
  List<SubActivityCount> get subActivityCounts;/// Total number of logs in this month.
- int get totalCount;
+ int get totalCount;/// The parent activity, used for icon fallback.
+ Activity? get activity;
 /// Create a copy of ActivityMonthStatistics
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,16 +32,16 @@ $ActivityMonthStatisticsCopyWith<ActivityMonthStatistics> get copyWith => _$Acti
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivityMonthStatistics&&const DeepCollectionEquality().equals(other.dailyActivityCounts, dailyActivityCounts)&&const DeepCollectionEquality().equals(other.subActivityCounts, subActivityCounts)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivityMonthStatistics&&const DeepCollectionEquality().equals(other.dailyActivityCounts, dailyActivityCounts)&&const DeepCollectionEquality().equals(other.subActivityCounts, subActivityCounts)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.activity, activity) || other.activity == activity));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(dailyActivityCounts),const DeepCollectionEquality().hash(subActivityCounts),totalCount);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(dailyActivityCounts),const DeepCollectionEquality().hash(subActivityCounts),totalCount,activity);
 
 @override
 String toString() {
-  return 'ActivityMonthStatistics(dailyActivityCounts: $dailyActivityCounts, subActivityCounts: $subActivityCounts, totalCount: $totalCount)';
+  return 'ActivityMonthStatistics(dailyActivityCounts: $dailyActivityCounts, subActivityCounts: $subActivityCounts, totalCount: $totalCount, activity: $activity)';
 }
 
 
@@ -51,11 +52,11 @@ abstract mixin class $ActivityMonthStatisticsCopyWith<$Res>  {
   factory $ActivityMonthStatisticsCopyWith(ActivityMonthStatistics value, $Res Function(ActivityMonthStatistics) _then) = _$ActivityMonthStatisticsCopyWithImpl;
 @useResult
 $Res call({
- Map<DateTime, int> dailyActivityCounts, List<SubActivityCount> subActivityCounts, int totalCount
+ Map<DateTime, int> dailyActivityCounts, List<SubActivityCount> subActivityCounts, int totalCount, Activity? activity
 });
 
 
-
+$ActivityCopyWith<$Res>? get activity;
 
 }
 /// @nodoc
@@ -68,15 +69,28 @@ class _$ActivityMonthStatisticsCopyWithImpl<$Res>
 
 /// Create a copy of ActivityMonthStatistics
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? dailyActivityCounts = null,Object? subActivityCounts = null,Object? totalCount = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dailyActivityCounts = null,Object? subActivityCounts = null,Object? totalCount = null,Object? activity = freezed,}) {
   return _then(_self.copyWith(
 dailyActivityCounts: null == dailyActivityCounts ? _self.dailyActivityCounts : dailyActivityCounts // ignore: cast_nullable_to_non_nullable
 as Map<DateTime, int>,subActivityCounts: null == subActivityCounts ? _self.subActivityCounts : subActivityCounts // ignore: cast_nullable_to_non_nullable
 as List<SubActivityCount>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,activity: freezed == activity ? _self.activity : activity // ignore: cast_nullable_to_non_nullable
+as Activity?,
   ));
 }
+/// Create a copy of ActivityMonthStatistics
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ActivityCopyWith<$Res>? get activity {
+    if (_self.activity == null) {
+    return null;
+  }
 
+  return $ActivityCopyWith<$Res>(_self.activity!, (value) {
+    return _then(_self.copyWith(activity: value));
+  });
+}
 }
 
 
@@ -158,10 +172,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount,  Activity? activity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ActivityMonthStatistics() when $default != null:
-return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount);case _:
+return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount,_that.activity);case _:
   return orElse();
 
 }
@@ -179,10 +193,10 @@ return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCou
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount,  Activity? activity)  $default,) {final _that = this;
 switch (_that) {
 case _ActivityMonthStatistics():
-return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount);case _:
+return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount,_that.activity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +213,10 @@ return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCou
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Map<DateTime, int> dailyActivityCounts,  List<SubActivityCount> subActivityCounts,  int totalCount,  Activity? activity)?  $default,) {final _that = this;
 switch (_that) {
 case _ActivityMonthStatistics() when $default != null:
-return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount);case _:
+return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCount,_that.activity);case _:
   return null;
 
 }
@@ -214,7 +228,7 @@ return $default(_that.dailyActivityCounts,_that.subActivityCounts,_that.totalCou
 @JsonSerializable()
 
 class _ActivityMonthStatistics implements ActivityMonthStatistics {
-  const _ActivityMonthStatistics({required final  Map<DateTime, int> dailyActivityCounts, required final  List<SubActivityCount> subActivityCounts, required this.totalCount}): _dailyActivityCounts = dailyActivityCounts,_subActivityCounts = subActivityCounts;
+  const _ActivityMonthStatistics({required final  Map<DateTime, int> dailyActivityCounts, required final  List<SubActivityCount> subActivityCounts, required this.totalCount, this.activity}): _dailyActivityCounts = dailyActivityCounts,_subActivityCounts = subActivityCounts;
   factory _ActivityMonthStatistics.fromJson(Map<String, dynamic> json) => _$ActivityMonthStatisticsFromJson(json);
 
 /// Map of date (year/month/day only) to log count for that day.
@@ -237,6 +251,8 @@ class _ActivityMonthStatistics implements ActivityMonthStatistics {
 
 /// Total number of logs in this month.
 @override final  int totalCount;
+/// The parent activity, used for icon fallback.
+@override final  Activity? activity;
 
 /// Create a copy of ActivityMonthStatistics
 /// with the given fields replaced by the non-null parameter values.
@@ -251,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivityMonthStatistics&&const DeepCollectionEquality().equals(other._dailyActivityCounts, _dailyActivityCounts)&&const DeepCollectionEquality().equals(other._subActivityCounts, _subActivityCounts)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivityMonthStatistics&&const DeepCollectionEquality().equals(other._dailyActivityCounts, _dailyActivityCounts)&&const DeepCollectionEquality().equals(other._subActivityCounts, _subActivityCounts)&&(identical(other.totalCount, totalCount) || other.totalCount == totalCount)&&(identical(other.activity, activity) || other.activity == activity));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_dailyActivityCounts),const DeepCollectionEquality().hash(_subActivityCounts),totalCount);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_dailyActivityCounts),const DeepCollectionEquality().hash(_subActivityCounts),totalCount,activity);
 
 @override
 String toString() {
-  return 'ActivityMonthStatistics(dailyActivityCounts: $dailyActivityCounts, subActivityCounts: $subActivityCounts, totalCount: $totalCount)';
+  return 'ActivityMonthStatistics(dailyActivityCounts: $dailyActivityCounts, subActivityCounts: $subActivityCounts, totalCount: $totalCount, activity: $activity)';
 }
 
 
@@ -271,11 +287,11 @@ abstract mixin class _$ActivityMonthStatisticsCopyWith<$Res> implements $Activit
   factory _$ActivityMonthStatisticsCopyWith(_ActivityMonthStatistics value, $Res Function(_ActivityMonthStatistics) _then) = __$ActivityMonthStatisticsCopyWithImpl;
 @override @useResult
 $Res call({
- Map<DateTime, int> dailyActivityCounts, List<SubActivityCount> subActivityCounts, int totalCount
+ Map<DateTime, int> dailyActivityCounts, List<SubActivityCount> subActivityCounts, int totalCount, Activity? activity
 });
 
 
-
+@override $ActivityCopyWith<$Res>? get activity;
 
 }
 /// @nodoc
@@ -288,16 +304,29 @@ class __$ActivityMonthStatisticsCopyWithImpl<$Res>
 
 /// Create a copy of ActivityMonthStatistics
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? dailyActivityCounts = null,Object? subActivityCounts = null,Object? totalCount = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dailyActivityCounts = null,Object? subActivityCounts = null,Object? totalCount = null,Object? activity = freezed,}) {
   return _then(_ActivityMonthStatistics(
 dailyActivityCounts: null == dailyActivityCounts ? _self._dailyActivityCounts : dailyActivityCounts // ignore: cast_nullable_to_non_nullable
 as Map<DateTime, int>,subActivityCounts: null == subActivityCounts ? _self._subActivityCounts : subActivityCounts // ignore: cast_nullable_to_non_nullable
 as List<SubActivityCount>,totalCount: null == totalCount ? _self.totalCount : totalCount // ignore: cast_nullable_to_non_nullable
-as int,
+as int,activity: freezed == activity ? _self.activity : activity // ignore: cast_nullable_to_non_nullable
+as Activity?,
   ));
 }
 
+/// Create a copy of ActivityMonthStatistics
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$ActivityCopyWith<$Res>? get activity {
+    if (_self.activity == null) {
+    return null;
+  }
 
+  return $ActivityCopyWith<$Res>(_self.activity!, (value) {
+    return _then(_self.copyWith(activity: value));
+  });
+}
 }
 
 

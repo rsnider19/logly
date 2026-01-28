@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_statistics_provider.dart';
+import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/widgets/logly_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -68,6 +69,7 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
             error: (_, _) => _buildCalendar(context, {}),
             data: (stats) => _buildCalendar(context, stats.dailyActivityCounts),
           ),
+          const SizedBox(height: 16),
           const Divider(height: 1),
           // Subactivity list
           Expanded(
@@ -166,7 +168,7 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
                     return ListTile(
                       leading: SubActivityIcon(
                         subActivity: sac.subActivity,
-                        size: 32,
+                        fallbackActivity: stats.activity,
                       ),
                       title: Text(sac.subActivity.name),
                       trailing: Text(

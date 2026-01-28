@@ -61,10 +61,14 @@ Future<ActivityMonthStatistics> activityMonthStatistics(
       .toList()
     ..sort((a, b) => b.count.compareTo(a.count));
 
+  // Extract the parent activity from the first log entry for icon fallback.
+  final activity = activities.isNotEmpty ? activities.first.activity : null;
+
   return ActivityMonthStatistics(
     dailyActivityCounts: dailyCounts,
     subActivityCounts: subActivityCounts,
     totalCount: activities.length,
+    activity: activity,
   );
 }
 

@@ -15,6 +15,9 @@ _ActivityMonthStatistics _$ActivityMonthStatisticsFromJson(
       .map((e) => SubActivityCount.fromJson(e as Map<String, dynamic>))
       .toList(),
   totalCount: (json['total_count'] as num).toInt(),
+  activity: json['activity'] == null
+      ? null
+      : Activity.fromJson(json['activity'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$ActivityMonthStatisticsToJson(
@@ -27,6 +30,7 @@ Map<String, dynamic> _$ActivityMonthStatisticsToJson(
       .map((e) => e.toJson())
       .toList(),
   'total_count': instance.totalCount,
+  'activity': instance.activity?.toJson(),
 };
 
 _SubActivityCount _$SubActivityCountFromJson(Map<String, dynamic> json) =>

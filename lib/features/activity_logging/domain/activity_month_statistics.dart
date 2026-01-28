@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 
 part 'activity_month_statistics.freezed.dart';
@@ -16,6 +17,9 @@ abstract class ActivityMonthStatistics with _$ActivityMonthStatistics {
 
     /// Total number of logs in this month.
     required int totalCount,
+
+    /// The parent activity, used for icon fallback.
+    Activity? activity,
   }) = _ActivityMonthStatistics;
 
   factory ActivityMonthStatistics.fromJson(Map<String, dynamic> json) =>

@@ -244,7 +244,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            ActivityIcon(activity: activity, size: 24),
+            ActivityIcon(activity: activity),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -262,7 +262,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                 activityName: activity.name,
                 initialMonth: _userActivity!.activityTimestamp.toIso8601String(),
                 colorHex: activity.activityCategory?.hexColor,
-              ).go(context);
+              ).push(context);
             },
             icon: const Icon(Icons.query_stats),
             tooltip: 'View statistics',

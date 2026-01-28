@@ -176,7 +176,7 @@ final class ActivityMonthStatisticsProvider
 }
 
 String _$activityMonthStatisticsHash() =>
-    r'7ca1550674a1b744987c6e7cd679f5a7d2568923';
+    r'f61bac915ea391185f09d71e84fa0d617c81abf0';
 
 /// Derives monthly statistics from the fetched user activities.
 
