@@ -17,7 +17,7 @@ class MonthlyChartCard extends ConsumerWidget {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.monthly] ?? true;
     final monthlyDataAsync = ref.watch(filteredMonthlyChartDataProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     return CollapsibleSection(
       title: 'Last 12 Months',

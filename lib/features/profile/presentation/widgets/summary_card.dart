@@ -53,7 +53,7 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
   @override
   Widget build(BuildContext context) {
     final summaryAsync = ref.watch(categorySummaryProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     return categoriesAsync.when(
       data: (categories) {

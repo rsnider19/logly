@@ -16,7 +16,7 @@ class WeeklyRadarChartCard extends ConsumerWidget {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.weeklyRadar] ?? true;
     final normalizedDataAsync = ref.watch(normalizedRadarDataProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     return CollapsibleSection(
       title: 'Weekly Activity',

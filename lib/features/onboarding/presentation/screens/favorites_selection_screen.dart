@@ -58,7 +58,7 @@ class _FavoritesSelectionScreenState extends ConsumerState<FavoritesSelectionScr
     final theme = Theme.of(context);
     final selectedIdsAsync = ref.watch(onboardingFavoritesStateProvider);
     final popularAsync = ref.watch(popularActivitiesSummaryProvider);
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     final selectedIds = switch (selectedIdsAsync) {
       AsyncData(:final value) => value,

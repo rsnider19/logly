@@ -64,52 +64,6 @@ final class ActivityCategoriesProvider
 String _$activityCategoriesHash() =>
     r'38a3c626a0f0e6d67853d0c9aa4fa56044579040';
 
-/// Provides all activity categories.
-
-@ProviderFor(categories)
-final categoriesProvider = CategoriesProvider._();
-
-/// Provides all activity categories.
-
-final class CategoriesProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<List<ActivityCategory>>,
-          List<ActivityCategory>,
-          FutureOr<List<ActivityCategory>>
-        >
-    with
-        $FutureModifier<List<ActivityCategory>>,
-        $FutureProvider<List<ActivityCategory>> {
-  /// Provides all activity categories.
-  CategoriesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'categoriesProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$categoriesHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<List<ActivityCategory>> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<ActivityCategory>> create(Ref ref) {
-    return categories(ref);
-  }
-}
-
-String _$categoriesHash() => r'13304b4a354468f29acd1c3c5f38159727ceda2c';
-
 /// Provides a single category by ID.
 
 @ProviderFor(categoryById)

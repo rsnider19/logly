@@ -14,13 +14,6 @@ Future<List<ActivityCategory>> activityCategories(Ref ref) async {
   return service.getCategories();
 }
 
-/// Provides all activity categories.
-@riverpod
-Future<List<ActivityCategory>> categories(Ref ref) async {
-  final service = ref.watch(catalogServiceProvider);
-  return service.getCategories();
-}
-
 /// Provides a single category by ID.
 @riverpod
 Future<ActivityCategory> categoryById(Ref ref, String categoryId) async {

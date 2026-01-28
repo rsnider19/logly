@@ -74,7 +74,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
-          categoriesProvider.overrideWith((ref) async => _mockCategories),
+          activityCategoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       router = container.read(appRouterProvider);
@@ -168,7 +168,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       final container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
-          categoriesProvider.overrideWith((ref) async => _mockCategories),
+          activityCategoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       final router = container.read(appRouterProvider);
@@ -203,7 +203,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       final container = ProviderContainer(
         overrides: [
           supabaseProvider.overrideWithValue(mockSupabase),
-          categoriesProvider.overrideWith((ref) async => _mockCategories),
+          activityCategoriesProvider.overrideWith((ref) async => _mockCategories),
         ],
       );
       final router = container.read(appRouterProvider);

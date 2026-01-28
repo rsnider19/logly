@@ -37,7 +37,7 @@ Future<List<WeeklyCategoryData>> filteredWeeklyRadarData(Ref ref) async {
   // Watch all futures before any async gap to avoid disposal between awaits
   final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
   final allDataFuture = ref.watch(weeklyRadarDataProvider.future);
-  final categoriesFuture = ref.watch(categoriesProvider.future);
+  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
   final (effectiveFilters, allData, categories) =
       await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;

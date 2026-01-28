@@ -11,7 +11,7 @@ class CategoryFilterChips extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categoriesAsync = ref.watch(categoriesProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
     final effectiveFiltersAsync = ref.watch(effectiveSelectedFiltersProvider);
     final notifier = ref.watch(selectedCategoryFiltersStateProvider.notifier);
 

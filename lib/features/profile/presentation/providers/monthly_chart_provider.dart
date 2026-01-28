@@ -45,7 +45,7 @@ class SelectedCategoryFiltersStateNotifier extends _$SelectedCategoryFiltersStat
 Future<Set<String>> effectiveSelectedFilters(Ref ref) async {
   final rawFilters = ref.watch(selectedCategoryFiltersStateProvider);
   // Watch the future before the async gap
-  final categoriesFuture = ref.watch(categoriesProvider.future);
+  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
   if (rawFilters.isEmpty) {
     final categories = await categoriesFuture;
@@ -96,7 +96,7 @@ Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
   // Watch all futures before any async gap to avoid disposal between awaits
   final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
   final allDataFuture = ref.watch(monthlyChartDataProvider.future);
-  final categoriesFuture = ref.watch(categoriesProvider.future);
+  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
   final (effectiveFilters, allData, categories) =
       await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
