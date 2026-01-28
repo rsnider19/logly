@@ -17,6 +17,7 @@ List<RouteBase> get $appRoutes => [
   $categoryDetailRoute,
   $activityStatisticsRoute,
   $editActivityRoute,
+  $createCustomActivityRoute,
   $developerRoute,
 ];
 
@@ -360,6 +361,43 @@ mixin $EditActivityRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/activities/edit/${Uri.encodeComponent(_self.userActivityId)}',
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $createCustomActivityRoute => GoRouteData.$route(
+  path: '/activities/create',
+  factory: $CreateCustomActivityRoute._fromState,
+);
+
+mixin $CreateCustomActivityRoute on GoRouteData {
+  static CreateCustomActivityRoute _fromState(GoRouterState state) =>
+      CreateCustomActivityRoute(
+        name: state.uri.queryParameters['name'],
+        date: state.uri.queryParameters['date'],
+      );
+
+  CreateCustomActivityRoute get _self => this as CreateCustomActivityRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/activities/create',
+    queryParams: {
+      if (_self.name != null) 'name': _self.name,
+      if (_self.date != null) 'date': _self.date,
+    },
   );
 
   @override
