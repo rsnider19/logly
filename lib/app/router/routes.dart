@@ -9,6 +9,7 @@ import 'package:logly/features/activity_logging/presentation/screens/category_de
 import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:logly/features/custom_activity/presentation/screens/create_custom_activity_screen.dart';
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
 import 'package:logly/features/home/presentation/widgets/app_shell.dart';
@@ -264,6 +265,30 @@ class EditActivityRoute extends GoRouteData with $EditActivityRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return EditActivityScreen(userActivityId: userActivityId);
+  }
+}
+
+/// Create custom activity route - create a new custom activity.
+@TypedGoRoute<CreateCustomActivityRoute>(path: '/activities/create')
+class CreateCustomActivityRoute extends GoRouteData with $CreateCustomActivityRoute {
+  const CreateCustomActivityRoute({this.name, this.date});
+
+  /// Pre-populated activity name from search query.
+  final String? name;
+
+  /// Optional initial date for the activity (ISO 8601 string).
+  final String? date;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    DateTime? initialDate;
+    if (date != null) {
+      initialDate = DateTime.tryParse(date!);
+    }
+    return CreateCustomActivityScreen(
+      initialName: name,
+      initialDate: initialDate,
+    );
   }
 }
 

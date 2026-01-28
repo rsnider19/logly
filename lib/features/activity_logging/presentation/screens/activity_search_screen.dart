@@ -88,6 +88,19 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     ).pushReplacement(context);
   }
 
+  void _navigateToCreateActivity(String searchQuery) {
+    CreateCustomActivityRoute(
+      name: searchQuery,
+      date: _selectedDate.toIso8601String(),
+    ).push(context);
+  }
+
+  /// Checks if there's an exact match (case-insensitive) in the search results.
+  bool _hasExactMatch(List<ActivitySummary> activities, String query) {
+    final normalizedQuery = query.trim().toLowerCase();
+    return activities.any((a) => a.name.toLowerCase() == normalizedQuery);
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -147,31 +160,48 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
 
   Widget _buildSearchResults(AsyncValue<List<ActivitySummary>> searchResultsAsync) {
     final theme = Theme.of(context);
+    final searchQuery = ref.watch(searchQueryProvider);
 
     return searchResultsAsync.when(
       data: (activities) {
+        final showCreateOption = searchQuery.trim().length >= 2 && !_hasExactMatch(activities, searchQuery);
+
         if (activities.isEmpty) {
-          return Center(
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.search_off,
-                  size: 64,
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'No activities found',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Try a different search term',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
+                // Create custom activity option
+                if (showCreateOption) _buildCreateActivityTile(searchQuery),
+
+                // Empty state
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 48),
+                      Icon(
+                        Icons.search_off,
+                        size: 64,
+                        color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No activities found',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Try a different search term or create a custom activity',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -179,21 +209,33 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
           );
         }
 
-        // Display search results as chips in a Wrap
+        // Display search results with create option at top if no exact match
         return SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-              spacing: 8,
-              children: activities.map((activity) {
-                return ActivityChip(
-                  activity: activity,
-                  showIcon: false,
-                  onPressed: () => _selectActivity(activity),
-                );
-              }).toList(),
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Create custom activity option at the top
+              if (showCreateOption) ...[
+                _buildCreateActivityTile(searchQuery),
+                const SizedBox(height: 16),
+              ],
+
+              // Activity chips
+              Align(
+                alignment: Alignment.topLeft,
+                child: Wrap(
+                  spacing: 8,
+                  children: activities.map((activity) {
+                    return ActivityChip(
+                      activity: activity,
+                      showIcon: false,
+                      onPressed: () => _selectActivity(activity),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -210,6 +252,35 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildCreateActivityTile(String searchQuery) {
+    final theme = Theme.of(context);
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: theme.colorScheme.primaryContainer,
+          child: Icon(
+            Icons.add,
+            color: theme.colorScheme.onPrimaryContainer,
+          ),
+        ),
+        title: Text(
+          'Create "$searchQuery"',
+          style: theme.textTheme.titleMedium,
+        ),
+        subtitle: Text(
+          'Create a custom activity',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => _navigateToCreateActivity(searchQuery),
+      ),
     );
   }
 
