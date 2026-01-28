@@ -26,8 +26,14 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     return AppBar(
-      title: Text(title),
+      title: Text(
+        title,
+        style: theme.textTheme.headlineMedium?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       centerTitle: false,
       actions: [
         if (showTrendingButton)
@@ -47,10 +53,12 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   void _showTrendingSheet(BuildContext context) {
-    unawaited(showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => const TrendingBottomSheet(),
-    ));
+    unawaited(
+      showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => const TrendingBottomSheet(),
+      ),
+    );
   }
 }
