@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:logly/core/providers/logger_provider.dart';
+import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/home/application/home_service.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -133,6 +134,67 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
       // Re-throw to let error handlers deal with it
       Error.throwWithStackTrace(e, st);
     }
+  }
+
+  /// Adds an optimistic user activity entry to the matching day summary.
+  ///
+  /// If no summary exists for the activity's date, one is created.
+  void addOptimisticEntry(UserActivity userActivity) {
+    final currentStateValue = state;
+    if (currentStateValue is! AsyncData<DailyActivitiesState>) return;
+
+    final currentState = currentStateValue.value;
+    final activityDate = DateTime(
+      userActivity.activityTimestamp.year,
+      userActivity.activityTimestamp.month,
+      userActivity.activityTimestamp.day,
+    );
+
+    final updatedSummaries = List<DailyActivitySummary>.from(currentState.summaries);
+    final existingIndex = updatedSummaries.indexWhere(
+      (s) => s.activityDate.year == activityDate.year &&
+          s.activityDate.month == activityDate.month &&
+          s.activityDate.day == activityDate.day,
+    );
+
+    if (existingIndex >= 0) {
+      final existing = updatedSummaries[existingIndex];
+      updatedSummaries[existingIndex] = existing.copyWith(
+        activityCount: existing.activityCount + 1,
+        userActivities: [...existing.userActivities, userActivity],
+      );
+    } else {
+      updatedSummaries.insert(
+        0,
+        DailyActivitySummary(
+          activityDate: activityDate,
+          activityCount: 1,
+          userActivities: [userActivity],
+        ),
+      );
+    }
+
+    state = AsyncData(currentState.copyWith(summaries: updatedSummaries));
+  }
+
+  /// Removes an optimistic user activity entry by its temporary ID.
+  void removeOptimisticEntry(String tempUserActivityId) {
+    final currentStateValue = state;
+    if (currentStateValue is! AsyncData<DailyActivitiesState>) return;
+
+    final currentState = currentStateValue.value;
+    final updatedSummaries = currentState.summaries.map((summary) {
+      final filtered = summary.userActivities
+          .where((ua) => ua.userActivityId != tempUserActivityId)
+          .toList();
+      if (filtered.length == summary.userActivities.length) return summary;
+      return summary.copyWith(
+        activityCount: filtered.length,
+        userActivities: filtered,
+      );
+    }).toList();
+
+    state = AsyncData(currentState.copyWith(summaries: updatedSummaries));
   }
 
   /// Refreshes the data, reloading from the current date range.
