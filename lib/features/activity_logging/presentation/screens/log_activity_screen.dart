@@ -232,8 +232,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
           IconButton(
             onPressed: _toggleFavorite,
             icon: Icon(
-              isFavorited ? Icons.star : Icons.star_border,
-              color: isFavorited ? Colors.amber : null,
+              isFavorited ? Icons.favorite : Icons.favorite_border,
+              color: isFavorited ? Colors.red : null,
             ),
             tooltip: isFavorited ? 'Remove from favorites' : 'Add to favorites',
           ),

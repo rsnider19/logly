@@ -28,7 +28,7 @@ Future<bool> isActivityFavorited(Ref ref, String activityId) async {
 }
 
 /// State notifier for managing favorite actions with optimistic updates.
-@riverpod
+@Riverpod(keepAlive: true)
 class FavoriteStateNotifier extends _$FavoriteStateNotifier {
   @override
   AsyncValue<Set<String>> build() {
