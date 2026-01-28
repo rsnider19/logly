@@ -30,7 +30,7 @@ class TrendingRepository {
       final response = await _supabase
           .from('trending_activity')
           .select(_selectWithRelations)
-          .order('current_rank')
+          .order('current_rank', ascending: true)
           .limit(limit);
 
       return (response as List).map((e) => TrendingActivity.fromJson(e as Map<String, dynamic>)).toList();

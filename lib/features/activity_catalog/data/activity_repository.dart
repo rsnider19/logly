@@ -42,7 +42,7 @@ class ActivityRepository {
           .from('activity')
           .select('*, activity_category(*), activity_detail(*), sub_activity(*)')
           .eq('activity_category_id', categoryId)
-          .order('name');
+          .order('name', ascending: true);
 
       final activities =
           (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
@@ -146,7 +146,7 @@ class ActivityRepository {
           .from('activity')
           .select('*, activity_category(*)')
           .eq('is_suggested_favorite', true)
-          .order('name');
+          .order('name', ascending: true);
 
       final activities =
           (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
@@ -179,7 +179,7 @@ class ActivityRepository {
           .select('*, activity_category(*)')
           .eq('is_suggested_favorite', true)
           .eq('activity_category_id', categoryId)
-          .order('name');
+          .order('name', ascending: true);
 
       final activities =
           (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
@@ -213,7 +213,7 @@ class ActivityRepository {
           .from('activity')
           .select(_summarySelect)
           .eq('activity_category_id', categoryId)
-          .order('name');
+          .order('name', ascending: true);
 
       final summaries =
           (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
@@ -268,7 +268,7 @@ class ActivityRepository {
           .from('activity')
           .select(_summarySelect)
           .eq('is_suggested_favorite', true)
-          .order('name');
+          .order('name', ascending: true);
 
       final summaries =
           (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
@@ -299,7 +299,7 @@ class ActivityRepository {
           .select(_summarySelect)
           .eq('is_suggested_favorite', true)
           .eq('activity_category_id', categoryId)
-          .order('name');
+          .order('name', ascending: true);
 
       final summaries =
           (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();

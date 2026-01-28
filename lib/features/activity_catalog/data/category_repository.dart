@@ -33,7 +33,7 @@ class CategoryRepository {
   Future<List<ActivityCategory>> getAll() async {
     try {
       // Try network first
-      final response = await _supabase.from('activity_category').select().order('sort_order');
+      final response = await _supabase.from('activity_category').select().order('sort_order', ascending: true);
 
       final categories =
           (response as List).map((e) => ActivityCategory.fromJson(e as Map<String, dynamic>)).toList();
