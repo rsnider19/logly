@@ -10,6 +10,7 @@ import 'package:logly/features/activity_catalog/presentation/providers/search_pr
 import 'package:logly/features/activity_logging/domain/favorite_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/search_section_expansion_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/already_logged_section.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/search_section_tile.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/view_all_chip.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
@@ -222,6 +223,9 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Already logged section (hidden when empty)
+          AlreadyLoggedSection(selectedDate: _selectedDate),
+
           // Favorites section (hidden when empty)
           favoritesAsync.when(
             data: (favorites) {
