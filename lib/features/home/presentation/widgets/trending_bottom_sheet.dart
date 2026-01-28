@@ -156,9 +156,9 @@ class _TrendingActivityTile extends StatelessWidget {
           const SizedBox(width: 8),
           // Activity icon
           if (activityData != null)
-            ActivityIcon(activity: activityData, size: 40)
+            ActivityIcon(activity: activityData, size: 24)
           else
-            const Icon(Icons.fitness_center, size: 40),
+            const Icon(Icons.fitness_center, size: 24),
         ],
       ),
       title: Text(activityData?.name ?? 'Unknown Activity'),
@@ -176,32 +176,21 @@ class _RankChangeIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (rankChange == 0) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.remove, size: 16, color: Colors.grey[500]),
-        ],
+      return Icon(
+        Icons.trending_flat,
+        size: 24,
+        color: Colors.grey[500],
       );
     }
 
     final isUp = rankChange > 0;
     final color = isUp ? Colors.green : Colors.red;
-    final icon = isUp ? Icons.arrow_upward : Icons.arrow_downward;
+    final icon = isUp ? Icons.trending_up : Icons.trending_down;
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 16, color: color),
-        const SizedBox(width: 4),
-        Text(
-          '${rankChange.abs()}',
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-      ],
+    return Icon(
+      icon,
+      size: 24,
+      color: color,
     );
   }
 }
