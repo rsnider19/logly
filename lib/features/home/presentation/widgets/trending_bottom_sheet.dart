@@ -156,9 +156,9 @@ class _TrendingActivityTile extends StatelessWidget {
           const SizedBox(width: 8),
           // Activity icon
           if (activityData != null)
-            ActivityIcon(activity: activityData, size: 24)
+            ActivityIcon(activity: activityData)
           else
-            const Icon(Icons.fitness_center, size: 24),
+            const Icon(Icons.category_outlined, size: 24),
         ],
       ),
       title: Text(activityData?.name ?? 'Unknown Activity'),

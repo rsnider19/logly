@@ -216,7 +216,7 @@ final class FavoriteStateNotifierProvider
 }
 
 String _$favoriteStateNotifierHash() =>
-    r'ec32895dddd12f981308c52f7c373c3e0fb806ef';
+    r'7e8b7b1db02f2b85c4015bcace26956c44837e79';
 
 /// State notifier for managing favorite actions with optimistic updates.
 

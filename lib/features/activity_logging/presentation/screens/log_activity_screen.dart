@@ -242,7 +242,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            ActivityIcon(activity: activity, size: 24),
+            ActivityIcon(activity: activity),
             const SizedBox(width: 8),
             Expanded(
               child: Text(

@@ -14,7 +14,6 @@ class ActivityCategoryIcon extends StatelessWidget {
     required this.activityCategory,
     this.size = 24,
     this.fit = BoxFit.cover,
-    this.borderRadius,
     this.color,
     super.key,
   });
@@ -22,27 +21,22 @@ class ActivityCategoryIcon extends StatelessWidget {
   final ActivityCategory activityCategory;
   final double size;
   final BoxFit fit;
-  final BorderRadius? borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
     final categoryColor = _parseColor(activityCategory.hexColor);
 
-    return ClipRRect(
-      borderRadius: effectiveBorderRadius,
-      child: CachedNetworkImage(
-        imageUrl: activityCategory.icon,
-        width: size,
-        height: size,
-        fit: fit,
-        placeholder: (context, url) => SizedBox(width: size, height: size),
-        errorWidget: (context, url, error) => Icon(
-          Icons.category_outlined,
-          size: size,
-          color: color ?? categoryColor,
-        ),
+    return CachedNetworkImage(
+      imageUrl: activityCategory.icon,
+      width: size,
+      height: size,
+      fit: fit,
+      placeholder: (context, url) => SizedBox(width: size, height: size),
+      errorWidget: (context, url, error) => Icon(
+        Icons.category_outlined,
+        size: size,
+        color: color ?? categoryColor,
       ),
     );
   }
@@ -105,7 +99,6 @@ class ActivitySummaryIcon extends StatelessWidget {
     required this.activitySummary,
     this.size = 24,
     this.fit = BoxFit.cover,
-    this.borderRadius,
     this.color,
     super.key,
   });
@@ -113,38 +106,31 @@ class ActivitySummaryIcon extends StatelessWidget {
   final ActivitySummary activitySummary;
   final double size;
   final BoxFit fit;
-  final BorderRadius? borderRadius;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = borderRadius ?? BorderRadius.circular(size / 2);
-
-    return ClipRRect(
-      borderRadius: effectiveBorderRadius,
-      child: CachedNetworkImage(
-        imageUrl: activitySummary.icon,
-        width: size,
-        height: size,
-        fit: fit,
-        placeholder: (context, url) => SizedBox(width: size, height: size),
-        errorWidget: (context, url, error) {
-          if (activitySummary.activityCategory != null) {
-            return ActivityCategoryIcon(
-              activityCategory: activitySummary.activityCategory!,
-              size: size,
-              fit: fit,
-              borderRadius: effectiveBorderRadius,
-              color: color,
-            );
-          }
-          return Icon(
-            Icons.category_outlined,
+    return CachedNetworkImage(
+      imageUrl: activitySummary.icon,
+      width: size,
+      height: size,
+      fit: fit,
+      placeholder: (context, url) => SizedBox(width: size, height: size),
+      errorWidget: (context, url, error) {
+        if (activitySummary.activityCategory != null) {
+          return ActivityCategoryIcon(
+            activityCategory: activitySummary.activityCategory!,
             size: size,
+            fit: fit,
             color: color,
           );
-        },
-      ),
+        }
+        return Icon(
+          Icons.category_outlined,
+          size: size,
+          color: color,
+        );
+      },
     );
   }
 }
@@ -170,30 +156,27 @@ class SubActivityIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(size / 2),
-      child: CachedNetworkImage(
-        imageUrl: subActivity.icon,
-        width: size,
-        height: size,
-        fit: fit,
-        placeholder: (context, url) => SizedBox(width: size, height: size),
-        errorWidget: (context, url, error) {
-          if (fallbackActivity != null) {
-            return ActivityIcon(
-              activity: fallbackActivity!,
-              size: size,
-              fit: fit,
-              color: color,
-            );
-          }
-          return Icon(
-            Icons.category_outlined,
+    return CachedNetworkImage(
+      imageUrl: subActivity.icon,
+      width: size,
+      height: size,
+      fit: fit,
+      placeholder: (context, url) => SizedBox(width: size, height: size),
+      errorWidget: (context, url, error) {
+        if (fallbackActivity != null) {
+          return ActivityIcon(
+            activity: fallbackActivity!,
             size: size,
+            fit: fit,
             color: color,
           );
-        },
-      ),
+        }
+        return Icon(
+          Icons.category_outlined,
+          size: size,
+          color: color,
+        );
+      },
     );
   }
 }
