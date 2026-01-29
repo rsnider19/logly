@@ -70,7 +70,7 @@ EnvironmentDetailConfig _$EnvironmentDetailConfigFromJson(
   Map<String, dynamic> json,
 ) => EnvironmentDetailConfig(
   id: json['id'] as String,
-  label: json['label'] as String? ?? '',
+  label: json['label'] as String? ?? 'Environment',
   $type: json['detailType'] as String?,
 );
 

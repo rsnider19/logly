@@ -501,7 +501,7 @@ as bool,
 @JsonSerializable()
 
 class EnvironmentDetailConfig extends ActivityDetailConfig {
-  const EnvironmentDetailConfig({required this.id, this.label = '', final  String? $type}): $type = $type ?? 'environment',super._();
+  const EnvironmentDetailConfig({required this.id, this.label = 'Environment', final  String? $type}): $type = $type ?? 'environment',super._();
   factory EnvironmentDetailConfig.fromJson(Map<String, dynamic> json) => _$EnvironmentDetailConfigFromJson(json);
 
 @override final  String id;

@@ -45,7 +45,7 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
   @FreezedUnionValue('environment')
   const factory ActivityDetailConfig.environment({
     required String id,
-    @Default('') String label,
+    @Default('Environment') String label,
   }) = EnvironmentDetailConfig;
 
   /// Pace detail (requires duration and distance marked for pace).
