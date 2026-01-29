@@ -16,50 +16,24 @@ class EnvironmentDetailForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        // Label input (optional for environment)
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'Label (Optional)',
-            hintText: config.labelPlaceholder,
-            helperText: 'Leave empty for default "Environment"',
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          ),
-          onChanged: onLabelChanged,
-          controller: TextEditingController(text: config.label)
-            ..selection = TextSelection.collapsed(offset: config.label.length),
-          textCapitalization: TextCapitalization.words,
+        Expanded(
+          flex: 2,
+          child: Text('Label', style: theme.textTheme.bodyMedium),
         ),
-        const SizedBox(height: 16),
-
-        // Preview
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.info_outline,
-                color: theme.colorScheme.primary,
-                size: 20,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(
-                  'Users can select Indoor or Outdoor when logging this activity.',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-              ),
-            ],
+        Expanded(
+          flex: 3,
+          child: TextField(
+            textAlign: TextAlign.right,
+            decoration: InputDecoration(
+              hintText: config.labelPlaceholder,
+              border: const OutlineInputBorder(),
+            ),
+            onChanged: onLabelChanged,
+            controller: TextEditingController(text: config.label)
+              ..selection = TextSelection.collapsed(offset: config.label.length),
+            textCapitalization: TextCapitalization.words,
           ),
         ),
       ],

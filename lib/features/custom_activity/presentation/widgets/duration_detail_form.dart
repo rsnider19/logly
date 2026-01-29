@@ -79,62 +79,91 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Label input
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'Label',
-            hintText: widget.config.labelPlaceholder,
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          ),
-          onChanged: widget.onLabelChanged,
-          controller: TextEditingController(text: widget.config.label)
-            ..selection = TextSelection.collapsed(offset: widget.config.label.length),
-          textCapitalization: TextCapitalization.words,
-        ),
-        const SizedBox(height: 16),
-
-        // Maximum duration input
-        Text('Maximum Duration', style: theme.textTheme.bodyMedium),
-        const SizedBox(height: 8),
         Row(
           children: [
             Expanded(
+              flex: 2,
+              child: Text('Label', style: theme.textTheme.bodyMedium),
+            ),
+            Expanded(
+              flex: 3,
               child: TextField(
-                controller: _hoursController,
-                decoration: const InputDecoration(
-                  labelText: 'Hours',
-                  border: OutlineInputBorder(),
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  hintText: widget.config.labelPlaceholder,
+                  border: const OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                onChanged: (_) => _updateMaxSeconds(),
+                onChanged: widget.onLabelChanged,
+                controller: TextEditingController(text: widget.config.label)
+                  ..selection = TextSelection.collapsed(offset: widget.config.label.length),
+                textCapitalization: TextCapitalization.words,
               ),
             ),
-            const SizedBox(width: 8),
+          ],
+        ),
+        const SizedBox(height: 16),
+
+        // Max duration input
+        Row(
+          children: [
             Expanded(
-              child: TextField(
-                controller: _minutesController,
-                decoration: const InputDecoration(
-                  labelText: 'Minutes',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                onChanged: (_) => _updateMaxSeconds(),
-              ),
+              flex: 2,
+              child: Text('Maximum', style: theme.textTheme.bodyMedium),
             ),
-            const SizedBox(width: 8),
             Expanded(
-              child: TextField(
-                controller: _secondsController,
-                decoration: const InputDecoration(
-                  labelText: 'Seconds',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                onChanged: (_) => _updateMaxSeconds(),
+              flex: 3,
+              child: Row(
+                spacing: 8,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _hoursController,
+                      textAlign: TextAlign.right,
+                      decoration: const InputDecoration(
+                        suffixText: 'h',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      onChanged: (_) => _updateMaxSeconds(),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _minutesController,
+                      textAlign: TextAlign.right,
+                      decoration: const InputDecoration(
+                        suffixText: 'm',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      onChanged: (_) => _updateMaxSeconds(),
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      controller: _secondsController,
+                      textAlign: TextAlign.right,
+                      decoration: const InputDecoration(
+                        suffixText: 's',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(2),
+                      ],
+                      onChanged: (_) => _updateMaxSeconds(),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -143,12 +172,15 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
 
         // Use for pace calculation toggle
         if (widget.paceEnabled)
-          SwitchListTile(
-            title: const Text('Use for pace calculation'),
-            subtitle: const Text('Mark this duration for pace calculation'),
-            value: widget.config.useForPace,
-            onChanged: widget.onUseForPaceChanged,
-            contentPadding: EdgeInsets.zero,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Use for pace', style: theme.textTheme.bodyMedium),
+              Switch(
+                value: widget.config.useForPace,
+                onChanged: widget.onUseForPaceChanged,
+              ),
+            ],
           ),
       ],
     );

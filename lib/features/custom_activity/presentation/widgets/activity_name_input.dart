@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// A text field for entering the activity name.
 class ActivityNameInput extends StatelessWidget {
@@ -17,30 +18,30 @@ class ActivityNameInput extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          'Activity Name',
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: 'Enter activity name',
-            errorText: errorText,
-            counterText: '${controller.text.length}/50',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+        Expanded(
+          flex: 2,
+          child: Text(
+            'Activity Name',
+            style: theme.textTheme.bodyMedium,
           ),
-          maxLength: 50,
-          textCapitalization: TextCapitalization.words,
-          textInputAction: TextInputAction.next,
+        ),
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: controller,
+            onChanged: onChanged,
+            decoration: InputDecoration(
+              hintText: 'Enter activity name',
+              errorText: errorText,
+              counter: const SizedBox.shrink(),
+            ),
+            maxLength: 50,
+            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+            textCapitalization: TextCapitalization.words,
+            textInputAction: TextInputAction.next,
+          ),
         ),
       ],
     );

@@ -26,11 +26,6 @@ class CategorySelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Category',
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
         categoriesAsync.when(
           data: (categories) => _buildCategoryChips(context, categories),
           loading: () => const Center(
@@ -48,13 +43,29 @@ class CategorySelector extends ConsumerWidget {
           ),
         ),
         if (hasError && selectedCategoryId == null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              'Please select a category',
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.error,
-              ),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: theme.colorScheme.error,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Please select a category.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
       ],
@@ -62,15 +73,34 @@ class CategorySelector extends ConsumerWidget {
   }
 
   Widget _buildCategoryChips(BuildContext context, List<ActivityCategory> categories) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: categories.map((category) {
-        final isSelected = category.activityCategoryId == selectedCategoryId;
-        return _CategoryChip(
-          category: category,
-          isSelected: isSelected,
-          onTap: () => onCategorySelected(category.activityCategoryId),
+    final rows = <List<ActivityCategory>>[];
+    for (var i = 0; i < categories.length; i += 3) {
+      rows.add(categories.sublist(i, (i + 3).clamp(0, categories.length)));
+    }
+
+    return Column(
+      children: rows.map((row) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Row(
+            children: [
+              for (var i = 0; i < row.length; i++) ...[
+                if (i > 0) const SizedBox(width: 8),
+                Expanded(
+                  child: _CategoryChip(
+                    category: row[i],
+                    isSelected: row[i].activityCategoryId == selectedCategoryId,
+                    onTap: () => onCategorySelected(row[i].activityCategoryId),
+                  ),
+                ),
+              ],
+              // Fill remaining space if row has fewer than 3 items
+              for (var i = row.length; i < 3; i++) ...[
+                const SizedBox(width: 8),
+                const Expanded(child: SizedBox.shrink()),
+              ],
+            ],
+          ),
         );
       }).toList(),
     );
@@ -94,11 +124,22 @@ class _CategoryChip extends StatelessWidget {
     final categoryColor = category.color;
 
     return FilterChip(
-      label: Text(category.name),
+      label: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Text(
+              category.name,
+              overflow: TextOverflow.fade,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
+      ),
       selected: isSelected,
       onSelected: (_) => onTap(),
       selectedColor: categoryColor,
-      checkmarkColor: _contrastColor(categoryColor),
+      showCheckmark: false,
       labelStyle: TextStyle(
         color: isSelected ? _contrastColor(categoryColor) : theme.colorScheme.onSurface,
       ),

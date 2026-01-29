@@ -52,26 +52,33 @@ class PaceDetailForm extends StatelessWidget {
           ),
 
         // Pace type dropdown
-        Text('Pace Type', style: theme.textTheme.bodyMedium),
-        const SizedBox(height: 8),
-        DropdownButtonFormField<PaceType>(
-          value: config.paceType,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          ),
-          items: PaceType.values.map((type) {
-            return DropdownMenuItem(
-              value: type,
-              child: Text(_getPaceTypeLabel(type)),
-            );
-          }).toList(),
-          onChanged: (value) {
-            if (value != null) {
-              onPaceTypeChanged(value);
-            }
-          },
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text('Pace Type', style: theme.textTheme.bodyMedium),
+            ),
+            Expanded(
+              flex: 3,
+              child: DropdownButtonFormField<PaceType>(
+                initialValue: config.paceType,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                ),
+                items: PaceType.values.map((type) {
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(_getPaceTypeLabel(type)),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  if (value != null) {
+                    onPaceTypeChanged(value);
+                  }
+                },
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 8),
         Text(
@@ -86,10 +93,10 @@ class PaceDetailForm extends StatelessWidget {
 
   String _getPaceTypeLabel(PaceType type) {
     return switch (type) {
-      PaceType.minutesPerUom => 'Minutes per unit',
-      PaceType.minutesPer100Uom => 'Minutes per 100 units',
-      PaceType.minutesPer500m => 'Minutes per 500m',
-      PaceType.floorsPerMinute => 'Floors per minute',
+      PaceType.minutesPerUom => 'Minutes/unit',
+      PaceType.minutesPer100Uom => 'Minutes/100 units',
+      PaceType.minutesPer500m => 'Minutes/500m',
+      PaceType.floorsPerMinute => 'Floors/minute',
     };
   }
 

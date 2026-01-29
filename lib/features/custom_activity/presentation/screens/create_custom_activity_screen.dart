@@ -39,7 +39,9 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
 
     // Initialize the form state
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(createCustomActivityFormStateProvider.notifier).init(
+      ref
+          .read(createCustomActivityFormStateProvider.notifier)
+          .init(
             initialName: widget.initialName,
           );
     });
@@ -182,66 +184,52 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category selector
-                    CategorySelector(
-                      selectedCategoryId: formState.categoryId,
-                      onCategorySelected: (categoryId) {
-                        ref.read(createCustomActivityFormStateProvider.notifier).setCategory(categoryId);
-                      },
-                      hasError: !validation.hasCategorySelected && formState.name.isNotEmpty,
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Activity name input
-                    ActivityNameInput(
-                      controller: _nameController,
-                      onChanged: (name) {
-                        ref.read(createCustomActivityFormStateProvider.notifier).setName(name);
-                      },
-                      errorText: formState.name.isNotEmpty && !validation.isNameValid
-                          ? 'Name must be 2-50 characters'
-                          : null,
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Detail cards
-                    if (formState.details.isNotEmpty) ...[
-                      Text(
-                        'Details',
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      ...formState.details.map((detail) => _buildDetailCard(detail, formState)),
-                    ],
-
-                    // Pace dependency error
-                    if (validation.paceDependencyError != null)
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        margin: const EdgeInsets.only(bottom: 16),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.errorContainer,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Row(
+                    Card.outlined(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Icon(
-                              Icons.warning_amber_rounded,
-                              color: theme.colorScheme.error,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
+                            SizedBox(
+                              height: kMinInteractiveDimension - 12,
                               child: Text(
-                                validation.paceDependencyError!,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onErrorContainer,
+                                'Activity',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                            ),
+                            const Divider(height: 1),
+                            const SizedBox(height: 10),
+                            // Category selector
+                            CategorySelector(
+                              selectedCategoryId: formState.categoryId,
+                              onCategorySelected: (categoryId) {
+                                ref.read(createCustomActivityFormStateProvider.notifier).setCategory(categoryId);
+                              },
+                              hasError: !validation.hasCategorySelected && formState.name.isNotEmpty,
+                            ),
+                            const SizedBox(height: 16),
+
+                            // Activity name input
+                            ActivityNameInput(
+                              controller: _nameController,
+                              onChanged: (name) {
+                                ref.read(createCustomActivityFormStateProvider.notifier).setName(name);
+                              },
+                              errorText: formState.name.isNotEmpty && !validation.isNameValid
+                                  ? 'Name must be 2-50 characters'
+                                  : null,
                             ),
                           ],
                         ),
                       ),
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Detail cards
+                    ...formState.details.map((detail) => _buildDetailCard(detail, formState)),
 
                     // Spacer for sticky bottom
                     const SizedBox(height: 100),
@@ -271,35 +259,35 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
       onDelete: () => notifier.removeDetail(detail.id),
       child: switch (detail) {
         NumberDetailConfig() => NumberDetailForm(
-            config: detail,
-            onLabelChanged: (label) => notifier.updateNumberLabel(detail.id, label),
-            onIsIntegerChanged: (isInteger) => notifier.updateNumberIsInteger(detail.id, isInteger: isInteger),
-            onMaxValueChanged: (maxValue) => notifier.updateNumberMaxValue(detail.id, maxValue),
-          ),
+          config: detail,
+          onLabelChanged: (label) => notifier.updateNumberLabel(detail.id, label),
+          onIsIntegerChanged: (isInteger) => notifier.updateNumberIsInteger(detail.id, isInteger: isInteger),
+          onMaxValueChanged: (maxValue) => notifier.updateNumberMaxValue(detail.id, maxValue),
+        ),
         DurationDetailConfig() => DurationDetailForm(
-            config: detail,
-            onLabelChanged: (label) => notifier.updateDurationLabel(detail.id, label),
-            onMaxSecondsChanged: (maxSeconds) => notifier.updateDurationMaxSeconds(detail.id, maxSeconds),
-            onUseForPaceChanged: (useForPace) => notifier.updateDurationUseForPace(detail.id, useForPace: useForPace),
-            paceEnabled: formState.hasPace || !formState.hasDurationForPace,
-          ),
+          config: detail,
+          onLabelChanged: (label) => notifier.updateDurationLabel(detail.id, label),
+          onMaxSecondsChanged: (maxSeconds) => notifier.updateDurationMaxSeconds(detail.id, maxSeconds),
+          onUseForPaceChanged: (useForPace) => notifier.updateDurationUseForPace(detail.id, useForPace: useForPace),
+          paceEnabled: formState.hasPace || !formState.hasDurationForPace,
+        ),
         DistanceDetailConfig() => DistanceDetailForm(
-            config: detail,
-            onLabelChanged: (label) => notifier.updateDistanceLabel(detail.id, label),
-            onIsShortChanged: (isShort) => notifier.updateDistanceIsShort(detail.id, isShort: isShort),
-            onMaxValueChanged: (maxValue) => notifier.updateDistanceMaxValue(detail.id, maxValue),
-            onUseForPaceChanged: (useForPace) => notifier.updateDistanceUseForPace(detail.id, useForPace: useForPace),
-            paceEnabled: formState.hasPace || !formState.hasDistanceForPace,
-          ),
+          config: detail,
+          onLabelChanged: (label) => notifier.updateDistanceLabel(detail.id, label),
+          onIsShortChanged: (isShort) => notifier.updateDistanceIsShort(detail.id, isShort: isShort),
+          onMaxValueChanged: (maxValue) => notifier.updateDistanceMaxValue(detail.id, maxValue),
+          onUseForPaceChanged: (useForPace) => notifier.updateDistanceUseForPace(detail.id, useForPace: useForPace),
+          paceEnabled: formState.hasPace || !formState.hasDistanceForPace,
+        ),
         EnvironmentDetailConfig() => EnvironmentDetailForm(
-            config: detail,
-            onLabelChanged: (label) => notifier.updateEnvironmentLabel(detail.id, label),
-          ),
+          config: detail,
+          onLabelChanged: (label) => notifier.updateEnvironmentLabel(detail.id, label),
+        ),
         PaceDetailConfig() => PaceDetailForm(
-            config: detail,
-            onPaceTypeChanged: (paceType) => notifier.updatePaceType(detail.id, paceType),
-            areDependenciesMet: formState.arePaceDependenciesMet,
-          ),
+          config: detail,
+          onPaceTypeChanged: (paceType) => notifier.updatePaceType(detail.id, paceType),
+          areDependenciesMet: formState.arePaceDependenciesMet,
+        ),
       },
     );
   }

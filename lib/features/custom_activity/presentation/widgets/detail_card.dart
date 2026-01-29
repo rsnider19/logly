@@ -21,39 +21,39 @@ class DetailCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
+    return Card.outlined(
       margin: const EdgeInsets.only(bottom: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  detail.typeName,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              Text(
+                detail.typeName,
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: theme.colorScheme.error,
-                  ),
-                  onPressed: onDelete,
-                  tooltip: 'Remove ${detail.typeName}',
+              ),
+              const Spacer(),
+              IconButton(
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: theme.colorScheme.error,
                 ),
-              ],
-            ),
-            const Divider(),
-            const SizedBox(height: 8),
-            // Form fields
-            child,
-          ],
-        ),
+                onPressed: onDelete,
+                tooltip: 'Remove ${detail.typeName}',
+              ),
+            ],
+          ),
+          const Divider(indent: 16, endIndent: 16, height: 1),
+          const SizedBox(height: 16),
+          // Form fields
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: child,
+          ),
+        ],
       ),
     );
   }

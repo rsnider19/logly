@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
+import 'package:logly/features/settings/domain/user_preferences.dart';
+import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 
 /// Form fields for configuring a Distance detail.
-class DistanceDetailForm extends StatelessWidget {
+class DistanceDetailForm extends ConsumerWidget {
   const DistanceDetailForm({
     required this.config,
     required this.onLabelChanged,
@@ -22,88 +26,109 @@ class DistanceDetailForm extends StatelessWidget {
   final bool paceEnabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final preferencesAsync = ref.watch(preferencesStateProvider);
+    final isImperial = switch (preferencesAsync) {
+      AsyncData(:final value) => value.unitSystem == UnitSystem.imperial,
+      _ => false,
+    };
+    final shortUnit = isImperial ? 'yd' : 'm';
+    final longUnit = isImperial ? 'mi' : 'km';
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Label input
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'Label',
-            hintText: config.labelPlaceholder,
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          ),
-          onChanged: onLabelChanged,
-          controller: TextEditingController(text: config.label)
-            ..selection = TextSelection.collapsed(offset: config.label.length),
-          textCapitalization: TextCapitalization.words,
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text('Label', style: theme.textTheme.bodyMedium),
+            ),
+            Expanded(
+              flex: 3,
+              child: TextField(
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  hintText: config.labelPlaceholder,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: onLabelChanged,
+                controller: TextEditingController(text: config.label)
+                  ..selection = TextSelection.collapsed(offset: config.label.length),
+                textCapitalization: TextCapitalization.words,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
 
-        // Short/Long toggle
-        Text('Distance Type', style: theme.textTheme.bodyMedium),
-        const SizedBox(height: 8),
-        SegmentedButton<bool>(
-          segments: const [
-            ButtonSegment(
-              value: true,
-              label: Text('Short'),
-              icon: Icon(Icons.straighten, size: 16),
+        // Short/Long toggle (full width, no label)
+        CupertinoSlidingSegmentedControl<bool>(
+          groupValue: config.isShort,
+          children: {
+            true: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('Short ($shortUnit)'),
             ),
-            ButtonSegment(
-              value: false,
-              label: Text('Long'),
-              icon: Icon(Icons.route, size: 16),
+            false: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('Long ($longUnit)'),
             ),
-          ],
-          selected: {config.isShort},
-          onSelectionChanged: (selected) => onIsShortChanged(selected.first),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          config.isShort ? 'meters / yards' : 'kilometers / miles',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // Maximum value input
-        TextField(
-          decoration: InputDecoration(
-            labelText: 'Maximum Value',
-            suffixText: config.isShort ? 'm / yd' : 'km / mi',
-            border: const OutlineInputBorder(),
-            filled: true,
-            fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
-          ),
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-          ],
-          onChanged: (value) {
-            final parsed = double.tryParse(value);
-            if (parsed != null && parsed > 0) {
-              onMaxValueChanged(parsed);
+          },
+          onValueChanged: (value) {
+            if (value != null) {
+              onIsShortChanged(value);
             }
           },
-          controller: TextEditingController(text: config.maxValue.toString())
-            ..selection = TextSelection.collapsed(offset: config.maxValue.toString().length),
+        ),
+        const SizedBox(height: 16),
+
+        // Max value input
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text('Maximum', style: theme.textTheme.bodyMedium),
+            ),
+            Expanded(
+              flex: 3,
+              child: TextField(
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  suffixText: config.isShort ? shortUnit : longUnit,
+                  border: const OutlineInputBorder(),
+                ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\d.]')),
+                ],
+                onChanged: (value) {
+                  final parsed = double.tryParse(value);
+                  if (parsed != null && parsed > 0) {
+                    onMaxValueChanged(parsed);
+                  }
+                },
+                controller: TextEditingController(text: config.maxValue.toString())
+                  ..selection = TextSelection.collapsed(offset: config.maxValue.toString().length),
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 16),
 
         // Use for pace calculation toggle
         if (paceEnabled)
-          SwitchListTile(
-            title: const Text('Use for pace calculation'),
-            subtitle: const Text('Mark this distance for pace calculation'),
-            value: config.useForPace,
-            onChanged: onUseForPaceChanged,
-            contentPadding: EdgeInsets.zero,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Use for pace', style: theme.textTheme.bodyMedium),
+              Switch(
+                value: config.useForPace,
+                onChanged: onUseForPaceChanged,
+              ),
+            ],
           ),
       ],
     );
