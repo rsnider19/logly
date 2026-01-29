@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/onboarding/presentation/widgets/intro_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -17,17 +18,17 @@ class _IntroPagerScreenState extends State<IntroPagerScreen> {
 
   static const List<({IconData icon, String title, String description})> _pages = [
     (
-      icon: Icons.track_changes,
+      icon: LucideIcons.target,
       title: 'Track Everything',
       description: 'Log any activity from fitness to lifestyle. Build a complete picture of your daily habits.',
     ),
     (
-      icon: Icons.local_fire_department,
+      icon: LucideIcons.flame,
       title: 'Build Streaks',
       description: 'Stay consistent and build healthy habits. Watch your streaks grow day by day.',
     ),
     (
-      icon: Icons.insights,
+      icon: LucideIcons.lightbulb,
       title: 'Get Insights',
       description: 'AI-powered analysis of your activity patterns. Discover trends and optimize your routine.',
     ),

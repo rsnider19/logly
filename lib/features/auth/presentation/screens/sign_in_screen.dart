@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/auth/domain/auth_exception.dart' as app_auth;
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
@@ -96,7 +97,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               const Spacer(flex: 2),
               // App branding
               Icon(
-                Icons.track_changes,
+                LucideIcons.target,
                 size: 80,
                 color: theme.colorScheme.primary,
               ),

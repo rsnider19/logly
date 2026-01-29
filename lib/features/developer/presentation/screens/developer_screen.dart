@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
@@ -266,7 +267,7 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
           child: Row(
             children: [
               Icon(
-                Icons.info_outline,
+                LucideIcons.info,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
               const SizedBox(width: 12),

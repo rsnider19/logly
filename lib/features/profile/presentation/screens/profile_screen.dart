@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
@@ -43,7 +44,7 @@ class ProfileScreen extends ConsumerWidget {
                       : null,
                   child: user?.userMetadata?['avatar_url'] == null
                       ? Icon(
-                          Icons.person,
+                          LucideIcons.user,
                           size: 48,
                           color: theme.colorScheme.onPrimaryContainer,
                         )
@@ -106,7 +107,7 @@ class _InsightsFab extends ConsumerWidget {
           ProBadge(feature: FeatureCode.aiInsights),
         ],
       ),
-      icon: const Icon(Icons.auto_awesome_rounded),
+      icon: const Icon(LucideIcons.sparkles, size: 20),
     );
   }
 

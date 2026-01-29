@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/onboarding/application/onboarding_service.dart';
@@ -23,7 +24,7 @@ class _HealthPermissionScreenState extends ConsumerState<HealthPermissionScreen>
       ? 'Connect to Apple Health to automatically sync your workouts and activities.'
       : 'Connect to Health Connect to automatically sync your workouts and activities.';
 
-  IconData get _platformIcon => Platform.isIOS ? Icons.favorite : Icons.monitor_heart;
+  IconData get _platformIcon => Platform.isIOS ? Icons.favorite : LucideIcons.heartPulse;
 
   Future<void> _requestPermissions() async {
     setState(() {
@@ -151,17 +152,17 @@ class _HealthPermissionScreenState extends ConsumerState<HealthPermissionScreen>
 
               // Benefits list
               const _BenefitItem(
-                icon: Icons.sync,
+                icon: LucideIcons.refreshCw,
                 text: 'Auto-sync workouts and activities',
               ),
               const SizedBox(height: 12),
               const _BenefitItem(
-                icon: Icons.trending_up,
+                icon: LucideIcons.trendingUp,
                 text: 'Get more accurate insights',
               ),
               const SizedBox(height: 12),
               const _BenefitItem(
-                icon: Icons.lock_outline,
+                icon: LucideIcons.lock,
                 text: 'Your data stays private and secure',
               ),
 

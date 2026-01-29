@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
@@ -75,7 +76,7 @@ class _FavoritesSelectionScreenState extends ConsumerState<FavoritesSelectionScr
               Padding(
                 padding: const EdgeInsets.only(left: 8, top: 8),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_back),
+                  icon: const Icon(LucideIcons.arrowLeft),
                   onPressed: () => context.go('/onboarding'),
                 ),
               ),

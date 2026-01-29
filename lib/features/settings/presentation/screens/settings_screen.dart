@@ -1,6 +1,7 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
@@ -321,12 +322,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const _SectionHeader(title: 'Feedback'),
           ListTile(
             title: const Text('Rate us on the App Store'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _rateApp,
           ),
           ListTile(
             title: const Text('Share Logly'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _shareApp,
           ),
           ListTile(
@@ -337,7 +338,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _sendFeedback,
           ),
 
@@ -368,7 +369,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
           ListTile(
             title: const Text('Select favorites'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: () {
               showModalBottomSheet<void>(
                 context: context,
@@ -397,17 +398,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           const _SectionHeader(title: 'About us'),
           ListTile(
             title: const Text('Our vision'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openOurVision,
           ),
           ListTile(
             title: const Text('Privacy Policy'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openPrivacyPolicy,
           ),
           ListTile(
             title: const Text('EULA'),
-            trailing: const Icon(Icons.chevron_right),
+            trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openEula,
           ),
 
@@ -416,7 +417,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Account Management Section
           const _SectionHeader(title: 'Account Management'),
           ListTile(
-            leading: const Icon(Icons.logout),
+            leading: const Icon(LucideIcons.logOut),
             title: const Text('Sign Out'),
             trailing: _isSigningOut
                 ? const SizedBox(
@@ -428,7 +429,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: _isSigningOut ? null : _signOut,
           ),
           ListTile(
-            leading: Icon(Icons.delete_outline, color: theme.colorScheme.error),
+            leading: Icon(LucideIcons.trash2, color: theme.colorScheme.error),
             title: Text(
               'Delete Account',
               style: TextStyle(color: theme.colorScheme.error),
@@ -669,7 +670,7 @@ class _HealthSyncListTile extends ConsumerWidget {
     return ListTile(
       title: const Text('Sync health data'),
       subtitle: subtitle,
-      trailing: const Icon(Icons.chevron_right),
+      trailing: const Icon(LucideIcons.chevronRight),
       onTap: isSyncing ? null : () => _handleTap(context, ref, healthSyncEnabled: healthSyncEnabled),
     );
   }
@@ -709,7 +710,7 @@ class _NoActivitiesFoundBottomSheet extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              Icons.search_off,
+              LucideIcons.searchX,
               size: 40,
               color: theme.colorScheme.onSurfaceVariant,
             ),

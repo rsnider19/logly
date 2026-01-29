@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/onboarding/application/onboarding_service.dart';
@@ -26,7 +27,7 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
       ? 'Connect to Apple Health to automatically sync your workouts and activities.'
       : 'Connect to Health Connect to automatically sync your workouts and activities.';
 
-  IconData get _platformIcon => Platform.isIOS ? Icons.favorite : Icons.monitor_heart;
+  IconData get _platformIcon => Platform.isIOS ? Icons.favorite : LucideIcons.heartPulse;
 
   @override
   void initState() {
@@ -172,17 +173,17 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
 
           // Benefits list
           _BenefitItem(
-            icon: Icons.sync,
+            icon: LucideIcons.refreshCw,
             text: 'Auto-sync workouts and activities',
           ),
           const SizedBox(height: 8),
           _BenefitItem(
-            icon: Icons.trending_up,
+            icon: LucideIcons.trendingUp,
             text: 'Get more accurate insights',
           ),
           const SizedBox(height: 8),
           _BenefitItem(
-            icon: Icons.lock_outline,
+            icon: LucideIcons.lock,
             text: 'Your data stays private and secure',
           ),
 
@@ -324,7 +325,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         icon: Icon(
-          Icons.search_off,
+          LucideIcons.searchX,
           size: 48,
           color: theme.colorScheme.onSurfaceVariant,
         ),
@@ -454,7 +455,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.check_circle,
+                LucideIcons.circleCheck,
                 color: theme.colorScheme.primary,
                 size: 20,
               ),
@@ -495,7 +496,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
             child: Row(
               children: [
                 Icon(
-                  isFirstSync ? Icons.info_outline : Icons.access_time,
+                  isFirstSync ? LucideIcons.info : LucideIcons.clock,
                   color: theme.colorScheme.onSurfaceVariant,
                   size: 18,
                 ),
@@ -527,7 +528,7 @@ class _ConnectedSyncControls extends ConsumerWidget {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.sync),
+                : const Icon(LucideIcons.refreshCw),
             label: Text(syncState.isSyncing ? 'Syncing...' : 'Sync Now'),
           ),
         ),
