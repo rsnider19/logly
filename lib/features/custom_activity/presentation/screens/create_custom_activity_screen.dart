@@ -237,6 +237,9 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
                         physics: const NeverScrollableScrollPhysics(),
                         buildDefaultDragHandles: false,
                         proxyDecorator: _proxyDecorator,
+                        onReorderStart: (index) {
+                          FocusScope.of(context).unfocus();
+                        },
                         onReorder: (oldIndex, newIndex) {
                           ref
                               .read(createCustomActivityFormStateProvider.notifier)
