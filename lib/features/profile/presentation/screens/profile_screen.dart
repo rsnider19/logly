@@ -10,6 +10,7 @@ import 'package:logly/features/profile/presentation/widgets/weekly_radar_chart.d
 import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
+import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
 class ProfileScreen extends ConsumerWidget {
@@ -96,33 +97,16 @@ class _InsightsFab extends ConsumerWidget {
     final entitlements = ref.watch(entitlementStateProvider);
     final hasAccess = entitlements.hasFeature(FeatureCode.aiInsights);
 
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       onPressed: () => _onPressed(context, ref, hasAccess),
-      tooltip: 'AI Insights',
-      child: Stack(
-        alignment: Alignment.center,
+      label: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.auto_awesome),
-          if (!hasAccess && !entitlements.isLoading)
-            Positioned(
-              right: 0,
-              top: 0,
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.tertiary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.lock,
-                  size: 8,
-                  color: Theme.of(context).colorScheme.onTertiary,
-                ),
-              ),
-            ),
+          const Text('LoglyAI'),
+          ProBadge(feature: FeatureCode.aiInsights),
         ],
       ),
+      icon: const Icon(Icons.auto_awesome_rounded),
     );
   }
 

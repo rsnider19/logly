@@ -14,8 +14,10 @@ import 'package:logly/features/activity_logging/presentation/widgets/already_log
 import 'package:logly/features/activity_logging/presentation/widgets/search_section_tile.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/view_all_chip.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
+import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
+import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart';
 import 'package:logly/widgets/logly_icons.dart' show ActivityCategoryIcon;
 
 /// Screen for searching and selecting an activity to log.
@@ -262,20 +264,30 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     final theme = Theme.of(context);
     final hasAccess = ref.watch(hasCreateCustomActivityProvider);
 
-    return Card.filled(
+    return Card.outlined(
       margin: EdgeInsets.zero,
       child: ListTile(
         title: Text(
           'Create "$searchQuery"',
           style: theme.textTheme.titleMedium,
         ),
-        subtitle: Text(
-          'Create a custom activity',
-          style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Create a custom activity',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            ProBadge(feature: FeatureCode.createCustomActivity),
+          ],
         ),
-        trailing: Icon(hasAccess ? Icons.chevron_right : Icons.lock_outline),
+        trailing: const Icon(Icons.chevron_right),
+        contentPadding: const EdgeInsets.only(
+          left: 16,
+          right: 8,
+        ),
         onTap: hasAccess
             ? () => _navigateToCreateActivity(searchQuery)
             : () => ref.read(subscriptionServiceProvider).showPaywall(),

@@ -6,6 +6,7 @@ import 'package:logly/features/activity_logging/presentation/providers/activity_
 import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
+import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart';
 
 /// A text input for customizing the activity name.
 ///
@@ -57,9 +58,14 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Custom Name',
-          style: theme.textTheme.bodyLarge,
+        Row(
+          children: [
+            Text(
+              'Custom Name',
+              style: theme.textTheme.bodyLarge,
+            ),
+            ProBadge(feature: FeatureCode.activityNameOverride),
+          ],
         ),
         const SizedBox(height: 8),
         GestureDetector(
@@ -75,7 +81,7 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
                 hintText: 'e.g. Morning Run',
                 border: const OutlineInputBorder(),
                 counterText: hasAccess ? null : '',
-                suffixIcon: hasAccess ? null : const Icon(Icons.lock_outline),
+                suffixIcon: null,
               ),
               onChanged: hasAccess ? _onChanged : null,
             ),
