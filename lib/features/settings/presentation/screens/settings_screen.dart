@@ -508,17 +508,19 @@ class _NotificationsSection extends ConsumerWidget {
                   }
                 },
         ),
-        AnimatedCrossFade(
-          firstChild: const SizedBox.shrink(),
-          secondChild: ListTile(
-            title: const Text('Reminder'),
-            trailing: TextButton(
-              onPressed: onTimeTap,
-              child: Text(formatTime(reminderTime)),
-            ),
-          ),
-          crossFadeState: enabled ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+        AnimatedSize(
           duration: const Duration(milliseconds: 200),
+          alignment: Alignment.topCenter,
+          curve: Curves.easeInOut,
+          child: enabled
+              ? ListTile(
+                  title: const Text('Reminder'),
+                  trailing: TextButton(
+                    onPressed: onTimeTap,
+                    child: Text(formatTime(reminderTime)),
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
       ],
     );
