@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -110,7 +111,7 @@ class DailyActivityRow extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 8),
                 child: ActionChip(
                   avatar: Icon(
-                    Icons.add,
+                    LucideIcons.plus,
                     color: Theme.of(context).colorScheme.surface,
                   ),
                   label: Text(

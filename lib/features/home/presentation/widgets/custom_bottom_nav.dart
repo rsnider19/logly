@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -54,7 +55,7 @@ class CustomBottomNav extends ConsumerWidget {
                       : null,
                   child: user?.userMetadata?['avatar_url'] == null
                       ? Icon(
-                          Icons.person,
+                          LucideIcons.user,
                           size: 20,
                           color: theme.colorScheme.onPrimaryContainer,
                         )
@@ -83,7 +84,7 @@ class CustomBottomNav extends ConsumerWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    Icons.add,
+                    LucideIcons.plus,
                     size: 24,
                     color: theme.colorScheme.onPrimary,
                   ),

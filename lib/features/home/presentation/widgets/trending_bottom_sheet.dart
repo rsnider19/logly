@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/home/domain/trending_activity.dart';
 import 'package:logly/features/home/presentation/providers/trending_provider.dart';
@@ -42,7 +43,7 @@ class TrendingBottomSheet extends ConsumerWidget {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.trending_up,
+                      LucideIcons.trendingUp,
                       color: theme.colorScheme.primary,
                     ),
                     const SizedBox(width: 12),
@@ -65,7 +66,7 @@ class TrendingBottomSheet extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.trending_flat,
+                              LucideIcons.moveRight,
                               size: 48,
                               color: Colors.grey[400],
                             ),
@@ -96,7 +97,7 @@ class TrendingBottomSheet extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.error_outline,
+                            LucideIcons.circleAlert,
                             size: 48,
                             color: theme.colorScheme.error,
                           ),
@@ -158,7 +159,7 @@ class _TrendingActivityTile extends StatelessWidget {
           if (activityData != null)
             ActivityIcon(activity: activityData)
           else
-            const Icon(Icons.category_outlined, size: 24),
+            const Icon(LucideIcons.layoutGrid, size: 24),
         ],
       ),
       title: Text(activityData?.name ?? 'Unknown Activity'),
@@ -177,7 +178,7 @@ class _RankChangeIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     if (rankChange == 0) {
       return Icon(
-        Icons.trending_flat,
+        LucideIcons.moveRight,
         size: 24,
         color: Colors.grey[500],
       );
@@ -185,7 +186,7 @@ class _RankChangeIndicator extends StatelessWidget {
 
     final isUp = rankChange > 0;
     final color = isUp ? Colors.green : Colors.red;
-    final icon = isUp ? Icons.trending_up : Icons.trending_down;
+    final icon = isUp ? LucideIcons.trendingUp : LucideIcons.trendingDown;
 
     return Icon(
       icon,
