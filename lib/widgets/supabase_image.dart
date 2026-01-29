@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/services/env_service.dart';
 
@@ -49,7 +50,7 @@ class SupabaseImage extends ConsumerWidget {
       errorWidget:
           errorWidget ??
           (context, url, error) => const Center(
-            child: Icon(Icons.broken_image_outlined, color: Colors.grey),
+            child: Icon(LucideIcons.imageOff, color: Colors.grey),
           ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A chip that navigates to view all activities in a category.
 ///
@@ -29,7 +30,7 @@ class ViewAllChip extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Icon(
-            Icons.chevron_right,
+            LucideIcons.chevronRight,
             size: 18,
             color: categoryColor,
           ),

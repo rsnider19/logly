@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A collapsible card section with animated expand/collapse.
 class CollapsibleSection extends StatelessWidget {
@@ -58,7 +59,7 @@ class CollapsibleSection extends StatelessWidget {
                   AnimatedRotation(
                     turns: isExpanded ? 0.5 : 0,
                     duration: const Duration(milliseconds: 200),
-                    child: const Icon(Icons.expand_more),
+                    child: const Icon(LucideIcons.chevronDown),
                   ),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
@@ -8,7 +9,7 @@ import 'package:logly/features/activity_logging/domain/user_activity.dart';
 
 /// Displays an icon for an [ActivityCategory] from Supabase Storage.
 ///
-/// Falls back to [Icons.category_outlined] with the category color on error.
+/// Falls back to [LucideIcons.layoutGrid] with the category color on error.
 class ActivityCategoryIcon extends StatelessWidget {
   const ActivityCategoryIcon({
     required this.activityCategory,
@@ -34,7 +35,7 @@ class ActivityCategoryIcon extends StatelessWidget {
       fit: fit,
       placeholder: (context, url) => SizedBox(width: size, height: size),
       errorWidget: (context, url, error) => Icon(
-        Icons.category_outlined,
+        LucideIcons.layoutGrid,
         size: size,
         color: color ?? categoryColor,
       ),
@@ -49,7 +50,7 @@ class ActivityCategoryIcon extends StatelessWidget {
 
 /// Displays an icon for an [Activity] from Supabase Storage.
 ///
-/// Falls back to [ActivityCategoryIcon] if category exists, else [Icons.fitness_center].
+/// Falls back to [ActivityCategoryIcon] if category exists, else [LucideIcons.dumbbell].
 class ActivityIcon extends StatelessWidget {
   const ActivityIcon({
     required this.activity,
@@ -82,7 +83,7 @@ class ActivityIcon extends StatelessWidget {
           );
         }
         return Icon(
-          Icons.category_outlined,
+          LucideIcons.layoutGrid,
           size: size,
           color: color,
         );
@@ -93,7 +94,7 @@ class ActivityIcon extends StatelessWidget {
 
 /// Displays an icon for an [ActivitySummary] from Supabase Storage.
 ///
-/// Falls back to [ActivityCategoryIcon] if category exists, else [Icons.fitness_center].
+/// Falls back to [ActivityCategoryIcon] if category exists, else [LucideIcons.dumbbell].
 class ActivitySummaryIcon extends StatelessWidget {
   const ActivitySummaryIcon({
     required this.activitySummary,
@@ -126,7 +127,7 @@ class ActivitySummaryIcon extends StatelessWidget {
           );
         }
         return Icon(
-          Icons.category_outlined,
+          LucideIcons.layoutGrid,
           size: size,
           color: color,
         );
@@ -137,7 +138,7 @@ class ActivitySummaryIcon extends StatelessWidget {
 
 /// Displays an icon for a [SubActivity] from Supabase Storage.
 ///
-/// Falls back to [ActivityIcon] if fallbackActivity provided, else [Icons.layers_outlined].
+/// Falls back to [ActivityIcon] if fallbackActivity provided, else [LucideIcons.layoutGrid].
 class SubActivityIcon extends StatelessWidget {
   const SubActivityIcon({
     required this.subActivity,
@@ -172,7 +173,7 @@ class SubActivityIcon extends StatelessWidget {
           );
         }
         return Icon(
-          Icons.category_outlined,
+          LucideIcons.layoutGrid,
           size: size,
           color: color,
         );
@@ -186,7 +187,7 @@ class SubActivityIcon extends StatelessWidget {
 /// Priority logic:
 /// 1. If exactly 1 subactivity -> [SubActivityIcon] (with activity as fallback)
 /// 2. Otherwise -> [ActivityIcon] (which cascades to category on error)
-/// 3. If no activity -> generic [Icons.event_outlined]
+/// 3. If no activity -> generic [LucideIcons.layoutGrid]
 class UserActivityIcon extends StatelessWidget {
   const UserActivityIcon({
     required this.userActivity,
@@ -208,7 +209,7 @@ class UserActivityIcon extends StatelessWidget {
     // No activity -> generic icon
     if (activity == null) {
       return Icon(
-        Icons.category_outlined,
+        LucideIcons.layoutGrid,
         size: size,
       );
     }
