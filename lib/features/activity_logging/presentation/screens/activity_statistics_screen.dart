@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_statistics_provider.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
@@ -81,7 +82,7 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.error_outline, size: 48, color: theme.colorScheme.error),
+                      Icon(LucideIcons.circleAlert, size: 48, color: theme.colorScheme.error),
                       const SizedBox(height: 16),
                       Text(
                         'Failed to load statistics',
@@ -121,7 +122,7 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            Icons.event_busy_outlined,
+                            LucideIcons.calendarOff,
                             size: 48,
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -145,7 +146,7 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
                     children: [
                       ListTile(
                         leading: Icon(
-                          Icons.fitness_center,
+                          LucideIcons.dumbbell,
                           color: _dotColor,
                         ),
                         title: Text(widget.activityName),

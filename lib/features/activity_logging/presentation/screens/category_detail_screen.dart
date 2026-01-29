@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -86,7 +87,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.category_outlined,
+                    LucideIcons.layoutGrid,
                     size: 64,
                     color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                   ),
@@ -125,7 +126,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                Icons.error_outline,
+                LucideIcons.circleAlert,
                 color: theme.colorScheme.error,
                 size: 48,
               ),

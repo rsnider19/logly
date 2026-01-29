@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
@@ -205,7 +206,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.error_outline,
+                  LucideIcons.circleAlert,
                   size: 64,
                   color: theme.colorScheme.error,
                 ),
@@ -274,7 +275,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                 colorHex: activity.activityCategory?.hexColor,
               ).push<void>(context);
             },
-            icon: const Icon(Icons.query_stats),
+            icon: const Icon(LucideIcons.chartNoAxesCombined),
             tooltip: 'View statistics',
           ),
           IconButton(
@@ -293,7 +294,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : const Icon(Icons.delete_outline),
+                : const Icon(LucideIcons.trash2),
             tooltip: 'Delete',
           ),
         ],
@@ -381,7 +382,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.error_outline,
+                            LucideIcons.circleAlert,
                             color: theme.colorScheme.onErrorContainer,
                           ),
                           const SizedBox(width: 8),
@@ -491,7 +492,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
           child: Row(
             children: [
               Icon(
-                Icons.location_on_outlined,
+                LucideIcons.mapPin,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
               const SizedBox(width: 12),

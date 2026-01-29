@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -135,10 +136,10 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
               focusNode: _searchFocusNode,
               decoration: InputDecoration(
                 hintText: 'Search activities...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(LucideIcons.search),
                 suffixIcon: searchQuery.isNotEmpty
                     ? IconButton(
-                        icon: const Icon(Icons.clear),
+                        icon: const Icon(LucideIcons.x),
                         onPressed: _clearSearch,
                       )
                     : null,
@@ -181,7 +182,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                     children: [
                       const SizedBox(height: 48),
                       Icon(
-                        Icons.search_off,
+                        LucideIcons.searchX,
                         size: 64,
                         color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                       ),
@@ -283,7 +284,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
             ProBadge(feature: FeatureCode.createCustomActivity),
           ],
         ),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: const Icon(LucideIcons.chevronRight),
         contentPadding: const EdgeInsets.only(
           left: 16,
           right: 8,
@@ -366,7 +367,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                 child: Column(
                   children: [
                     Icon(
-                      Icons.error_outline,
+                      LucideIcons.circleAlert,
                       color: theme.colorScheme.error,
                       size: 48,
                     ),

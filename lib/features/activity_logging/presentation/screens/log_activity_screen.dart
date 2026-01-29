@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
@@ -189,7 +190,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  Icons.error_outline,
+                  LucideIcons.circleAlert,
                   size: 64,
                   color: theme.colorScheme.error,
                 ),
@@ -379,7 +380,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.error_outline,
+                                  LucideIcons.circleAlert,
                                   color: theme.colorScheme.onErrorContainer,
                                 ),
                                 const SizedBox(width: 8),
@@ -486,7 +487,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
           child: Row(
             children: [
               Icon(
-                Icons.location_on_outlined,
+                LucideIcons.mapPin,
                 color: theme.colorScheme.onSurfaceVariant,
               ),
               const SizedBox(width: 12),
