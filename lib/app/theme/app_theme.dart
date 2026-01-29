@@ -67,9 +67,18 @@ abstract final class AppTheme {
       labelStyle: _dark.chipTheme.labelStyle?.copyWith(
         color: _dark.colorScheme.onSurface,
       ),
+      side: BorderSide(
+        color: _dark.colorScheme.outline,
+      ),
     ),
     cardTheme: _dark.cardTheme.copyWith(
       margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: _dark.colorScheme.outline,
+        ),
+      ),
     ),
   );
 }
