@@ -50,6 +50,8 @@ abstract final class AppTheme {
       inputDecoratorBorderType: FlexInputBorderType.outline,
       alignedDropdown: true,
       navigationRailUseIndicator: true,
+      inputDecoratorContentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      inputDecoratorIsDense: true,
     ),
     // Direct ThemeData properties.
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -57,10 +59,17 @@ abstract final class AppTheme {
   );
 
   static ThemeData dark = _dark.copyWith(
+    inputDecorationTheme: _dark.inputDecorationTheme.copyWith(
+      filled: true,
+      fillColor: _dark.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+    ),
     chipTheme: _dark.chipTheme.copyWith(
       labelStyle: _dark.chipTheme.labelStyle?.copyWith(
         color: _dark.colorScheme.onSurface,
       ),
+    ),
+    cardTheme: _dark.cardTheme.copyWith(
+      margin: EdgeInsets.zero,
     ),
   );
 }
