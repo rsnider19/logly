@@ -24,7 +24,6 @@ import 'package:logly/features/activity_logging/presentation/widgets/pace_displa
 import 'package:logly/features/activity_logging/presentation/widgets/custom_name_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
-import 'package:logly/widgets/logly_icons.dart';
 
 /// Screen for logging a new activity.
 ///
@@ -234,7 +233,6 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
         ) ??
         false;
 
-    final activityColor = activity.getColor(context);
     final sortedDetails = List<ActivityDetail>.from(activity.activityDetail)
       ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
@@ -242,18 +240,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            ActivityIcon(activity: activity),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                activity.name,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
+        title: const Text('Log Activity'),
+        centerTitle: false,
         actions: [
           IconButton(
             onPressed: _toggleFavorite,
@@ -268,46 +256,16 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       body: formState.activity == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Activity header
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: activityColor.withValues(alpha: 0.1),
-                    border: Border(
-                      bottom: BorderSide(
-                        color: activityColor.withValues(alpha: 0.3),
-                      ),
+                // Activity name
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    activity.name,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      ActivityIcon(
-                        activity: activity,
-                        size: 48,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              activity.name,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            if (activity.activityCategory != null)
-                              Text(
-                                activity.activityCategory!.name,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
                   ),
                 ),
                 Expanded(

@@ -119,10 +119,12 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Log Activity'),
+        centerTitle: false,
         actions: [
-          TextButton(
+          TextButton.icon(
             onPressed: _pickDate,
-            child: Text(DateFormat.yMMMd().format(_selectedDate)),
+            icon: const Icon(LucideIcons.calendar),
+            label: Text(DateFormat.yMMMd().format(_selectedDate)),
           ),
         ],
       ),
