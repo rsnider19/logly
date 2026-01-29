@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
@@ -50,7 +51,7 @@ class _SubActivitySelectorState extends ConsumerState<SubActivitySelector> {
                   ),
                 ),
                 Icon(
-                  _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  _isExpanded ? LucideIcons.chevronUp : LucideIcons.chevronDown,
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/contribution_provider.dart';
@@ -305,7 +306,7 @@ class _ContributionError extends StatelessWidget {
       child: Column(
         children: [
           Icon(
-            Icons.error_outline,
+            LucideIcons.circleAlert,
             color: theme.colorScheme.error,
             size: 32,
           ),

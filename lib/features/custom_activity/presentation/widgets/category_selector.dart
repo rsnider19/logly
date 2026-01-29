@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
@@ -52,7 +53,7 @@ class CategorySelector extends ConsumerWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  LucideIcons.triangleAlert,
                   color: theme.colorScheme.error,
                   size: 20,
                 ),

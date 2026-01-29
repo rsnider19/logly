@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
@@ -233,7 +234,7 @@ class _SummaryError extends StatelessWidget {
       child: Column(
         children: [
           Icon(
-            Icons.error_outline,
+            LucideIcons.circleAlert,
             color: theme.colorScheme.error,
             size: 32,
           ),

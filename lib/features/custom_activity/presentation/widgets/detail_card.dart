@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
 
 /// A card container for an activity detail configuration.
@@ -38,7 +39,7 @@ class DetailCard extends StatelessWidget {
               const Spacer(),
               IconButton(
                 icon: Icon(
-                  Icons.delete_outline,
+                  LucideIcons.trash2,
                   color: theme.colorScheme.error,
                 ),
                 onPressed: onDelete,

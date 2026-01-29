@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
@@ -69,7 +70,7 @@ class DateRangePicker extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Icon(
-                  Icons.arrow_forward,
+                  LucideIcons.arrowRight,
                   color: theme.colorScheme.onSurfaceVariant,
                   size: 20,
                 ),
@@ -198,7 +199,7 @@ class _DateField extends StatelessWidget {
         child: Row(
           children: [
             Icon(
-              Icons.calendar_today,
+              LucideIcons.calendar,
               color: theme.colorScheme.onSurfaceVariant,
               size: 18,
             ),

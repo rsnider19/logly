@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
@@ -111,7 +112,7 @@ class _DefaultLockedContent extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.lock_outline,
+              LucideIcons.lock,
               size: 40,
               color: theme.colorScheme.primary,
             ),

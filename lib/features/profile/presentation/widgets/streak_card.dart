@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
@@ -62,7 +63,7 @@ class _StreakContentState extends State<_StreakContent> {
           child: _StreakStatBox(
             label: 'Current',
             value: widget.currentStreak,
-            icon: Icons.local_fire_department,
+            icon: LucideIcons.flame,
             iconColor: Colors.orange,
             autoSizeGroup: autoSizeGroup,
             placeholderText: '888',
@@ -73,7 +74,7 @@ class _StreakContentState extends State<_StreakContent> {
           child: _StreakStatBox(
             label: 'Longest',
             value: widget.longestStreak,
-            icon: Icons.emoji_events,
+            icon: LucideIcons.trophy,
             iconColor: Colors.amber,
             autoSizeGroup: autoSizeGroup,
             placeholderText: '888',
@@ -84,7 +85,7 @@ class _StreakContentState extends State<_StreakContent> {
           child: _StreakStatBox(
             label: 'Consistency',
             value: widget.consistencyScore,
-            icon: Icons.show_chart,
+            icon: LucideIcons.chartLine,
             iconColor: Colors.teal,
             suffix: '%',
             autoSizeGroup: autoSizeGroup,
@@ -167,7 +168,7 @@ class _StreakError extends StatelessWidget {
         child: Column(
           children: [
             Icon(
-              Icons.error_outline,
+              LucideIcons.circleAlert,
               color: theme.colorScheme.error,
               size: 32,
             ),

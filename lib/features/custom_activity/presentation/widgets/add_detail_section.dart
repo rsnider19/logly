@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
 
 /// The detail types available for adding.
 enum DetailType {
-  number('Number', Icons.numbers),
-  duration('Duration', Icons.timer_outlined),
-  distance('Distance', Icons.straighten),
-  environment('Environment', Icons.wb_sunny_outlined),
-  pace('Pace', Icons.speed);
+  number('Number', LucideIcons.hash),
+  duration('Duration', LucideIcons.timer),
+  distance('Distance', LucideIcons.ruler),
+  environment('Environment', LucideIcons.sun),
+  pace('Pace', LucideIcons.gauge);
 
   const DetailType(this.label, this.icon);
 

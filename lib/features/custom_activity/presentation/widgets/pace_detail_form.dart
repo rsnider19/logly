@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/activity_catalog/domain/pace_type.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
 
@@ -34,7 +35,7 @@ class PaceDetailForm extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.warning_amber_rounded,
+                  LucideIcons.triangleAlert,
                   color: theme.colorScheme.error,
                   size: 20,
                 ),
