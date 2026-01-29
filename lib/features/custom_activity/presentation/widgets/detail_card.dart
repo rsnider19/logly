@@ -9,12 +9,14 @@ import 'package:logly/features/custom_activity/domain/activity_detail_config.dar
 class DetailCard extends StatelessWidget {
   const DetailCard({
     required this.detail,
+    required this.index,
     required this.onDelete,
     required this.child,
     super.key,
   });
 
   final ActivityDetailConfig detail;
+  final int index;
   final VoidCallback onDelete;
   final Widget child;
 
@@ -29,7 +31,18 @@ class DetailCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const SizedBox(width: 16),
+              ReorderableDragStartListener(
+                index: index,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4),
+                  child: Icon(
+                    LucideIcons.gripVertical,
+                    color: theme.colorScheme.onSurfaceVariant,
+                    size: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
                 detail.typeName,
                 style: theme.textTheme.titleMedium?.copyWith(

@@ -125,6 +125,18 @@ class CreateCustomActivityFormStateNotifier extends _$CreateCustomActivityFormSt
     );
   }
 
+  /// Reorders details by moving the item at [oldIndex] to [newIndex].
+  void reorderDetails(int oldIndex, int newIndex) {
+    final details = List<ActivityDetailConfig>.from(state.details);
+    var adjustedNewIndex = newIndex;
+    if (oldIndex < adjustedNewIndex) {
+      adjustedNewIndex -= 1;
+    }
+    final item = details.removeAt(oldIndex);
+    details.insert(adjustedNewIndex, item);
+    state = state.copyWith(details: details, clearError: true);
+  }
+
   /// Updates a detail by its ID.
   void updateDetail(String detailId, ActivityDetailConfig Function(ActivityDetailConfig) updater) {
     state = state.copyWith(
