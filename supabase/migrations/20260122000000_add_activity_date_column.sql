@@ -109,7 +109,7 @@ BEGIN
       (detail->>'distance_in_meters')::double precision,
       (detail->>'liquid_volume_in_liters')::double precision,
       (detail->>'weight_in_kilograms')::double precision,
-      (detail->>'lat_lng')::geography(point)
+      (detail->>'lat_lng')::extensions.geography(point)
     FROM public.activity_detail a
       LEFT JOIN jsonb_array_elements(p_user_activity_details) AS detail ON a.activity_detail_id = (detail->>'activity_detail_id')::uuid
     WHERE a.activity_id = (p_user_activity->>'activity_id')::uuid

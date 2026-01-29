@@ -72,7 +72,7 @@ Deno.serve((r) =>
       previousResponseId,
       previousConversionId,
     });
-  }))
+  })
 );
 
 /* To invoke locally:
