@@ -17,29 +17,20 @@ class StreakCard extends ConsumerWidget {
     final consistencyAsync = ref.watch(consistencyScoreProvider);
 
     if (streakAsync is AsyncError) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: _StreakError(onRetry: () => ref.invalidate(streakProvider)),
-      );
+      return _StreakError(onRetry: () => ref.invalidate(streakProvider));
     }
     if (consistencyAsync is AsyncError) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: _StreakError(onRetry: () => ref.invalidate(consistencyScoreProvider)),
-      );
+      return _StreakError(onRetry: () => ref.invalidate(consistencyScoreProvider));
     }
 
     final isLoading = streakAsync is! AsyncData || consistencyAsync is! AsyncData;
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SkellyWrapper(
-        isLoading: isLoading,
-        child: _StreakContent(
-          currentStreak: streakAsync.value?.currentStreak ?? 0,
-          longestStreak: streakAsync.value?.longestStreak ?? 0,
-          consistencyScore: consistencyAsync.value ?? 0,
-        ),
+    return SkellyWrapper(
+      isLoading: isLoading,
+      child: _StreakContent(
+        currentStreak: streakAsync.value?.currentStreak ?? 0,
+        longestStreak: streakAsync.value?.longestStreak ?? 0,
+        consistencyScore: consistencyAsync.value ?? 0,
       ),
     );
   }
@@ -130,34 +121,32 @@ class _StreakStatBox extends StatelessWidget {
     final displayValue = suffix != null ? '$value$suffix' : '$value';
     final displayLabel = suffix != null ? label : '$label days';
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: iconColor, size: 32),
-          const SizedBox(height: 8),
-          Text(
-            displayValue,
-            style: theme.textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontFeatures: [
-                const FontFeature.tabularFigures(),
-              ],
+    return Card.outlined(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(icon, color: iconColor, size: 32),
+            const SizedBox(height: 8),
+            Text(
+              displayValue,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontFeatures: [
+                  const FontFeature.tabularFigures(),
+                ],
+              ),
+            ).withSkeleton(placeholderText: placeholderText),
+            AutoSizeText(
+              displayLabel,
+              maxLines: 1,
+              group: autoSizeGroup,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
-          ).withSkeleton(placeholderText: placeholderText),
-          AutoSizeText(
-            displayLabel,
-            maxLines: 1,
-            group: autoSizeGroup,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -172,26 +161,28 @@ class _StreakError extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Icon(
-            Icons.error_outline,
-            color: theme.colorScheme.error,
-            size: 32,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Failed to load streak data',
-            style: theme.textTheme.bodyMedium,
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: onRetry,
-            child: const Text('Retry'),
-          ),
-        ],
+    return Card.outlined(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Icon(
+              Icons.error_outline,
+              color: theme.colorScheme.error,
+              size: 32,
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Failed to load streak data',
+              style: theme.textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 8),
+            TextButton(
+              onPressed: onRetry,
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       ),
     );
   }

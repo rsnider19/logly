@@ -30,8 +30,7 @@ class CollapsibleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Card.outlined(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

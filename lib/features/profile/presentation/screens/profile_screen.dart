@@ -27,49 +27,47 @@ class ProfileScreen extends ConsumerWidget {
       ),
       floatingActionButton: _InsightsFab(),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
         child: Column(
+          spacing: 16,
           children: [
             // User info header
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 48,
-                    backgroundColor: theme.colorScheme.primaryContainer,
-                    backgroundImage: user?.userMetadata?['avatar_url'] != null
-                        ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
-                        : null,
-                    child: user?.userMetadata?['avatar_url'] == null
-                        ? Icon(
-                            Icons.person,
-                            size: 48,
-                            color: theme.colorScheme.onPrimaryContainer,
-                          )
-                        : null,
+            Column(
+              children: [
+                CircleAvatar(
+                  radius: 48,
+                  backgroundColor: theme.colorScheme.primaryContainer,
+                  backgroundImage: user?.userMetadata?['avatar_url'] != null
+                      ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
+                      : null,
+                  child: user?.userMetadata?['avatar_url'] == null
+                      ? Icon(
+                          Icons.person,
+                          size: 48,
+                          color: theme.colorScheme.onPrimaryContainer,
+                        )
+                      : null,
+                ),
+                const SizedBox(height: 16),
+                if (user?.email != null)
+                  Text(
+                    user!.email!,
+                    style: theme.textTheme.titleMedium,
                   ),
-                  const SizedBox(height: 16),
-                  if (user?.email != null)
-                    Text(
-                      user!.email!,
-                      style: theme.textTheme.titleMedium,
+                if (user?.createdAt != null) ...[
+                  const SizedBox(height: 4),
+                  Text(
+                    'Member since ${_formatMemberSince(user!.createdAt)}',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
-                  if (user?.createdAt != null) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      'Member since ${_formatMemberSince(user!.createdAt)}',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                  ),
                 ],
-              ),
+              ],
             ),
 
             // Streak card
             const StreakCard(),
-            const SizedBox(height: 8),
 
             // Summary card with time period filter
             const SummaryCard(),
@@ -84,7 +82,7 @@ class ProfileScreen extends ConsumerWidget {
             const MonthlyChartCard(),
 
             // Bottom padding for safe area
-            const SizedBox(height: 24),
+            const SizedBox(height: 56),
           ],
         ),
       ),
