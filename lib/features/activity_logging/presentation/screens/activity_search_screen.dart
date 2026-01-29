@@ -14,6 +14,8 @@ import 'package:logly/features/activity_logging/presentation/widgets/already_log
 import 'package:logly/features/activity_logging/presentation/widgets/search_section_tile.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/view_all_chip.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
+import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
+import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
 import 'package:logly/widgets/logly_icons.dart' show ActivityCategoryIcon;
 
 /// Screen for searching and selecting an activity to log.
@@ -92,7 +94,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     CreateCustomActivityRoute(
       name: searchQuery,
       date: _selectedDate.toIso8601String(),
-    ).push(context);
+    ).pushReplacement(context);
   }
 
   /// Checks if there's an exact match (case-insensitive) in the search results.
@@ -141,8 +143,6 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                filled: true,
-                fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
               ),
               onChanged: _onSearchChanged,
             ),
@@ -172,9 +172,6 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Create custom activity option
-                if (showCreateOption) _buildCreateActivityTile(searchQuery),
-
                 // Empty state
                 Center(
                   child: Column(
@@ -204,6 +201,12 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                     ],
                   ),
                 ),
+
+                // Create custom activity option (below empty state)
+                if (showCreateOption) ...[
+                  const SizedBox(height: 16),
+                  _buildCreateActivityTile(searchQuery),
+                ],
               ],
             ),
           );
@@ -215,12 +218,6 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Create custom activity option at the top
-              if (showCreateOption) ...[
-                _buildCreateActivityTile(searchQuery),
-                const SizedBox(height: 16),
-              ],
-
               // Activity chips
               Align(
                 alignment: Alignment.topLeft,
@@ -235,6 +232,12 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                   }).toList(),
                 ),
               ),
+
+              // Create custom activity option (below search results)
+              if (showCreateOption) ...[
+                const SizedBox(height: 16),
+                _buildCreateActivityTile(searchQuery),
+              ],
             ],
           ),
         );
@@ -257,17 +260,11 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
 
   Widget _buildCreateActivityTile(String searchQuery) {
     final theme = Theme.of(context);
+    final hasAccess = ref.watch(hasCreateCustomActivityProvider);
 
-    return Card(
+    return Card.filled(
       margin: EdgeInsets.zero,
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: theme.colorScheme.primaryContainer,
-          child: Icon(
-            Icons.add,
-            color: theme.colorScheme.onPrimaryContainer,
-          ),
-        ),
         title: Text(
           'Create "$searchQuery"',
           style: theme.textTheme.titleMedium,
@@ -278,8 +275,10 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () => _navigateToCreateActivity(searchQuery),
+        trailing: Icon(hasAccess ? Icons.chevron_right : Icons.lock_outline),
+        onTap: hasAccess
+            ? () => _navigateToCreateActivity(searchQuery)
+            : () => ref.read(subscriptionServiceProvider).showPaywall(),
       ),
     );
   }
