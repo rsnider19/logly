@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart' show DefaultCacheManager;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/providers/shared_preferences_provider.dart';
 import 'package:logly/core/services/env_service.dart';
@@ -55,6 +56,8 @@ Future<void> bootstrap(
   if (kDebugMode) {
     debugPrint('✓ SharedPreferences initialized');
   }
+
+  await DefaultCacheManager().emptyCache();
 
   runApp(
     ProviderScope(

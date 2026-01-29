@@ -16,6 +16,7 @@ dependencies:
   drift: ^2.22.1
   flutter:
     sdk: flutter
+  flutter_cache_manager: ^3.4.1
   flutter_chat_core: ^2.9.0
   flutter_chat_ui: ^2.11.1
   flutter_dotenv: ^6.0.0
