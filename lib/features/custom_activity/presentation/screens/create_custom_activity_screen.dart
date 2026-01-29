@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/routes.dart';
@@ -228,8 +230,29 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
 
                     const SizedBox(height: 16),
 
-                    // Detail cards
-                    ...formState.details.map((detail) => _buildDetailCard(detail, formState)),
+                    // Detail cards (reorderable)
+                    if (formState.details.isNotEmpty)
+                      ReorderableListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        buildDefaultDragHandles: false,
+                        proxyDecorator: _proxyDecorator,
+                        onReorder: (oldIndex, newIndex) {
+                          ref
+                              .read(createCustomActivityFormStateProvider.notifier)
+                              .reorderDetails(oldIndex, newIndex);
+                        },
+                        itemCount: formState.details.length,
+                        itemBuilder: (context, index) {
+                          final detail = formState.details[index];
+                          return _buildDetailCard(
+                            detail,
+                            formState,
+                            index,
+                            key: ValueKey(detail.id),
+                          );
+                        },
+                      ),
 
                     // Spacer for sticky bottom
                     const SizedBox(height: 100),
@@ -251,11 +274,36 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
     );
   }
 
-  Widget _buildDetailCard(ActivityDetailConfig detail, CreateCustomActivityFormState formState) {
+  Widget _proxyDecorator(Widget child, int index, Animation<double> animation) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        final animValue = Curves.easeInOut.transform(animation.value);
+        final elevation = lerpDouble(0, 6, animValue)!;
+        return Material(
+          elevation: elevation,
+          color: Colors.transparent,
+          shadowColor: Colors.black26,
+          borderRadius: BorderRadius.circular(12),
+          child: child,
+        );
+      },
+      child: child,
+    );
+  }
+
+  Widget _buildDetailCard(
+    ActivityDetailConfig detail,
+    CreateCustomActivityFormState formState,
+    int index, {
+    Key? key,
+  }) {
     final notifier = ref.read(createCustomActivityFormStateProvider.notifier);
 
     return DetailCard(
+      key: key,
       detail: detail,
+      index: index,
       onDelete: () => notifier.removeDetail(detail.id),
       child: switch (detail) {
         NumberDetailConfig() => NumberDetailForm(
