@@ -50,7 +50,10 @@ class SupabaseImage extends ConsumerWidget {
       errorWidget:
           errorWidget ??
           (context, url, error) => const Center(
-            child: Icon(LucideIcons.imageOff, color: Colors.grey),
+            child: Icon(
+              LucideIcons.imageOff300,
+              size: 20,
+            ),
           ),
     );
   }

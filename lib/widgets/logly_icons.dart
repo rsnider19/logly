@@ -1,11 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Displays an icon for an [ActivityCategory] from Supabase Storage.
 ///
@@ -35,9 +35,9 @@ class ActivityCategoryIcon extends StatelessWidget {
       fit: fit,
       placeholder: (context, url) => SizedBox(width: size, height: size),
       errorWidget: (context, url, error) => Icon(
-        LucideIcons.layoutGrid,
-        size: size,
-        color: color ?? categoryColor,
+        LucideIcons.imageOff300,
+        size: 20,
+        color: color,
       ),
     );
   }
@@ -83,8 +83,8 @@ class ActivityIcon extends StatelessWidget {
           );
         }
         return Icon(
-          LucideIcons.layoutGrid,
-          size: size,
+          LucideIcons.imageOff300,
+          size: 20,
           color: color,
         );
       },
@@ -127,7 +127,7 @@ class ActivitySummaryIcon extends StatelessWidget {
           );
         }
         return Icon(
-          LucideIcons.layoutGrid,
+          LucideIcons.imageOff300,
           size: size,
           color: color,
         );
@@ -173,7 +173,7 @@ class SubActivityIcon extends StatelessWidget {
           );
         }
         return Icon(
-          LucideIcons.layoutGrid,
+          LucideIcons.imageOff300,
           size: size,
           color: color,
         );
