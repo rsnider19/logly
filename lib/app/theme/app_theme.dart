@@ -50,7 +50,7 @@ abstract final class AppTheme {
       inputDecoratorBorderType: FlexInputBorderType.outline,
       alignedDropdown: true,
       navigationRailUseIndicator: true,
-      inputDecoratorContentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      inputDecoratorContentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       inputDecoratorIsDense: true,
     ),
     // Direct ThemeData properties.
