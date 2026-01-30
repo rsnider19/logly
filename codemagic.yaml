@@ -54,8 +54,7 @@ workflows:
           flutter build appbundle \
             --release \
             --flavor production \
-            --target lib/main_production.dart \
-            --build-number=$(($(google-play get-latest-build-number --package-name "com.logly") + 1))
+            --target lib/main_production.dart
 
       - name: Set up iOS pods
         script: |
