@@ -64,7 +64,6 @@ class _SubActivitySelectorState extends ConsumerState<SubActivitySelector> {
             padding: const EdgeInsets.only(top: 8),
             child: Wrap(
               spacing: 8,
-              runSpacing: 8,
               children: widget.subActivities.map((subActivity) {
                 final isSelected = selectedIds.contains(subActivity.subActivityId);
                 return SubActivityChip(

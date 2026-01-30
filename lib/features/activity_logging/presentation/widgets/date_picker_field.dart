@@ -7,67 +7,21 @@ import 'package:logly/features/activity_logging/presentation/providers/activity_
 /// Date picker field for selecting the activity date.
 ///
 /// Uses [ActivityFormStateNotifier.setActivityDate] to update the value.
-class DatePickerField extends ConsumerWidget {
+class DatePickerField extends ConsumerStatefulWidget {
   const DatePickerField({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
-    final formState = ref.watch(activityFormStateProvider);
-    final selectedDate = formState.activityDate;
-    final dateFormat = DateFormat.yMMMd();
+  ConsumerState<DatePickerField> createState() => _DatePickerFieldState();
+}
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Date',
-          style: theme.textTheme.bodyLarge,
-        ),
-        const SizedBox(height: 8),
-        InkWell(
-          onTap: () => _selectDate(context, ref, selectedDate),
-          borderRadius: BorderRadius.circular(8),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              border: Border.all(color: theme.colorScheme.outline),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  LucideIcons.calendar,
-                  color: theme.colorScheme.onSurfaceVariant,
-                  size: 20,
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    dateFormat.format(selectedDate),
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ),
-                if (_isToday(selectedDate))
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      'Today',
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
+class _DatePickerFieldState extends ConsumerState<DatePickerField> {
+  final _controller = TextEditingController();
+  final _dateFormat = DateFormat.yMMMd();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   bool _isToday(DateTime date) {
@@ -75,7 +29,7 @@ class DatePickerField extends ConsumerWidget {
     return date.year == now.year && date.month == now.month && date.day == now.day;
   }
 
-  Future<void> _selectDate(BuildContext context, WidgetRef ref, DateTime currentDate) async {
+  Future<void> _selectDate(DateTime currentDate) async {
     final now = DateTime.now();
     final selectedDate = await showDatePicker(
       context: context,
@@ -107,5 +61,67 @@ class DatePickerField extends ConsumerWidget {
       }
       ref.read(activityFormStateProvider.notifier).setActivityDate(dateWithTime);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final formState = ref.watch(activityFormStateProvider);
+    final selectedDate = formState.activityDate;
+
+    final formattedDate = _dateFormat.format(selectedDate);
+    if (_controller.text != formattedDate) {
+      _controller.text = formattedDate;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Date',
+          style: theme.textTheme.bodyLarge,
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: _controller,
+          readOnly: true,
+          showCursor: false,
+          canRequestFocus: false,
+          style: theme.textTheme.bodyLarge,
+          decoration: InputDecoration(
+            prefixIconConstraints: const BoxConstraints.tightFor(width: 36),
+            prefixIcon: Icon(
+              LucideIcons.calendar,
+              color: theme.colorScheme.onSurfaceVariant,
+              size: 16,
+            ),
+            border: const OutlineInputBorder(),
+            suffixIconConstraints: const BoxConstraints.tightFor(width: 64),
+            suffixIcon: _isToday(selectedDate)
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: MediaQuery.withNoTextScaling(
+                        child: Text(
+                          'Today',
+                          textAlign: TextAlign.center,
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          onTap: () => _selectDate(selectedDate),
+        ),
+      ],
+    );
   }
 }

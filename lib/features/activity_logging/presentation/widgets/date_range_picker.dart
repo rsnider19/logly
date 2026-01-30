@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,7 +132,9 @@ class DateRangePicker extends ConsumerWidget {
     );
 
     if (selectedDate != null) {
-      ref.read(activityFormStateProvider.notifier).setActivityDate(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setActivityDate(
             DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
           );
       // If end date is before new start date, adjust it
@@ -152,12 +155,14 @@ class DateRangePicker extends ConsumerWidget {
       context: context,
       initialDate: currentEnd ?? startDate,
       firstDate: startDate, // Can't end before start
-      lastDate: now,
+      lastDate: now.add(30.days),
       helpText: 'Select end date',
     );
 
     if (selectedDate != null) {
-      ref.read(activityFormStateProvider.notifier).setEndDate(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setEndDate(
             DateTime(selectedDate.year, selectedDate.month, selectedDate.day),
           );
     }
@@ -190,18 +195,19 @@ class _DateField extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: theme.colorScheme.outline),
-          borderRadius: BorderRadius.circular(8),
+      child: InputDecorator(
+        decoration: const InputDecoration().applyDefaults(
+          theme.inputDecorationTheme,
         ),
         child: Row(
           children: [
-            Icon(
-              LucideIcons.calendar,
-              color: theme.colorScheme.onSurfaceVariant,
-              size: 18,
+            SizedBox(
+              height: 24,
+              child: Icon(
+                LucideIcons.calendar,
+                color: theme.colorScheme.onSurfaceVariant,
+                size: 18,
+              ),
             ),
             const SizedBox(width: 8),
             Expanded(

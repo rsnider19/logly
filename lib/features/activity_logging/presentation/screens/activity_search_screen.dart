@@ -145,9 +145,6 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                         onPressed: _clearSearch,
                       )
                     : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
               ),
               onChanged: _onSearchChanged,
             ),
