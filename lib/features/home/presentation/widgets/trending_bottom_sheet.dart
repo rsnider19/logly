@@ -150,6 +150,7 @@ class _TrendingActivityTile extends StatelessWidget {
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.grey[600],
+                fontFeatures: [const FontFeature.tabularFigures()],
               ),
               textAlign: TextAlign.center,
             ),

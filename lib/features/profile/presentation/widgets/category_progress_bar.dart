@@ -91,6 +91,7 @@ class _CategoryProgressBarState extends State<CategoryProgressBar> with SingleTi
                 '${widget.count}',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
+                  fontFeatures: [const FontFeature.tabularFigures()],
                 ),
               ),
             ],
