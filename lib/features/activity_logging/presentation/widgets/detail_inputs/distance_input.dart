@@ -201,7 +201,9 @@ class _DistanceInputState extends ConsumerState<DistanceInput> {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       textAlign: TextAlign.right,
                       textAlignVertical: TextAlignVertical.center,
-                      style: theme.textTheme.bodyLarge,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontFeatures: [const FontFeature.tabularFigures()],
+                      ),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
                       ],

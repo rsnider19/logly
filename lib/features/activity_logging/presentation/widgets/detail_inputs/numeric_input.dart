@@ -120,7 +120,9 @@ class _NumericInputState extends ConsumerState<NumericInput> {
                       keyboardType: TextInputType.numberWithOptions(decimal: !_isInteger),
                       textAlign: TextAlign.right,
                       textAlignVertical: TextAlignVertical.center,
-                      style: theme.textTheme.bodyLarge,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontFeatures: [const FontFeature.tabularFigures()],
+                      ),
                       inputFormatters: [
                         if (_isInteger)
                           FilteringTextInputFormatter.digitsOnly

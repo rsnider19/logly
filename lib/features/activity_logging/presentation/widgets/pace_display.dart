@@ -75,6 +75,7 @@ class PaceDisplay extends ConsumerWidget {
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
+                    fontFeatures: [const FontFeature.tabularFigures()],
                   ),
                 ),
               ],

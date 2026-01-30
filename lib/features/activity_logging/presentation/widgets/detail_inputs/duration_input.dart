@@ -179,7 +179,9 @@ class _TimeField extends StatelessWidget {
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         textAlignVertical: TextAlignVertical.center,
-        style: theme.textTheme.bodyLarge,
+        style: theme.textTheme.bodyLarge?.copyWith(
+          fontFeatures: [const FontFeature.tabularFigures()],
+        ),
         inputFormatters: [
           FilteringTextInputFormatter.digitsOnly,
           LengthLimitingTextInputFormatter(2),
