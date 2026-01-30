@@ -44,6 +44,8 @@
 	<true/>
 	<key>NSHealthShareUsageDescription</key>
 	<string>Granting access will allow us to import your Apple Health data into Logly</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Granting access will allow us to import your Apple Health data into Logly</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
