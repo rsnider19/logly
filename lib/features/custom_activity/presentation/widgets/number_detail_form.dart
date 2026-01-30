@@ -144,6 +144,9 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
                 controller: _maxValueController,
                 focusNode: _maxValueFocusNode,
                 textAlign: TextAlign.right,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  fontFeatures: [const FontFeature.tabularFigures()],
+                ),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                 ),

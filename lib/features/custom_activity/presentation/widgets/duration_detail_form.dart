@@ -119,6 +119,9 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                     child: TextField(
                       controller: _hoursController,
                       textAlign: TextAlign.right,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontFeatures: [const FontFeature.tabularFigures()],
+                      ),
                       decoration: const InputDecoration(
                         suffixText: 'h',
                         border: OutlineInputBorder(),
@@ -135,6 +138,9 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                     child: TextField(
                       controller: _minutesController,
                       textAlign: TextAlign.right,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontFeatures: [const FontFeature.tabularFigures()],
+                      ),
                       decoration: const InputDecoration(
                         suffixText: 'm',
                         border: OutlineInputBorder(),
@@ -151,6 +157,9 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                     child: TextField(
                       controller: _secondsController,
                       textAlign: TextAlign.right,
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontFeatures: [const FontFeature.tabularFigures()],
+                      ),
                       decoration: const InputDecoration(
                         suffixText: 's',
                         border: OutlineInputBorder(),
