@@ -1,0 +1,113 @@
+# yaml-language-server: $schema=https://static.codemagic.io/docs/codemagic.schema.json
+
+workflows:
+  # ──────────────────────────────────────────────
+  # Android Production → Google Play
+  # ──────────────────────────────────────────────
+  android-production:
+    name: Android Production
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: 3.38.6
+      java: 17
+      groups:
+        - google-play
+      android_signing:
+        - Logly Keystore
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: v*
+          include: true
+
+    scripts:
+      - name: Set up local.properties
+        script: echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
+
+      - name: Run code generation
+        script: |
+          dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build AAB
+        script: |
+          flutter build appbundle \
+            --release \
+            --flavor production \
+            --target lib/main_production.dart \
+            --build-number=$(($(google-play get-latest-build-number --package-name "com.logly") + 1))
+
+    artifacts:
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: false
+
+  # ──────────────────────────────────────────────
+  # iOS Production → App Store / TestFlight
+  # ──────────────────────────────────────────────
+  ios-production:
+    name: iOS Production
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: codemagic
+
+    environment:
+      flutter: 3.38.6
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.logly.ios
+      vars:
+        BUNDLE_ID: com.logly.ios
+        APP_STORE_APP_ID: "1465198031"
+
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: v*
+          include: true
+
+    scripts:
+      - name: Set up code signing
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+          keychain initialize
+          keychain add-certificates
+          xcode-project use-profiles
+
+      - name: Run code generation
+        script: |
+          dart run build_runner build --delete-conflicting-outputs
+
+      - name: Build IPA
+        script: |
+          flutter build ipa \
+            --release \
+            --flavor production \
+            --target lib/main_production.dart \
+            --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        # TODO: Set submit_to_testflight to true once your first build is
+        #       manually submitted and compliance info is filled in.
+        submit_to_testflight: false
+        submit_to_app_store: false
