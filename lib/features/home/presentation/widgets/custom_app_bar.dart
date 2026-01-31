@@ -57,6 +57,7 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
     unawaited(
       showModalBottomSheet<void>(
         context: context,
+        useRootNavigator: true,
         isScrollControlled: true,
         builder: (context) => const TrendingBottomSheet(),
       ),
