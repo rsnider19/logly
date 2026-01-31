@@ -104,6 +104,18 @@ class EnvService {
   /// RevenueCat API key for Android (production).
   static String? get revenueCatAndroidApiKey => dotenv.env['REVENUECAT_ANDROID_API_KEY'];
 
+  /// GrowthBook SDK client key for feature flags.
+  static String get growthBookClientKey {
+    final value = dotenv.env['GROWTHBOOK_CLIENT_KEY'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'GrowthBook client key not configured',
+        'GROWTHBOOK_CLIENT_KEY is missing from env file',
+      );
+    }
+    return value;
+  }
+
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);
