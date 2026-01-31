@@ -367,6 +367,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       _ => UnitSystem.metric,
     };
 
+    final hapticFeedbackEnabled = switch (preferencesAsync) {
+      AsyncData(:final value) => value.hapticFeedbackEnabled,
+      _ => true,
+    };
+
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Settings',
@@ -436,6 +441,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 showDragHandle: true,
                 builder: (context) => const FavoritesBottomSheet(),
               );
+            },
+          ),
+          SwitchListTile(
+            title: const Text('Scroll haptics'),
+            subtitle: const Text('Vibrate when scrolling past logged days'),
+            value: hapticFeedbackEnabled,
+            onChanged: (value) {
+              ref.read(preferencesStateProvider.notifier).setHapticFeedbackEnabled(value);
             },
           ),
           _HealthSyncListTile(),

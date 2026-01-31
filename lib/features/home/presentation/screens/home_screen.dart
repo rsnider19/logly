@@ -9,6 +9,8 @@ import 'package:logly/features/home/presentation/providers/daily_activities_prov
 import 'package:logly/features/home/presentation/providers/home_navigation_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/home/presentation/widgets/daily_activity_row.dart';
+import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:logly/widgets/haptic_item.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
 
 /// The main home screen displaying a chronological list of days with activities.
@@ -73,6 +75,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     final dailyActivitiesAsync = ref.watch(dailyActivitiesStateProvider);
+    final hapticFeedbackEnabled = switch (ref.watch(preferencesStateProvider)) {
+      AsyncData(:final value) => value.hapticFeedbackEnabled,
+      _ => false,
+    };
 
     return Scaffold(
       appBar: const CustomAppBar(
@@ -95,7 +101,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
-                return DailyActivityRow(summary: state.summaries[index]);
+                final summary = state.summaries[index];
+                return HapticItem(
+                  id: 'haptic-${summary.activityDate.toIso8601String().split('T').first}',
+                  isEnabled: summary.activityCount > 0 && hapticFeedbackEnabled,
+                  child: DailyActivityRow(summary: summary),
+                );
               },
             ),
           ),
