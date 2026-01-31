@@ -20,107 +20,91 @@ class TrendingBottomSheet extends ConsumerWidget {
       maxChildSize: 0.9,
       expand: false,
       builder: (context, scrollController) {
-        return Container(
-          decoration: BoxDecoration(
-            color: theme.scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-          ),
-          child: Column(
-            children: [
-              // Handle
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 12),
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
-                ),
+        return Column(
+          children: [
+            // Header
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Icon(
+                    LucideIcons.trendingUp,
+                    color: theme.colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Trending Activities',
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ],
               ),
-              // Header
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Icon(
-                      LucideIcons.trendingUp,
-                      color: theme.colorScheme.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      'Trending Activities',
-                      style: theme.textTheme.titleLarge,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Divider(),
-              // List
-              Expanded(
-                child: trendingAsync.when(
-                  data: (activities) {
-                    if (activities.isEmpty) {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              LucideIcons.moveRight,
-                              size: 48,
-                              color: Colors.grey[400],
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              'No trending activities yet',
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                    return ListView.builder(
-                      controller: scrollController,
-                      itemCount: activities.length,
-                      itemBuilder: (context, index) {
-                        return _TrendingActivityTile(activity: activities[index]);
-                      },
-                    );
-                  },
-                  loading: () => const Center(child: CircularProgressIndicator()),
-                  error: (error, _) => Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
+            ),
+            const SizedBox(height: 8),
+            const Divider(),
+            // List
+            Expanded(
+              child: trendingAsync.when(
+                data: (activities) {
+                  if (activities.isEmpty) {
+                    return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            LucideIcons.circleAlert,
+                            LucideIcons.moveRight,
                             size: 48,
-                            color: theme.colorScheme.error,
+                            color: Colors.grey[400],
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Failed to load trending activities',
+                            'No trending activities yet',
                             style: theme.textTheme.bodyLarge?.copyWith(
-                              color: theme.colorScheme.error,
+                              color: Colors.grey[600],
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          TextButton(
-                            onPressed: () => ref.invalidate(trendingActivitiesProvider),
-                            child: const Text('Retry'),
                           ),
                         ],
                       ),
+                    );
+                  }
+                  return ListView.builder(
+                    controller: scrollController,
+                    itemCount: activities.length,
+                    itemBuilder: (context, index) {
+                      return _TrendingActivityTile(activity: activities[index]);
+                    },
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, _) => Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          LucideIcons.circleAlert,
+                          size: 48,
+                          color: theme.colorScheme.error,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Failed to load trending activities',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.error,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        TextButton(
+                          onPressed: () => ref.invalidate(trendingActivitiesProvider),
+                          child: const Text('Retry'),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );

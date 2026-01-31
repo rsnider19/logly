@@ -432,6 +432,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
+                clipBehavior: Clip.antiAlias,
+                showDragHandle: true,
                 builder: (context) => const FavoritesBottomSheet(),
               );
             },
@@ -595,6 +597,8 @@ class _HealthSyncListTile extends ConsumerWidget {
         context: context,
         useRootNavigator: true,
         isScrollControlled: true,
+        clipBehavior: Clip.antiAlias,
+        showDragHandle: true,
         builder: (context) => const HealthSyncBottomSheet(),
       );
       return;
@@ -700,6 +704,8 @@ class _HealthSyncListTile extends ConsumerWidget {
             showModalBottomSheet<void>(
               context: context,
               useRootNavigator: true,
+              showDragHandle: true,
+              clipBehavior: Clip.antiAlias,
               builder: (context) => const _NoActivitiesFoundBottomSheet(),
             );
           } else {
@@ -749,18 +755,6 @@ class _NoActivitiesFoundBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Handle
-          Container(
-            width: 40,
-            height: 4,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.outlineVariant,
-              borderRadius: BorderRadius.circular(2),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
           // Icon
           Container(
             width: 80,

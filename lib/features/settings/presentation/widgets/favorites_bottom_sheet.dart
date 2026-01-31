@@ -87,23 +87,6 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Handle
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 12),
-                        child: Container(
-                          width: 40,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.outlineVariant,
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
                     // Header
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),

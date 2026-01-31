@@ -59,6 +59,8 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
         context: context,
         useRootNavigator: true,
         isScrollControlled: true,
+        clipBehavior: Clip.antiAlias,
+        showDragHandle: true,
         builder: (context) => const TrendingBottomSheet(),
       ),
     );
