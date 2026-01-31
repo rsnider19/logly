@@ -104,6 +104,32 @@ class EnvService {
   /// RevenueCat API key for Android (production).
   static String? get revenueCatAndroidApiKey => dotenv.env['REVENUECAT_ANDROID_API_KEY'];
 
+  /// Sentry DSN for error reporting.
+  ///
+  /// Returns null if not configured (e.g., development environment),
+  /// which disables Sentry error reporting.
+  static String? get sentryDsn {
+    final value = dotenv.env['SENTRY_DSN'];
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    return value;
+  }
+
+  /// The current environment name derived from the Supabase URL.
+  ///
+  /// Used for Sentry environment tagging.
+  static String get environment {
+    final url = dotenv.env['SUPABASE_URL'] ?? '';
+    if (url.contains('127.0.0.1') || url.contains('localhost')) {
+      return 'development';
+    }
+    if (url.contains('staging')) {
+      return 'staging';
+    }
+    return 'production';
+  }
+
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);
