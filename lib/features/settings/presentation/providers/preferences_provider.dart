@@ -59,6 +59,24 @@ class PreferencesStateNotifier extends _$PreferencesStateNotifier {
     }
   }
 
+  /// Updates the haptic feedback enabled preference.
+  Future<void> setHapticFeedbackEnabled(bool enabled) async {
+    final currentState = state;
+    if (currentState is! AsyncData<UserPreferences>) return;
+
+    // Optimistic update
+    state = AsyncData(currentState.value.copyWith(hapticFeedbackEnabled: enabled));
+
+    try {
+      final service = ref.read(settingsServiceProvider);
+      await service.setHapticFeedbackEnabled(enabled);
+    } catch (e) {
+      // Revert on error
+      state = currentState;
+      rethrow;
+    }
+  }
+
   /// Updates the unit system preference.
   Future<void> setUnitSystem(UnitSystem unitSystem) async {
     final currentState = state;

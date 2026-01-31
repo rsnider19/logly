@@ -18,7 +18,8 @@ mixin _$UserPreferences {
 /// The user's preferred theme mode.
 @ThemeModeConverter() ThemeMode get themeMode;/// Whether health sync is enabled.
  bool get healthSyncEnabled;/// The user's preferred unit system.
-@UnitSystemConverter() UnitSystem get unitSystem;
+@UnitSystemConverter() UnitSystem get unitSystem;/// Whether haptic feedback on scroll is enabled.
+ bool get hapticFeedbackEnabled;
 /// Create a copy of UserPreferences
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -31,16 +32,16 @@ $UserPreferencesCopyWith<UserPreferences> get copyWith => _$UserPreferencesCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserPreferences&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.healthSyncEnabled, healthSyncEnabled) || other.healthSyncEnabled == healthSyncEnabled)&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserPreferences&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.healthSyncEnabled, healthSyncEnabled) || other.healthSyncEnabled == healthSyncEnabled)&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.hapticFeedbackEnabled, hapticFeedbackEnabled) || other.hapticFeedbackEnabled == hapticFeedbackEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,themeMode,healthSyncEnabled,unitSystem);
+int get hashCode => Object.hash(runtimeType,themeMode,healthSyncEnabled,unitSystem,hapticFeedbackEnabled);
 
 @override
 String toString() {
-  return 'UserPreferences(themeMode: $themeMode, healthSyncEnabled: $healthSyncEnabled, unitSystem: $unitSystem)';
+  return 'UserPreferences(themeMode: $themeMode, healthSyncEnabled: $healthSyncEnabled, unitSystem: $unitSystem, hapticFeedbackEnabled: $hapticFeedbackEnabled)';
 }
 
 
@@ -51,7 +52,7 @@ abstract mixin class $UserPreferencesCopyWith<$Res>  {
   factory $UserPreferencesCopyWith(UserPreferences value, $Res Function(UserPreferences) _then) = _$UserPreferencesCopyWithImpl;
 @useResult
 $Res call({
-@ThemeModeConverter() ThemeMode themeMode, bool healthSyncEnabled,@UnitSystemConverter() UnitSystem unitSystem
+@ThemeModeConverter() ThemeMode themeMode, bool healthSyncEnabled,@UnitSystemConverter() UnitSystem unitSystem, bool hapticFeedbackEnabled
 });
 
 
@@ -68,12 +69,13 @@ class _$UserPreferencesCopyWithImpl<$Res>
 
 /// Create a copy of UserPreferences
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? themeMode = null,Object? healthSyncEnabled = null,Object? unitSystem = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? themeMode = null,Object? healthSyncEnabled = null,Object? unitSystem = null,Object? hapticFeedbackEnabled = null,}) {
   return _then(_self.copyWith(
 themeMode: null == themeMode ? _self.themeMode : themeMode // ignore: cast_nullable_to_non_nullable
 as ThemeMode,healthSyncEnabled: null == healthSyncEnabled ? _self.healthSyncEnabled : healthSyncEnabled // ignore: cast_nullable_to_non_nullable
 as bool,unitSystem: null == unitSystem ? _self.unitSystem : unitSystem // ignore: cast_nullable_to_non_nullable
-as UnitSystem,
+as UnitSystem,hapticFeedbackEnabled: null == hapticFeedbackEnabled ? _self.hapticFeedbackEnabled : hapticFeedbackEnabled // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 
@@ -158,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem,  bool hapticFeedbackEnabled)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserPreferences() when $default != null:
-return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _:
+return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem,_that.hapticFeedbackEnabled);case _:
   return orElse();
 
 }
@@ -179,10 +181,10 @@ return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem,  bool hapticFeedbackEnabled)  $default,) {final _that = this;
 switch (_that) {
 case _UserPreferences():
-return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _:
+return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem,_that.hapticFeedbackEnabled);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +201,10 @@ return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@ThemeModeConverter()  ThemeMode themeMode,  bool healthSyncEnabled, @UnitSystemConverter()  UnitSystem unitSystem,  bool hapticFeedbackEnabled)?  $default,) {final _that = this;
 switch (_that) {
 case _UserPreferences() when $default != null:
-return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _:
+return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem,_that.hapticFeedbackEnabled);case _:
   return null;
 
 }
@@ -214,7 +216,7 @@ return $default(_that.themeMode,_that.healthSyncEnabled,_that.unitSystem);case _
 @JsonSerializable()
 
 class _UserPreferences implements UserPreferences {
-  const _UserPreferences({@ThemeModeConverter() this.themeMode = ThemeMode.system, this.healthSyncEnabled = false, @UnitSystemConverter() this.unitSystem = UnitSystem.metric});
+  const _UserPreferences({@ThemeModeConverter() this.themeMode = ThemeMode.system, this.healthSyncEnabled = false, @UnitSystemConverter() this.unitSystem = UnitSystem.metric, this.hapticFeedbackEnabled = true});
   factory _UserPreferences.fromJson(Map<String, dynamic> json) => _$UserPreferencesFromJson(json);
 
 /// The user's preferred theme mode.
@@ -223,6 +225,8 @@ class _UserPreferences implements UserPreferences {
 @override@JsonKey() final  bool healthSyncEnabled;
 /// The user's preferred unit system.
 @override@JsonKey()@UnitSystemConverter() final  UnitSystem unitSystem;
+/// Whether haptic feedback on scroll is enabled.
+@override@JsonKey() final  bool hapticFeedbackEnabled;
 
 /// Create a copy of UserPreferences
 /// with the given fields replaced by the non-null parameter values.
@@ -237,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserPreferences&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.healthSyncEnabled, healthSyncEnabled) || other.healthSyncEnabled == healthSyncEnabled)&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserPreferences&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.healthSyncEnabled, healthSyncEnabled) || other.healthSyncEnabled == healthSyncEnabled)&&(identical(other.unitSystem, unitSystem) || other.unitSystem == unitSystem)&&(identical(other.hapticFeedbackEnabled, hapticFeedbackEnabled) || other.hapticFeedbackEnabled == hapticFeedbackEnabled));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,themeMode,healthSyncEnabled,unitSystem);
+int get hashCode => Object.hash(runtimeType,themeMode,healthSyncEnabled,unitSystem,hapticFeedbackEnabled);
 
 @override
 String toString() {
-  return 'UserPreferences(themeMode: $themeMode, healthSyncEnabled: $healthSyncEnabled, unitSystem: $unitSystem)';
+  return 'UserPreferences(themeMode: $themeMode, healthSyncEnabled: $healthSyncEnabled, unitSystem: $unitSystem, hapticFeedbackEnabled: $hapticFeedbackEnabled)';
 }
 
 
@@ -257,7 +261,7 @@ abstract mixin class _$UserPreferencesCopyWith<$Res> implements $UserPreferences
   factory _$UserPreferencesCopyWith(_UserPreferences value, $Res Function(_UserPreferences) _then) = __$UserPreferencesCopyWithImpl;
 @override @useResult
 $Res call({
-@ThemeModeConverter() ThemeMode themeMode, bool healthSyncEnabled,@UnitSystemConverter() UnitSystem unitSystem
+@ThemeModeConverter() ThemeMode themeMode, bool healthSyncEnabled,@UnitSystemConverter() UnitSystem unitSystem, bool hapticFeedbackEnabled
 });
 
 
@@ -274,12 +278,13 @@ class __$UserPreferencesCopyWithImpl<$Res>
 
 /// Create a copy of UserPreferences
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? themeMode = null,Object? healthSyncEnabled = null,Object? unitSystem = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? themeMode = null,Object? healthSyncEnabled = null,Object? unitSystem = null,Object? hapticFeedbackEnabled = null,}) {
   return _then(_UserPreferences(
 themeMode: null == themeMode ? _self.themeMode : themeMode // ignore: cast_nullable_to_non_nullable
 as ThemeMode,healthSyncEnabled: null == healthSyncEnabled ? _self.healthSyncEnabled : healthSyncEnabled // ignore: cast_nullable_to_non_nullable
 as bool,unitSystem: null == unitSystem ? _self.unitSystem : unitSystem // ignore: cast_nullable_to_non_nullable
-as UnitSystem,
+as UnitSystem,hapticFeedbackEnabled: null == hapticFeedbackEnabled ? _self.hapticFeedbackEnabled : hapticFeedbackEnabled // ignore: cast_nullable_to_non_nullable
+as bool,
   ));
 }
 

@@ -17,6 +17,7 @@ _UserPreferences _$UserPreferencesFromJson(Map<String, dynamic> json) =>
           : const UnitSystemConverter().fromJson(
               json['unit_system'] as String?,
             ),
+      hapticFeedbackEnabled: json['haptic_feedback_enabled'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$UserPreferencesToJson(_UserPreferences instance) =>
@@ -24,4 +25,5 @@ Map<String, dynamic> _$UserPreferencesToJson(_UserPreferences instance) =>
       'theme_mode': const ThemeModeConverter().toJson(instance.themeMode),
       'health_sync_enabled': instance.healthSyncEnabled,
       'unit_system': const UnitSystemConverter().toJson(instance.unitSystem),
+      'haptic_feedback_enabled': instance.hapticFeedbackEnabled,
     };

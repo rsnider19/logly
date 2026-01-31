@@ -19,6 +19,9 @@ abstract class UserPreferences with _$UserPreferences {
 
     /// The user's preferred unit system.
     @UnitSystemConverter() @Default(UnitSystem.metric) UnitSystem unitSystem,
+
+    /// Whether haptic feedback on scroll is enabled.
+    @Default(true) bool hapticFeedbackEnabled,
   }) = _UserPreferences;
 
   factory UserPreferences.fromJson(Map<String, dynamic> json) => _$UserPreferencesFromJson(json);

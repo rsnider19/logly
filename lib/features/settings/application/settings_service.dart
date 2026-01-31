@@ -39,6 +39,11 @@ class SettingsService {
     await _repository.setHealthSyncEnabled(enabled);
   }
 
+  /// Updates the haptic feedback enabled preference.
+  Future<void> setHapticFeedbackEnabled(bool enabled) async {
+    await _repository.setHapticFeedbackEnabled(enabled);
+  }
+
   /// Updates the unit system preference.
   Future<void> setUnitSystem(UnitSystem unitSystem) async {
     await _repository.setUnitSystem(unitSystem);

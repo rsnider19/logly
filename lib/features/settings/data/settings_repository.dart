@@ -25,6 +25,7 @@ class SettingsRepository {
         themeMode: _parseThemeMode(response['theme_mode'] as String?),
         healthSyncEnabled: response['health_sync_enabled'] as bool? ?? false,
         unitSystem: _parseUnitSystem(response['unit_system'] as String?),
+        hapticFeedbackEnabled: response['haptic_feedback_enabled'] as bool? ?? true,
       );
     } catch (e, st) {
       _logger.e('Failed to load preferences', e, st);
@@ -69,6 +70,24 @@ class SettingsRepository {
       }).eq('user_id', userId);
     } catch (e, st) {
       _logger.e('Failed to save health sync preference', e, st);
+      if (e is SavePreferencesException) rethrow;
+      throw SavePreferencesException(e.toString());
+    }
+  }
+
+  /// Saves the user's haptic feedback enabled preference.
+  Future<void> setHapticFeedbackEnabled(bool enabled) async {
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) {
+        throw const SavePreferencesException('User not authenticated');
+      }
+
+      await _supabase.from('profile').update({
+        'haptic_feedback_enabled': enabled,
+      }).eq('user_id', userId);
+    } catch (e, st) {
+      _logger.e('Failed to save haptic feedback preference', e, st);
       if (e is SavePreferencesException) rethrow;
       throw SavePreferencesException(e.toString());
     }

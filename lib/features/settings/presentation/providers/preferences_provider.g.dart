@@ -81,7 +81,7 @@ final class PreferencesStateNotifierProvider
 }
 
 String _$preferencesStateNotifierHash() =>
-    r'06c54455650ea82a7998f023cc80649d9b90c4ab';
+    r'f2087c39ce8cb8fffebf1260431a393c0668b82e';
 
 /// State notifier for managing user preferences.
 
