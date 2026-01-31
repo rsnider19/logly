@@ -41,9 +41,6 @@ class DailyActivitiesRepository {
       final start = DateTime(startDate.year, startDate.month, startDate.day);
       final end = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
 
-      // TODO(dev): Remove this delay - for testing loading states only
-      await Future<void>.delayed(const Duration(seconds: 2));
-
       final response = await _supabase
           .from('user_activity')
           .select(_selectWithRelations)
