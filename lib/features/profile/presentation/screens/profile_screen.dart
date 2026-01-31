@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
-import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
+import 'package:logly/features/profile/presentation/widgets/profile_filter_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/streak_card.dart';
 import 'package:logly/features/profile/presentation/widgets/summary_card.dart';
 import 'package:logly/features/profile/presentation/widgets/weekly_radar_chart.dart';
@@ -20,74 +21,141 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final topPadding = MediaQuery.of(context).padding.top;
     final user = ref.watch(currentUserProvider);
 
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Profile',
-        showTrendingButton: false,
-      ),
       floatingActionButton: _InsightsFab(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          spacing: 16,
-          children: [
-            // User info header
-            Column(
-              children: [
-                CircleAvatar(
-                  radius: 48,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: user?.userMetadata?['avatar_url'] != null
-                      ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
-                      : null,
-                  child: user?.userMetadata?['avatar_url'] == null
-                      ? Icon(
-                          LucideIcons.user,
-                          size: 48,
-                          color: theme.colorScheme.onPrimaryContainer,
-                        )
-                      : null,
-                ),
-                const SizedBox(height: 16),
-                if (user?.email != null)
-                  Text(
-                    user!.email!,
-                    style: theme.textTheme.titleMedium,
-                  ),
-                if (user?.createdAt != null) ...[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Member since ${_formatMemberSince(user!.createdAt)}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
-              ],
+      body: CustomScrollView(
+        slivers: [
+          // App bar scrolls away with content
+          SliverAppBar(
+            title: Text(
+              'Profile',
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            centerTitle: false,
+            actions: [
+              IconButton(
+                icon: const Icon(LucideIcons.settings),
+                tooltip: 'Settings',
+                onPressed: () => context.go('/settings'),
+              ),
+            ],
+          ),
 
-            // Streak card
-            const StreakCard(),
+          // Filter bar pins to top when app bar scrolls away
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _FilterBarDelegate(theme: theme, topPadding: topPadding),
+          ),
 
-            // Summary card with time period filter
-            const SummaryCard(),
+          // Content sections
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                // User info header
+                Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 48,
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                      backgroundImage: user?.userMetadata?['avatar_url'] != null
+                          ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
+                          : null,
+                      child: user?.userMetadata?['avatar_url'] == null
+                          ? Icon(
+                              LucideIcons.user,
+                              size: 48,
+                              color: theme.colorScheme.onPrimaryContainer,
+                            )
+                          : null,
+                    ),
+                    const SizedBox(height: 16),
+                    if (user?.email != null)
+                      Text(
+                        user!.email!,
+                        style: theme.textTheme.titleMedium,
+                      ),
+                    if (user?.createdAt != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        'Member since ${_formatMemberSince(user!.createdAt)}',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
 
-            // Contribution graph (GitHub-style)
-            const ContributionCard(),
+                const SizedBox(height: 16),
 
-            // Weekly radar chart (activity by day of week)
-            const WeeklyRadarChartCard(),
+                // Streak card (unaffected by filters)
+                const StreakCard(),
 
-            // Monthly chart (12 month stacked bars)
-            const MonthlyChartCard(),
+                const SizedBox(height: 16),
 
-            // Bottom padding for safe area
-            const SizedBox(height: 56),
-          ],
-        ),
+                // Summary card
+                const SummaryCard(),
+
+                const SizedBox(height: 16),
+
+                // Contribution graph
+                const ContributionCard(),
+
+                const SizedBox(height: 16),
+
+                // Weekly radar chart
+                const WeeklyRadarChartCard(),
+
+                const SizedBox(height: 16),
+
+                // Monthly chart
+                const MonthlyChartCard(),
+
+                // Bottom padding for safe area + FAB
+                const SizedBox(height: 56),
+              ]),
+            ),
+          ),
+        ],
       ),
+    );
+  }
+}
+
+/// Persistent header delegate for the pinned filter bar.
+class _FilterBarDelegate extends SliverPersistentHeaderDelegate {
+  _FilterBarDelegate({required this.theme, required this.topPadding});
+
+  final ThemeData theme;
+  final double topPadding;
+
+  // Category icons row (~48) + spacing (8) + filter chips row (~40) + padding (16+8)
+  static const double _contentExtent = 120;
+
+  double get _extent => _contentExtent + topPadding;
+
+  @override
+  double get maxExtent => _extent;
+
+  @override
+  double get minExtent => _extent;
+
+  @override
+  bool shouldRebuild(covariant _FilterBarDelegate oldDelegate) =>
+      topPadding != oldDelegate.topPadding;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: theme.scaffoldBackgroundColor,
+      padding: EdgeInsets.fromLTRB(16, 8 + topPadding, 16, 8),
+      child: const ProfileFilterBar(),
     );
   }
 }
