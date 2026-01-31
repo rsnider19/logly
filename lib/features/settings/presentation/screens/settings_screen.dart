@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,10 +84,43 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _rateApp() async {
-    final inAppReview = InAppReview.instance;
+    try {
+      final inAppReview = InAppReview.instance;
 
-    if (await inAppReview.isAvailable()) {
-      await inAppReview.requestReview();
+      if (await inAppReview.isAvailable()) {
+        await inAppReview.requestReview();
+      } else {
+        // Show informative message when review dialog unavailable
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('In-app rating not available'),
+              action: SnackBarAction(
+                label: 'Open App Store',
+                onPressed: () async {
+                  final uri = Platform.isIOS
+                      ? Uri.parse('https://apps.apple.com/app/id1465198031?action=write-review')
+                      : Uri.parse('https://play.google.com/store/apps/details?id=com.logly');
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  }
+                },
+              ),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Could not open rating dialog'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
@@ -119,23 +154,45 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   }
 
   Future<void> _openPrivacyPolicy() async {
-    final uri = Uri.parse('https://www.mylogly.app/privacy-policy');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppWebView);
-    }
+    await _openUrl('https://www.mylogly.app/privacy-policy', 'Privacy Policy');
   }
 
   Future<void> _openEula() async {
-    final uri = Uri.parse('https://www.apple.com/legal/internet-services/itunes/dev/stdeula');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppWebView);
-    }
+    await _openUrl(
+      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula',
+      'EULA',
+    );
   }
 
   Future<void> _openOurVision() async {
-    final uri = Uri.parse('https://www.mylogly.app');
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.inAppWebView);
+    await _openUrl('https://www.mylogly.app', 'Our Vision');
+  }
+
+  Future<void> _openUrl(String url, String displayName) async {
+    try {
+      final uri = Uri.parse(url);
+
+      if (!await canLaunchUrl(uri)) {
+        throw Exception('Cannot launch URL');
+      }
+
+      // Try in-app web view first
+      try {
+        await launchUrl(uri, mode: LaunchMode.inAppWebView);
+      } catch (e) {
+        // Fallback to external browser
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open $displayName'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
