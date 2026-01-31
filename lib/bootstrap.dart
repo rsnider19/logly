@@ -5,8 +5,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show DefaultCacheManager;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growthbook_sdk_flutter/growthbook_sdk_flutter.dart';
+import 'package:logly/core/providers/growthbook_provider.dart';
 import 'package:logly/core/providers/shared_preferences_provider.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:logly/core/services/feature_flag_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -51,6 +55,26 @@ Future<void> bootstrap(
     debugPrint('✓ RevenueCat configured');
   }
 
+  // Initialize GrowthBook feature flags
+  final packageInfo = await PackageInfo.fromPlatform();
+  final environment = envPath.contains('development')
+      ? 'development'
+      : envPath.contains('staging')
+          ? 'staging'
+          : 'production';
+  final gbSdk = await GBSDKBuilderApp(
+    apiKey: EnvService.growthBookClientKey,
+    hostURL: 'https://cdn.growthbook.io',
+    attributes: FeatureFlagService.buildAnonymousAttributes(
+      appVersion: packageInfo.version,
+      buildNumber: packageInfo.buildNumber,
+      environment: environment,
+    ),
+  ).initialize();
+  if (kDebugMode) {
+    debugPrint('✓ GrowthBook initialized');
+  }
+
   // Initialize SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   if (kDebugMode) {
@@ -63,6 +87,7 @@ Future<void> bootstrap(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        growthBookProvider.overrideWithValue(gbSdk),
       ],
       child: await builder(),
     ),
