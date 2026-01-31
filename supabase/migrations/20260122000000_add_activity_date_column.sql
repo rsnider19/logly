@@ -171,7 +171,7 @@ BEGIN
     (detail->>'distance_in_meters')::double precision,
     (detail->>'liquid_volume_in_liters')::double precision,
     (detail->>'weight_in_kilograms')::double precision,
-    (detail->>'lat_lng')::geography(point)
+    (detail->>'lat_lng')::extensions.geography(point)
   FROM jsonb_array_elements(p_user_activity_details) AS detail
   ON CONFLICT (user_activity_id, activity_detail_id) DO UPDATE
   SET
