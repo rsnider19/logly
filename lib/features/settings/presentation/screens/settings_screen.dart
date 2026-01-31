@@ -373,6 +373,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             onTap: () {
               showModalBottomSheet<void>(
                 context: context,
+                useRootNavigator: true,
                 isScrollControlled: true,
                 builder: (context) => const FavoritesBottomSheet(),
               );
@@ -535,6 +536,7 @@ class _HealthSyncListTile extends ConsumerWidget {
     if (!healthSyncEnabled) {
       showModalBottomSheet<void>(
         context: context,
+        useRootNavigator: true,
         isScrollControlled: true,
         builder: (context) => const HealthSyncBottomSheet(),
       );
@@ -640,6 +642,7 @@ class _HealthSyncListTile extends ConsumerWidget {
           if (next.lastSyncResult!.total == 0) {
             showModalBottomSheet<void>(
               context: context,
+              useRootNavigator: true,
               builder: (context) => const _NoActivitiesFoundBottomSheet(),
             );
           } else {
