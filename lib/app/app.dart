@@ -4,6 +4,7 @@ import 'package:logly/app/router/app_router.dart';
 import 'package:logly/app/theme/app_theme.dart';
 import 'package:logly/core/providers/scaffold_messenger_provider.dart';
 import 'package:logly/core/services/sentry_initializer.dart';
+import 'package:logly/features/feature_flags/application/feature_flag_initializer.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
 import 'package:logly/features/subscriptions/application/subscription_initializer.dart';
@@ -28,6 +29,8 @@ class _AppState extends ConsumerState<App> {
       ref.read(subscriptionInitializerProvider).initialize();
       // Initialize Sentry user context (syncs auth state with Sentry)
       ref.read(sentryInitializerProvider).initialize();
+      // Initialize feature flag attribute updates (syncs GrowthBook with auth state)
+      ref.read(featureFlagInitializerProvider).initialize();
     });
   }
 

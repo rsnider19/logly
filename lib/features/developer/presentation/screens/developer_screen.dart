@@ -14,6 +14,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/liquid_volume_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/numeric_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
+import 'package:logly/features/developer/presentation/widgets/feature_flags_section.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Developer screen for testing activity detail inputs.
@@ -203,6 +204,8 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const FeatureFlagsSection(),
+            const SizedBox(height: 32),
             Text(
               'Activity Detail Inputs',
               style: theme.textTheme.headlineSmall,

@@ -6,9 +6,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show DefaultCacheManager;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:growthbook_sdk_flutter/growthbook_sdk_flutter.dart';
 import 'package:logly/core/exceptions/app_exception.dart';
+import 'package:logly/core/providers/growthbook_provider.dart';
 import 'package:logly/core/providers/shared_preferences_provider.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:logly/core/services/feature_flag_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,8 +27,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 /// 3. Initializes Sentry (non-debug builds with a configured DSN)
 /// 4. Initializes Supabase
 /// 5. Initializes RevenueCat
-/// 6. Initializes SharedPreferences
-/// 7. Wraps the app in ProviderScope
+/// 6. Initializes GrowthBook
+/// 7. Initializes SharedPreferences
+/// 8. Wraps the app in ProviderScope
 Future<void> bootstrap(
   FutureOr<Widget> Function() builder, {
   required String envPath,
@@ -67,18 +72,18 @@ Future<void> bootstrap(
             return event;
           };
       },
-      appRunner: () async => _initializeAndRun(builder),
+      appRunner: () async => _initializeAndRun(builder, envPath),
     );
   } else {
     // Debug mode or no DSN: use basic error logging, no Sentry
     FlutterError.onError = (details) {
       log(details.exceptionAsString(), stackTrace: details.stack);
     };
-    await _initializeAndRun(builder);
+    await _initializeAndRun(builder, envPath);
   }
 }
 
-Future<void> _initializeAndRun(FutureOr<Widget> Function() builder) async {
+Future<void> _initializeAndRun(FutureOr<Widget> Function() builder, String envPath) async {
   // Initialize Supabase
   await Supabase.initialize(
     url: EnvService.supabaseUrl,
@@ -92,6 +97,26 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder) async {
   await Purchases.configure(PurchasesConfiguration(EnvService.revenueCatApiKey));
   if (kDebugMode) {
     debugPrint('✓ RevenueCat configured');
+  }
+
+  // Initialize GrowthBook feature flags
+  final packageInfo = await PackageInfo.fromPlatform();
+  final environment = envPath.contains('development')
+      ? 'development'
+      : envPath.contains('staging')
+          ? 'staging'
+          : 'production';
+  final gbSdk = await GBSDKBuilderApp(
+    apiKey: EnvService.growthBookClientKey,
+    hostURL: 'https://cdn.growthbook.io',
+    attributes: FeatureFlagService.buildAnonymousAttributes(
+      appVersion: packageInfo.version,
+      buildNumber: packageInfo.buildNumber,
+      environment: environment,
+    ),
+  ).initialize();
+  if (kDebugMode) {
+    debugPrint('✓ GrowthBook initialized');
   }
 
   // Initialize SharedPreferences
@@ -113,6 +138,7 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder) async {
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        growthBookProvider.overrideWithValue(gbSdk),
       ],
       child: await builder(),
     ),
