@@ -1,12 +1,5 @@
-import * as jose from "jsr:@panva/jose@6";
 import { createMiddleware } from "jsr:@hono/hono/factory";
-
-const SUPABASE_JWT_ISSUER = Deno.env.get("SB_JWT_ISSUER") ??
-  Deno.env.get("SUPABASE_URL") + "/auth/v1";
-
-const SUPABASE_JWT_KEYS = jose.createRemoteJWKSet(
-  new URL(Deno.env.get("SUPABASE_URL")! + "/auth/v1/.well-known/jwks.json"),
-);
+import { supabaseAdminClient } from "./supabaseAdmin.ts";
 
 function getAuthToken(req: Request) {
   const authHeader = req.headers.get("authorization");
@@ -19,12 +12,6 @@ function getAuthToken(req: Request) {
   }
 
   return token;
-}
-
-function verifySupabaseJWT(jwt: string) {
-  return jose.jwtVerify(jwt, SUPABASE_JWT_KEYS, {
-    issuer: SUPABASE_JWT_ISSUER,
-  });
 }
 
 // Type for Hono context variables
@@ -42,16 +29,17 @@ export const authMiddleware = createMiddleware<AuthEnv>(async (c, next) => {
 
   try {
     const token = getAuthToken(c.req.raw);
-    const jwt = await verifySupabaseJWT(token);
+    const { data, error } = await supabaseAdminClient.auth.getClaims(token)
+    const userId = data?.claims.sub;
 
-    if (jwt?.payload?.sub) {
-      c.set("userId", jwt.payload.sub);
-      return await next();
+    if (!userId || error) {
+      return c.json({ msg: 'Invalid JWT' }, { status: 401 })
     }
 
-    return c.json({ msg: "Invalid JWT" }, 401);
+    c.set("userId", userId);
+    return await next();
   } catch (e) {
-    return c.json({ msg: e?.toString() }, 401);
+    return c.json({ msg: e?.toString() }, { status: 401 });
   }
 });
 
@@ -64,18 +52,15 @@ export async function AuthMiddleware(
 
   try {
     const token = getAuthToken(req);
-    const jwt = await verifySupabaseJWT(token);
+    const { data, error } = await supabaseAdminClient.auth.getClaims(token)
+    const userId = data?.claims.sub;
 
-    if (jwt?.payload?.sub) {
-      return await next(req, jwt!.payload!.sub!)
+    if (!userId || error) {
+      return Response.json({ msg: 'Invalid JWT' }, { status: 401, })
     }
 
-    return Response.json({ msg: "Invalid JWT" }, {
-      status: 401,
-    });
+    return await next(req, userId);
   } catch (e) {
-    return Response.json({ msg: e?.toString() }, {
-      status: 401,
-    });
+    return Response.json({ msg: e?.toString() }, { status: 401, });
   }
 }
