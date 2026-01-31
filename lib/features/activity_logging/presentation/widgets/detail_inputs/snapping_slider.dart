@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-/// A slider that snaps values to the nearest interval.
+/// A slider that snaps values to the nearest interval with haptic feedback.
 ///
 /// Unlike the standard [Slider] with divisions, this slider does not show
 /// tick marks but still rounds values to the nearest [interval] on change.
-class SnappingSlider extends StatelessWidget {
+/// A selection haptic fires each time the slider moves to a new snap position.
+class SnappingSlider extends StatefulWidget {
   const SnappingSlider({
     required this.value,
     required this.min,
@@ -29,11 +31,18 @@ class SnappingSlider extends StatelessWidget {
   /// Called when the slider value changes, with the snapped value.
   final ValueChanged<double> onChanged;
 
-  double _snapToInterval(double rawValue) {
-    if (interval <= 0) return rawValue;
+  @override
+  State<SnappingSlider> createState() => _SnappingSliderState();
+}
 
-    final snapped = (rawValue / interval).round() * interval;
-    return snapped.clamp(min, max);
+class _SnappingSliderState extends State<SnappingSlider> {
+  double? _lastSnappedValue;
+
+  double _snapToInterval(double rawValue) {
+    if (widget.interval <= 0) return rawValue;
+
+    final snapped = (rawValue / widget.interval).round() * widget.interval;
+    return snapped.clamp(widget.min, widget.max);
   }
 
   @override
@@ -45,13 +54,18 @@ class SnappingSlider extends StatelessWidget {
         overlayShape: const RoundSliderOverlayShape(overlayRadius: 16),
       ),
       child: Slider(
-        value: value.clamp(min, max),
-        min: min,
-        max: max,
+        value: widget.value.clamp(widget.min, widget.max),
+        min: widget.min,
+        max: widget.max,
         onChanged: (rawValue) {
           final snappedValue = _snapToInterval(rawValue);
-          onChanged(snappedValue);
+          if (snappedValue != _lastSnappedValue) {
+            _lastSnappedValue = snappedValue;
+            HapticFeedback.selectionClick();
+          }
+          widget.onChanged(snappedValue);
         },
+        onChangeEnd: (_) => _lastSnappedValue = null,
       ),
     );
   }
