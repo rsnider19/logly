@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/contribution_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_legend.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// GitHub-style contribution graph color mapping.
 abstract class ContributionColors {
@@ -17,9 +17,9 @@ abstract class ContributionColors {
   /// [emptyColor] is used for count == 0 (typically from theme).
   static Color getColorForCount(int count, {required Color emptyColor}) {
     if (count == 0) return emptyColor;
-    if (count <= 2) return level1;
-    if (count <= 4) return level2;
-    if (count <= 6) return level3;
+    if (count < 2) return level1;
+    if (count < 4) return level2;
+    if (count < 6) return level3;
     return level4;
   }
 
