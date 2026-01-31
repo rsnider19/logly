@@ -54,7 +54,7 @@ final class CreateCustomActivityFormStateNotifierProvider
 }
 
 String _$createCustomActivityFormStateNotifierHash() =>
-    r'604e8298414567c04bb72bd4f39eb9d2f0081e5e';
+    r'9e650ede8cf83ffdfdc7a09ea04a481ba542700c';
 
 /// State notifier for managing the create custom activity form.
 

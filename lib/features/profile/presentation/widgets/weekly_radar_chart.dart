@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
-import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/weekly_radar_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
@@ -23,95 +22,39 @@ class WeeklyRadarChartCard extends ConsumerWidget {
       title: 'Weekly Activity',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.weeklyRadar),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const _TimePeriodSelector(),
-          const SizedBox(height: 16),
-          normalizedDataAsync.when(
-            data: (data) {
-              if (data.isEmpty) {
-                return const _EmptyState();
-              }
+      child: normalizedDataAsync.when(
+        data: (data) {
+          if (data.isEmpty) {
+            return const _EmptyState();
+          }
 
-              return categoriesAsync.when(
-                data: (categories) {
-                  // Build category color map
-                  final categoryColors = {
-                    for (final c in categories)
-                      c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
-                  };
+          return categoriesAsync.when(
+            data: (categories) {
+              // Build category color map
+              final categoryColors = {
+                for (final c in categories)
+                  c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
+              };
 
-                  // Sort categories by sortOrder for consistent layering
-                  final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+              // Sort categories by sortOrder for consistent layering
+              final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
-                  return _WeeklyRadarChart(
-                    normalizedData: data,
-                    categoryColors: categoryColors,
-                    categoryOrder: sortedCategories.map((c) => c.activityCategoryId).toList(),
-                  );
-                },
-                loading: () => const _RadarChartShimmer(),
-                error: (_, __) => const _RadarChartShimmer(),
+              return _WeeklyRadarChart(
+                normalizedData: data,
+                categoryColors: categoryColors,
+                categoryOrder: sortedCategories.map((c) => c.activityCategoryId).toList(),
               );
             },
             loading: () => const _RadarChartShimmer(),
-            error: (error, _) => _RadarChartError(
-              onRetry: () => ref.invalidate(normalizedRadarDataProvider),
-            ),
-          ),
-        ],
+            error: (_, __) => const _RadarChartShimmer(),
+          );
+        },
+        loading: () => const _RadarChartShimmer(),
+        error: (error, _) => _RadarChartError(
+          onRetry: () => ref.invalidate(normalizedRadarDataProvider),
+        ),
       ),
     );
-  }
-}
-
-class _TimePeriodSelector extends ConsumerWidget {
-  const _TimePeriodSelector();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedPeriod = ref.watch(selectedRadarTimePeriodStateProvider);
-    final notifier = ref.watch(selectedRadarTimePeriodStateProvider.notifier);
-
-    return Row(
-      children: TimePeriod.values.asMap().entries.map((entry) {
-        final index = entry.key;
-        final period = entry.value;
-        final isSelected = period == selectedPeriod;
-        final isLast = index == TimePeriod.values.length - 1;
-
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: isLast ? 0 : 8),
-            child: FilterChip(
-              label: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  _getPeriodLabel(period),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              selected: isSelected,
-              onSelected: (_) => notifier.select(period),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
-
-  String _getPeriodLabel(TimePeriod period) {
-    switch (period) {
-      case TimePeriod.oneWeek:
-        return '1W';
-      case TimePeriod.oneMonth:
-        return '1M';
-      case TimePeriod.oneYear:
-        return '1Y';
-      case TimePeriod.all:
-        return 'All';
-    }
   }
 }
 

@@ -8,148 +8,24 @@ part of 'monthly_chart_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Notifier for selected category filters on the monthly chart.
+/// Provides chart data aggregated by the global time period.
 ///
-/// An empty set means "all categories selected" (default state).
-/// When user deselects a category, we populate with all except that one.
-
-@ProviderFor(SelectedCategoryFiltersStateNotifier)
-final selectedCategoryFiltersStateProvider =
-    SelectedCategoryFiltersStateNotifierProvider._();
-
-/// Notifier for selected category filters on the monthly chart.
+/// - `1W`: 7 day-level entries (last 7 days)
+/// - `1M`: 4-5 week-level entries (last 30 days grouped by week-start Monday)
+/// - `1Y` / `All`: 12 month-level entries (last 12 months)
 ///
-/// An empty set means "all categories selected" (default state).
-/// When user deselects a category, we populate with all except that one.
-final class SelectedCategoryFiltersStateNotifierProvider
-    extends
-        $NotifierProvider<SelectedCategoryFiltersStateNotifier, Set<String>> {
-  /// Notifier for selected category filters on the monthly chart.
-  ///
-  /// An empty set means "all categories selected" (default state).
-  /// When user deselects a category, we populate with all except that one.
-  SelectedCategoryFiltersStateNotifierProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'selectedCategoryFiltersStateProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() =>
-      _$selectedCategoryFiltersStateNotifierHash();
-
-  @$internal
-  @override
-  SelectedCategoryFiltersStateNotifier create() =>
-      SelectedCategoryFiltersStateNotifier();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(Set<String> value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<Set<String>>(value),
-    );
-  }
-}
-
-String _$selectedCategoryFiltersStateNotifierHash() =>
-    r'708634fc0aaf72c1ee0b68cb21504df309a488ee';
-
-/// Notifier for selected category filters on the monthly chart.
-///
-/// An empty set means "all categories selected" (default state).
-/// When user deselects a category, we populate with all except that one.
-
-abstract class _$SelectedCategoryFiltersStateNotifier
-    extends $Notifier<Set<String>> {
-  Set<String> build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final ref = this.ref as $Ref<Set<String>, Set<String>>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<Set<String>, Set<String>>,
-              Set<String>,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
-  }
-}
-
-/// Provides the effective set of selected category IDs.
-///
-/// When raw state is empty, returns all category IDs (all selected by default).
-/// Otherwise returns the raw selection.
-
-@ProviderFor(effectiveSelectedFilters)
-final effectiveSelectedFiltersProvider = EffectiveSelectedFiltersProvider._();
-
-/// Provides the effective set of selected category IDs.
-///
-/// When raw state is empty, returns all category IDs (all selected by default).
-/// Otherwise returns the raw selection.
-
-final class EffectiveSelectedFiltersProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<Set<String>>,
-          Set<String>,
-          FutureOr<Set<String>>
-        >
-    with $FutureModifier<Set<String>>, $FutureProvider<Set<String>> {
-  /// Provides the effective set of selected category IDs.
-  ///
-  /// When raw state is empty, returns all category IDs (all selected by default).
-  /// Otherwise returns the raw selection.
-  EffectiveSelectedFiltersProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'effectiveSelectedFiltersProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$effectiveSelectedFiltersHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<Set<String>> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<Set<String>> create(Ref ref) {
-    return effectiveSelectedFilters(ref);
-  }
-}
-
-String _$effectiveSelectedFiltersHash() =>
-    r'75fda0f7a9c7569cdf8bad207c49f5856db1e03d';
-
-/// Provides monthly chart data for all categories.
-///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// aggregates by month + category for the last 12 months.
+/// Reuses [MonthlyCategoryData] model — `activityMonth` represents the period start date.
 
 @ProviderFor(monthlyChartData)
 final monthlyChartDataProvider = MonthlyChartDataProvider._();
 
-/// Provides monthly chart data for all categories.
+/// Provides chart data aggregated by the global time period.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// aggregates by month + category for the last 12 months.
+/// - `1W`: 7 day-level entries (last 7 days)
+/// - `1M`: 4-5 week-level entries (last 30 days grouped by week-start Monday)
+/// - `1Y` / `All`: 12 month-level entries (last 12 months)
+///
+/// Reuses [MonthlyCategoryData] model — `activityMonth` represents the period start date.
 
 final class MonthlyChartDataProvider
     extends
@@ -161,10 +37,13 @@ final class MonthlyChartDataProvider
     with
         $FutureModifier<List<MonthlyCategoryData>>,
         $FutureProvider<List<MonthlyCategoryData>> {
-  /// Provides monthly chart data for all categories.
+  /// Provides chart data aggregated by the global time period.
   ///
-  /// Derives from the single source [activityCountsByDateProvider] and
-  /// aggregates by month + category for the last 12 months.
+  /// - `1W`: 7 day-level entries (last 7 days)
+  /// - `1M`: 4-5 week-level entries (last 30 days grouped by week-start Monday)
+  /// - `1Y` / `All`: 12 month-level entries (last 12 months)
+  ///
+  /// Reuses [MonthlyCategoryData] model — `activityMonth` represents the period start date.
   MonthlyChartDataProvider._()
     : super(
         from: null,
@@ -191,14 +70,14 @@ final class MonthlyChartDataProvider
   }
 }
 
-String _$monthlyChartDataHash() => r'b0a547e18af712cb11a240d2914f6aae1d0b2441';
+String _$monthlyChartDataHash() => r'701b1542602dce9b82404d06ffca0c9c8b7235aa';
 
-/// Provides filtered monthly chart data based on selected category filters.
+/// Provides filtered chart data based on global category filters.
 
 @ProviderFor(filteredMonthlyChartData)
 final filteredMonthlyChartDataProvider = FilteredMonthlyChartDataProvider._();
 
-/// Provides filtered monthly chart data based on selected category filters.
+/// Provides filtered chart data based on global category filters.
 
 final class FilteredMonthlyChartDataProvider
     extends
@@ -210,7 +89,7 @@ final class FilteredMonthlyChartDataProvider
     with
         $FutureModifier<List<MonthlyCategoryData>>,
         $FutureProvider<List<MonthlyCategoryData>> {
-  /// Provides filtered monthly chart data based on selected category filters.
+  /// Provides filtered chart data based on global category filters.
   FilteredMonthlyChartDataProvider._()
     : super(
         from: null,
@@ -238,4 +117,4 @@ final class FilteredMonthlyChartDataProvider
 }
 
 String _$filteredMonthlyChartDataHash() =>
-    r'afa272b0c416057d78505a34e65cd19d0a6aa0e9';
+    r'0cb7ceac830615a0b6919bd9e488c3306c152747';

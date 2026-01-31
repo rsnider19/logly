@@ -3,13 +3,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
-import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/category_progress_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 
-/// Card displaying category summary with time period filter.
+/// Card displaying category summary filtered by global time period and categories.
 class SummaryCard extends ConsumerWidget {
   const SummaryCard({super.key});
 
@@ -23,14 +22,7 @@ class SummaryCard extends ConsumerWidget {
       title: 'Summary',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.summary),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _TimePeriodSelector(),
-          SizedBox(height: 16),
-          _SummaryContent(),
-        ],
-      ),
+      child: const _SummaryContent(),
     );
   }
 }
@@ -96,8 +88,15 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
         // Sort categories by sortOrder
         final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
+        // Only show categories that have summary data (respects global category filter)
+        final summaryCategories = sortedCategories.where((c) => summaryMap.containsKey(c.activityCategoryId)).toList();
+
+        if (summaryCategories.isEmpty) {
+          return const _SummaryEmpty();
+        }
+
         return Column(
-          children: sortedCategories.map((category) {
+          children: summaryCategories.map((category) {
             final count = summaryMap[category.activityCategoryId] ?? 0;
             final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
 
@@ -118,52 +117,23 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
   }
 }
 
-class _TimePeriodSelector extends ConsumerWidget {
-  const _TimePeriodSelector();
+class _SummaryEmpty extends StatelessWidget {
+  const _SummaryEmpty();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedPeriod = ref.watch(selectedTimePeriodStateProvider);
-    final notifier = ref.watch(selectedTimePeriodStateProvider.notifier);
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
 
-    return Row(
-      children: TimePeriod.values.asMap().entries.map((entry) {
-        final index = entry.key;
-        final period = entry.value;
-        final isSelected = period == selectedPeriod;
-        final isLast = index == TimePeriod.values.length - 1;
-
-        return Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: isLast ? 0 : 8),
-            child: FilterChip(
-              label: SizedBox(
-                width: double.infinity,
-                child: Text(
-                  _getPeriodLabel(period),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              selected: isSelected,
-              onSelected: (_) => notifier.select(period),
-            ),
-          ),
-        );
-      }).toList(),
+    return Container(
+      padding: const EdgeInsets.all(24),
+      alignment: Alignment.center,
+      child: Text(
+        'No activities for selected filters',
+        style: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
+      ),
     );
-  }
-
-  String _getPeriodLabel(TimePeriod period) {
-    switch (period) {
-      case TimePeriod.oneWeek:
-        return '1W';
-      case TimePeriod.oneMonth:
-        return '1M';
-      case TimePeriod.oneYear:
-        return '1Y';
-      case TimePeriod.all:
-        return 'All';
-    }
   }
 }
 

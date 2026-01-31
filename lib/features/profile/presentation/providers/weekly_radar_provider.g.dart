@@ -8,74 +8,10 @@ part of 'weekly_radar_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Independent time period selector for radar chart (separate from SummaryCard).
-
-@ProviderFor(SelectedRadarTimePeriodStateNotifier)
-final selectedRadarTimePeriodStateProvider =
-    SelectedRadarTimePeriodStateNotifierProvider._();
-
-/// Independent time period selector for radar chart (separate from SummaryCard).
-final class SelectedRadarTimePeriodStateNotifierProvider
-    extends
-        $NotifierProvider<SelectedRadarTimePeriodStateNotifier, TimePeriod> {
-  /// Independent time period selector for radar chart (separate from SummaryCard).
-  SelectedRadarTimePeriodStateNotifierProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'selectedRadarTimePeriodStateProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() =>
-      _$selectedRadarTimePeriodStateNotifierHash();
-
-  @$internal
-  @override
-  SelectedRadarTimePeriodStateNotifier create() =>
-      SelectedRadarTimePeriodStateNotifier();
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(TimePeriod value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<TimePeriod>(value),
-    );
-  }
-}
-
-String _$selectedRadarTimePeriodStateNotifierHash() =>
-    r'31e53ac3c11f6fec50ea50b8a064603c1a0f1181';
-
-/// Independent time period selector for radar chart (separate from SummaryCard).
-
-abstract class _$SelectedRadarTimePeriodStateNotifier
-    extends $Notifier<TimePeriod> {
-  TimePeriod build();
-  @$mustCallSuper
-  @override
-  void runBuild() {
-    final ref = this.ref as $Ref<TimePeriod, TimePeriod>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<TimePeriod, TimePeriod>,
-              TimePeriod,
-              Object?,
-              Object?
-            >;
-    element.handleCreate(ref, build);
-  }
-}
-
 /// Provides weekly radar data aggregated by day of week and category.
 ///
 /// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the radar's selected time period.
+/// filters by the global time period.
 
 @ProviderFor(weeklyRadarData)
 final weeklyRadarDataProvider = WeeklyRadarDataProvider._();
@@ -83,7 +19,7 @@ final weeklyRadarDataProvider = WeeklyRadarDataProvider._();
 /// Provides weekly radar data aggregated by day of week and category.
 ///
 /// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the radar's selected time period.
+/// filters by the global time period.
 
 final class WeeklyRadarDataProvider
     extends
@@ -98,7 +34,7 @@ final class WeeklyRadarDataProvider
   /// Provides weekly radar data aggregated by day of week and category.
   ///
   /// Derives from the single source [activityCountsByDateProvider] and
-  /// filters by the radar's selected time period.
+  /// filters by the global time period.
   WeeklyRadarDataProvider._()
     : super(
         from: null,
@@ -125,18 +61,14 @@ final class WeeklyRadarDataProvider
   }
 }
 
-String _$weeklyRadarDataHash() => r'f47f173a0b5f6e8d551cc5fdab7e3970e2e84537';
+String _$weeklyRadarDataHash() => r'cc51c25be8a99903e7d1c2b640ea149905783784';
 
-/// Provides filtered weekly radar data based on selected category filters.
-///
-/// Reuses the same category filter state as the monthly chart.
+/// Provides filtered weekly radar data based on global category filters.
 
 @ProviderFor(filteredWeeklyRadarData)
 final filteredWeeklyRadarDataProvider = FilteredWeeklyRadarDataProvider._();
 
-/// Provides filtered weekly radar data based on selected category filters.
-///
-/// Reuses the same category filter state as the monthly chart.
+/// Provides filtered weekly radar data based on global category filters.
 
 final class FilteredWeeklyRadarDataProvider
     extends
@@ -148,9 +80,7 @@ final class FilteredWeeklyRadarDataProvider
     with
         $FutureModifier<List<WeeklyCategoryData>>,
         $FutureProvider<List<WeeklyCategoryData>> {
-  /// Provides filtered weekly radar data based on selected category filters.
-  ///
-  /// Reuses the same category filter state as the monthly chart.
+  /// Provides filtered weekly radar data based on global category filters.
   FilteredWeeklyRadarDataProvider._()
     : super(
         from: null,
@@ -178,7 +108,7 @@ final class FilteredWeeklyRadarDataProvider
 }
 
 String _$filteredWeeklyRadarDataHash() =>
-    r'afd88e792932d77067fe441f264df8ac138ae241';
+    r'04a628248ca4aaf492e37d7458ed48d9411022db';
 
 /// Provides normalized radar data (0-100%) per category.
 ///

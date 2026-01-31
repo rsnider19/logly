@@ -58,5 +58,4 @@ final class SentryInitializerProvider
   }
 }
 
-String _$sentryInitializerHash() =>
-    r'0000000000000000000000000000000000000000';
+String _$sentryInitializerHash() => r'6c7517ff85d9d3d1e4e91311c40452e8964e8d75';

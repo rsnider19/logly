@@ -3,39 +3,27 @@ import 'package:logly/features/profile/domain/activity_count_by_date.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/domain/weekly_category_data.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
-import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'weekly_radar_provider.g.dart';
 
-/// Independent time period selector for radar chart (separate from SummaryCard).
-@riverpod
-class SelectedRadarTimePeriodStateNotifier extends _$SelectedRadarTimePeriodStateNotifier {
-  @override
-  TimePeriod build() => TimePeriod.all;
-
-  /// Updates the selected time period for the radar chart.
-  void select(TimePeriod period) => state = period;
-}
-
 /// Provides weekly radar data aggregated by day of week and category.
 ///
 /// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the radar's selected time period.
+/// filters by the global time period.
 @riverpod
 Future<List<WeeklyCategoryData>> weeklyRadarData(Ref ref) async {
-  final period = ref.watch(selectedRadarTimePeriodStateProvider);
+  final period = ref.watch(globalTimePeriodProvider);
   final rawData = await ref.watch(activityCountsByDateProvider.future);
   return _aggregateByDayOfWeek(rawData, period);
 }
 
-/// Provides filtered weekly radar data based on selected category filters.
-///
-/// Reuses the same category filter state as the monthly chart.
+/// Provides filtered weekly radar data based on global category filters.
 @riverpod
 Future<List<WeeklyCategoryData>> filteredWeeklyRadarData(Ref ref) async {
   // Watch all futures before any async gap to avoid disposal between awaits
-  final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
+  final effectiveFiltersFuture = ref.watch(effectiveGlobalCategoryFiltersProvider.future);
   final allDataFuture = ref.watch(weeklyRadarDataProvider.future);
   final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 

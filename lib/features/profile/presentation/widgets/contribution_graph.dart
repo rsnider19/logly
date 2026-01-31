@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/contribution_provider.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_legend.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -38,13 +40,14 @@ class ContributionCard extends ConsumerWidget {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.contribution] ?? true;
     final contributionAsync = ref.watch(contributionDataProvider);
+    final timePeriod = ref.watch(globalTimePeriodProvider);
 
     return CollapsibleSection(
       title: 'Activities Last Year',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.contribution),
       child: contributionAsync.when(
-        data: (data) => _ContributionContent(data: data),
+        data: (data) => _ContributionContent(data: data, timePeriod: timePeriod),
         loading: () => const _ContributionShimmer(),
         error: (error, _) => _ContributionError(
           onRetry: () => ref.invalidate(contributionDataProvider),
@@ -55,16 +58,17 @@ class ContributionCard extends ConsumerWidget {
 }
 
 class _ContributionContent extends StatelessWidget {
-  const _ContributionContent({required this.data});
+  const _ContributionContent({required this.data, required this.timePeriod});
 
   final Map<DateTime, int> data;
+  final TimePeriod timePeriod;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _ContributionGraph(data: data),
+        _ContributionGraph(data: data, timePeriod: timePeriod),
         const SizedBox(height: 8),
         const ContributionLegend(),
       ],
@@ -73,9 +77,10 @@ class _ContributionContent extends StatelessWidget {
 }
 
 class _ContributionGraph extends StatelessWidget {
-  const _ContributionGraph({required this.data});
+  const _ContributionGraph({required this.data, required this.timePeriod});
 
   final Map<DateTime, int> data;
+  final TimePeriod timePeriod;
 
   static const double cellSize = 16;
   static const double cellGap = 4;
@@ -110,6 +115,10 @@ class _ContributionGraph extends StatelessWidget {
     final theme = Theme.of(context);
     final today = DateTime.now();
     final todayNormalized = DateTime(today.year, today.month, today.day);
+
+    // Calculate the time period start date for opacity
+    final periodStartDate = _getPeriodStartDate(todayNormalized);
+    final shouldDim = timePeriod == TimePeriod.oneWeek || timePeriod == TimePeriod.oneMonth;
 
     // Find the starting Sunday for the graph (approximately 1 year ago)
     final startDate = todayNormalized.subtract(Duration(days: (columns - 1) * 7 + todayNormalized.weekday % 7));
@@ -173,6 +182,10 @@ class _ContributionGraph extends StatelessWidget {
                         emptyColor: theme.colorScheme.surfaceContainerHighest,
                       );
 
+                      // Apply dimming for cells outside the selected time window
+                      final isOutOfRange = shouldDim && normalizedDate.isBefore(periodStartDate);
+                      final effectiveColor = isOutOfRange ? color.withValues(alpha: 0.5) : color;
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: cellGap),
                         child: Tooltip(
@@ -181,7 +194,7 @@ class _ContributionGraph extends StatelessWidget {
                             width: cellSize,
                             height: cellSize,
                             decoration: BoxDecoration(
-                              color: color,
+                              color: effectiveColor,
                               borderRadius: BorderRadius.circular(2),
                             ),
                           ),
@@ -196,6 +209,16 @@ class _ContributionGraph extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// Returns the start date for the selected time period.
+  DateTime _getPeriodStartDate(DateTime today) {
+    return switch (timePeriod) {
+      TimePeriod.oneWeek => today.subtract(const Duration(days: 6)),
+      TimePeriod.oneMonth => today.subtract(const Duration(days: 29)),
+      TimePeriod.oneYear => today.subtract(const Duration(days: 364)),
+      TimePeriod.all => DateTime(2000),
+    };
   }
 
   /// Calculates column positions for month labels.

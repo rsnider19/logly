@@ -4,12 +4,18 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
+import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
-import 'package:logly/features/profile/presentation/widgets/category_filter_chips.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
 
-/// Card displaying the last 12 months as stacked bar chart.
+/// Card displaying activity data as a stacked bar chart.
+///
+/// The chart dynamically adapts to the global time period:
+/// - 1W: 7 daily bars
+/// - 1M: 4-5 weekly bars
+/// - 1Y / All: 12 monthly bars
 class MonthlyChartCard extends ConsumerWidget {
   const MonthlyChartCard({super.key});
 
@@ -19,44 +25,45 @@ class MonthlyChartCard extends ConsumerWidget {
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.monthly] ?? true;
     final monthlyDataAsync = ref.watch(filteredMonthlyChartDataProvider);
     final categoriesAsync = ref.watch(activityCategoriesProvider);
+    final timePeriod = ref.watch(globalTimePeriodProvider);
+
+    final title = switch (timePeriod) {
+      TimePeriod.oneWeek => 'Last 7 Days',
+      TimePeriod.oneMonth => 'Last 30 Days',
+      TimePeriod.oneYear || TimePeriod.all => 'Last 12 Months',
+    };
 
     return CollapsibleSection(
-      title: 'Last 12 Months',
+      title: title,
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.monthly),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CategoryFilterChips(),
-          const SizedBox(height: 16),
-          monthlyDataAsync.when(
-            data: (data) {
-              if (data.isEmpty) {
-                return const _EmptyState();
-              }
+      child: monthlyDataAsync.when(
+        data: (data) {
+          if (data.isEmpty) {
+            return const _EmptyState();
+          }
 
-              return categoriesAsync.when(
-                data: (categories) {
-                  final categoryColors = {
-                    for (final c in categories)
-                      c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
-                  };
+          return categoriesAsync.when(
+            data: (categories) {
+              final categoryColors = {
+                for (final c in categories)
+                  c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
+              };
 
-                  return _MonthlyChart(
-                    data: data,
-                    categoryColors: categoryColors,
-                  );
-                },
-                loading: () => const _MonthlyChartShimmer(),
-                error: (_, _) => const _MonthlyChartShimmer(),
+              return _MonthlyChart(
+                data: data,
+                categoryColors: categoryColors,
+                timePeriod: timePeriod,
               );
             },
             loading: () => const _MonthlyChartShimmer(),
-            error: (error, _) => _MonthlyChartError(
-              onRetry: () => ref.invalidate(filteredMonthlyChartDataProvider),
-            ),
-          ),
-        ],
+            error: (_, _) => const _MonthlyChartShimmer(),
+          );
+        },
+        loading: () => const _MonthlyChartShimmer(),
+        error: (error, _) => _MonthlyChartError(
+          onRetry: () => ref.invalidate(filteredMonthlyChartDataProvider),
+        ),
       ),
     );
   }
@@ -66,23 +73,40 @@ class _MonthlyChart extends StatelessWidget {
   const _MonthlyChart({
     required this.data,
     required this.categoryColors,
+    required this.timePeriod,
   });
 
   final List<MonthlyCategoryData> data;
   final Map<String, Color> categoryColors;
+  final TimePeriod timePeriod;
 
-  static const List<String> monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  static const List<String> monthLabels = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  static const List<String> dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   static const double chartHeight = 124;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final periods = _generatePeriods();
 
-    // Group data by month
-    final monthlyGroups = <DateTime, List<MonthlyCategoryData>>{};
+    // Group data by period key
+    final periodGroups = <DateTime, List<MonthlyCategoryData>>{};
     for (final item in data) {
-      final monthKey = DateTime(item.activityMonth.year, item.activityMonth.month);
-      monthlyGroups.putIfAbsent(monthKey, () => []).add(item);
+      final key = _periodKeyForItem(item);
+      periodGroups.putIfAbsent(key, () => []).add(item);
     }
 
     // Calculate overall totals per category (for sorting segments)
@@ -101,26 +125,19 @@ class _MonthlyChart extends StatelessWidget {
     final sortedCategories = categoryTotals.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
     final categoryOrder = {for (var i = 0; i < sortedCategories.length; i++) sortedCategories[i].key: i};
 
-    // Get last 12 months (most recent first)
-    final now = DateTime.now();
-    final months = List.generate(12, (i) {
-      final date = DateTime(now.year, now.month - i);
-      return DateTime(date.year, date.month);
-    });
-
     // Calculate max total for Y axis
     var maxTotal = 0.0;
-    for (final month in months) {
-      final items = monthlyGroups[month] ?? [];
+    for (final period in periods) {
+      final items = periodGroups[period] ?? [];
       final total = items.fold(0, (sum, item) => sum + item.activityCount);
       if (total > maxTotal) maxTotal = total.toDouble();
     }
 
     // Build bar groups
     final barGroups = <BarChartGroupData>[];
-    for (var i = 0; i < months.length; i++) {
-      final month = months[i];
-      final items = monthlyGroups[month] ?? [];
+    for (var i = 0; i < periods.length; i++) {
+      final period = periods[i];
+      final items = periodGroups[period] ?? [];
 
       // Sort items by category order (highest total category first = bottom of stack)
       final sortedItems = items.toList()
@@ -139,9 +156,7 @@ class _MonthlyChart extends StatelessWidget {
           BarChartRodStackItem(
             fromY,
             toY,
-            item.activityCategoryId != null
-                ? categoryColors[item.activityCategoryId] ?? Colors.grey
-                : Colors.grey,
+            item.activityCategoryId != null ? categoryColors[item.activityCategoryId] ?? Colors.grey : Colors.grey,
           ),
         );
         fromY = toY;
@@ -184,22 +199,10 @@ class _MonthlyChart extends StatelessWidget {
                 reservedSize: 24,
                 getTitlesWidget: (value, meta) {
                   final index = value.toInt();
-                  if (index < 0 || index >= months.length) {
+                  if (index < 0 || index >= periods.length) {
                     return const SizedBox.shrink();
                   }
-                  // Skip every other month label
-                  if (index % 2 != 0) {
-                    return const SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      monthLabels[months[index].month - 1],
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  );
+                  return _buildLabel(theme, periods[index], index, periods.length);
                 },
               ),
             ),
@@ -218,6 +221,86 @@ class _MonthlyChart extends StatelessWidget {
         ),
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  /// Generates the list of period start dates based on time period.
+  List<DateTime> _generatePeriods() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+
+    switch (timePeriod) {
+      case TimePeriod.oneWeek:
+        // Last 7 days (most recent first, reversed for display: oldest on left)
+        return List.generate(7, (i) => today.subtract(Duration(days: i))).reversed.toList();
+
+      case TimePeriod.oneMonth:
+        // Last 30 days grouped by week (Monday starts)
+        final startDate = today.subtract(const Duration(days: 29));
+        final weeks = <DateTime>{};
+        for (var d = startDate; !d.isAfter(today); d = d.add(const Duration(days: 1))) {
+          final weekStart = d.subtract(Duration(days: d.weekday - 1));
+          weeks.add(weekStart);
+        }
+        final sorted = weeks.toList()..sort();
+        return sorted;
+
+      case TimePeriod.oneYear:
+      case TimePeriod.all:
+        // Last 12 months (most recent first, reversed for display: oldest on left)
+        return List.generate(12, (i) {
+          final date = DateTime(now.year, now.month - i);
+          return DateTime(date.year, date.month);
+        }).reversed.toList();
+    }
+  }
+
+  /// Returns the period key for a data item (normalizes to the period bucket).
+  DateTime _periodKeyForItem(MonthlyCategoryData item) {
+    switch (timePeriod) {
+      case TimePeriod.oneWeek:
+        return DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
+
+      case TimePeriod.oneMonth:
+        final date = DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
+        return date.subtract(Duration(days: date.weekday - 1));
+
+      case TimePeriod.oneYear:
+      case TimePeriod.all:
+        return DateTime(item.activityMonth.year, item.activityMonth.month);
+    }
+  }
+
+  /// Builds the x-axis label for a period.
+  Widget _buildLabel(ThemeData theme, DateTime period, int index, int total) {
+    String label;
+    bool shouldShow;
+
+    switch (timePeriod) {
+      case TimePeriod.oneWeek:
+        label = dayLabels[period.weekday - 1];
+        shouldShow = true; // Show all 7 days
+
+      case TimePeriod.oneMonth:
+        label = '${monthLabels[period.month - 1]} ${period.day}';
+        shouldShow = true; // Show all week labels
+
+      case TimePeriod.oneYear:
+      case TimePeriod.all:
+        label = monthLabels[period.month - 1];
+        shouldShow = index % 2 == 0; // Skip every other month label
+    }
+
+    if (!shouldShow) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }

@@ -2,69 +2,109 @@ import 'package:dartx/dartx.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/activity_count_by_date.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
+import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'monthly_chart_provider.g.dart';
 
-/// Notifier for selected category filters on the monthly chart.
+/// Provides chart data aggregated by the global time period.
 ///
-/// An empty set means "all categories selected" (default state).
-/// When user deselects a category, we populate with all except that one.
-@riverpod
-class SelectedCategoryFiltersStateNotifier extends _$SelectedCategoryFiltersStateNotifier {
-  @override
-  Set<String> build() => {};
-
-  /// Toggles a category filter on/off.
-  ///
-  /// If state is empty (all selected), first populates with all category IDs
-  /// then removes the toggled one.
-  void toggle(String categoryId, List<String> allCategoryIds) {
-    if (state.isEmpty) {
-      // Empty means all selected, so toggling means deselecting one
-      state = allCategoryIds.where((id) => id != categoryId).toSet();
-    } else if (state.contains(categoryId)) {
-      state = {...state}..remove(categoryId);
-    } else {
-      state = {...state, categoryId};
-    }
-  }
-
-  /// Selects all categories (resets to empty set which means all selected).
-  void selectAll() {
-    state = {};
-  }
-}
-
-/// Provides the effective set of selected category IDs.
+/// - `1W`: 7 day-level entries (last 7 days)
+/// - `1M`: 4-5 week-level entries (last 30 days grouped by week-start Monday)
+/// - `1Y` / `All`: 12 month-level entries (last 12 months)
 ///
-/// When raw state is empty, returns all category IDs (all selected by default).
-/// Otherwise returns the raw selection.
-@riverpod
-Future<Set<String>> effectiveSelectedFilters(Ref ref) async {
-  final rawFilters = ref.watch(selectedCategoryFiltersStateProvider);
-  // Watch the future before the async gap
-  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
-
-  if (rawFilters.isEmpty) {
-    final categories = await categoriesFuture;
-    return categories.map((c) => c.activityCategoryId).toSet();
-  }
-  return rawFilters;
-}
-
-/// Provides monthly chart data for all categories.
-///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// aggregates by month + category for the last 12 months.
+/// Reuses [MonthlyCategoryData] model — `activityMonth` represents the period start date.
 @riverpod
 Future<List<MonthlyCategoryData>> monthlyChartData(Ref ref) async {
+  final period = ref.watch(globalTimePeriodProvider);
   final rawData = await ref.watch(activityCountsByDateProvider.future);
-  return _aggregateByMonth(rawData);
+
+  return switch (period) {
+    TimePeriod.oneWeek => _aggregateByDay(rawData),
+    TimePeriod.oneMonth => _aggregateByWeek(rawData),
+    TimePeriod.oneYear || TimePeriod.all => _aggregateByMonth(rawData),
+  };
 }
 
-/// Aggregates raw activity counts by month and category for last 12 months.
+/// Provides filtered chart data based on global category filters.
+@riverpod
+Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
+  // Watch all futures before any async gap to avoid disposal between awaits
+  final effectiveFiltersFuture = ref.watch(effectiveGlobalCategoryFiltersProvider.future);
+  final allDataFuture = ref.watch(monthlyChartDataProvider.future);
+  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
+
+  final (effectiveFilters, allData, categories) =
+      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
+
+  // If all categories are selected, return all data (optimization)
+  if (effectiveFilters.length == categories.length) {
+    return allData;
+  }
+
+  return allData
+      .where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId))
+      .toList();
+}
+
+/// Aggregates raw activity counts by day for the last 7 days.
+List<MonthlyCategoryData> _aggregateByDay(List<ActivityCountByDate> rawData) {
+  final now = DateTime.now();
+  final startDate = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 6));
+
+  final dailyTotals = <(DateTime, String), int>{};
+  for (final item in rawData) {
+    final dateKey = DateTime(item.activityDate.year, item.activityDate.month, item.activityDate.day);
+    if (dateKey.isBefore(startDate)) continue;
+
+    final key = (dateKey, item.activityCategoryId);
+    dailyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
+  }
+
+  return dailyTotals.entries
+      .map((e) {
+        final (date, categoryId) = e.key;
+        return MonthlyCategoryData(
+          activityMonth: date,
+          activityCount: e.value,
+          activityCategoryId: categoryId,
+        );
+      })
+      .sortedByDescending((a) => a.activityMonth);
+}
+
+/// Aggregates raw activity counts by week for the last 30 days.
+/// Weeks start on Monday.
+List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
+  final now = DateTime.now();
+  final startDate = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 29));
+
+  final weeklyTotals = <(DateTime, String), int>{};
+  for (final item in rawData) {
+    final dateKey = DateTime(item.activityDate.year, item.activityDate.month, item.activityDate.day);
+    if (dateKey.isBefore(startDate)) continue;
+
+    // Find the Monday of the week
+    final weekStart = dateKey.subtract(Duration(days: dateKey.weekday - 1));
+    final key = (weekStart, item.activityCategoryId);
+    weeklyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
+  }
+
+  return weeklyTotals.entries
+      .map((e) {
+        final (weekStart, categoryId) = e.key;
+        return MonthlyCategoryData(
+          activityMonth: weekStart,
+          activityCount: e.value,
+          activityCategoryId: categoryId,
+        );
+      })
+      .sortedByDescending((a) => a.activityMonth);
+}
+
+/// Aggregates raw activity counts by month for last 12 months.
 List<MonthlyCategoryData> _aggregateByMonth(List<ActivityCountByDate> rawData) {
   final now = DateTime.now();
   final startDate = DateTime(now.year - 1, now.month, 1);
@@ -88,25 +128,4 @@ List<MonthlyCategoryData> _aggregateByMonth(List<ActivityCountByDate> rawData) {
         );
       })
       .sortedByDescending((a) => a.activityMonth);
-}
-
-/// Provides filtered monthly chart data based on selected category filters.
-@riverpod
-Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
-  // Watch all futures before any async gap to avoid disposal between awaits
-  final effectiveFiltersFuture = ref.watch(effectiveSelectedFiltersProvider.future);
-  final allDataFuture = ref.watch(monthlyChartDataProvider.future);
-  final categoriesFuture = ref.watch(activityCategoriesProvider.future);
-
-  final (effectiveFilters, allData, categories) =
-      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
-
-  // If all categories are selected, return all data (optimization)
-  if (effectiveFilters.length == categories.length) {
-    return allData;
-  }
-
-  return allData
-      .where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId))
-      .toList();
 }

@@ -8,7 +8,8 @@ part of 'contribution_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Provides contribution data (activity counts by day) for the last year.
+/// Provides contribution data (activity counts by day) for the last year,
+/// filtered by the global category selection.
 ///
 /// Derives from the single source [activityCountsByDateProvider] and
 /// aggregates by date for the contribution graph.
@@ -16,7 +17,8 @@ part of 'contribution_provider.dart';
 @ProviderFor(contributionData)
 final contributionDataProvider = ContributionDataProvider._();
 
-/// Provides contribution data (activity counts by day) for the last year.
+/// Provides contribution data (activity counts by day) for the last year,
+/// filtered by the global category selection.
 ///
 /// Derives from the single source [activityCountsByDateProvider] and
 /// aggregates by date for the contribution graph.
@@ -31,7 +33,8 @@ final class ContributionDataProvider
     with
         $FutureModifier<Map<DateTime, int>>,
         $FutureProvider<Map<DateTime, int>> {
-  /// Provides contribution data (activity counts by day) for the last year.
+  /// Provides contribution data (activity counts by day) for the last year,
+  /// filtered by the global category selection.
   ///
   /// Derives from the single source [activityCountsByDateProvider] and
   /// aggregates by date for the contribution graph.
@@ -61,4 +64,4 @@ final class ContributionDataProvider
   }
 }
 
-String _$contributionDataHash() => r'd621c56349e19f281c8b07ba04607dfcecb39cb6';
+String _$contributionDataHash() => r'5fbce0162e3ebeede47a9a1939b9fc21d392bda2';
