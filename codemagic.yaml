@@ -25,6 +25,12 @@ workflows:
         BUNDLE_ID: com.logly.ios
         APP_STORE_APP_ID: "1465198031"
 
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+        - $HOME/.gradle/caches
+        - $HOME/Library/Caches/CocoaPods
+
     triggering:
       events:
         - tag
