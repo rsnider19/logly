@@ -5,6 +5,7 @@ import 'package:logly/app/theme/app_theme.dart';
 import 'package:logly/core/providers/scaffold_messenger_provider.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
 import 'package:logly/features/settings/application/notification_service.dart';
+import 'package:logly/core/services/sentry_initializer.dart';
 import 'package:logly/features/subscriptions/application/subscription_initializer.dart';
 
 class App extends ConsumerStatefulWidget {
@@ -25,6 +26,8 @@ class _AppState extends ConsumerState<App> {
       ref.read(healthSyncInitializerProvider).initialize();
       // Initialize subscription listener (syncs RevenueCat with auth state)
       ref.read(subscriptionInitializerProvider).initialize();
+      // Initialize Sentry user context (syncs auth state with Sentry)
+      ref.read(sentryInitializerProvider).initialize();
     });
   }
 

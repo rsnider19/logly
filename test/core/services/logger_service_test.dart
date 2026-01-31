@@ -12,7 +12,7 @@ void main() {
 
     setUp(() {
       mockLogger = MockLogger();
-      loggerService = LoggerService(logger: mockLogger);
+      loggerService = LoggerService(logger: mockLogger, enableSentry: false);
     });
 
     group('constructor', () {
