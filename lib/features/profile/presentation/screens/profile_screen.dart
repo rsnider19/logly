@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/profile_filter_bar.dart';
@@ -12,6 +11,7 @@ import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
 import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
 class ProfileScreen extends ConsumerWidget {
@@ -93,10 +93,10 @@ class _InsightsFab extends ConsumerWidget {
 
     return FloatingActionButton.extended(
       onPressed: () => _onPressed(context, ref, hasAccess),
-      label: Row(
+      label: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('LoglyAI'),
+          Text('LoglyAI'),
           ProBadge(feature: FeatureCode.aiInsights),
         ],
       ),

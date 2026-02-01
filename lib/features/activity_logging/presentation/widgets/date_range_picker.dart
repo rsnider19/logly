@@ -1,9 +1,9 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Date range picker for multi-day activities.
 ///
@@ -94,7 +94,6 @@ class DateRangePicker extends ConsumerWidget {
           ),
         ] else ...[
           _DateField(
-            label: null,
             date: startDate,
             showToday: true,
             onTap: () => _selectStartDate(context, ref, startDate, null),

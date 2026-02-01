@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Whether an activity is logged for a single date or a date range.
-@JsonEnum(fieldRename: FieldRename.none)
+@JsonEnum()
 enum ActivityDateType {
   /// Activity is logged for a single date/time.
   @JsonValue('single')

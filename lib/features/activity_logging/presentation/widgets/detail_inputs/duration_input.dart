@@ -73,7 +73,9 @@ class _DurationInputState extends ConsumerState<DurationInput> {
 
   void _updateValue() {
     final totalSeconds = _totalSeconds;
-    ref.read(activityFormStateProvider.notifier).setDurationValue(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setDurationValue(
           widget.activityDetail.activityDetailId,
           totalSeconds > 0 ? totalSeconds : null,
         );
@@ -82,7 +84,9 @@ class _DurationInputState extends ConsumerState<DurationInput> {
   void _onSliderChanged(double value) {
     final totalSeconds = value.round();
     _updateControllersFromSeconds(totalSeconds);
-    ref.read(activityFormStateProvider.notifier).setDurationValue(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setDurationValue(
           widget.activityDetail.activityDetailId,
           totalSeconds > 0 ? totalSeconds : null,
         );
@@ -175,36 +179,36 @@ class _TimeField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return TextField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        textAlignVertical: TextAlignVertical.center,
-        style: theme.textTheme.bodyLarge?.copyWith(
-          fontFeatures: [const FontFeature.tabularFigures()],
+      controller: controller,
+      keyboardType: TextInputType.number,
+      textAlign: TextAlign.center,
+      textAlignVertical: TextAlignVertical.center,
+      style: theme.textTheme.bodyLarge?.copyWith(
+        fontFeatures: [const FontFeature.tabularFigures()],
+      ),
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(2),
+        _MaxValueInputFormatter(maxValue),
+      ],
+      decoration: InputDecoration(
+        suffixText: suffix,
+        suffixStyle: theme.textTheme.bodyMedium?.copyWith(
+          color: theme.colorScheme.onSurfaceVariant,
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(2),
-          _MaxValueInputFormatter(maxValue),
-        ],
-        decoration: InputDecoration(
-          suffixText: suffix,
-          suffixStyle: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          isDense: true,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: theme.colorScheme.outline),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: theme.colorScheme.outline),
-          ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        isDense: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
         ),
-        onChanged: onChanged,
-      );
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: theme.colorScheme.outline),
+        ),
+      ),
+      onChanged: onChanged,
+    );
   }
 }
 

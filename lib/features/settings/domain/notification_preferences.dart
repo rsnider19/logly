@@ -15,8 +15,7 @@ abstract class NotificationPreferences with _$NotificationPreferences {
     @TimeOfDayConverter() @Default(TimeOfDay(hour: 20, minute: 0)) TimeOfDay reminderTime,
   }) = _NotificationPreferences;
 
-  factory NotificationPreferences.fromJson(Map<String, dynamic> json) =>
-      _$NotificationPreferencesFromJson(json);
+  factory NotificationPreferences.fromJson(Map<String, dynamic> json) => _$NotificationPreferencesFromJson(json);
 }
 
 /// JSON converter for TimeOfDay.

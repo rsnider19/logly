@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
@@ -9,6 +8,7 @@ import 'package:logly/features/profile/presentation/providers/collapsible_sectio
 import 'package:logly/features/profile/presentation/providers/monthly_chart_provider.dart';
 import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Card displaying activity data as a stacked bar chart.
 ///

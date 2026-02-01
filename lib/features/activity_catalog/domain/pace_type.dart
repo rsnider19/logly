@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// How pace should be calculated for an activity.
-@JsonEnum(fieldRename: FieldRename.none)
+@JsonEnum()
 enum PaceType {
   /// Minutes per unit of measure (e.g., min/mile, min/km).
   @JsonValue('minutesPerUom')

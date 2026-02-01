@@ -27,8 +27,7 @@ Future<List<WeeklyCategoryData>> filteredWeeklyRadarData(Ref ref) async {
   final allDataFuture = ref.watch(weeklyRadarDataProvider.future);
   final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
-  final (effectiveFilters, allData, categories) =
-      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
+  final (effectiveFilters, allData, categories) = await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
 
   // If all categories are selected, return all data
   if (effectiveFilters.length == categories.length) {

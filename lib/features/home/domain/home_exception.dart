@@ -8,11 +8,11 @@ abstract class HomeException extends AppException {
 /// Thrown when fetching daily activities fails.
 class FetchDailyActivitiesException extends HomeException {
   const FetchDailyActivitiesException([String? technicalDetails])
-      : super('Unable to load activities. Please try again.', technicalDetails);
+    : super('Unable to load activities. Please try again.', technicalDetails);
 }
 
 /// Thrown when fetching trending activities fails.
 class FetchTrendingActivitiesException extends HomeException {
   const FetchTrendingActivitiesException([String? technicalDetails])
-      : super('Unable to load trending activities. Please try again.', technicalDetails);
+    : super('Unable to load trending activities. Please try again.', technicalDetails);
 }

@@ -41,7 +41,9 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
   }
 
   void _onChanged(String value) {
-    ref.read(activityFormStateProvider.notifier).setActivityNameOverride(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setActivityNameOverride(
           value.isEmpty ? null : value,
         );
   }
@@ -64,7 +66,7 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
               'Custom Name',
               style: theme.textTheme.bodyLarge,
             ),
-            ProBadge(feature: FeatureCode.activityNameOverride),
+            const ProBadge(feature: FeatureCode.activityNameOverride),
           ],
         ),
         const SizedBox(height: 8),
@@ -81,7 +83,6 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
                 hintText: 'e.g. Morning Run',
                 border: const OutlineInputBorder(),
                 counterText: hasAccess ? null : '',
-                suffixIcon: null,
               ),
               onChanged: hasAccess ? _onChanged : null,
             ),

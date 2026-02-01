@@ -27,9 +27,9 @@ class ProBadge extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.only(left: 6),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: ShapeDecoration(
+      decoration: const ShapeDecoration(
         color: Colors.amber,
-        shape: const StadiumBorder(),
+        shape: StadiumBorder(),
       ),
       child: const Text(
         'PRO',

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Metric units of measurement.
-@JsonEnum(fieldRename: FieldRename.none)
+@JsonEnum()
 enum MetricUom {
   @JsonValue('meters')
   meters,

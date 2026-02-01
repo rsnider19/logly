@@ -7,16 +7,14 @@ part 'entitlement_state.g.dart';
 /// Represents the current state of user entitlements.
 @freezed
 abstract class EntitlementState with _$EntitlementState {
-  const EntitlementState._();
-
   const factory EntitlementState({
     @Default(true) bool isLoading,
     @Default({}) Set<String> activeEntitlements,
     String? error,
   }) = _EntitlementState;
+  const EntitlementState._();
 
-  factory EntitlementState.fromJson(Map<String, dynamic> json) =>
-      _$EntitlementStateFromJson(json);
+  factory EntitlementState.fromJson(Map<String, dynamic> json) => _$EntitlementStateFromJson(json);
 
   /// Whether the user has the pro subscription.
   bool get isPro => activeEntitlements.contains(FeatureCode.pro.value);
@@ -27,6 +25,5 @@ abstract class EntitlementState with _$EntitlementState {
   /// - The specific feature entitlement, OR
   /// - The `logly-pro` entitlement (which grants all features)
   bool hasFeature(FeatureCode feature) =>
-      activeEntitlements.contains(feature.value) ||
-      activeEntitlements.contains(FeatureCode.pro.value);
+      activeEntitlements.contains(feature.value) || activeEntitlements.contains(FeatureCode.pro.value);
 }

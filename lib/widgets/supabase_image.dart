@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/services/env_service.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A widget that displays an image from a Supabase Storage bucket.
 ///

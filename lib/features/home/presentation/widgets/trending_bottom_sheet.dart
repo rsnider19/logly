@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/home/domain/trending_activity.dart';
 import 'package:logly/features/home/presentation/providers/trending_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Bottom sheet displaying global trending activities.
 class TrendingBottomSheet extends ConsumerWidget {

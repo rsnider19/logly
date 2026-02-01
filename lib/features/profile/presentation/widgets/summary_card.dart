@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
-
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
@@ -9,6 +7,7 @@ import 'package:logly/features/profile/presentation/providers/profile_filter_pro
 import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/category_progress_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Card displaying category summary filtered by global time period and categories.
 class SummaryCard extends ConsumerWidget {
@@ -17,8 +16,7 @@ class SummaryCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
-    final isExpanded =
-        ref.watch(collapsibleSectionsStateProvider)[ProfileSections.summary] ?? true;
+    final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.summary] ?? true;
 
     return CollapsibleSection(
       title: 'Summary',
@@ -85,9 +83,7 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
         // maxCount computed from ALL summaries so bars stay proportional
         final maxCount = isLoading
             ? _cachedMaxCount
-            : (summaries.isEmpty
-                ? 1
-                : summaries.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b));
+            : (summaries.isEmpty ? 1 : summaries.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b));
 
         // Sort categories by sortOrder — show ALL categories always
         final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));

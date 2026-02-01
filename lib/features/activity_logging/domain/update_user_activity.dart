@@ -39,7 +39,8 @@ abstract class UpdateUserActivity with _$UpdateUserActivity {
     return {
       'user_activity_id': userActivityId,
       'activity_timestamp': activityTimestamp.toIso8601String(),
-      'activity_date': '${activityDate.year}-${activityDate.month.toString().padLeft(2, '0')}-${activityDate.day.toString().padLeft(2, '0')}',
+      'activity_date':
+          '${activityDate.year}-${activityDate.month.toString().padLeft(2, '0')}-${activityDate.day.toString().padLeft(2, '0')}',
       'comments': comments,
       'activity_name_override': activityNameOverride,
     };

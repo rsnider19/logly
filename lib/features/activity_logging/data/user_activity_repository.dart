@@ -155,17 +155,19 @@ class UserActivityRepository {
       final userActivityJson = activity.toUserActivityJson();
       final detailsJson = activity.details
           .where((d) => d.hasValue)
-          .map((d) => {
-                'activity_detail_id': d.activityDetailId,
-                'activity_detail_type': d.activityDetailType.name,
-                'text_value': d.textValue,
-                'environment_value': d.environmentValue?.name,
-                'numeric_value': d.numericValue,
-                'duration_in_sec': d.durationInSec,
-                'distance_in_meters': d.distanceInMeters,
-                'liquid_volume_in_liters': d.liquidVolumeInLiters,
-                'weight_in_kilograms': d.weightInKilograms,
-              })
+          .map(
+            (d) => {
+              'activity_detail_id': d.activityDetailId,
+              'activity_detail_type': d.activityDetailType.name,
+              'text_value': d.textValue,
+              'environment_value': d.environmentValue?.name,
+              'numeric_value': d.numericValue,
+              'duration_in_sec': d.durationInSec,
+              'distance_in_meters': d.distanceInMeters,
+              'liquid_volume_in_liters': d.liquidVolumeInLiters,
+              'weight_in_kilograms': d.weightInKilograms,
+            },
+          )
           .toList();
 
       _logger.d('=== CREATE USER ACTIVITY RPC ===');
@@ -206,17 +208,19 @@ class UserActivityRepository {
     try {
       final detailsJson = activity.details
           .where((d) => d.hasValue)
-          .map((d) => {
-                'activity_detail_id': d.activityDetailId,
-                'activity_detail_type': d.activityDetailType.name,
-                'text_value': d.textValue,
-                'environment_value': d.environmentValue?.name,
-                'numeric_value': d.numericValue,
-                'duration_in_sec': d.durationInSec,
-                'distance_in_meters': d.distanceInMeters,
-                'liquid_volume_in_liters': d.liquidVolumeInLiters,
-                'weight_in_kilograms': d.weightInKilograms,
-              })
+          .map(
+            (d) => {
+              'activity_detail_id': d.activityDetailId,
+              'activity_detail_type': d.activityDetailType.name,
+              'text_value': d.textValue,
+              'environment_value': d.environmentValue?.name,
+              'numeric_value': d.numericValue,
+              'duration_in_sec': d.durationInSec,
+              'distance_in_meters': d.distanceInMeters,
+              'liquid_volume_in_liters': d.liquidVolumeInLiters,
+              'weight_in_kilograms': d.weightInKilograms,
+            },
+          )
           .toList();
 
       final response = await _supabase

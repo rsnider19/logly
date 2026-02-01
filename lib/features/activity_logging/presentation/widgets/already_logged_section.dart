@@ -115,9 +115,7 @@ class AlreadyLoggedSection extends ConsumerWidget {
 
   String get _headerText {
     final now = DateTime.now();
-    final isToday = selectedDate.year == now.year &&
-        selectedDate.month == now.month &&
-        selectedDate.day == now.day;
+    final isToday = selectedDate.year == now.year && selectedDate.month == now.month && selectedDate.day == now.day;
     if (isToday) return 'Logged today';
     return 'Logged on ${DateFormat('EEE MM/dd').format(selectedDate)}';
   }

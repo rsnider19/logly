@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/onboarding/application/onboarding_service.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for requesting health platform permissions during onboarding.
 class HealthPermissionScreen extends ConsumerStatefulWidget {

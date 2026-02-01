@@ -80,7 +80,7 @@ class _EmptyPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ActivityChip(
+    return const ActivityChip(
       activity: _emptySummary,
       showIcon: false,
     );
@@ -93,7 +93,7 @@ class _LoadingPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ActivityChip(
+    return const ActivityChip(
       activity: _emptySummary,
       showIcon: false,
     );
@@ -106,7 +106,7 @@ class _ErrorPlaceholder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ActivityChip(
+    return const ActivityChip(
       activity: _emptySummary,
       showIcon: false,
     );
@@ -123,8 +123,10 @@ const _emptySummary = ActivitySummary(
 
 /// Internal provider to fetch activity summary by ID for chip display.
 // ignore: specify_nonobvious_property_types
-final _activitySummaryByIdProvider =
-    FutureProvider.autoDispose.family<ActivitySummary, String>((ref, activityId) async {
+final _activitySummaryByIdProvider = FutureProvider.autoDispose.family<ActivitySummary, String>((
+  ref,
+  activityId,
+) async {
   final service = ref.watch(catalogServiceProvider);
   final activity = await service.getActivityById(activityId);
   return ActivitySummary(

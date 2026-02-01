@@ -22,8 +22,7 @@ abstract class ActivityMonthStatistics with _$ActivityMonthStatistics {
     Activity? activity,
   }) = _ActivityMonthStatistics;
 
-  factory ActivityMonthStatistics.fromJson(Map<String, dynamic> json) =>
-      _$ActivityMonthStatisticsFromJson(json);
+  factory ActivityMonthStatistics.fromJson(Map<String, dynamic> json) => _$ActivityMonthStatisticsFromJson(json);
 }
 
 /// A count of how many times a specific subactivity was logged.
@@ -34,6 +33,5 @@ abstract class SubActivityCount with _$SubActivityCount {
     required int count,
   }) = _SubActivityCount;
 
-  factory SubActivityCount.fromJson(Map<String, dynamic> json) =>
-      _$SubActivityCountFromJson(json);
+  factory SubActivityCount.fromJson(Map<String, dynamic> json) => _$SubActivityCountFromJson(json);
 }

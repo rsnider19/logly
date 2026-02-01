@@ -292,7 +292,7 @@ class _ContributionGraph extends StatelessWidget {
     return Row(
       children: [
         // Empty space to align with day labels column
-        SizedBox(width: labelWidth + cellGap),
+        const SizedBox(width: labelWidth + cellGap),
         // Month label cells
         ...List.generate(columns, (colIndex) {
           final label = monthLabels[colIndex];

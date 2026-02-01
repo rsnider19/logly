@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// The detail types available for adding.
 enum DetailType {
@@ -140,9 +140,7 @@ class _DetailTypeChip extends StatelessWidget {
       label: Text(type.label),
       onPressed: onTap,
       backgroundColor: isDisabled ? theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5) : null,
-      labelStyle: isDisabled
-          ? TextStyle(color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5))
-          : null,
+      labelStyle: isDisabled ? TextStyle(color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5)) : null,
     );
   }
 }

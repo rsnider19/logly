@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Multi-select chip list for choosing subactivities.
 ///
@@ -71,7 +71,9 @@ class _SubActivitySelectorState extends ConsumerState<SubActivitySelector> {
                   isSelected: isSelected,
                   selectedColor: activityColor,
                   onPressed: () {
-                    ref.read(activityFormStateProvider.notifier).toggleSubActivity(
+                    ref
+                        .read(activityFormStateProvider.notifier)
+                        .toggleSubActivity(
                           subActivity.subActivityId,
                         );
                   },

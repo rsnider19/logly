@@ -17,16 +17,16 @@ class HealthRepository {
 
   /// The health data types needed for workout sync.
   List<HealthDataType> get _workoutTypes => [
-        HealthDataType.WORKOUT,
-        if (Platform.isAndroid) ...[
-          HealthDataType.DISTANCE_DELTA,
-          HealthDataType.TOTAL_CALORIES_BURNED,
-        ],
-        if (Platform.isIOS) ...[
-          HealthDataType.DISTANCE_WALKING_RUNNING,
-          HealthDataType.ACTIVE_ENERGY_BURNED,
-        ],
-      ];
+    HealthDataType.WORKOUT,
+    if (Platform.isAndroid) ...[
+      HealthDataType.DISTANCE_DELTA,
+      HealthDataType.TOTAL_CALORIES_BURNED,
+    ],
+    if (Platform.isIOS) ...[
+      HealthDataType.DISTANCE_WALKING_RUNNING,
+      HealthDataType.ACTIVE_ENERGY_BURNED,
+    ],
+  ];
 
   /// Configures the health plugin. Must be called before other operations.
   Future<void> configure() async {

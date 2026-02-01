@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
@@ -9,6 +8,7 @@ import 'package:logly/features/activity_catalog/presentation/providers/category_
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_favorites_provider.dart';
 import 'package:logly/features/onboarding/presentation/widgets/selected_favorites_row.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for selecting favorite activities during onboarding.
 class FavoritesSelectionScreen extends ConsumerStatefulWidget {

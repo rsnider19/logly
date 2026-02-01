@@ -1,11 +1,11 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/weekly_radar_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Card displaying weekly activity as a radar chart by day of week.
 class WeeklyRadarChartCard extends ConsumerWidget {
@@ -155,7 +155,6 @@ class _WeeklyRadarChart extends StatelessWidget {
           getTitle: (index, angle) {
             return RadarChartTitle(
               text: dayLabels[index],
-              angle: 0, // Keep text horizontal
               positionPercentageOffset: 0.05,
             );
           },

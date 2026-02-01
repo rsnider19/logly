@@ -13,9 +13,9 @@ abstract class ActivityCategory with _$ActivityCategory {
     required String activityCategoryId,
     required String name,
     required String activityCategoryCode,
-    String? description,
     required String hexColor,
     required int sortOrder,
+    String? description,
   }) = _ActivityCategory;
 
   const ActivityCategory._();
@@ -23,7 +23,8 @@ abstract class ActivityCategory with _$ActivityCategory {
   factory ActivityCategory.fromJson(Map<String, dynamic> json) => _$ActivityCategoryFromJson(json);
 
   /// The Supabase storage URL for this activity category's icon.
-  String get icon => '${EnvService.supabaseUrl}/storage/v1/object/public/activity_category_icons/$activityCategoryId.png';
+  String get icon =>
+      '${EnvService.supabaseUrl}/storage/v1/object/public/activity_category_icons/$activityCategoryId.png';
 
   Color get color => Color(int.parse(hexColor.replaceFirst('#', 'FF'), radix: 16));
 }

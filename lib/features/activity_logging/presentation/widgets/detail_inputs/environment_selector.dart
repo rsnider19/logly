@@ -50,7 +50,9 @@ class EnvironmentSelector extends ConsumerWidget {
               ),
             },
             onValueChanged: (EnvironmentType? value) {
-              ref.read(activityFormStateProvider.notifier).setEnvironmentValue(
+              ref
+                  .read(activityFormStateProvider.notifier)
+                  .setEnvironmentValue(
                     activityDetail.activityDetailId,
                     value,
                   );

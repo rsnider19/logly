@@ -8,7 +8,7 @@ abstract class CustomActivityException extends AppException {
 /// Thrown when creating a custom activity fails.
 class CreateCustomActivityException extends CustomActivityException {
   const CreateCustomActivityException([String? technicalDetails])
-      : super('Unable to create activity. Please try again.', technicalDetails);
+    : super('Unable to create activity. Please try again.', technicalDetails);
 }
 
 /// Thrown when validation fails for custom activity creation.
@@ -19,11 +19,10 @@ class CustomActivityValidationException extends CustomActivityException {
 /// Thrown when checking for duplicate activity names fails.
 class CheckActivityNameException extends CustomActivityException {
   const CheckActivityNameException([String? technicalDetails])
-      : super('Unable to validate activity name. Please try again.', technicalDetails);
+    : super('Unable to validate activity name. Please try again.', technicalDetails);
 }
 
 /// Thrown when activity name is already taken by another custom activity.
 class ActivityNameTakenException extends CustomActivityException {
-  const ActivityNameTakenException(String name)
-      : super('You already have a custom activity named "$name".');
+  const ActivityNameTakenException(String name) : super('You already have a custom activity named "$name".');
 }

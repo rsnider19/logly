@@ -55,8 +55,7 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
     @Default(PaceType.minutesPerUom) PaceType paceType,
   }) = PaceDetailConfig;
 
-  factory ActivityDetailConfig.fromJson(Map<String, dynamic> json) =>
-      _$ActivityDetailConfigFromJson(json);
+  factory ActivityDetailConfig.fromJson(Map<String, dynamic> json) => _$ActivityDetailConfigFromJson(json);
 
   /// Creates a new Number detail with a unique ID.
   static NumberDetailConfig createNumber() => NumberDetailConfig(id: const Uuid().v4());
@@ -68,40 +67,39 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
   static DistanceDetailConfig createDistance() => DistanceDetailConfig(id: const Uuid().v4());
 
   /// Creates a new Environment detail with a unique ID.
-  static EnvironmentDetailConfig createEnvironment() =>
-      EnvironmentDetailConfig(id: const Uuid().v4());
+  static EnvironmentDetailConfig createEnvironment() => EnvironmentDetailConfig(id: const Uuid().v4());
 
   /// Creates a new Pace detail with a unique ID.
   static PaceDetailConfig createPace() => PaceDetailConfig(id: const Uuid().v4());
 
   /// Returns the display name for this detail type.
   String get typeName => switch (this) {
-        NumberDetailConfig() => 'Number',
-        DurationDetailConfig() => 'Duration',
-        DistanceDetailConfig() => 'Distance',
-        EnvironmentDetailConfig() => 'Environment',
-        PaceDetailConfig() => 'Pace',
-      };
+    NumberDetailConfig() => 'Number',
+    DurationDetailConfig() => 'Duration',
+    DistanceDetailConfig() => 'Distance',
+    EnvironmentDetailConfig() => 'Environment',
+    PaceDetailConfig() => 'Pace',
+  };
 
   /// Returns the placeholder hint for the label field.
   String get labelPlaceholder => switch (this) {
-        NumberDetailConfig() => 'e.g. Reps, Sets',
-        DurationDetailConfig() => 'e.g. Workout Time',
-        DistanceDetailConfig() => 'e.g. Running Distance',
-        EnvironmentDetailConfig() => 'e.g. Setting',
-        PaceDetailConfig() => '',
-      };
+    NumberDetailConfig() => 'e.g. Reps, Sets',
+    DurationDetailConfig() => 'e.g. Workout Time',
+    DistanceDetailConfig() => 'e.g. Running Distance',
+    EnvironmentDetailConfig() => 'e.g. Setting',
+    PaceDetailConfig() => '',
+  };
 
   /// Returns true if this detail type requires a label.
   bool get requiresLabel => switch (this) {
-        PaceDetailConfig() => false,
-        _ => true,
-      };
+    PaceDetailConfig() => false,
+    _ => true,
+  };
 
   /// Returns true if this detail type is limited to a single instance.
   bool get isSingleInstance => switch (this) {
-        EnvironmentDetailConfig() => true,
-        PaceDetailConfig() => true,
-        _ => false,
-      };
+    EnvironmentDetailConfig() => true,
+    PaceDetailConfig() => true,
+    _ => false,
+  };
 }

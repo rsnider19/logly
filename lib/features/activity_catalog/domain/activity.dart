@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:logly/core/services/env_service.dart';
@@ -15,15 +13,13 @@ part 'activity.g.dart';
 /// An activity that can be logged (e.g., Running, Yoga, Swimming).
 @freezed
 abstract class Activity with _$Activity {
-  const Activity._();
-
   const factory Activity({
     required String activityId,
     required String activityCategoryId,
     required String name,
     required String activityCode,
-    String? description,
     required ActivityDateType activityDateType,
+    String? description,
     PaceType? paceType,
     @Default(false) bool isSuggestedFavorite,
 
@@ -36,6 +32,7 @@ abstract class Activity with _$Activity {
     /// Subactivities for this activity (populated via join).
     @Default([]) List<SubActivity> subActivity,
   }) = _Activity;
+  const Activity._();
 
   factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
 

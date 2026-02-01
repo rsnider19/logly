@@ -241,9 +241,7 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
                           FocusScope.of(context).unfocus();
                         },
                         onReorder: (oldIndex, newIndex) {
-                          ref
-                              .read(createCustomActivityFormStateProvider.notifier)
-                              .reorderDetails(oldIndex, newIndex);
+                          ref.read(createCustomActivityFormStateProvider.notifier).reorderDetails(oldIndex, newIndex);
                         },
                         itemCount: formState.details.length,
                         itemBuilder: (context, index) {

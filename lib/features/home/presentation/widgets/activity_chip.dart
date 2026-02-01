@@ -26,6 +26,7 @@ class UserActivityChip extends StatelessWidget {
     final color = userActivity.getColor(context);
 
     return ActionChip(
+      padding: EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 8),
       avatar: _isPending
           ? SizedBox(
               width: 18,
@@ -38,9 +39,7 @@ class UserActivityChip extends StatelessWidget {
           : UserActivityIcon(userActivity: userActivity),
       label: Text(
         userActivity.displayName,
-        style: _isPending
-            ? TextStyle(color: theme.colorScheme.onSurfaceVariant)
-            : null,
+        style: _isPending ? TextStyle(color: theme.colorScheme.onSurfaceVariant) : null,
       ),
       shape: const StadiumBorder(),
       backgroundColor: _isPending ? theme.colorScheme.surfaceContainerHighest : color,

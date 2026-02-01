@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -10,6 +9,7 @@ import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A row displaying a single day with its logged activities.
 ///

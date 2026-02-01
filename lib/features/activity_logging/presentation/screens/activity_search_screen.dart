@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -20,6 +19,7 @@ import 'package:logly/features/subscriptions/presentation/providers/entitlement_
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
 import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart';
 import 'package:logly/widgets/logly_icons.dart' show ActivityCategoryIcon;
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for searching and selecting an activity to log.
 ///
@@ -280,7 +280,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            ProBadge(feature: FeatureCode.createCustomActivity),
+            const ProBadge(feature: FeatureCode.createCustomActivity),
           ],
         ),
         trailing: const Icon(LucideIcons.chevronRight),
@@ -410,7 +410,7 @@ class _CategorySection extends ConsumerWidget {
     return SearchSectionTile(
       sectionId: categorySectionId(category.activityCategoryId),
       title: category.name,
-      leading: ActivityCategoryIcon(activityCategory: category, size: 24),
+      leading: ActivityCategoryIcon(activityCategory: category),
       children: [
         activitiesAsync.when(
           data: (activities) {

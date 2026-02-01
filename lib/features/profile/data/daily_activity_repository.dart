@@ -90,7 +90,7 @@ class DailyActivityRepository {
   Future<List<MonthlyCategoryData>> getMonthlyData() async {
     try {
       final endDate = DateTime.now();
-      final startDate = DateTime(endDate.year - 1, endDate.month, 1);
+      final startDate = DateTime(endDate.year - 1, endDate.month);
 
       final response = await _supabase
           .from('activity_counts_by_date')

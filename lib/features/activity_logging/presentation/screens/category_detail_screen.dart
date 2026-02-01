@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
@@ -7,6 +6,7 @@ import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen showing all activities in a category.
 ///

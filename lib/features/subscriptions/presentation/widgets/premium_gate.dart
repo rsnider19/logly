@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/subscriptions/domain/feature_code.dart';
 import 'package:logly/features/subscriptions/presentation/providers/entitlement_provider.dart';
 import 'package:logly/features/subscriptions/presentation/providers/subscription_service_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A widget that gates content behind a premium feature.
 ///

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
@@ -15,6 +14,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/liquid_volume_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/numeric_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Developer screen for testing activity detail inputs.
 ///
@@ -123,30 +123,32 @@ class _DeveloperScreenState extends ConsumerState<DeveloperScreen> {
   void _showResultsDialog() {
     final formState = ref.read(activityFormStateProvider);
 
-    unawaited(showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Form Values'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: _mockDetails.map((detail) {
-              final value = formState.detailValues[detail.activityDetailId];
-              return ListTile(
-                title: Text(detail.label),
-                subtitle: Text(_formatValue(detail, value)),
-              );
-            }).toList(),
+    unawaited(
+      showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Form Values'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: _mockDetails.map((detail) {
+                final value = formState.detailValues[detail.activityDetailId];
+                return ListTile(
+                  title: Text(detail.label),
+                  subtitle: Text(_formatValue(detail, value)),
+                );
+              }).toList(),
+            ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
       ),
-    ));
+    );
   }
 
   String _formatValue(ActivityDetail detail, DetailValue? value) {

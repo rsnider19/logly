@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/utils/extensions.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
@@ -12,6 +11,7 @@ import 'package:logly/features/home/presentation/widgets/daily_activity_row.dart
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/widgets/haptic_item.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// The main home screen displaying a chronological list of days with activities.
 class HomeScreen extends ConsumerStatefulWidget {

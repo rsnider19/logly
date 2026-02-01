@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
 import 'package:logly/features/home/application/home_service.dart';
@@ -152,7 +151,8 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
 
     final updatedSummaries = List<DailyActivitySummary>.from(currentState.summaries);
     final existingIndex = updatedSummaries.indexWhere(
-      (s) => s.activityDate.year == activityDate.year &&
+      (s) =>
+          s.activityDate.year == activityDate.year &&
           s.activityDate.month == activityDate.month &&
           s.activityDate.day == activityDate.day,
     );
@@ -184,9 +184,7 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
 
     final currentState = currentStateValue.value;
     final updatedSummaries = currentState.summaries.map((summary) {
-      final filtered = summary.userActivities
-          .where((ua) => ua.userActivityId != tempUserActivityId)
-          .toList();
+      final filtered = summary.userActivities.where((ua) => ua.userActivityId != tempUserActivityId).toList();
       if (filtered.length == summary.userActivities.length) return summary;
       return summary.copyWith(
         activityCount: filtered.length,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// A card container for an activity detail configuration.
 ///

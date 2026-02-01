@@ -10,17 +10,17 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 /// lower-level logs are added as breadcrumbs.
 class LoggerService {
   LoggerService({Logger? logger, bool enableSentry = true})
-      : _logger = logger ??
-            Logger(
-              printer: PrettyPrinter(
-                methodCount: 0,
-                errorMethodCount: 5,
-                colors: false,
-                printEmojis: true,
-              ),
-              level: kReleaseMode ? Level.warning : Level.debug,
+    : _logger =
+          logger ??
+          Logger(
+            printer: PrettyPrinter(
+              methodCount: 0,
+              errorMethodCount: 5,
+              colors: false,
             ),
-        _enableSentry = enableSentry;
+            level: kReleaseMode ? Level.warning : Level.debug,
+          ),
+      _enableSentry = enableSentry;
 
   final Logger _logger;
   final bool _enableSentry;
@@ -31,11 +31,13 @@ class LoggerService {
   void d(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     _logger.d(message, error: error, stackTrace: stackTrace);
     if (_sentryActive) {
-      Sentry.addBreadcrumb(Breadcrumb(
-        message: message.toString(),
-        level: SentryLevel.debug,
-        category: 'log',
-      ));
+      Sentry.addBreadcrumb(
+        Breadcrumb(
+          message: message.toString(),
+          level: SentryLevel.debug,
+          category: 'log',
+        ),
+      );
     }
   }
 
@@ -43,11 +45,13 @@ class LoggerService {
   void i(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     _logger.i(message, error: error, stackTrace: stackTrace);
     if (_sentryActive) {
-      Sentry.addBreadcrumb(Breadcrumb(
-        message: message.toString(),
-        level: SentryLevel.info,
-        category: 'log',
-      ));
+      Sentry.addBreadcrumb(
+        Breadcrumb(
+          message: message.toString(),
+          level: SentryLevel.info,
+          category: 'log',
+        ),
+      );
     }
   }
 
@@ -55,11 +59,13 @@ class LoggerService {
   void w(dynamic message, [dynamic error, StackTrace? stackTrace]) {
     _logger.w(message, error: error, stackTrace: stackTrace);
     if (_sentryActive) {
-      Sentry.addBreadcrumb(Breadcrumb(
-        message: message.toString(),
-        level: SentryLevel.warning,
-        category: 'log',
-      ));
+      Sentry.addBreadcrumb(
+        Breadcrumb(
+          message: message.toString(),
+          level: SentryLevel.warning,
+          category: 'log',
+        ),
+      );
     }
   }
 

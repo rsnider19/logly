@@ -74,10 +74,12 @@ class HomeService {
       if (summary != null) {
         result.add(summary);
       } else {
-        result.add(DailyActivitySummary(
-          activityDate: current,
-          activityCount: 0,
-        ));
+        result.add(
+          DailyActivitySummary(
+            activityDate: current,
+            activityCount: 0,
+          ),
+        );
       }
       // Use DateTime constructor for proper calendar day arithmetic (DST-safe)
       current = DateTime(current.year, current.month, current.day + 1);

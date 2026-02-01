@@ -44,8 +44,7 @@ class ActivityRepository {
           .eq('activity_category_id', categoryId)
           .order('name', ascending: true);
 
-      final activities =
-          (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
+      final activities = (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
 
       // Cache the result
       await _cacheActivities(cacheKey, activities);
@@ -113,11 +112,9 @@ class ActivityRepository {
     const cacheKey = 'popular';
 
     try {
-      final response =
-          await _supabase.rpc<List<dynamic>>('popular_activities').select('*, activity_category(*)');
+      final response = await _supabase.rpc<List<dynamic>>('popular_activities').select('*, activity_category(*)');
 
-      final activities =
-          (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
+      final activities = (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
 
       // Cache the result
       await _cacheActivities(cacheKey, activities);
@@ -148,8 +145,7 @@ class ActivityRepository {
           .eq('is_suggested_favorite', true)
           .order('name', ascending: true);
 
-      final activities =
-          (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
+      final activities = (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
 
       // Cache the result
       await _cacheActivities(cacheKey, activities);
@@ -181,8 +177,7 @@ class ActivityRepository {
           .eq('activity_category_id', categoryId)
           .order('name', ascending: true);
 
-      final activities =
-          (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
+      final activities = (response as List).map((e) => Activity.fromJson(e as Map<String, dynamic>)).toList();
 
       // Cache the result
       await _cacheActivities(cacheKey, activities);
@@ -215,8 +210,7 @@ class ActivityRepository {
           .eq('activity_category_id', categoryId)
           .order('name', ascending: true);
 
-      final summaries =
-          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+      final summaries = (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
 
       await _cacheSummaries(cacheKey, summaries);
 
@@ -270,8 +264,7 @@ class ActivityRepository {
           .eq('is_suggested_favorite', true)
           .order('name', ascending: true);
 
-      final summaries =
-          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+      final summaries = (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
 
       await _cacheSummaries(cacheKey, summaries);
 
@@ -301,8 +294,7 @@ class ActivityRepository {
           .eq('activity_category_id', categoryId)
           .order('name', ascending: true);
 
-      final summaries =
-          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+      final summaries = (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
 
       await _cacheSummaries(cacheKey, summaries);
 
@@ -325,11 +317,9 @@ class ActivityRepository {
     const cacheKey = 'summary::popular';
 
     try {
-      final response =
-          await _supabase.rpc<List<dynamic>>('popular_activities').select(_summarySelect);
+      final response = await _supabase.rpc<List<dynamic>>('popular_activities').select(_summarySelect);
 
-      final summaries =
-          (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
+      final summaries = (response as List).map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>)).toList();
 
       await _cacheSummaries(cacheKey, summaries);
 

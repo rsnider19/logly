@@ -1,12 +1,10 @@
-import 'dart:ui';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Card displaying current and longest streak information.
 class StreakCard extends ConsumerWidget {
@@ -70,7 +68,7 @@ class _StreakContentState extends State<_StreakContent> {
             children: [
               Row(
                 children: [
-                  Icon(LucideIcons.chartLine, color: Colors.teal, size: 24),
+                  const Icon(LucideIcons.chartLine, color: Colors.teal, size: 24),
                   const SizedBox(width: 8),
                   Text(
                     'Consistency Score',

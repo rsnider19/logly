@@ -7,8 +7,6 @@ part 'trending_activity.g.dart';
 /// An activity with trending rank information.
 @freezed
 abstract class TrendingActivity with _$TrendingActivity {
-  const TrendingActivity._();
-
   const factory TrendingActivity({
     required String activityId,
     required int currentRank,
@@ -18,6 +16,7 @@ abstract class TrendingActivity with _$TrendingActivity {
     /// The activity definition (populated via join).
     Activity? activity,
   }) = _TrendingActivity;
+  const TrendingActivity._();
 
   factory TrendingActivity.fromJson(Map<String, dynamic> json) => _$TrendingActivityFromJson(json);
 

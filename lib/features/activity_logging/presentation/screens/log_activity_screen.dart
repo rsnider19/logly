@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
@@ -12,6 +11,7 @@ import 'package:logly/features/activity_catalog/presentation/providers/activity_
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/pending_save_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/custom_name_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_picker_field.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/date_range_picker.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/distance_input.dart';
@@ -21,9 +21,9 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/numeric_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
-import 'package:logly/features/activity_logging/presentation/widgets/custom_name_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for logging a new activity.
 ///
@@ -256,7 +256,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       body: formState.activity == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Activity name
                 Padding(

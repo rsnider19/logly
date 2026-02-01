@@ -73,7 +73,6 @@ class NotificationService {
               _channelId,
               _channelName,
               description: _channelDescription,
-              importance: Importance.defaultImportance,
             ),
           );
     }
@@ -195,8 +194,6 @@ class NotificationService {
         _channelId,
         _channelName,
         channelDescription: _channelDescription,
-        importance: Importance.defaultImportance,
-        priority: Priority.defaultPriority,
       );
       const iosDetails = DarwinNotificationDetails(
         presentAlert: true,

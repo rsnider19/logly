@@ -36,17 +36,14 @@ Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
   final allDataFuture = ref.watch(monthlyChartDataProvider.future);
   final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
-  final (effectiveFilters, allData, categories) =
-      await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
+  final (effectiveFilters, allData, categories) = await (effectiveFiltersFuture, allDataFuture, categoriesFuture).wait;
 
   // If all categories are selected, return all data (optimization)
   if (effectiveFilters.length == categories.length) {
     return allData;
   }
 
-  return allData
-      .where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId))
-      .toList();
+  return allData.where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId)).toList();
 }
 
 /// Aggregates raw activity counts by day for the last 7 days.
@@ -112,7 +109,7 @@ List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
 /// Aggregates raw activity counts by month for last 12 months.
 List<MonthlyCategoryData> _aggregateByMonth(List<ActivityCountByDate> rawData) {
   final now = DateTime.now();
-  final startDate = DateTime(now.year - 1, now.month, 1);
+  final startDate = DateTime(now.year - 1, now.month);
 
   // Filter to last 12 months and aggregate by month + category
   final monthlyTotals = <(int, int, String), int>{};

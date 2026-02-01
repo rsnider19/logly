@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Imperial units of measurement.
-@JsonEnum(fieldRename: FieldRename.none)
+@JsonEnum()
 enum ImperialUom {
   @JsonValue('yards')
   yards,

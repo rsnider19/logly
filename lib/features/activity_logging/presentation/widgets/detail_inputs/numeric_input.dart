@@ -64,12 +64,16 @@ class _NumericInputState extends ConsumerState<NumericInput> {
   void _updateValue(String text) {
     final value = double.tryParse(text);
     if (value != null) {
-      ref.read(activityFormStateProvider.notifier).setNumericValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setNumericValue(
             widget.activityDetail.activityDetailId,
             _isInteger ? value.roundToDouble() : value,
           );
     } else {
-      ref.read(activityFormStateProvider.notifier).setNumericValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setNumericValue(
             widget.activityDetail.activityDetailId,
             null,
           );
@@ -80,7 +84,9 @@ class _NumericInputState extends ConsumerState<NumericInput> {
     final adjustedValue = _isInteger ? value.roundToDouble() : value;
     _controller.text = _formatValue(adjustedValue);
 
-    ref.read(activityFormStateProvider.notifier).setNumericValue(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setNumericValue(
           widget.activityDetail.activityDetailId,
           adjustedValue,
         );

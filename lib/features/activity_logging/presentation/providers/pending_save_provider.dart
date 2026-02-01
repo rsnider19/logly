@@ -123,7 +123,9 @@ class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
     final optimisticEntry = request.optimisticEntry.copyWith(userActivityId: tempId);
 
     // Replace the original entry on the home screen
-    ref.read(dailyActivitiesStateProvider.notifier).replaceWithOptimisticEntry(
+    ref
+        .read(dailyActivitiesStateProvider.notifier)
+        .replaceWithOptimisticEntry(
           request.originalEntry.userActivityId,
           optimisticEntry,
         );
@@ -141,7 +143,9 @@ class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
       await _refreshActivityProviders();
     } catch (e) {
       // Revert to the original entry on failure
-      ref.read(dailyActivitiesStateProvider.notifier).revertOptimisticUpdate(
+      ref
+          .read(dailyActivitiesStateProvider.notifier)
+          .revertOptimisticUpdate(
             tempId,
             request.originalEntry,
           );

@@ -56,10 +56,9 @@ Future<ActivityMonthStatistics> activityMonthStatistics(
   }
 
   // Sort by count descending
-  final subActivityCounts = subActivityMap.values
-      .map((acc) => SubActivityCount(subActivity: acc.subActivity, count: acc.count))
-      .toList()
-    ..sort((a, b) => b.count.compareTo(a.count));
+  final subActivityCounts =
+      subActivityMap.values.map((acc) => SubActivityCount(subActivity: acc.subActivity, count: acc.count)).toList()
+        ..sort((a, b) => b.count.compareTo(a.count));
 
   // Extract the parent activity from the first log entry for icon fallback.
   final activity = activities.isNotEmpty ? activities.first.activity : null;

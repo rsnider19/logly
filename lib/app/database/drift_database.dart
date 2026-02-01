@@ -53,9 +53,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Gets cached data by id and type.
   Future<CachedDataData?> getCachedData(String id, String type) async {
-    return (select(cachedData)
-          ..where((t) => t.id.equals(id) & t.type.equals(type)))
-        .getSingleOrNull();
+    return (select(cachedData)..where((t) => t.id.equals(id) & t.type.equals(type))).getSingleOrNull();
   }
 
   /// Gets all cached data of a specific type.
@@ -75,9 +73,7 @@ class AppDatabase extends _$AppDatabase {
 
   /// Deletes all expired cached data.
   Future<int> deleteExpiredCache() async {
-    return (delete(cachedData)
-          ..where((t) => t.expiresAt.isSmallerOrEqualValue(DateTime.now())))
-        .go();
+    return (delete(cachedData)..where((t) => t.expiresAt.isSmallerOrEqualValue(DateTime.now()))).go();
   }
 
   /// Clears all cached data.

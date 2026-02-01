@@ -18,8 +18,7 @@ Future<Map<DateTime, int>> contributionData(Ref ref) async {
   final effectiveFiltersFuture = ref.watch(effectiveGlobalCategoryFiltersProvider.future);
   final categoriesFuture = ref.watch(activityCategoriesProvider.future);
 
-  final (rawData, effectiveFilters, categories) =
-      await (rawDataFuture, effectiveFiltersFuture, categoriesFuture).wait;
+  final (rawData, effectiveFilters, categories) = await (rawDataFuture, effectiveFiltersFuture, categoriesFuture).wait;
 
   // If all categories are selected, aggregate all data
   final allSelected = effectiveFilters.length == categories.length;

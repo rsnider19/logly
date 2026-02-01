@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/auth/domain/auth_exception.dart' as app_auth;
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/auth/presentation/widgets/apple_sign_in_button.dart';
 import 'package:logly/features/auth/presentation/widgets/google_sign_in_button.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Sign-in screen with Apple and Google authentication options.

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 /// Types of activity details that can be logged.
-@JsonEnum(fieldRename: FieldRename.none)
+@JsonEnum()
 enum ActivityDetailType {
   @JsonValue('string')
   string,

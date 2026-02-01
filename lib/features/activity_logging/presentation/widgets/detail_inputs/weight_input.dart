@@ -126,12 +126,16 @@ class _WeightInputState extends ConsumerState<WeightInput> {
     final displayValue = double.tryParse(text);
     if (displayValue != null && displayValue > 0) {
       final kilograms = _displayToKilograms(displayValue);
-      ref.read(activityFormStateProvider.notifier).setWeightValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setWeightValue(
             widget.activityDetail.activityDetailId,
             kilograms,
           );
     } else {
-      ref.read(activityFormStateProvider.notifier).setWeightValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setWeightValue(
             widget.activityDetail.activityDetailId,
             null,
           );
@@ -142,7 +146,9 @@ class _WeightInputState extends ConsumerState<WeightInput> {
     _controller.text = _formatNumber(displayValue);
 
     final kilograms = _displayToKilograms(displayValue);
-    ref.read(activityFormStateProvider.notifier).setWeightValue(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setWeightValue(
           widget.activityDetail.activityDetailId,
           kilograms > 0 ? kilograms : null,
         );
@@ -158,8 +164,7 @@ class _WeightInputState extends ConsumerState<WeightInput> {
     setState(() {
       _unitSystem = newSystem;
       if (kilograms > 0) {
-        final displayValue =
-            _useMetric ? _kilogramsToDisplayMetric(kilograms) : _kilogramsToDisplayImperial(kilograms);
+        final displayValue = _useMetric ? _kilogramsToDisplayMetric(kilograms) : _kilogramsToDisplayImperial(kilograms);
         _controller.text = _formatNumber(displayValue);
       }
     });
@@ -171,8 +176,7 @@ class _WeightInputState extends ConsumerState<WeightInput> {
     final formState = ref.watch(activityFormStateProvider);
     final detailValue = formState.detailValues[widget.activityDetail.activityDetailId];
     final kilograms = detailValue?.weightInKilograms ?? 0;
-    final currentDisplay =
-        _useMetric ? _kilogramsToDisplayMetric(kilograms) : _kilogramsToDisplayImperial(kilograms);
+    final currentDisplay = _useMetric ? _kilogramsToDisplayMetric(kilograms) : _kilogramsToDisplayImperial(kilograms);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -80,8 +80,8 @@ class SubscriptionRepository {
       _logger.d('Active entitlements: ${activeEntitlements.keys.toList()}');
 
       // Check for specific feature OR the pro entitlement (grants all)
-      final hasAccess = activeEntitlements.containsKey(feature.value) ||
-          activeEntitlements.containsKey(FeatureCode.pro.value);
+      final hasAccess =
+          activeEntitlements.containsKey(feature.value) || activeEntitlements.containsKey(FeatureCode.pro.value);
       _logger.d('Has access to ${feature.value}: $hasAccess');
 
       return hasAccess;

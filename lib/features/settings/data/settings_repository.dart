@@ -47,9 +47,12 @@ class SettingsRepository {
         ThemeMode.system => 'system',
       };
 
-      await _supabase.from('profile').update({
-        'theme_mode': themeModeString,
-      }).eq('user_id', userId);
+      await _supabase
+          .from('profile')
+          .update({
+            'theme_mode': themeModeString,
+          })
+          .eq('user_id', userId);
     } catch (e, st) {
       _logger.e('Failed to save theme mode', e, st);
       if (e is SavePreferencesException) rethrow;
@@ -65,9 +68,12 @@ class SettingsRepository {
         throw const SavePreferencesException('User not authenticated');
       }
 
-      await _supabase.from('profile').update({
-        'health_sync_enabled': enabled,
-      }).eq('user_id', userId);
+      await _supabase
+          .from('profile')
+          .update({
+            'health_sync_enabled': enabled,
+          })
+          .eq('user_id', userId);
     } catch (e, st) {
       _logger.e('Failed to save health sync preference', e, st);
       if (e is SavePreferencesException) rethrow;
@@ -83,9 +89,12 @@ class SettingsRepository {
         throw const SavePreferencesException('User not authenticated');
       }
 
-      await _supabase.from('profile').update({
-        'haptic_feedback_enabled': enabled,
-      }).eq('user_id', userId);
+      await _supabase
+          .from('profile')
+          .update({
+            'haptic_feedback_enabled': enabled,
+          })
+          .eq('user_id', userId);
     } catch (e, st) {
       _logger.e('Failed to save haptic feedback preference', e, st);
       if (e is SavePreferencesException) rethrow;
@@ -106,9 +115,12 @@ class SettingsRepository {
         UnitSystem.imperial => 'imperial',
       };
 
-      await _supabase.from('profile').update({
-        'unit_system': unitSystemString,
-      }).eq('user_id', userId);
+      await _supabase
+          .from('profile')
+          .update({
+            'unit_system': unitSystemString,
+          })
+          .eq('user_id', userId);
     } catch (e, st) {
       _logger.e('Failed to save unit system preference', e, st);
       if (e is SavePreferencesException) rethrow;

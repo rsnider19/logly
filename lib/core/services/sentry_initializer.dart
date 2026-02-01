@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
@@ -36,8 +34,7 @@ class SentryInitializer {
     // Listen to auth state changes
     _authSubscription = _ref.listen(authStateProvider, (previous, next) {
       next.whenData((authState) {
-        if (authState.event == AuthChangeEvent.signedIn ||
-            authState.event == AuthChangeEvent.initialSession) {
+        if (authState.event == AuthChangeEvent.signedIn || authState.event == AuthChangeEvent.initialSession) {
           _onUserAuthenticated(authState.session);
         } else if (authState.event == AuthChangeEvent.signedOut) {
           _onUserSignedOut();
@@ -63,10 +60,12 @@ class SentryInitializer {
     _logger.d('SentryInitializer: Setting Sentry user context');
 
     Sentry.configureScope((scope) {
-      scope.setUser(SentryUser(
-        id: userId,
-        email: email,
-      ));
+      scope.setUser(
+        SentryUser(
+          id: userId,
+          email: email,
+        ),
+      );
     });
   }
 

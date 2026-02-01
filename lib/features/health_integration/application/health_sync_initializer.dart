@@ -32,8 +32,7 @@ class HealthSyncInitializer {
     // Listen to auth state changes
     _authSubscription = _ref.listen(authStateProvider, (previous, next) {
       next.whenData((authState) {
-        if (authState.event == AuthChangeEvent.signedIn ||
-            authState.event == AuthChangeEvent.initialSession) {
+        if (authState.event == AuthChangeEvent.signedIn || authState.event == AuthChangeEvent.initialSession) {
           _onUserAuthenticated();
         }
       });

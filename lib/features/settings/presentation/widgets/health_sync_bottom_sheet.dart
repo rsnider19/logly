@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/onboarding/application/onboarding_service.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// Bottom sheet for managing health sync settings.
@@ -137,9 +137,7 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
 
           // Title
           Text(
-            _hasPermissions == true && healthSyncEnabled
-                ? '$_platformName Connected'
-                : 'Connect to $_platformName',
+            _hasPermissions == true && healthSyncEnabled ? '$_platformName Connected' : 'Connect to $_platformName',
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -160,17 +158,17 @@ class _HealthSyncBottomSheetState extends ConsumerState<HealthSyncBottomSheet> {
           const SizedBox(height: 20),
 
           // Benefits list
-          _BenefitItem(
+          const _BenefitItem(
             icon: LucideIcons.refreshCw,
             text: 'Auto-sync workouts and activities',
           ),
           const SizedBox(height: 8),
-          _BenefitItem(
+          const _BenefitItem(
             icon: LucideIcons.trendingUp,
             text: 'Get more accurate insights',
           ),
           const SizedBox(height: 8),
-          _BenefitItem(
+          const _BenefitItem(
             icon: LucideIcons.lock,
             text: 'Your data stays private and secure',
           ),

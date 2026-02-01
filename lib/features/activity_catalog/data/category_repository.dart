@@ -35,8 +35,7 @@ class CategoryRepository {
       // Try network first
       final response = await _supabase.from('activity_category').select().order('sort_order', ascending: true);
 
-      final categories =
-          (response as List).map((e) => ActivityCategory.fromJson(e as Map<String, dynamic>)).toList();
+      final categories = (response as List).map((e) => ActivityCategory.fromJson(e as Map<String, dynamic>)).toList();
 
       // Cache the result
       await _cacheCategories(categories);
@@ -59,8 +58,11 @@ class CategoryRepository {
   /// Fetches a single category by ID.
   Future<ActivityCategory> getById(String categoryId) async {
     try {
-      final response =
-          await _supabase.from('activity_category').select().eq('activity_category_id', categoryId).single();
+      final response = await _supabase
+          .from('activity_category')
+          .select()
+          .eq('activity_category_id', categoryId)
+          .single();
 
       return ActivityCategory.fromJson(response);
     } catch (e, st) {

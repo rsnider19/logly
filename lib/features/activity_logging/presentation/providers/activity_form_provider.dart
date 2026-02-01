@@ -435,10 +435,7 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       state.activityDate.day,
     );
 
-    final details = state.detailValues.values
-        .where((d) => d.hasValue)
-        .map((d) => d.toCreateDetail())
-        .toList();
+    final details = state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
 
     final createUserActivity = CreateUserActivity(
       activityId: activity.activityId,
@@ -481,8 +478,7 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       state.activityDate.day,
     );
 
-    final details =
-        state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
+    final details = state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
 
     final updatePayload = UpdateUserActivity(
       userActivityId: existing.userActivityId,

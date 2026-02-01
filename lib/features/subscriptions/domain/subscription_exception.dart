@@ -8,29 +8,29 @@ abstract class SubscriptionException extends AppException {
 /// Thrown when RevenueCat SDK configuration fails.
 class SubscriptionConfigurationException extends SubscriptionException {
   const SubscriptionConfigurationException([String? technicalDetails])
-      : super('Failed to initialize subscription service', technicalDetails);
+    : super('Failed to initialize subscription service', technicalDetails);
 }
 
 /// Thrown when login to RevenueCat fails.
 class SubscriptionLoginException extends SubscriptionException {
   const SubscriptionLoginException([String? technicalDetails])
-      : super('Failed to sync subscription status', technicalDetails);
+    : super('Failed to sync subscription status', technicalDetails);
 }
 
 /// Thrown when checking entitlements fails.
 class SubscriptionEntitlementException extends SubscriptionException {
   const SubscriptionEntitlementException([String? technicalDetails])
-      : super('Failed to check subscription status', technicalDetails);
+    : super('Failed to check subscription status', technicalDetails);
 }
 
 /// Thrown when displaying the paywall fails.
 class SubscriptionPaywallException extends SubscriptionException {
   const SubscriptionPaywallException([String? technicalDetails])
-      : super('Failed to display subscription options', technicalDetails);
+    : super('Failed to display subscription options', technicalDetails);
 }
 
 /// Thrown when restoring purchases fails.
 class SubscriptionRestoreException extends SubscriptionException {
   const SubscriptionRestoreException([String? technicalDetails])
-      : super('Failed to restore purchases', technicalDetails);
+    : super('Failed to restore purchases', technicalDetails);
 }

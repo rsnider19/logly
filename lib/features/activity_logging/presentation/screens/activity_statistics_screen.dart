@@ -1,11 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_statistics_provider.dart';
-import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/widgets/logly_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 /// Screen displaying monthly statistics for a specific activity.

@@ -41,9 +41,12 @@ class ExternalDataRepository {
         throw const UpdateLastSyncException('User not authenticated');
       }
 
-      await _supabase.from('profile').update({
-        'last_health_sync_date': date.toUtc().toIso8601String(),
-      }).eq('user_id', userId);
+      await _supabase
+          .from('profile')
+          .update({
+            'last_health_sync_date': date.toUtc().toIso8601String(),
+          })
+          .eq('user_id', userId);
 
       _logger.i('Updated last health sync date to $date');
     } catch (e, st) {

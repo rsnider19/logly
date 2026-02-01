@@ -124,12 +124,16 @@ class _LiquidVolumeInputState extends ConsumerState<LiquidVolumeInput> {
     final displayValue = double.tryParse(text);
     if (displayValue != null && displayValue > 0) {
       final liters = _displayToLiters(displayValue);
-      ref.read(activityFormStateProvider.notifier).setLiquidVolumeValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setLiquidVolumeValue(
             widget.activityDetail.activityDetailId,
             liters,
           );
     } else {
-      ref.read(activityFormStateProvider.notifier).setLiquidVolumeValue(
+      ref
+          .read(activityFormStateProvider.notifier)
+          .setLiquidVolumeValue(
             widget.activityDetail.activityDetailId,
             null,
           );
@@ -140,7 +144,9 @@ class _LiquidVolumeInputState extends ConsumerState<LiquidVolumeInput> {
     _controller.text = _formatNumber(displayValue);
 
     final liters = _displayToLiters(displayValue);
-    ref.read(activityFormStateProvider.notifier).setLiquidVolumeValue(
+    ref
+        .read(activityFormStateProvider.notifier)
+        .setLiquidVolumeValue(
           widget.activityDetail.activityDetailId,
           liters > 0 ? liters : null,
         );

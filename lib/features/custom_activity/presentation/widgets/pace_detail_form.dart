@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/activity_catalog/domain/pace_type.dart';
 import 'package:logly/features/custom_activity/domain/activity_detail_config.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Form fields for configuring a Pace detail.
 class PaceDetailForm extends StatelessWidget {
@@ -63,8 +63,8 @@ class PaceDetailForm extends StatelessWidget {
               flex: 3,
               child: DropdownButtonFormField<PaceType>(
                 initialValue: config.paceType,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                 ),
                 items: PaceType.values.map((type) {
                   return DropdownMenuItem(

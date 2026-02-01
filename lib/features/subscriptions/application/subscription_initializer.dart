@@ -30,8 +30,7 @@ class SubscriptionInitializer {
     // Listen to auth state changes
     _authSubscription = _ref.listen(authStateProvider, (previous, next) {
       next.whenData((authState) {
-        if (authState.event == AuthChangeEvent.signedIn ||
-            authState.event == AuthChangeEvent.initialSession) {
+        if (authState.event == AuthChangeEvent.signedIn || authState.event == AuthChangeEvent.initialSession) {
           unawaited(_onUserAuthenticated(authState.session));
         } else if (authState.event == AuthChangeEvent.signedOut) {
           unawaited(_onUserSignedOut());
