@@ -169,7 +169,7 @@ class _StreakStatBox extends StatelessWidget {
     final displayValue = suffix != null ? '$value$suffix' : '$value';
     final displayLabel = suffix != null ? label : '$label days';
 
-    return Card.outlined(
+    return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
@@ -228,7 +228,7 @@ class _StreakError extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card.outlined(
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

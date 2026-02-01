@@ -59,6 +59,7 @@ abstract final class AppTheme {
       bottomSheetModalBackgroundColor: SchemeColor.surfaceContainer,
       appBarScrolledUnderElevation: 3,
       appBarBackgroundSchemeColor: SchemeColor.surfaceContainerLowest,
+      cardBackgroundSchemeColor: SchemeColor.surfaceContainer,
     ),
     // Direct ThemeData properties.
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
@@ -102,9 +103,6 @@ abstract final class AppTheme {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: _dark.colorScheme.outline,
-        ),
       ),
     ),
   );

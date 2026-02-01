@@ -265,7 +265,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     final theme = Theme.of(context);
     final hasAccess = ref.watch(hasCreateCustomActivityProvider);
 
-    return Card.outlined(
+    return Card(
       margin: EdgeInsets.zero,
       child: ListTile(
         title: Text(

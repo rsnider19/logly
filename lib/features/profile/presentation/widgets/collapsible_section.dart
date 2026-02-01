@@ -31,7 +31,7 @@ class CollapsibleSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card.outlined(
+    return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -186,7 +186,7 @@ class _CreateCustomActivityScreenState extends ConsumerState<CreateCustomActivit
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Card.outlined(
+                    Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Column(

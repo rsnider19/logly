@@ -50,7 +50,7 @@ class PaceDisplay extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
-    return Card.outlined(
+    return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
