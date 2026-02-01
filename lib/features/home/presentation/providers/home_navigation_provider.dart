@@ -2,6 +2,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_navigation_provider.g.dart';
 
+/// Trigger counter that increments when the home tab icon is tapped.
+/// HomeScreen listens to this to scroll back to the top.
+@riverpod
+class HomeScrollToTopTriggerNotifier extends _$HomeScrollToTopTriggerNotifier {
+  @override
+  int build() => 0;
+
+  void trigger() {
+    state++;
+  }
+}
+
 /// Navigation indices for the bottom navigation bar.
 enum HomeNavigationIndex {
   profile(0),

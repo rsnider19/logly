@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/utils/extensions.dart';
 import 'package:logly/features/home/domain/daily_activity_summary.dart';
 import 'package:logly/features/home/presentation/providers/daily_activities_provider.dart';
+import 'package:logly/features/home/presentation/providers/home_navigation_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/home/presentation/widgets/daily_activity_row.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
@@ -67,6 +68,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(homeScrollToTopTriggerProvider, (previous, next) {
+      if (previous != next) scrollToTop();
+    });
+
     final dailyActivitiesAsync = ref.watch(dailyActivitiesStateProvider);
 
     return Scaffold(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/home/presentation/providers/daily_activities_provider.dart';
+import 'package:logly/features/home/presentation/providers/home_navigation_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_bottom_nav.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
@@ -37,8 +38,9 @@ class AppShell extends ConsumerWidget {
         ref.invalidate(streakProvider);
         ref.invalidate(allPeriodSummariesProvider);
       case 1:
-        // Home tab — refresh daily activities
+        // Home tab — refresh daily activities and scroll to top
         ref.read(dailyActivitiesStateProvider.notifier).refresh();
+        ref.read(homeScrollToTopTriggerProvider.notifier).trigger();
     }
 
     navigationShell.goBranch(
