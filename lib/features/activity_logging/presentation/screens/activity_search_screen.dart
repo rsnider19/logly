@@ -136,6 +136,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
             child: TextField(
               controller: _searchController,
               focusNode: _searchFocusNode,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
                 hintText: 'Search activities...',
                 prefixIcon: const Icon(LucideIcons.search),
