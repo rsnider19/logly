@@ -349,7 +349,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
 
                   // Comments field
                   Text(
-                    'Notes',
+                    'Comments',
                     style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 8),
@@ -357,8 +357,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                     controller: _commentsController,
                     maxLines: 3,
                     decoration: const InputDecoration(
-                      hintText: 'Add notes about this activity...',
-                      border: OutlineInputBorder(),
+                      hintText: 'Add comments about this activity...',
                     ),
                     onChanged: (value) {
                       ref
@@ -457,7 +456,6 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
           initialValue: detailValue?.textValue,
           decoration: InputDecoration(
             hintText: 'Enter ${detail.label.toLowerCase()}',
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             ref

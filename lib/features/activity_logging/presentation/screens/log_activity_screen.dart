@@ -306,7 +306,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
                         // Comments field
                         Text(
-                          'Notes',
+                          'Comments',
                           style: theme.textTheme.bodyLarge,
                         ),
                         const SizedBox(height: 8),
@@ -314,8 +314,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                           controller: _commentsController,
                           maxLines: 3,
                           decoration: const InputDecoration(
-                            hintText: 'Add notes about this activity...',
-                            border: OutlineInputBorder(),
+                            hintText: 'Add comments about this activity...',
                           ),
                           onChanged: (value) {
                             ref
@@ -410,7 +409,6 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
         TextField(
           decoration: InputDecoration(
             hintText: 'Enter ${detail.label.toLowerCase()}',
-            border: const OutlineInputBorder(),
           ),
           onChanged: (value) {
             ref
