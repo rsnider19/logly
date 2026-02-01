@@ -48,6 +48,7 @@ class ActivityFormState {
     this.isSubmitting = false,
     this.errorMessage,
     this.multiDayResult,
+    this.isMetric = true,
   });
 
   /// The activity being logged.
@@ -83,6 +84,9 @@ class ActivityFormState {
   /// Result of multi-day logging (for partial success scenarios).
   final LogMultiDayResult? multiDayResult;
 
+  /// Whether the current unit system is metric (true) or imperial (false).
+  final bool isMetric;
+
   /// Whether this is editing an existing activity.
   bool get isEditing => existingUserActivity != null;
 
@@ -105,6 +109,7 @@ class ActivityFormState {
     bool? isSubmitting,
     String? errorMessage,
     LogMultiDayResult? multiDayResult,
+    bool? isMetric,
     bool clearError = false,
     bool clearEndDate = false,
     bool clearMultiDayResult = false,
@@ -121,6 +126,7 @@ class ActivityFormState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       multiDayResult: clearMultiDayResult ? null : (multiDayResult ?? this.multiDayResult),
+      isMetric: isMetric ?? this.isMetric,
     );
   }
 
@@ -225,16 +231,17 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
   }
 
   /// Initializes the form for creating a new activity log.
-  void initForCreate(Activity activity, {DateTime? initialDate}) {
+  void initForCreate(Activity activity, {DateTime? initialDate, bool? isMetric}) {
     state = ActivityFormState(
       activity: activity,
       activityDate: initialDate ?? DateTime.now(),
       detailValues: _initDetailValues(activity.activityDetail),
+      isMetric: isMetric ?? true,
     );
   }
 
   /// Initializes the form for editing an existing activity log.
-  void initForEdit(UserActivity userActivity) {
+  void initForEdit(UserActivity userActivity, {bool? isMetric}) {
     final detailValues = <String, DetailValue>{};
 
     // Populate detail values from existing user activity
@@ -261,12 +268,18 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       activityNameOverride: userActivity.activityNameOverride,
       selectedSubActivityIds: userActivity.subActivity.map((s) => s.subActivityId).toSet(),
       detailValues: detailValues,
+      isMetric: isMetric ?? true,
     );
   }
 
   /// Resets the form to initial state.
   void reset() {
     state = ActivityFormState(activityDate: DateTime.now());
+  }
+
+  /// Updates the unit system preference.
+  void setIsMetric({required bool isMetric}) {
+    state = state.copyWith(isMetric: isMetric);
   }
 
   /// Updates the activity date.

@@ -52,6 +52,8 @@ class _DistanceInputState extends ConsumerState<DistanceInput> {
 
   void _initializeFromState() {
     final formState = ref.read(activityFormStateProvider);
+    _unitSystem = formState.isMetric ? _UnitSystem.metric : _UnitSystem.imperial;
+
     final detailValue = formState.detailValues[widget.activityDetail.activityDetailId];
     final meters = detailValue?.distanceInMeters;
 
@@ -166,6 +168,8 @@ class _DistanceInputState extends ConsumerState<DistanceInput> {
         _controller.text = _formatNumber(displayValue);
       }
     });
+
+    ref.read(activityFormStateProvider.notifier).setIsMetric(isMetric: newSystem == _UnitSystem.metric);
   }
 
   @override

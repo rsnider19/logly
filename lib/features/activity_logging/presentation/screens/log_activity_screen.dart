@@ -23,6 +23,8 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:logly/features/settings/domain/user_preferences.dart';
+import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for logging a new activity.
@@ -63,11 +65,18 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
     if (!_formInitialized) {
       _formInitialized = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        final prefsState = ref.read(preferencesStateProvider);
+        final isMetric = prefsState.whenOrNull(
+              data: (prefs) => prefs.unitSystem == UnitSystem.metric,
+            ) ??
+            true;
+
         ref
             .read(activityFormStateProvider.notifier)
             .initForCreate(
               activity,
               initialDate: widget.initialDate,
+              isMetric: isMetric,
             );
       });
     }
