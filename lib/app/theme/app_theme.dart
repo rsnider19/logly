@@ -52,8 +52,10 @@ abstract final class AppTheme {
       navigationRailUseIndicator: true,
       inputDecoratorContentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       inputDecoratorIsDense: true,
-      bottomSheetBackgroundColor: SchemeColor.surfaceContainerHigh,
-      bottomSheetModalBackgroundColor: SchemeColor.surfaceContainerHigh,
+      bottomSheetBackgroundColor: SchemeColor.surfaceContainer,
+      bottomSheetModalBackgroundColor: SchemeColor.surfaceContainer,
+      appBarScrolledUnderElevation: 3,
+      appBarBackgroundSchemeColor: SchemeColor.surfaceContainerLowest,
     ),
     // Direct ThemeData properties.
     visualDensity: FlexColorScheme.comfortablePlatformDensity,
