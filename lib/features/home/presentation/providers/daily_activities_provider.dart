@@ -306,8 +306,36 @@ class DailyActivitiesStateNotifier extends _$DailyActivitiesStateNotifier {
   }
 
   /// Refreshes the data, reloading from the current date range.
+  /// Keeps the previous data visible while fetching to avoid a flash.
   Future<void> refresh() async {
-    ref.invalidateSelf();
-    await future;
+    final service = ref.read(homeServiceProvider);
+    final logger = ref.read(loggerProvider);
+
+    final today = DateTime.now();
+    final endDate = DateTime(today.year, today.month, today.day);
+    final startDate = DateTime(endDate.year, endDate.month, endDate.day - (_initialDays - 1));
+
+    try {
+      final summaries = await service.getDailyActivities(
+        startDate: startDate,
+        endDate: endDate,
+      );
+
+      final filledSummaries = service.fillDateRange(
+        startDate: startDate,
+        endDate: endDate,
+        summaries: summaries,
+      );
+
+      state = AsyncData(
+        DailyActivitiesState(
+          summaries: filledSummaries,
+          oldestLoadedDate: startDate,
+          newestLoadedDate: endDate,
+        ),
+      );
+    } catch (e, st) {
+      logger.e('Failed to refresh daily activities', e, st);
+    }
   }
 }
