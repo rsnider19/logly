@@ -36,12 +36,23 @@ PaceResult? calculatePace(
   required PaceType? paceType,
   required bool isMetric,
 }) {
+  if (paceType == null) return null;
+
+  final paceUnit = _paceUnit(paceType, isMetric: isMetric);
+
+  // Show zero pace when either input is missing or zero
   if (durationInSeconds == null ||
       durationInSeconds <= 0 ||
       distanceInMeters == null ||
-      distanceInMeters <= 0 ||
-      paceType == null) {
-    return null;
+      distanceInMeters <= 0) {
+    final formatted = paceType == PaceType.floorsPerMinute
+        ? '0.0 $paceUnit'
+        : '${_formatMinutes(0)} $paceUnit';
+    return PaceResult(
+      paceValue: 0,
+      paceUnit: paceUnit,
+      formattedPace: formatted,
+    );
   }
 
   final durationMinutes = durationInSeconds / 60.0;
@@ -51,10 +62,7 @@ PaceResult? calculatePace(
       // Standard pace: min/mile or min/km
       final distanceInUnits = isMetric ? distanceInMeters / 1000.0 : distanceInMeters / 1609.344;
 
-      if (distanceInUnits <= 0) return null;
-
       final paceValue = durationMinutes / distanceInUnits;
-      final paceUnit = isMetric ? 'min/km' : 'min/mile';
 
       return PaceResult(
         paceValue: paceValue,
@@ -66,10 +74,7 @@ PaceResult? calculatePace(
       // Swimming pace: min/100m or min/100yd
       final distancePer100 = isMetric ? distanceInMeters / 100.0 : distanceInMeters / 91.44; // 100 yards in meters
 
-      if (distancePer100 <= 0) return null;
-
       final paceValue = durationMinutes / distancePer100;
-      final paceUnit = isMetric ? 'min/100m' : 'min/100yd';
 
       return PaceResult(
         paceValue: paceValue,
@@ -81,10 +86,7 @@ PaceResult? calculatePace(
       // Rowing pace: min/500m (always metric)
       final distancePer500 = distanceInMeters / 500.0;
 
-      if (distancePer500 <= 0) return null;
-
       final paceValue = durationMinutes / distancePer500;
-      const paceUnit = 'min/500m';
 
       return PaceResult(
         paceValue: paceValue,
@@ -94,10 +96,7 @@ PaceResult? calculatePace(
 
     case PaceType.floorsPerMinute:
       // Stair climbing: floors/min (distance represents floors)
-      if (durationMinutes <= 0) return null;
-
       final paceValue = distanceInMeters / durationMinutes; // distance is floors in this context
-      const paceUnit = 'floors/min';
 
       return PaceResult(
         paceValue: paceValue,
@@ -105,6 +104,16 @@ PaceResult? calculatePace(
         formattedPace: '${paceValue.toStringAsFixed(1)} $paceUnit',
       );
   }
+}
+
+/// Returns the display unit string for a given [PaceType].
+String _paceUnit(PaceType paceType, {required bool isMetric}) {
+  return switch (paceType) {
+    PaceType.minutesPerUom => isMetric ? 'min/km' : 'min/mile',
+    PaceType.minutesPer100Uom => isMetric ? 'min/100m' : 'min/100yd',
+    PaceType.minutesPer500m => 'min/500m',
+    PaceType.floorsPerMinute => 'floors/min',
+  };
 }
 
 /// Formats minutes as MM:SS string.
