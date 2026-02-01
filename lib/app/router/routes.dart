@@ -13,6 +13,7 @@ import 'package:logly/features/custom_activity/presentation/screens/create_custo
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
 import 'package:logly/features/home/presentation/widgets/app_shell.dart';
+import 'package:logly/features/onboarding/presentation/screens/favorites_category_detail_screen.dart';
 import 'package:logly/features/onboarding/presentation/screens/intro_pager_screen.dart';
 import 'package:logly/features/onboarding/presentation/screens/onboarding_questions_shell.dart';
 import 'package:logly/features/onboarding/presentation/screens/post_auth_setup_shell.dart';
@@ -125,11 +126,15 @@ class OnboardingIntroRoute extends GoRouteData with $OnboardingIntroRoute {
 /// Onboarding questions route - getting to know you questions.
 @TypedGoRoute<OnboardingQuestionsRoute>(path: '/onboarding/questions')
 class OnboardingQuestionsRoute extends GoRouteData with $OnboardingQuestionsRoute {
-  const OnboardingQuestionsRoute();
+  const OnboardingQuestionsRoute({this.source});
+
+  /// When 'settings', the questions flow was launched from settings
+  /// and should return there on completion.
+  final String? source;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const OnboardingQuestionsShell();
+    return OnboardingQuestionsShell(source: source);
   }
 }
 
@@ -322,5 +327,19 @@ class SettingsFavoritesRoute extends GoRouteData with $SettingsFavoritesRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const FavoritesScreen();
+  }
+}
+
+/// Favorites category detail route - view all activities in a category for favorite toggling.
+@TypedGoRoute<FavoritesCategoryDetailRoute>(path: '/favorites/category/:categoryId')
+class FavoritesCategoryDetailRoute extends GoRouteData with $FavoritesCategoryDetailRoute {
+  const FavoritesCategoryDetailRoute({required this.categoryId});
+
+  /// The ID of the category to display.
+  final String categoryId;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return FavoritesCategoryDetailScreen(categoryId: categoryId);
   }
 }

@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
-import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
@@ -20,6 +18,13 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+Widget _buildLeadingIcon(IconData icon, ThemeData theme, {Color? iconColor}) {
+  return CircleAvatar(
+    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+    child: Icon(icon, color: iconColor ?? theme.colorScheme.primary),
+  );
+}
 
 /// Settings screen with app preferences and account options.
 class SettingsScreen extends ConsumerStatefulWidget {
@@ -353,6 +358,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     return result ?? false;
   }
 
+  String _unitSystemLabel(UnitSystem system) {
+    return switch (system) {
+      UnitSystem.imperial => 'Imperial (lbs, mi)',
+      UnitSystem.metric => 'Metric (kg, km)',
+    };
+  }
+
+  void _showUnitSystemSheet(BuildContext context, WidgetRef ref) {
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      showDragHandle: true,
+      clipBehavior: Clip.antiAlias,
+      isScrollControlled: true,
+      builder: (context) => const _UnitSystemBottomSheet(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -384,74 +407,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Profile completion banner
           const _ProfileCompletionBanner(),
 
-          // Feedback Section
-          const _SectionHeader(title: 'Feedback'),
-          ListTile(
-            title: const Text('Rate us on the App Store'),
-            trailing: const Icon(LucideIcons.chevronRight),
-            onTap: _rateApp,
-          ),
-          ListTile(
-            title: const Text('Share Logly'),
-            trailing: const Icon(LucideIcons.chevronRight),
-            onTap: _shareApp,
-          ),
-          ListTile(
-            title: const Text('Send us feedback'),
-            subtitle: Text(
-              "Send us anything you'd like to see in future updates...",
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            trailing: const Icon(LucideIcons.chevronRight),
-            onTap: _sendFeedback,
-          ),
-
-          const Divider(height: 1),
-
           // Customization Section
           const _SectionHeader(title: 'Customization'),
           ListTile(
+            leading: _buildLeadingIcon(LucideIcons.ruler, theme),
             title: const Text('Units'),
-            trailing: CupertinoSlidingSegmentedControl<UnitSystem>(
-              groupValue: unitSystem,
-              onValueChanged: (value) {
-                if (value != null) {
-                  ref.read(preferencesStateProvider.notifier).setUnitSystem(value);
-                }
-              },
-              children: const {
-                UnitSystem.metric: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('Metric'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _unitSystemLabel(unitSystem),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                UnitSystem.imperial: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12),
-                  child: Text('Imperial'),
-                ),
-              },
+                const SizedBox(width: 4),
+                const Icon(LucideIcons.chevronRight),
+              ],
             ),
+            onTap: () => _showUnitSystemSheet(context, ref),
           ),
           ListTile(
+            leading: _buildLeadingIcon(LucideIcons.heart, theme),
             title: const Text('Select favorites'),
             trailing: const Icon(LucideIcons.chevronRight),
             onTap: () => const SettingsFavoritesRoute().push<void>(context),
           ),
+          _HealthSyncListTile(),
           SwitchListTile(
-            title: const Text('Scroll haptics'),
-            subtitle: const Text('Vibrate when scrolling past logged days'),
+            secondary: _buildLeadingIcon(LucideIcons.vibrate, theme),
+            title: const Text('Home screen vibration'),
             value: hapticFeedbackEnabled,
             onChanged: (value) {
               ref.read(preferencesStateProvider.notifier).setHapticFeedbackEnabled(value);
             },
           ),
-          _HealthSyncListTile(),
-
-          const Divider(height: 1),
-
-          // Notifications Section
-          const _SectionHeader(title: 'Notifications'),
           _NotificationsSection(
             isToggling: _isTogglingNotifications,
             onEnable: _enableNotifications,
@@ -460,32 +450,52 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             formatTime: _formatTime,
           ),
 
-          const Divider(height: 1),
-
           // About us Section
           const _SectionHeader(title: 'About us'),
           ListTile(
+            leading: _buildLeadingIcon(LucideIcons.lightbulb, theme),
             title: const Text('Our vision'),
             trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openOurVision,
           ),
           ListTile(
+            leading: _buildLeadingIcon(LucideIcons.shieldCheck, theme),
             title: const Text('Privacy Policy'),
             trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openPrivacyPolicy,
           ),
           ListTile(
+            leading: _buildLeadingIcon(LucideIcons.fileText, theme),
             title: const Text('EULA'),
             trailing: const Icon(LucideIcons.chevronRight),
             onTap: _openEula,
           ),
 
-          const Divider(height: 1),
+          // Feedback Section
+          const _SectionHeader(title: 'Feedback'),
+          ListTile(
+            leading: _buildLeadingIcon(LucideIcons.star, theme),
+            title: const Text('Rate us on the App Store'),
+            trailing: const Icon(LucideIcons.chevronRight),
+            onTap: _rateApp,
+          ),
+          ListTile(
+            leading: _buildLeadingIcon(LucideIcons.share2, theme),
+            title: const Text('Share Logly'),
+            trailing: const Icon(LucideIcons.chevronRight),
+            onTap: _shareApp,
+          ),
+          ListTile(
+            leading: _buildLeadingIcon(LucideIcons.messageSquare, theme),
+            title: const Text('Send us feedback'),
+            trailing: const Icon(LucideIcons.chevronRight),
+            onTap: _sendFeedback,
+          ),
 
           // Account Management Section
           const _SectionHeader(title: 'Account Management'),
           ListTile(
-            leading: const Icon(LucideIcons.logOut),
+            leading: _buildLeadingIcon(LucideIcons.logOut, theme),
             title: const Text('Sign Out'),
             trailing: _isSigningOut
                 ? const SizedBox(
@@ -493,23 +503,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : null,
+                : const Icon(LucideIcons.chevronRight),
             onTap: _isSigningOut ? null : _signOut,
           ),
           ListTile(
-            leading: Icon(LucideIcons.trash2, color: theme.colorScheme.error),
+            leading: _buildLeadingIcon(LucideIcons.trash2, theme, iconColor: Colors.red),
             title: Text(
               'Delete Account',
-              style: TextStyle(color: theme.colorScheme.error),
+              style: TextStyle(color: Colors.red),
             ),
-            subtitle: const Text('Permanently delete your account and data'),
             trailing: _isDeleting
                 ? const SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : null,
+                : const Icon(LucideIcons.chevronRight),
             onTap: _isDeleting ? null : _deleteAccount,
           ),
 
@@ -533,7 +542,6 @@ class _SectionHeader extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -557,6 +565,7 @@ class _NotificationsSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final notificationPrefs = ref.watch(notificationPreferencesStateProvider);
     final enabled = notificationPrefs.enabled;
     final reminderTime = notificationPrefs.reminderTime;
@@ -565,7 +574,8 @@ class _NotificationsSection extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SwitchListTile(
-          title: const Text('Enable'),
+          secondary: _buildLeadingIcon(LucideIcons.bell, theme),
+          title: const Text('Notifications'),
           value: enabled,
           onChanged: isToggling
               ? null
@@ -583,7 +593,8 @@ class _NotificationsSection extends ConsumerWidget {
           curve: Curves.easeInOut,
           child: enabled
               ? ListTile(
-                  title: const Text('Reminder'),
+                  leading: _buildLeadingIcon(LucideIcons.clock, theme),
+                  title: const Text('Daily reminder'),
                   trailing: TextButton(
                     onPressed: onTimeTap,
                     child: Text(formatTime(reminderTime)),
@@ -741,7 +752,10 @@ class _HealthSyncListTile extends ConsumerWidget {
       subtitle = Text('Last synced ${timeago.format(lastSyncDate)}');
     }
 
+    final theme = Theme.of(context);
+
     return ListTile(
+      leading: _buildLeadingIcon(LucideIcons.heartPulse, theme),
       title: const Text('Sync health data'),
       subtitle: subtitle,
       trailing: const Icon(LucideIcons.chevronRight),
@@ -775,8 +789,54 @@ class _ProfileCompletionBanner extends ConsumerWidget {
           title: const Text('Complete your profile'),
           subtitle: const Text('Answer a few questions to personalize your experience.'),
           trailing: const Icon(LucideIcons.chevronRight),
-          onTap: () => context.go('/onboarding/questions'),
+          onTap: () => const OnboardingQuestionsRoute(source: 'settings').go(context),
         ),
+      ),
+    );
+  }
+}
+
+/// Bottom sheet for selecting the unit system.
+class _UnitSystemBottomSheet extends ConsumerWidget {
+  const _UnitSystemBottomSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final preferencesAsync = ref.watch(preferencesStateProvider);
+    final unitSystem = switch (preferencesAsync) {
+      AsyncData(:final value) => value.unitSystem,
+      _ => UnitSystem.metric,
+    };
+
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          RadioListTile<UnitSystem>(
+            title: const Text('Imperial'),
+            subtitle: const Text('miles, pounds, feet'),
+            value: UnitSystem.imperial,
+            groupValue: unitSystem,
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(preferencesStateProvider.notifier).setUnitSystem(value);
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+          RadioListTile<UnitSystem>(
+            title: const Text('Metric'),
+            subtitle: const Text('kilometers, kilograms, meters'),
+            value: UnitSystem.metric,
+            groupValue: unitSystem,
+            onChanged: (value) {
+              if (value != null) {
+                ref.read(preferencesStateProvider.notifier).setUnitSystem(value);
+                Navigator.of(context).pop();
+              }
+            },
+          ),
+        ],
       ),
     );
   }

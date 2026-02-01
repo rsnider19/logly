@@ -20,6 +20,7 @@ List<RouteBase> get $appRoutes => [
   $createCustomActivityRoute,
   $developerRoute,
   $settingsFavoritesRoute,
+  $favoritesCategoryDetailRoute,
 ];
 
 RouteBase get $appShellRoute => StatefulShellRouteData.$route(
@@ -164,10 +165,15 @@ RouteBase get $onboardingQuestionsRoute => GoRouteData.$route(
 
 mixin $OnboardingQuestionsRoute on GoRouteData {
   static OnboardingQuestionsRoute _fromState(GoRouterState state) =>
-      const OnboardingQuestionsRoute();
+      OnboardingQuestionsRoute(source: state.uri.queryParameters['source']);
+
+  OnboardingQuestionsRoute get _self => this as OnboardingQuestionsRoute;
 
   @override
-  String get location => GoRouteData.$location('/onboarding/questions');
+  String get location => GoRouteData.$location(
+    '/onboarding/questions',
+    queryParams: {if (_self.source != null) 'source': _self.source},
+  );
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -450,6 +456,39 @@ mixin $SettingsFavoritesRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings/favorites');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $favoritesCategoryDetailRoute => GoRouteData.$route(
+  path: '/favorites/category/:categoryId',
+  factory: $FavoritesCategoryDetailRoute._fromState,
+);
+
+mixin $FavoritesCategoryDetailRoute on GoRouteData {
+  static FavoritesCategoryDetailRoute _fromState(GoRouterState state) =>
+      FavoritesCategoryDetailRoute(
+        categoryId: state.pathParameters['categoryId']!,
+      );
+
+  FavoritesCategoryDetailRoute get _self =>
+      this as FavoritesCategoryDetailRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/favorites/category/${Uri.encodeComponent(_self.categoryId)}',
+  );
 
   @override
   void go(BuildContext context) => context.go(location);

@@ -7,11 +7,16 @@ class MotivationsQuestionContent extends ConsumerWidget {
   const MotivationsQuestionContent({super.key});
 
   static const _options = [
-    'Build healthy habits',
-    'Track my fitness progress',
-    'Stay accountable',
-    'Improve my wellness',
-    'Explore new activities',
+    ('💪', 'Improve my fitness'),
+    ('🧠', 'Feel better mentally'),
+    ('😴', 'Improve sleep & recovery'),
+    ('🔁', 'Be more consistent with habits'),
+    ('🔍', 'Understand patterns in my life'),
+    ('📊', 'Track health metrics'),
+    ('🧘', 'Reduce stress'),
+    ('🤝', 'Stay accountable'),
+    ('🤖', 'Use AI to get insights'),
+    ('📦', 'Just want everything in one place'),
   ];
 
   @override
@@ -40,18 +45,53 @@ class MotivationsQuestionContent extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          ..._options.map((option) {
-            final value = option.toLowerCase().replaceAll(' ', '_');
-            return CheckboxListTile(
-              title: Text(option),
-              value: selected.contains(value),
-              onChanged: (_) {
-                ref.read(onboardingAnswersStateProvider.notifier).toggleMotivation(value);
-              },
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            );
-          }),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 24),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: _options.map((option) {
+                  final (emoji, label) = option;
+                  final value = label.toLowerCase().replaceAll(' ', '_');
+                  final isSelected = selected.contains(value);
+                  return SizedBox(
+                    width: (MediaQuery.sizeOf(context).width - 48 - 12) / 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref.read(onboardingAnswersStateProvider.notifier).toggleMotivation(value);
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected ? theme.colorScheme.onSurface : theme.colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(emoji, style: const TextStyle(fontSize: 24)),
+                            const SizedBox(height: 8),
+                            Text(
+                              '$label\n',
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: isSelected
+                                    ? theme.colorScheme.surface
+                                    : theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
         ],
       ),
     );

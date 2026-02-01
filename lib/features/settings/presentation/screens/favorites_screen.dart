@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_catalog/application/catalog_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/view_all_chip.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_favorites_provider.dart';
@@ -272,10 +274,29 @@ class _CategorySection extends ConsumerWidget {
                   ),
                 ),
               ),
-              _ActivityChipsWrap(
-                activities: activities,
-                selectedIds: selectedIds,
-                onToggle: onToggle,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ...activities.map((activity) {
+                      final isSelected = selectedIds.contains(activity.activityId);
+                      return ActivityChip(
+                        activity: activity,
+                        isFilled: isSelected,
+                        onPressed: () => onToggle(activity.activityId),
+                        showIcon: false,
+                      );
+                    }),
+                    ViewAllChip(
+                      categoryColor: category.color,
+                      onPressed: () => FavoritesCategoryDetailRoute(
+                        categoryId: category.activityCategoryId,
+                      ).push<void>(context),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

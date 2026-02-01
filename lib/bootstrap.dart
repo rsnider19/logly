@@ -50,21 +50,20 @@ Future<void> bootstrap(
           ..attachScreenshot = true
           ..attachViewHierarchy = true
           ..enableAutoPerformanceTracing = true
-          ..enableUserInteractionTracing = true;
-
-        options.beforeSend = (event, hint) {
-          final throwable = event.throwable;
-          if (throwable is AppException) {
-            return event.copyWith(
-              tags: {...?event.tags, 'app_exception_type': throwable.runtimeType.toString()},
-              extra: {
-                ...?event.extra,
-                if (throwable.technicalDetails != null) 'technical_details': throwable.technicalDetails,
-              },
-            );
-          }
-          return event;
-        };
+          ..enableUserInteractionTracing = true
+          ..beforeSend = (event, hint) {
+            final throwable = event.throwable;
+            if (throwable is AppException) {
+              return event.copyWith(
+                tags: {...?event.tags, 'app_exception_type': throwable.runtimeType.toString()},
+                extra: {
+                  ...?event.extra,
+                  if (throwable.technicalDetails != null) 'technical_details': throwable.technicalDetails,
+                },
+              );
+            }
+            return event;
+          };
       },
       appRunner: () async => _initializeAndRun(builder),
     );

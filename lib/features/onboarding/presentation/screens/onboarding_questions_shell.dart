@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:logly/features/onboarding/presentation/providers/onboarding_answers_provider.dart';
+import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
 import 'package:logly/features/onboarding/presentation/widgets/onboarding_top_bar.dart';
 import 'package:logly/features/onboarding/presentation/widgets/transition_content.dart';
 import 'package:logly/features/onboarding/presentation/widgets/questions/gender_question_content.dart';
@@ -13,21 +15,38 @@ import 'package:logly/features/onboarding/presentation/widgets/questions/user_de
 
 /// Shell screen for the "Getting to Know You" questions flow.
 /// Page 0 = transition, Pages 1-6 = questions.
+///
+/// When [source] is 'settings', the transition page is skipped and
+/// completion navigates back to settings instead of to auth.
 class OnboardingQuestionsShell extends ConsumerStatefulWidget {
-  const OnboardingQuestionsShell({super.key});
+  const OnboardingQuestionsShell({super.key, this.source});
+
+  /// When 'settings', the flow was launched from settings.
+  final String? source;
 
   @override
   ConsumerState<OnboardingQuestionsShell> createState() => _OnboardingQuestionsShellState();
 }
 
 class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsShell> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
+  late final PageController _pageController;
+  late int _currentPage;
+
+  bool get _isFromSettings => widget.source == 'settings';
 
   static const _totalQuestions = 6;
 
   /// Pages: [transition, gender, birthday, units, motivations, progressPrefs, userDescriptors]
   static const _totalPages = _totalQuestions + 1;
+
+  @override
+  void initState() {
+    super.initState();
+    // When coming from settings, skip the transition page
+    final initialPage = _isFromSettings ? 1 : 0;
+    _pageController = PageController(initialPage: initialPage);
+    _currentPage = initialPage;
+  }
 
   @override
   void dispose() {
@@ -42,10 +61,17 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   /// Current segment for the progress bar (0 on transition, 1-6 on questions).
   int get _currentSegment => _currentPage;
 
-  void _next() {
+  Future<void> _next() async {
     if (_isLastQuestion) {
-      // After last question, navigate to auth
-      context.go('/auth');
+      if (_isFromSettings) {
+        // Persist answers and return to settings
+        await ref.read(onboardingAnswersStateProvider.notifier).persistToServer();
+        ref.invalidate(hasAnsweredProfileQuestionsProvider);
+        if (mounted) context.go('/settings');
+      } else {
+        // After last question, navigate to auth
+        context.go('/auth');
+      }
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -55,6 +81,11 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   }
 
   void _back() {
+    if (_isFromSettings && _isFirstQuestion) {
+      // Return to settings when pressing back on first question
+      context.go('/settings');
+      return;
+    }
     if (_currentPage > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 300),
@@ -78,7 +109,7 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
               OnboardingTopBar(
                 totalSegments: _totalQuestions,
                 currentSegment: _currentSegment,
-                showBack: !_isFirstQuestion,
+                showBack: _isFromSettings || !_isFirstQuestion,
                 showSkip: true,
                 onBack: _back,
                 onSkip: _skip,

@@ -7,11 +7,12 @@ class ProgressPreferencesQuestionContent extends ConsumerWidget {
   const ProgressPreferencesQuestionContent({super.key});
 
   static const _options = [
-    'Daily streaks',
-    'Weekly summaries',
-    'Charts and graphs',
-    'Personal records',
-    'Milestone badges',
+    ('📈', 'Graphs & trends'),
+    ('🔥', 'Streaks'),
+    ('🔢', 'Stats & numbers'),
+    ('📓', 'Journals / notes'),
+    ('🤖', 'AI summaries'),
+    ('🎯', 'A mix of everything'),
   ];
 
   @override
@@ -40,18 +41,53 @@ class ProgressPreferencesQuestionContent extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 24),
-          ..._options.map((option) {
-            final value = option.toLowerCase().replaceAll(' ', '_');
-            return CheckboxListTile(
-              title: Text(option),
-              value: selected.contains(value),
-              onChanged: (_) {
-                ref.read(onboardingAnswersStateProvider.notifier).toggleProgressPreference(value);
-              },
-              contentPadding: EdgeInsets.zero,
-              controlAffinity: ListTileControlAffinity.leading,
-            );
-          }),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 24),
+              child: Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: _options.map((option) {
+                  final (emoji, label) = option;
+                  final value = label.toLowerCase().replaceAll(' ', '_');
+                  final isSelected = selected.contains(value);
+                  return SizedBox(
+                    width: (MediaQuery.sizeOf(context).width - 48 - 12) / 2,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref.read(onboardingAnswersStateProvider.notifier).toggleProgressPreference(value);
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: isSelected ? theme.colorScheme.onSurface : theme.colorScheme.surfaceContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(emoji, style: const TextStyle(fontSize: 24)),
+                            const SizedBox(height: 8),
+                            Text(
+                              '$label\n',
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: isSelected
+                                    ? theme.colorScheme.surface
+                                    : theme.colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
         ],
       ),
     );

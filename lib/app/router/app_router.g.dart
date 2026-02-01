@@ -9,16 +9,28 @@ part of 'app_router.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Provides the app router instance with auth-based redirects.
+///
+/// Uses [ref.listen] + [refreshListenable] so the GoRouter is created once
+/// and redirect logic is re-evaluated when auth/onboarding state changes,
+/// without recreating the router (which would reset navigation state).
 
 @ProviderFor(appRouter)
 final appRouterProvider = AppRouterProvider._();
 
 /// Provides the app router instance with auth-based redirects.
+///
+/// Uses [ref.listen] + [refreshListenable] so the GoRouter is created once
+/// and redirect logic is re-evaluated when auth/onboarding state changes,
+/// without recreating the router (which would reset navigation state).
 
 final class AppRouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
   /// Provides the app router instance with auth-based redirects.
+  ///
+  /// Uses [ref.listen] + [refreshListenable] so the GoRouter is created once
+  /// and redirect logic is re-evaluated when auth/onboarding state changes,
+  /// without recreating the router (which would reset navigation state).
   AppRouterProvider._()
     : super(
         from: null,
@@ -52,4 +64,4 @@ final class AppRouterProvider
   }
 }
 
-String _$appRouterHash() => r'a0db98d0ba230ae76c166b20aa158bebadc15d2d';
+String _$appRouterHash() => r'f64231db4be253e8169991e0eb1806c1777bc915';

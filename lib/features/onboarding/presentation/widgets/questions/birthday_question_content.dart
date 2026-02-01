@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_answers_provider.dart';
+import 'package:logly/widgets/styled_cupertino_picker.dart';
 
 /// Question content for selecting birthday via CupertinoPicker wheels.
 class BirthdayQuestionContent extends ConsumerStatefulWidget {
@@ -13,18 +14,18 @@ class BirthdayQuestionContent extends ConsumerStatefulWidget {
 
 class _BirthdayQuestionContentState extends ConsumerState<BirthdayQuestionContent> {
   static const _months = [
-    'January',
-    'February',
-    'March',
-    'April',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
     'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   static const _minAge = 13;
@@ -106,62 +107,59 @@ class _BirthdayQuestionContentState extends ConsumerState<BirthdayQuestionConten
             ),
           ),
           const SizedBox(height: 24),
-          Expanded(
-            child: Row(
-              children: [
-                // Month
-                Expanded(
-                  flex: 3,
-                  child: CupertinoPicker(
-                    scrollController: _monthController,
-                    itemExtent: 40,
-                    onSelectedItemChanged: (index) {
-                      setState(() {
-                        _selectedMonth = index + 1;
-                      });
-                      _updateDate();
-                    },
-                    children: _months.map((m) => Center(child: Text(m, style: theme.textTheme.bodyLarge))).toList(),
+          Row(
+            spacing: 16,
+            children: [
+              // Month
+              Expanded(
+                child: StyledCupertinoPicker(
+                  label: 'Month',
+                  scrollController: _monthController,
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      _selectedMonth = index + 1;
+                    });
+                    _updateDate();
+                  },
+                  children:
+                      _months.map((m) => Center(child: Text(m, style: theme.textTheme.bodyLarge))).toList(),
+                ),
+              ),
+              // Day
+              Expanded(
+                child: StyledCupertinoPicker(
+                  label: 'Day',
+                  scrollController: _dayController,
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      _selectedDay = index + 1;
+                    });
+                    _updateDate();
+                  },
+                  children: List.generate(
+                    totalDays,
+                    (i) => Center(child: Text('${i + 1}', style: theme.textTheme.bodyLarge)),
                   ),
                 ),
-                // Day
-                Expanded(
-                  flex: 2,
-                  child: CupertinoPicker(
-                    scrollController: _dayController,
-                    itemExtent: 40,
-                    onSelectedItemChanged: (index) {
-                      setState(() {
-                        _selectedDay = index + 1;
-                      });
-                      _updateDate();
-                    },
-                    children: List.generate(
-                      totalDays,
-                      (i) => Center(child: Text('${i + 1}', style: theme.textTheme.bodyLarge)),
-                    ),
+              ),
+              // Year
+              Expanded(
+                child: StyledCupertinoPicker(
+                  label: 'Year',
+                  scrollController: _yearController,
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      _selectedYear = _minYear + index;
+                    });
+                    _updateDate();
+                  },
+                  children: List.generate(
+                    _maxYear - _minYear + 1,
+                    (i) => Center(child: Text('${_minYear + i}', style: theme.textTheme.bodyLarge)),
                   ),
                 ),
-                // Year
-                Expanded(
-                  flex: 2,
-                  child: CupertinoPicker(
-                    scrollController: _yearController,
-                    itemExtent: 40,
-                    onSelectedItemChanged: (index) {
-                      setState(() {
-                        _selectedYear = _minYear + index;
-                      });
-                      _updateDate();
-                    },
-                    children: List.generate(
-                      _maxYear - _minYear + 1,
-                      (i) => Center(child: Text('${_minYear + i}', style: theme.textTheme.bodyLarge)),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
