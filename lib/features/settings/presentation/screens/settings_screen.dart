@@ -387,6 +387,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Feedback Section
           const _SectionHeader(title: 'Feedback'),
           ListTile(
+            leading: CircleAvatar(
+              backgroundColor: theme.colorScheme.surfaceContainerHighest,
+              child: Icon(LucideIcons.star, color: theme.colorScheme.primary),
+            ),
             title: const Text('Rate us on the App Store'),
             trailing: const Icon(LucideIcons.chevronRight),
             onTap: _rateApp,
@@ -533,7 +537,6 @@ class _SectionHeader extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
           color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );
@@ -775,7 +778,7 @@ class _ProfileCompletionBanner extends ConsumerWidget {
           title: const Text('Complete your profile'),
           subtitle: const Text('Answer a few questions to personalize your experience.'),
           trailing: const Icon(LucideIcons.chevronRight),
-          onTap: () => context.go('/onboarding/questions'),
+          onTap: () => const OnboardingQuestionsRoute(source: 'settings').go(context),
         ),
       ),
     );
