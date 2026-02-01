@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/app_router.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
@@ -104,15 +103,16 @@ void main() {
         // Action & Verify
         final authService = container.read(authServiceProvider);
         expect(
-          () => authService.signInWithGoogle(),
+          authService.signInWithGoogle,
           throwsA(isA<AuthSignInCancelledException>()),
         );
       });
 
       test('Sign-in error throws AuthProviderException', () async {
         // Setup
-        when(() => mockRepository.signInWithApple())
-            .thenThrow(const AuthProviderException('Apple sign-in failed', 'Network error'));
+        when(
+          () => mockRepository.signInWithApple(),
+        ).thenThrow(const AuthProviderException('Apple sign-in failed', 'Network error'));
 
         container = createAuthServiceTestContainer(
           mockRepository: mockRepository,
@@ -123,7 +123,7 @@ void main() {
         // Action & Verify
         final authService = container.read(authServiceProvider);
         expect(
-          () => authService.signInWithApple(),
+          authService.signInWithApple,
           throwsA(
             isA<AuthProviderException>().having((e) => e.message, 'message', 'Apple sign-in failed'),
           ),

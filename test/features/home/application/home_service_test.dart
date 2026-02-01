@@ -113,8 +113,7 @@ void main() {
         // Assert
         expect(result.length, equals(3));
         final jan21 = result.firstWhere(
-          (s) =>
-              s.activityDate.year == 2025 && s.activityDate.month == 1 && s.activityDate.day == 21,
+          (s) => s.activityDate.year == 2025 && s.activityDate.month == 1 && s.activityDate.day == 21,
         );
         expect(jan21.activityCount, equals(5));
       });
@@ -172,7 +171,7 @@ void main() {
 
       test('handles year boundary correctly', () {
         // Arrange
-        final endDate = DateTime(2025, 1, 1);
+        final endDate = DateTime(2025);
         final startDate = DateTime(2024, 12, 31);
 
         // Act
@@ -184,7 +183,7 @@ void main() {
 
         // Assert
         expect(result.length, equals(2));
-        expect(result.first.activityDate, equals(DateTime(2025, 1, 1)));
+        expect(result.first.activityDate, equals(DateTime(2025)));
         expect(result.last.activityDate, equals(DateTime(2024, 12, 31)));
       });
     });
@@ -192,13 +191,12 @@ void main() {
     group('getDailyActivities', () {
       test('delegates to repository', () async {
         // Arrange
-        final startDate = DateTime(2025, 1, 1);
+        final startDate = DateTime(2025);
         final endDate = DateTime(2025, 1, 10);
         final summaries = [
           fakeDailyActivitySummary(activityDate: DateTime(2025, 1, 5), activityCount: 3),
         ];
-        when(() => mockDailyActivitiesRepository.getByDateRange(any(), any()))
-            .thenAnswer((_) async => summaries);
+        when(() => mockDailyActivitiesRepository.getByDateRange(any(), any())).thenAnswer((_) async => summaries);
 
         // Act
         final result = await service.getDailyActivities(
@@ -214,9 +212,8 @@ void main() {
       test('swaps dates when endDate is before startDate', () async {
         // Arrange
         final startDate = DateTime(2025, 1, 10);
-        final endDate = DateTime(2025, 1, 1);
-        when(() => mockDailyActivitiesRepository.getByDateRange(any(), any()))
-            .thenAnswer((_) async => []);
+        final endDate = DateTime(2025);
+        when(() => mockDailyActivitiesRepository.getByDateRange(any(), any())).thenAnswer((_) async => []);
 
         // Act
         await service.getDailyActivities(

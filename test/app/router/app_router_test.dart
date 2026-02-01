@@ -162,7 +162,7 @@ GOOGLE_IOS_CLIENT_ID=test-ios-client-id.apps.googleusercontent.com
       // No user - unauthenticated
       when(() => mockAuth.currentUser).thenReturn(null);
       when(() => mockAuth.onAuthStateChange).thenAnswer(
-        (_) => Stream.value(AuthState(AuthChangeEvent.signedOut, null)),
+        (_) => Stream.value(const AuthState(AuthChangeEvent.signedOut, null)),
       );
 
       final container = ProviderContainer(

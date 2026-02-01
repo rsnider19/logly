@@ -49,8 +49,7 @@ void main() {
     group('signInWithApple', () {
       test('calls repository signInWithApple and logs success', () async {
         final mockResponse = FakeAuthResponse();
-        when(() => mockRepository.signInWithApple())
-            .thenAnswer((_) async => mockResponse);
+        when(() => mockRepository.signInWithApple()).thenAnswer((_) async => mockResponse);
 
         final authService = container.read(authServiceProvider);
         final result = await authService.signInWithApple();
@@ -61,25 +60,23 @@ void main() {
       });
 
       test('rethrows AuthSignInCancelledException', () async {
-        when(() => mockRepository.signInWithApple())
-            .thenThrow(const AuthSignInCancelledException());
+        when(() => mockRepository.signInWithApple()).thenThrow(const AuthSignInCancelledException());
 
         final authService = container.read(authServiceProvider);
 
         expect(
-          () => authService.signInWithApple(),
+          authService.signInWithApple,
           throwsA(isA<AuthSignInCancelledException>()),
         );
       });
 
       test('rethrows AuthProviderException', () async {
-        when(() => mockRepository.signInWithApple())
-            .thenThrow(const AuthProviderException('Apple sign-in failed'));
+        when(() => mockRepository.signInWithApple()).thenThrow(const AuthProviderException('Apple sign-in failed'));
 
         final authService = container.read(authServiceProvider);
 
         expect(
-          () => authService.signInWithApple(),
+          authService.signInWithApple,
           throwsA(isA<AuthProviderException>()),
         );
       });
@@ -88,8 +85,7 @@ void main() {
     group('signInWithGoogle', () {
       test('calls repository signInWithGoogle and logs success', () async {
         final mockResponse = FakeAuthResponse();
-        when(() => mockRepository.signInWithGoogle())
-            .thenAnswer((_) async => mockResponse);
+        when(() => mockRepository.signInWithGoogle()).thenAnswer((_) async => mockResponse);
 
         final authService = container.read(authServiceProvider);
         final result = await authService.signInWithGoogle();
@@ -100,13 +96,12 @@ void main() {
       });
 
       test('rethrows AuthSignInCancelledException', () async {
-        when(() => mockRepository.signInWithGoogle())
-            .thenThrow(const AuthSignInCancelledException());
+        when(() => mockRepository.signInWithGoogle()).thenThrow(const AuthSignInCancelledException());
 
         final authService = container.read(authServiceProvider);
 
         expect(
-          () => authService.signInWithGoogle(),
+          authService.signInWithGoogle,
           throwsA(isA<AuthSignInCancelledException>()),
         );
       });
@@ -128,8 +123,7 @@ void main() {
 
     group('requestAccountDeletion', () {
       test('calls repository requestAccountDeletion and signs out', () async {
-        when(() => mockRepository.requestAccountDeletion())
-            .thenAnswer((_) async {});
+        when(() => mockRepository.requestAccountDeletion()).thenAnswer((_) async {});
         when(() => mockRepository.signOut()).thenAnswer((_) async {});
         when(() => mockDatabase.clearAllCache()).thenAnswer((_) async => 0);
 

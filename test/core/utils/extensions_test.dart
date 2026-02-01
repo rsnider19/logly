@@ -180,8 +180,8 @@ void main() {
     });
 
     test('isSameDayAs delegates to DateUtils', () {
-      final a = DateTime(2024, 3, 15, 8, 0);
-      final b = DateTime(2024, 3, 15, 20, 0);
+      final a = DateTime(2024, 3, 15, 8);
+      final b = DateTime(2024, 3, 15, 20);
 
       expect(a.isSameDayAs(b), isTrue);
     });
@@ -200,7 +200,7 @@ void main() {
   group('NullableExtensions', () {
     group('orElse', () {
       test('returns value when not null', () {
-        const String? value = 'hello';
+        const value = 'hello';
         expect(value.orElse(() => 'default'), 'hello');
       });
 
@@ -216,7 +216,7 @@ void main() {
 
       test('evaluates orElse lazily', () {
         var called = false;
-        const String? value = 'hello';
+        const value = 'hello';
         value.orElse(() {
           called = true;
           return 'default';
@@ -227,7 +227,7 @@ void main() {
 
     group('mapOrNull', () {
       test('returns mapped value when not null', () {
-        const String? value = 'hello';
+        const value = 'hello';
         expect(value.mapOrNull((v) => v.length), 5);
       });
 
@@ -237,7 +237,7 @@ void main() {
       });
 
       test('works with type transformation', () {
-        const int? value = 42;
+        const value = 42;
         expect(value.mapOrNull((v) => v.toString()), '42');
       });
 

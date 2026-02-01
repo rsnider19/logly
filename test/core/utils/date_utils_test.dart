@@ -114,7 +114,7 @@ void main() {
       });
 
       test('handles month boundaries correctly', () {
-        final date = DateTime(2024, 1, 1);
+        final date = DateTime(2024);
         final result = DateUtils.startOfMonth(date);
 
         expect(result.month, 1);
@@ -236,7 +236,7 @@ void main() {
 
     group('isSameDay', () {
       test('returns true for same day different times', () {
-        final a = DateTime(2024, 3, 15, 8, 0);
+        final a = DateTime(2024, 3, 15, 8);
         final b = DateTime(2024, 3, 15, 20, 30);
 
         expect(DateUtils.isSameDay(a, b), isTrue);
@@ -279,7 +279,7 @@ void main() {
 
       test('returns true for today at different time', () {
         final today = DateTime.now();
-        final todayMorning = DateTime(today.year, today.month, today.day, 6, 0);
+        final todayMorning = DateTime(today.year, today.month, today.day, 6);
 
         expect(DateUtils.isToday(todayMorning), isTrue);
       });

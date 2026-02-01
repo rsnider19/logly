@@ -37,10 +37,12 @@ List<DailyActivitySummary> generateSummariesForDateRange({
   final end = DateTime(endDate.year, endDate.month, endDate.day);
 
   while (!current.isAfter(end)) {
-    summaries.add(DailyActivitySummary(
-      activityDate: current,
-      activityCount: activityCount,
-    ));
+    summaries.add(
+      DailyActivitySummary(
+        activityDate: current,
+        activityCount: activityCount,
+      ),
+    );
     current = DateTime(current.year, current.month, current.day + 1);
   }
 
@@ -95,9 +97,7 @@ int countDaysInRange(DateTime startDate, DateTime endDate) {
 
 /// Extracts just the dates from a list of summaries for easier comparison.
 List<DateTime> extractDates(List<DailyActivitySummary> summaries) {
-  return summaries
-      .map((s) => DateTime(s.activityDate.year, s.activityDate.month, s.activityDate.day))
-      .toList();
+  return summaries.map((s) => DateTime(s.activityDate.year, s.activityDate.month, s.activityDate.day)).toList();
 }
 
 /// Checks if a list of dates is contiguous (no gaps).

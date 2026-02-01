@@ -144,7 +144,7 @@ void main() {
     group('Date Calculation Edge Cases', () {
       test('handles February correctly', () {
         // Arrange - test around February
-        final date = DateTime(2025, 3, 1);
+        final date = DateTime(2025, 3);
         final range = calculateInitialDateRange(today: date, initialDays: 30);
 
         // Assert
@@ -154,11 +154,11 @@ void main() {
 
       test('handles leap year February', () {
         // Arrange - 2024 is a leap year
-        final date = DateTime(2024, 3, 1);
+        final date = DateTime(2024, 3);
         final range = calculateInitialDateRange(today: date, initialDays: 30);
 
         // Assert - Feb has 29 days in 2024
-        expect(range.startDate, equals(DateTime(2024, 2, 1)));
+        expect(range.startDate, equals(DateTime(2024, 2)));
         expect(countDaysInRange(range.startDate, range.endDate), equals(30));
       });
 
@@ -180,7 +180,7 @@ void main() {
         final summaries = <DailyActivitySummary>[];
 
         // Initial load
-        var initialRange = calculateInitialDateRange(today: today, initialDays: initialDays);
+        final initialRange = calculateInitialDateRange(today: today, initialDays: initialDays);
         var current = initialRange.startDate;
         while (!current.isAfter(initialRange.endDate)) {
           summaries.add(DailyActivitySummary(activityDate: current, activityCount: 0));
@@ -233,15 +233,15 @@ void main() {
         // Initial ends at 12/24, loadMore1 starts at 12/23 (1 day before)
         expect(
           loadMore1Range.endDate,
-          equals(DateTime(initialRange.startDate.year, initialRange.startDate.month,
-              initialRange.startDate.day - 1)),
+          equals(DateTime(initialRange.startDate.year, initialRange.startDate.month, initialRange.startDate.day - 1)),
         );
 
         // LoadMore1 ends at 11/24, loadMore2 starts at 11/23 (1 day before)
         expect(
           loadMore2Range.endDate,
-          equals(DateTime(loadMore1Range.startDate.year, loadMore1Range.startDate.month,
-              loadMore1Range.startDate.day - 1)),
+          equals(
+            DateTime(loadMore1Range.startDate.year, loadMore1Range.startDate.month, loadMore1Range.startDate.day - 1),
+          ),
         );
 
         // Verify 11/23 is included in loadMore2

@@ -90,6 +90,6 @@ void setupAuthenticatedState(MockGoTrueClient mockAuth, User mockUser) {
 void setupUnauthenticatedState(MockGoTrueClient mockAuth) {
   when(() => mockAuth.currentUser).thenReturn(null);
   when(() => mockAuth.onAuthStateChange).thenAnswer(
-    (_) => Stream.value(AuthState(AuthChangeEvent.signedOut, null)),
+    (_) => Stream.value(const AuthState(AuthChangeEvent.signedOut, null)),
   );
 }

@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:logger/logger.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -18,7 +17,7 @@ void main() {
     group('constructor', () {
       test('creates default logger when none provided', () {
         expect(
-          () => LoggerService(),
+          LoggerService.new,
           returnsNormally,
         );
       });
@@ -27,8 +26,7 @@ void main() {
         final service = LoggerService(logger: mockLogger);
         service.d('test');
 
-        verify(() => mockLogger.d('test', error: null, stackTrace: null))
-            .called(1);
+        verify(() => mockLogger.d('test')).called(1);
       });
     });
 
@@ -37,7 +35,7 @@ void main() {
         loggerService.d('debug message');
 
         verify(
-          () => mockLogger.d('debug message', error: null, stackTrace: null),
+          () => mockLogger.d('debug message'),
         ).called(1);
       });
 
@@ -46,7 +44,7 @@ void main() {
         loggerService.d('debug message', error);
 
         verify(
-          () => mockLogger.d('debug message', error: error, stackTrace: null),
+          () => mockLogger.d('debug message', error: error),
         ).called(1);
       });
 
@@ -55,7 +53,7 @@ void main() {
         loggerService.d('debug message', null, stackTrace);
 
         verify(
-          () => mockLogger.d('debug message', error: null, stackTrace: stackTrace),
+          () => mockLogger.d('debug message', stackTrace: stackTrace),
         ).called(1);
       });
 
@@ -75,7 +73,7 @@ void main() {
         loggerService.i('info message');
 
         verify(
-          () => mockLogger.i('info message', error: null, stackTrace: null),
+          () => mockLogger.i('info message'),
         ).called(1);
       });
 
@@ -95,7 +93,7 @@ void main() {
         loggerService.w('warning message');
 
         verify(
-          () => mockLogger.w('warning message', error: null, stackTrace: null),
+          () => mockLogger.w('warning message'),
         ).called(1);
       });
 
@@ -115,7 +113,7 @@ void main() {
         loggerService.e('error message');
 
         verify(
-          () => mockLogger.e('error message', error: null, stackTrace: null),
+          () => mockLogger.e('error message'),
         ).called(1);
       });
 

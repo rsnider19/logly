@@ -20,8 +20,7 @@ void main() {
     Widget createTestWidget({AuthService? authService}) {
       return ProviderScope(
         overrides: [
-          if (authService != null)
-            authServiceProvider.overrideWithValue(authService),
+          if (authService != null) authServiceProvider.overrideWithValue(authService),
         ],
         child: const MaterialApp(
           home: SignInScreen(),

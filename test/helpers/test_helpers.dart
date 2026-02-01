@@ -10,7 +10,8 @@ void setUpTestEnv({
   String? googleIosClientId,
 }) {
   dotenv.loadFromString(
-    envString: '''
+    envString:
+        '''
 SUPABASE_URL=${supabaseUrl ?? 'https://test.supabase.co'}
 SUPABASE_ANON_KEY=${supabaseAnonKey ?? 'test-anon-key'}
 GOOGLE_WEB_CLIENT_ID=${googleWebClientId ?? 'test-web-client-id.apps.googleusercontent.com'}

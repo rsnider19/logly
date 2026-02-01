@@ -93,7 +93,8 @@ void main() {
       expect(
         contiguous,
         isTrue,
-        reason: 'Dates should be contiguous. Gaps found: $gaps\n'
+        reason:
+            'Dates should be contiguous. Gaps found: $gaps\n'
             'Initial: $initialStartDate to $initialEndDate\n'
             'LoadMore1: $loadMore1StartDate to $loadMore1EndDate\n'
             'LoadMore2: $loadMore2StartDate to $loadMore2EndDate',
@@ -255,7 +256,8 @@ void main() {
       expect(
         loadMore2EndDate,
         equals(expectedLoadMore2End),
-        reason: 'LoadMore2 end (${loadMore2EndDate.month}/${loadMore2EndDate.day}) '
+        reason:
+            'LoadMore2 end (${loadMore2EndDate.month}/${loadMore2EndDate.day}) '
             'should be 1 day before LoadMore1 start (${loadMore1StartDate.month}/${loadMore1StartDate.day}). '
             'Expected: ${expectedLoadMore2End.month}/${expectedLoadMore2End.day}',
       );
@@ -302,17 +304,21 @@ void main() {
       );
 
       // Setup mock to return empty summaries (fillDateRange will create the dates)
-      when(() => mockHomeService.getDailyActivities(
-            startDate: any(named: 'startDate'),
-            endDate: any(named: 'endDate'),
-          )).thenAnswer((_) async => <DailyActivitySummary>[]);
+      when(
+        () => mockHomeService.getDailyActivities(
+          startDate: any(named: 'startDate'),
+          endDate: any(named: 'endDate'),
+        ),
+      ).thenAnswer((_) async => <DailyActivitySummary>[]);
 
       // Setup mock fillDateRange to generate dates properly
-      when(() => mockHomeService.fillDateRange(
-            startDate: any(named: 'startDate'),
-            endDate: any(named: 'endDate'),
-            summaries: any(named: 'summaries'),
-          )).thenAnswer((invocation) {
+      when(
+        () => mockHomeService.fillDateRange(
+          startDate: any(named: 'startDate'),
+          endDate: any(named: 'endDate'),
+          summaries: any(named: 'summaries'),
+        ),
+      ).thenAnswer((invocation) {
         final startDate = invocation.namedArguments[const Symbol('startDate')] as DateTime;
         final endDate = invocation.namedArguments[const Symbol('endDate')] as DateTime;
 

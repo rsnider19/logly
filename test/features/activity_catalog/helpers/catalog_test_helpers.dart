@@ -129,105 +129,105 @@ SubActivity fakeSubActivity({
 
 /// Sample categories matching the app's actual categories.
 List<ActivityCategory> get testCategories => [
-      fakeActivityCategory(
-        activityCategoryId: 'cat-fitness',
-        name: 'Fitness',
-        activityCategoryCode: 'FITNESS',
-        hexColor: '#FF5733',
-        icon: 'fitness_center',
-        sortOrder: 1,
-      ),
-      fakeActivityCategory(
-        activityCategoryId: 'cat-sports',
-        name: 'Sports',
-        activityCategoryCode: 'SPORTS',
-        hexColor: '#33FF57',
-        icon: 'sports_soccer',
-        sortOrder: 2,
-      ),
-      fakeActivityCategory(
-        activityCategoryId: 'cat-wellness',
-        name: 'Wellness',
-        activityCategoryCode: 'WELLNESS',
-        hexColor: '#5733FF',
-        icon: 'spa',
-        sortOrder: 3,
-      ),
-      fakeActivityCategory(
-        activityCategoryId: 'cat-lifestyle',
-        name: 'Lifestyle',
-        activityCategoryCode: 'LIFESTYLE',
-        hexColor: '#FF33F5',
-        icon: 'self_improvement',
-        sortOrder: 4,
-      ),
-      fakeActivityCategory(
-        activityCategoryId: 'cat-nutrition',
-        name: 'Nutrition',
-        activityCategoryCode: 'NUTRITION',
-        hexColor: '#33FFF5',
-        icon: 'restaurant',
-        sortOrder: 5,
-      ),
-      fakeActivityCategory(
-        activityCategoryId: 'cat-mindfulness',
-        name: 'Mindfulness',
-        activityCategoryCode: 'MINDFULNESS',
-        hexColor: '#F5FF33',
-        icon: 'psychology',
-        sortOrder: 6,
-      ),
-    ];
+  fakeActivityCategory(
+    activityCategoryId: 'cat-fitness',
+    name: 'Fitness',
+    activityCategoryCode: 'FITNESS',
+    hexColor: '#FF5733',
+    icon: 'fitness_center',
+    sortOrder: 1,
+  ),
+  fakeActivityCategory(
+    activityCategoryId: 'cat-sports',
+    name: 'Sports',
+    activityCategoryCode: 'SPORTS',
+    hexColor: '#33FF57',
+    icon: 'sports_soccer',
+    sortOrder: 2,
+  ),
+  fakeActivityCategory(
+    activityCategoryId: 'cat-wellness',
+    name: 'Wellness',
+    activityCategoryCode: 'WELLNESS',
+    hexColor: '#5733FF',
+    icon: 'spa',
+    sortOrder: 3,
+  ),
+  fakeActivityCategory(
+    activityCategoryId: 'cat-lifestyle',
+    name: 'Lifestyle',
+    activityCategoryCode: 'LIFESTYLE',
+    hexColor: '#FF33F5',
+    icon: 'self_improvement',
+    sortOrder: 4,
+  ),
+  fakeActivityCategory(
+    activityCategoryId: 'cat-nutrition',
+    name: 'Nutrition',
+    activityCategoryCode: 'NUTRITION',
+    hexColor: '#33FFF5',
+    icon: 'restaurant',
+    sortOrder: 5,
+  ),
+  fakeActivityCategory(
+    activityCategoryId: 'cat-mindfulness',
+    name: 'Mindfulness',
+    activityCategoryCode: 'MINDFULNESS',
+    hexColor: '#F5FF33',
+    icon: 'psychology',
+    sortOrder: 6,
+  ),
+];
 
 /// Sample activities with nested data.
 List<Activity> get testActivities => [
-      fakeActivity(
+  fakeActivity(
+    activityId: 'act-running',
+    activityCategoryId: 'cat-fitness',
+    name: 'Running',
+    activityCode: 'RUNNING',
+    activityCategory: testCategories[0],
+    activityDetail: [
+      fakeActivityDetail(
+        activityDetailId: 'detail-duration',
         activityId: 'act-running',
-        activityCategoryId: 'cat-fitness',
-        name: 'Running',
-        activityCode: 'RUNNING',
-        activityCategory: testCategories[0],
-        activityDetail: [
-          fakeActivityDetail(
-            activityDetailId: 'detail-duration',
-            activityId: 'act-running',
-            label: 'Duration',
-            activityDetailType: ActivityDetailType.duration,
-            sortOrder: 1,
-          ),
-          fakeActivityDetail(
-            activityDetailId: 'detail-distance',
-            activityId: 'act-running',
-            label: 'Distance',
-            activityDetailType: ActivityDetailType.distance,
-            sortOrder: 2,
-          ),
-        ],
-        subActivity: [
-          fakeSubActivity(
-            subActivityId: 'sub-interval',
-            activityId: 'act-running',
-            name: 'Interval Running',
-            subActivityCode: 'INTERVAL',
-          ),
-        ],
+        label: 'Duration',
+        activityDetailType: ActivityDetailType.duration,
+        sortOrder: 1,
       ),
-      fakeActivity(
-        activityId: 'act-yoga',
-        activityCategoryId: 'cat-wellness',
-        name: 'Yoga',
-        activityCode: 'YOGA',
-        activityCategory: testCategories[2],
-        isSuggestedFavorite: true,
+      fakeActivityDetail(
+        activityDetailId: 'detail-distance',
+        activityId: 'act-running',
+        label: 'Distance',
+        activityDetailType: ActivityDetailType.distance,
+        sortOrder: 2,
       ),
-      fakeActivity(
-        activityId: 'act-swimming',
-        activityCategoryId: 'cat-fitness',
-        name: 'Swimming',
-        activityCode: 'SWIMMING',
-        activityCategory: testCategories[0],
+    ],
+    subActivity: [
+      fakeSubActivity(
+        subActivityId: 'sub-interval',
+        activityId: 'act-running',
+        name: 'Interval Running',
+        subActivityCode: 'INTERVAL',
       ),
-    ];
+    ],
+  ),
+  fakeActivity(
+    activityId: 'act-yoga',
+    activityCategoryId: 'cat-wellness',
+    name: 'Yoga',
+    activityCode: 'YOGA',
+    activityCategory: testCategories[2],
+    isSuggestedFavorite: true,
+  ),
+  fakeActivity(
+    activityId: 'act-swimming',
+    activityCategoryId: 'cat-fitness',
+    name: 'Swimming',
+    activityCode: 'SWIMMING',
+    activityCategory: testCategories[0],
+  ),
+];
 
 // MARK: - Test Container Helpers
 

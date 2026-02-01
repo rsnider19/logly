@@ -23,7 +23,7 @@ void main() {
       });
 
       test('throws EnvironmentException when missing', () {
-        dotenv.loadFromString(envString: '', isOptional: true);
+        dotenv.loadFromString(isOptional: true);
 
         expect(
           () => EnvService.supabaseUrl,
@@ -63,7 +63,7 @@ void main() {
       });
 
       test('throws EnvironmentException when missing', () {
-        dotenv.loadFromString(envString: '', isOptional: true);
+        dotenv.loadFromString(isOptional: true);
 
         expect(
           () => EnvService.supabaseAnonKey,

@@ -42,8 +42,7 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenThrow(const CategoryFetchException('Test error'));
+        when(() => mockCategoryRepository.getAll()).thenThrow(const CategoryFetchException('Test error'));
 
         // Act & Assert
         expect(
@@ -66,8 +65,7 @@ void main() {
       test('delegates to category repository when ID is valid', () async {
         // Arrange
         final category = testCategories.first;
-        when(() => mockCategoryRepository.getById(category.activityCategoryId))
-            .thenAnswer((_) async => category);
+        when(() => mockCategoryRepository.getById(category.activityCategoryId)).thenAnswer((_) async => category);
 
         // Act
         final result = await service.getCategoryById(category.activityCategoryId);
@@ -79,8 +77,7 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockCategoryRepository.getById('valid-id'))
-            .thenThrow(const CategoryNotFoundException('Not found'));
+        when(() => mockCategoryRepository.getById('valid-id')).thenThrow(const CategoryNotFoundException('Not found'));
 
         // Act & Assert
         expect(
@@ -103,8 +100,7 @@ void main() {
       test('delegates to activity repository when ID is valid', () async {
         // Arrange
         final activities = testActivities;
-        when(() => mockActivityRepository.getByCategory('cat-fitness'))
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.getByCategory('cat-fitness')).thenAnswer((_) async => activities);
 
         // Act
         final result = await service.getActivitiesByCategory('cat-fitness');
@@ -116,8 +112,9 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockActivityRepository.getByCategory('valid-id'))
-            .thenThrow(const ActivityFetchException('Fetch error'));
+        when(
+          () => mockActivityRepository.getByCategory('valid-id'),
+        ).thenThrow(const ActivityFetchException('Fetch error'));
 
         // Act & Assert
         expect(
@@ -140,8 +137,7 @@ void main() {
       test('delegates to activity repository when ID is valid', () async {
         // Arrange
         final activity = testActivities.first;
-        when(() => mockActivityRepository.getById(activity.activityId))
-            .thenAnswer((_) async => activity);
+        when(() => mockActivityRepository.getById(activity.activityId)).thenAnswer((_) async => activity);
 
         // Act
         final result = await service.getActivityById(activity.activityId);
@@ -153,8 +149,7 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockActivityRepository.getById('valid-id'))
-            .thenThrow(const ActivityNotFoundException('Not found'));
+        when(() => mockActivityRepository.getById('valid-id')).thenThrow(const ActivityNotFoundException('Not found'));
 
         // Act & Assert
         expect(
@@ -190,8 +185,7 @@ void main() {
       test('delegates to activity repository when query is valid', () async {
         // Arrange
         final activities = testActivities;
-        when(() => mockActivityRepository.search('running'))
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.search('running')).thenAnswer((_) async => activities);
 
         // Act
         final result = await service.searchActivities('running');
@@ -203,8 +197,7 @@ void main() {
 
       test('trims query before searching', () async {
         // Arrange
-        when(() => mockActivityRepository.search('running'))
-            .thenAnswer((_) async => []);
+        when(() => mockActivityRepository.search('running')).thenAnswer((_) async => []);
 
         // Act
         await service.searchActivities('  running  ');
@@ -215,8 +208,7 @@ void main() {
 
       test('searches with exactly 2 characters', () async {
         // Arrange
-        when(() => mockActivityRepository.search('ab'))
-            .thenAnswer((_) async => []);
+        when(() => mockActivityRepository.search('ab')).thenAnswer((_) async => []);
 
         // Act
         await service.searchActivities('ab');
@@ -227,8 +219,7 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockActivityRepository.search('valid'))
-            .thenThrow(const ActivitySearchException('Search error'));
+        when(() => mockActivityRepository.search('valid')).thenThrow(const ActivitySearchException('Search error'));
 
         // Act & Assert
         expect(
@@ -242,8 +233,7 @@ void main() {
       test('delegates to activity repository', () async {
         // Arrange
         final activities = testActivities;
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => activities);
 
         // Act
         final result = await service.getPopularActivities();
@@ -255,8 +245,7 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockActivityRepository.getPopular())
-            .thenThrow(const ActivityFetchException('Fetch error'));
+        when(() => mockActivityRepository.getPopular()).thenThrow(const ActivityFetchException('Fetch error'));
 
         // Act & Assert
         expect(
@@ -270,8 +259,7 @@ void main() {
       test('delegates to activity repository', () async {
         // Arrange
         final favorites = testActivities.where((a) => a.isSuggestedFavorite).toList();
-        when(() => mockActivityRepository.getSuggestedFavorites())
-            .thenAnswer((_) async => favorites);
+        when(() => mockActivityRepository.getSuggestedFavorites()).thenAnswer((_) async => favorites);
 
         // Act
         final result = await service.getSuggestedFavorites();
@@ -283,8 +271,9 @@ void main() {
 
       test('propagates exceptions from repository', () async {
         // Arrange
-        when(() => mockActivityRepository.getSuggestedFavorites())
-            .thenThrow(const ActivityFetchException('Fetch error'));
+        when(
+          () => mockActivityRepository.getSuggestedFavorites(),
+        ).thenThrow(const ActivityFetchException('Fetch error'));
 
         // Act & Assert
         expect(
@@ -297,10 +286,8 @@ void main() {
     group('prefetchCatalog', () {
       test('calls both getAll and getPopular in parallel', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenAnswer((_) async => testCategories);
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => testActivities);
+        when(() => mockCategoryRepository.getAll()).thenAnswer((_) async => testCategories);
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => testActivities);
 
         // Act
         await service.prefetchCatalog();
@@ -312,10 +299,8 @@ void main() {
 
       test('logs success message on completion', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenAnswer((_) async => testCategories);
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => testActivities);
+        when(() => mockCategoryRepository.getAll()).thenAnswer((_) async => testCategories);
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => testActivities);
 
         // Act
         await service.prefetchCatalog();
@@ -326,10 +311,8 @@ void main() {
 
       test('does not throw when category fetch fails', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenThrow(const CategoryFetchException('Error'));
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => testActivities);
+        when(() => mockCategoryRepository.getAll()).thenThrow(const CategoryFetchException('Error'));
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => testActivities);
 
         // Act & Assert - should not throw
         await expectLater(service.prefetchCatalog(), completes);
@@ -338,10 +321,8 @@ void main() {
 
       test('does not throw when activity fetch fails', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenAnswer((_) async => testCategories);
-        when(() => mockActivityRepository.getPopular())
-            .thenThrow(const ActivityFetchException('Error'));
+        when(() => mockCategoryRepository.getAll()).thenAnswer((_) async => testCategories);
+        when(() => mockActivityRepository.getPopular()).thenThrow(const ActivityFetchException('Error'));
 
         // Act & Assert - should not throw
         await expectLater(service.prefetchCatalog(), completes);
@@ -350,10 +331,8 @@ void main() {
 
       test('does not throw when both fetches fail', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenThrow(const CategoryFetchException('Error'));
-        when(() => mockActivityRepository.getPopular())
-            .thenThrow(const ActivityFetchException('Error'));
+        when(() => mockCategoryRepository.getAll()).thenThrow(const CategoryFetchException('Error'));
+        when(() => mockActivityRepository.getPopular()).thenThrow(const ActivityFetchException('Error'));
 
         // Act & Assert - should not throw
         await expectLater(service.prefetchCatalog(), completes);

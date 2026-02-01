@@ -57,8 +57,7 @@ void main() {
         // Arrange
         final activities = testActivities.where((a) => a.activityCategoryId == 'cat-fitness').toList();
 
-        when(() => mockActivityRepository.getByCategory('cat-fitness'))
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.getByCategory('cat-fitness')).thenAnswer((_) async => activities);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -74,8 +73,7 @@ void main() {
         // Arrange
         final category = testCategories.first;
 
-        when(() => mockCategoryRepository.getById(category.activityCategoryId))
-            .thenAnswer((_) async => category);
+        when(() => mockCategoryRepository.getById(category.activityCategoryId)).thenAnswer((_) async => category);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -90,8 +88,7 @@ void main() {
         // Arrange
         final activity = testActivities.first;
 
-        when(() => mockActivityRepository.getById(activity.activityId))
-            .thenAnswer((_) async => activity);
+        when(() => mockActivityRepository.getById(activity.activityId)).thenAnswer((_) async => activity);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -108,8 +105,7 @@ void main() {
         // Arrange
         final activities = testActivities.take(2).toList();
 
-        when(() => mockActivityRepository.search('running'))
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.search('running')).thenAnswer((_) async => activities);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -132,8 +128,7 @@ void main() {
 
       test('trims query before searching', () async {
         // Arrange
-        when(() => mockActivityRepository.search('running'))
-            .thenAnswer((_) async => []);
+        when(() => mockActivityRepository.search('running')).thenAnswer((_) async => []);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -149,8 +144,7 @@ void main() {
         // Arrange
         final activities = testActivities;
 
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => activities);
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => activities);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -165,8 +159,7 @@ void main() {
         // Arrange
         final favorites = testActivities.where((a) => a.isSuggestedFavorite).toList();
 
-        when(() => mockActivityRepository.getSuggestedFavorites())
-            .thenAnswer((_) async => favorites);
+        when(() => mockActivityRepository.getSuggestedFavorites()).thenAnswer((_) async => favorites);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -184,10 +177,8 @@ void main() {
         final categories = testCategories;
         final activities = testActivities;
 
-        when(() => mockCategoryRepository.getAll())
-            .thenAnswer((_) async => categories);
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => activities);
+        when(() => mockCategoryRepository.getAll()).thenAnswer((_) async => categories);
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => activities);
 
         // Act
         final service = container.read(catalogServiceProvider);
@@ -201,10 +192,8 @@ void main() {
 
       test('prefetch does not throw when category fetch fails', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenThrow(const CategoryFetchException('Error'));
-        when(() => mockActivityRepository.getPopular())
-            .thenAnswer((_) async => testActivities);
+        when(() => mockCategoryRepository.getAll()).thenThrow(const CategoryFetchException('Error'));
+        when(() => mockActivityRepository.getPopular()).thenAnswer((_) async => testActivities);
 
         // Act & Assert - should not throw
         final service = container.read(catalogServiceProvider);
@@ -214,10 +203,8 @@ void main() {
 
       test('prefetch does not throw when activity fetch fails', () async {
         // Arrange
-        when(() => mockCategoryRepository.getAll())
-            .thenAnswer((_) async => testCategories);
-        when(() => mockActivityRepository.getPopular())
-            .thenThrow(const ActivityFetchException('Error'));
+        when(() => mockCategoryRepository.getAll()).thenAnswer((_) async => testCategories);
+        when(() => mockActivityRepository.getPopular()).thenThrow(const ActivityFetchException('Error'));
 
         // Act & Assert - should not throw
         final service = container.read(catalogServiceProvider);
@@ -268,8 +255,9 @@ void main() {
 
       test('repository errors propagate through service to caller', () async {
         // Arrange
-        when(() => mockCategoryRepository.getById('nonexistent'))
-            .thenThrow(const CategoryNotFoundException('Not found'));
+        when(
+          () => mockCategoryRepository.getById('nonexistent'),
+        ).thenThrow(const CategoryNotFoundException('Not found'));
 
         // Act & Assert
         final service = container.read(catalogServiceProvider);
@@ -281,8 +269,9 @@ void main() {
 
       test('activity repository errors propagate through service', () async {
         // Arrange
-        when(() => mockActivityRepository.getById('nonexistent'))
-            .thenThrow(const ActivityNotFoundException('Not found'));
+        when(
+          () => mockActivityRepository.getById('nonexistent'),
+        ).thenThrow(const ActivityNotFoundException('Not found'));
 
         // Act & Assert
         final service = container.read(catalogServiceProvider);
@@ -294,8 +283,7 @@ void main() {
 
       test('search errors propagate through service', () async {
         // Arrange
-        when(() => mockActivityRepository.search('query'))
-            .thenThrow(const ActivitySearchException('Search failed'));
+        when(() => mockActivityRepository.search('query')).thenThrow(const ActivitySearchException('Search failed'));
 
         // Act & Assert
         final service = container.read(catalogServiceProvider);
