@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/profile_filter_bar.dart';
@@ -21,14 +20,11 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final topPadding = MediaQuery.of(context).padding.top;
-    final user = ref.watch(currentUserProvider);
 
     return Scaffold(
       floatingActionButton: _InsightsFab(),
       body: CustomScrollView(
         slivers: [
-          // App bar scrolls away with content
           SliverAppBar(
             title: Text(
               'Profile',
@@ -37,6 +33,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ),
             centerTitle: false,
+            pinned: true,
             actions: [
               IconButton(
                 icon: const Icon(LucideIcons.settings),
@@ -44,57 +41,17 @@ class ProfileScreen extends ConsumerWidget {
                 onPressed: () => context.go('/settings'),
               ),
             ],
-          ),
-
-          // Filter bar pins to top when app bar scrolls away
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: _FilterBarDelegate(theme: theme, topPadding: topPadding),
+            bottom: const PreferredSize(
+              preferredSize: Size.fromHeight(120),
+              child: ProfileFilterBar(),
+            ),
           ),
 
           // Content sections
           SliverPadding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                // User info header
-                Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 48,
-                      backgroundColor: theme.colorScheme.primaryContainer,
-                      backgroundImage: user?.userMetadata?['avatar_url'] != null
-                          ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
-                          : null,
-                      child: user?.userMetadata?['avatar_url'] == null
-                          ? Icon(
-                              LucideIcons.user,
-                              size: 48,
-                              color: theme.colorScheme.onPrimaryContainer,
-                            )
-                          : null,
-                    ),
-                    const SizedBox(height: 16),
-                    if (user?.email != null)
-                      Text(
-                        user!.email!,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                    if (user?.createdAt != null) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        'Member since ${_formatMemberSince(user!.createdAt)}',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // Streak card (unaffected by filters)
                 const StreakCard(),
 
                 const SizedBox(height: 16),
@@ -118,44 +75,12 @@ class ProfileScreen extends ConsumerWidget {
                 const MonthlyChartCard(),
 
                 // Bottom padding for safe area + FAB
-                const SizedBox(height: 56),
+                const SizedBox(height: 88),
               ]),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-/// Persistent header delegate for the pinned filter bar.
-class _FilterBarDelegate extends SliverPersistentHeaderDelegate {
-  _FilterBarDelegate({required this.theme, required this.topPadding});
-
-  final ThemeData theme;
-  final double topPadding;
-
-  // Category icons row (~48) + spacing (8) + filter chips row (~40) + padding (16+8)
-  static const double _contentExtent = 120;
-
-  double get _extent => _contentExtent + topPadding;
-
-  @override
-  double get maxExtent => _extent;
-
-  @override
-  double get minExtent => _extent;
-
-  @override
-  bool shouldRebuild(covariant _FilterBarDelegate oldDelegate) =>
-      topPadding != oldDelegate.topPadding;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: theme.scaffoldBackgroundColor,
-      padding: EdgeInsets.fromLTRB(16, 8 + topPadding, 16, 8),
-      child: const ProfileFilterBar(),
     );
   }
 }
@@ -201,23 +126,4 @@ class _InsightsFab extends ConsumerWidget {
       }
     }
   }
-}
-
-String _formatMemberSince(String createdAt) {
-  final date = DateTime.parse(createdAt);
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-  return '${months[date.month - 1]} ${date.year}';
 }

@@ -11,13 +11,16 @@ class ProfileFilterBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _CategoryIconRow(),
-        SizedBox(height: 8),
-        _TimePeriodChipRow(),
-      ],
+    return const Padding(
+      padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _CategoryIconRow(),
+          SizedBox(height: 8),
+          _TimePeriodChipRow(),
+        ],
+      ),
     );
   }
 }
@@ -44,7 +47,6 @@ class _CategoryIconRow extends ConsumerWidget {
         );
 
         return Row(
-          spacing: 8,
           children: [
             for (final category in sortedCategories)
               Expanded(
