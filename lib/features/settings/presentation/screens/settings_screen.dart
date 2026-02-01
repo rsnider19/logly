@@ -431,7 +431,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             title: const Text('Select favorites'),
             trailing: const Icon(LucideIcons.chevronRight),
-            onTap: () => const SettingsFavoritesRoute().go(context),
+            onTap: () => const SettingsFavoritesRoute().push<void>(context),
           ),
           SwitchListTile(
             title: const Text('Scroll haptics'),
