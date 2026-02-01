@@ -42,39 +42,38 @@ class _CategoryIconRow extends ConsumerWidget {
 
         final effectiveFilters = effectiveFiltersAsync.when(
           data: (filters) => filters,
-          loading: () => allCategoryIds.toSet(),
+          loading: allCategoryIds.toSet,
           error: (_, _) => allCategoryIds.toSet(),
         );
 
         return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             for (final category in sortedCategories)
-              Expanded(
-                child: Builder(
-                  builder: (context) {
-                    final isSelected = effectiveFilters.contains(category.activityCategoryId);
-                    return IconButton.outlined(
-                      onPressed: () => notifier.toggleCategory(category.activityCategoryId, allCategoryIds),
-                      color: Color(int.parse(category.hexColor.replaceFirst('#', 'FF'), radix: 16)),
-                      style: IconButton.styleFrom(
-                        shape: const CircleBorder(),
-                        side: BorderSide(
-                          color: isSelected
-                              ? Theme.of(context).colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.54))
-                              : category.color,
-                        ),
-                        backgroundColor: isSelected ? category.color : null,
+              Builder(
+                builder: (context) {
+                  final isSelected = effectiveFilters.contains(category.activityCategoryId);
+                  return IconButton.outlined(
+                    onPressed: () => notifier.toggleCategory(category.activityCategoryId, allCategoryIds),
+                    color: Color(int.parse(category.hexColor.replaceFirst('#', 'FF'), radix: 16)),
+                    style: IconButton.styleFrom(
+                      shape: const CircleBorder(),
+                      side: BorderSide(
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.54))
+                            : category.color,
                       ),
-                      icon: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: ActivityCategoryIcon(
-                          activityCategory: category,
-                          color: isSelected ? Theme.of(context).colorScheme.onSurface : category.color,
-                        ),
+                      backgroundColor: isSelected ? category.color : null,
+                    ),
+                    icon: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: ActivityCategoryIcon(
+                        activityCategory: category,
+                        color: isSelected ? Theme.of(context).colorScheme.onSurface : category.color,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
           ],
         );
