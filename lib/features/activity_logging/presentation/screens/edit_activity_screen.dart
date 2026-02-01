@@ -23,6 +23,8 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
+import 'package:logly/features/settings/domain/user_preferences.dart';
+import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -74,7 +76,13 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
         });
 
         // Initialize form state
-        ref.read(activityFormStateProvider.notifier).initForEdit(userActivity);
+        final prefsState = ref.read(preferencesStateProvider);
+        final isMetric = prefsState.whenOrNull(
+              data: (prefs) => prefs.unitSystem == UnitSystem.metric,
+            ) ??
+            true;
+
+        ref.read(activityFormStateProvider.notifier).initForEdit(userActivity, isMetric: isMetric);
       }
     } catch (e) {
       if (mounted) {

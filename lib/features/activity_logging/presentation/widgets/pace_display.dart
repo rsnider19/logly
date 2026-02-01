@@ -12,12 +12,10 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 class PaceDisplay extends ConsumerWidget {
   const PaceDisplay({
     required this.paceType,
-    this.isMetric = true,
     super.key,
   });
 
   final PaceType paceType;
-  final bool isMetric;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,7 +40,7 @@ class PaceDisplay extends ConsumerWidget {
         durationInSeconds: durationSeconds,
         distanceInMeters: distanceMeters,
         paceType: paceType,
-        isMetric: isMetric,
+        isMetric: formState.isMetric,
       ),
     );
 

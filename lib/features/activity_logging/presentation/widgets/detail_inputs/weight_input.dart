@@ -52,6 +52,8 @@ class _WeightInputState extends ConsumerState<WeightInput> {
 
   void _initializeFromState() {
     final formState = ref.read(activityFormStateProvider);
+    _unitSystem = formState.isMetric ? _UnitSystem.metric : _UnitSystem.imperial;
+
     final detailValue = formState.detailValues[widget.activityDetail.activityDetailId];
     final kilograms = detailValue?.weightInKilograms;
 
