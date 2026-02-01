@@ -33,9 +33,7 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
     _labelController = TextEditingController(text: widget.config.label)
       ..selection = TextSelection.collapsed(offset: widget.config.label.length);
     _maxValueController = TextEditingController(
-      text: widget.config.isInteger
-          ? widget.config.maxValue.toInt().toString()
-          : widget.config.maxValue.toString(),
+      text: widget.config.isInteger ? widget.config.maxValue.toInt().toString() : widget.config.maxValue.toString(),
     );
     _maxValueFocusNode = FocusNode()..addListener(_onMaxValueFocusChanged);
   }
@@ -80,30 +78,6 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Label input
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Text('Label', style: theme.textTheme.bodyMedium),
-            ),
-            Expanded(
-              flex: 3,
-              child: TextField(
-                controller: _labelController,
-                textAlign: TextAlign.right,
-                decoration: InputDecoration(
-                  hintText: widget.config.labelPlaceholder,
-                  border: const OutlineInputBorder(),
-                ),
-                onChanged: widget.onLabelChanged,
-                textCapitalization: TextCapitalization.words,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-
         // Integer/Decimal toggle
         Row(
           children: [
@@ -131,6 +105,30 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
         ),
         const SizedBox(height: 16),
 
+        // Label Input
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Text('Label', style: theme.textTheme.bodyMedium),
+            ),
+            Expanded(
+              flex: 3,
+              child: TextField(
+                controller: _labelController,
+                textAlign: TextAlign.right,
+                decoration: InputDecoration(
+                  hintText: widget.config.labelPlaceholder,
+                  border: const OutlineInputBorder(),
+                ),
+                onChanged: widget.onLabelChanged,
+                textCapitalization: TextCapitalization.words,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+
         // Max value input
         Row(
           children: [
@@ -147,8 +145,8 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
                 style: theme.textTheme.bodyLarge?.copyWith(
                   fontFeatures: [const FontFeature.tabularFigures()],
                 ),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.numberWithOptions(decimal: !widget.config.isInteger),
                 inputFormatters: [

@@ -39,6 +39,27 @@ class DistanceDetailForm extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Short/Long toggle (full width, no label)
+        CupertinoSlidingSegmentedControl<bool>(
+          groupValue: config.isShort,
+          children: {
+            true: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('Short ($shortUnit)'),
+            ),
+            false: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text('Long ($longUnit)'),
+            ),
+          },
+          onValueChanged: (value) {
+            if (value != null) {
+              onIsShortChanged(value);
+            }
+          },
+        ),
+        const SizedBox(height: 16),
+        
         // Label input
         Row(
           children: [
@@ -61,27 +82,6 @@ class DistanceDetailForm extends ConsumerWidget {
               ),
             ),
           ],
-        ),
-        const SizedBox(height: 16),
-
-        // Short/Long toggle (full width, no label)
-        CupertinoSlidingSegmentedControl<bool>(
-          groupValue: config.isShort,
-          children: {
-            true: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text('Short ($shortUnit)'),
-            ),
-            false: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text('Long ($longUnit)'),
-            ),
-          },
-          onValueChanged: (value) {
-            if (value != null) {
-              onIsShortChanged(value);
-            }
-          },
         ),
         const SizedBox(height: 16),
 
