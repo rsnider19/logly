@@ -23,8 +23,6 @@ class MonthlyChartCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.monthly] ?? true;
-    final monthlyDataAsync = ref.watch(filteredMonthlyChartDataProvider);
-    final categoriesAsync = ref.watch(activityCategoriesProvider);
     final timePeriod = ref.watch(globalTimePeriodProvider);
 
     final title = switch (timePeriod) {
@@ -37,34 +35,72 @@ class MonthlyChartCard extends ConsumerWidget {
       title: title,
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.monthly),
-      child: monthlyDataAsync.when(
-        data: (data) {
-          if (data.isEmpty) {
-            return const _EmptyState();
-          }
+      child: const _MonthlyChartContent(),
+    );
+  }
+}
 
-          return categoriesAsync.when(
-            data: (categories) {
-              final categoryColors = {
-                for (final c in categories)
-                  c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
-              };
+/// Content widget that maintains previous data during loading transitions
+/// to enable smooth chart animations between filter changes.
+class _MonthlyChartContent extends ConsumerStatefulWidget {
+  const _MonthlyChartContent();
 
-              return _MonthlyChart(
-                data: data,
-                categoryColors: categoryColors,
-                timePeriod: timePeriod,
-              );
-            },
-            loading: () => const _MonthlyChartShimmer(),
-            error: (_, _) => const _MonthlyChartShimmer(),
+  @override
+  ConsumerState<_MonthlyChartContent> createState() => _MonthlyChartContentState();
+}
+
+class _MonthlyChartContentState extends ConsumerState<_MonthlyChartContent> {
+  List<MonthlyCategoryData>? _cachedData;
+  Map<String, Color>? _cachedCategoryColors;
+
+  @override
+  Widget build(BuildContext context) {
+    final monthlyDataAsync = ref.watch(filteredMonthlyChartDataProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
+    final timePeriod = ref.watch(globalTimePeriodProvider);
+
+    return categoriesAsync.when(
+      data: (categories) {
+        final categoryColors = {
+          for (final c in categories)
+            c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
+        };
+
+        // Get current or cached data
+        final data = monthlyDataAsync.value ?? _cachedData;
+        final hasError = monthlyDataAsync.hasError && _cachedData == null;
+
+        // Update cache when we have new data
+        if (monthlyDataAsync.hasValue) {
+          _cachedData = monthlyDataAsync.value;
+          _cachedCategoryColors = categoryColors;
+        }
+
+        // Show shimmer only on initial load
+        if (data == null) {
+          return const _MonthlyChartShimmer();
+        }
+
+        // Show error only if we have no cached data
+        if (hasError) {
+          return _MonthlyChartError(
+            onRetry: () => ref.invalidate(filteredMonthlyChartDataProvider),
           );
-        },
-        loading: () => const _MonthlyChartShimmer(),
-        error: (error, _) => _MonthlyChartError(
-          onRetry: () => ref.invalidate(filteredMonthlyChartDataProvider),
-        ),
-      ),
+        }
+
+        // Show empty state immediately (not stale cached chart)
+        if (data.isEmpty) {
+          return const _EmptyState();
+        }
+
+        return _MonthlyChart(
+          data: data,
+          categoryColors: _cachedCategoryColors ?? categoryColors,
+          timePeriod: timePeriod,
+        );
+      },
+      loading: () => const _MonthlyChartShimmer(),
+      error: (_, __) => const _MonthlyChartShimmer(),
     );
   }
 }

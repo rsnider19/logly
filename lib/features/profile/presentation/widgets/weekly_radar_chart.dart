@@ -15,45 +15,83 @@ class WeeklyRadarChartCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.weeklyRadar] ?? true;
-    final normalizedDataAsync = ref.watch(normalizedRadarDataProvider);
-    final categoriesAsync = ref.watch(activityCategoriesProvider);
 
     return CollapsibleSection(
       title: 'Weekly Activity',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.weeklyRadar),
-      child: normalizedDataAsync.when(
-        data: (data) {
-          if (data.isEmpty) {
-            return const _EmptyState();
-          }
+      child: const _RadarChartContent(),
+    );
+  }
+}
 
-          return categoriesAsync.when(
-            data: (categories) {
-              // Build category color map
-              final categoryColors = {
-                for (final c in categories)
-                  c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
-              };
+/// Content widget that maintains previous data during loading transitions
+/// to enable smooth chart animations between filter changes.
+class _RadarChartContent extends ConsumerStatefulWidget {
+  const _RadarChartContent();
 
-              // Sort categories by sortOrder for consistent layering
-              final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+  @override
+  ConsumerState<_RadarChartContent> createState() => _RadarChartContentState();
+}
 
-              return _WeeklyRadarChart(
-                normalizedData: data,
-                categoryColors: categoryColors,
-                categoryOrder: sortedCategories.map((c) => c.activityCategoryId).toList(),
-              );
-            },
-            loading: () => const _RadarChartShimmer(),
-            error: (_, __) => const _RadarChartShimmer(),
+class _RadarChartContentState extends ConsumerState<_RadarChartContent> {
+  Map<String, List<double>>? _cachedNormalizedData;
+  Map<String, Color>? _cachedCategoryColors;
+  List<String>? _cachedCategoryOrder;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalizedDataAsync = ref.watch(normalizedRadarDataProvider);
+    final categoriesAsync = ref.watch(activityCategoriesProvider);
+
+    return categoriesAsync.when(
+      data: (categories) {
+        // Build category color map
+        final categoryColors = {
+          for (final c in categories)
+            c.activityCategoryId: Color(int.parse('FF${c.hexColor.replaceFirst('#', '')}', radix: 16)),
+        };
+
+        // Sort categories by sortOrder for consistent layering
+        final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+        final categoryOrder = sortedCategories.map((c) => c.activityCategoryId).toList();
+
+        // Get current or cached data
+        final data = normalizedDataAsync.value ?? _cachedNormalizedData;
+        final hasError = normalizedDataAsync.hasError && _cachedNormalizedData == null;
+
+        // Update cache when we have new data
+        if (normalizedDataAsync.hasValue) {
+          _cachedNormalizedData = normalizedDataAsync.value;
+          _cachedCategoryColors = categoryColors;
+          _cachedCategoryOrder = categoryOrder;
+        }
+
+        // Show shimmer only on initial load
+        if (data == null) {
+          return const _RadarChartShimmer();
+        }
+
+        // Show error only if we have no cached data
+        if (hasError) {
+          return _RadarChartError(
+            onRetry: () => ref.invalidate(normalizedRadarDataProvider),
           );
-        },
-        loading: () => const _RadarChartShimmer(),
-        error: (error, _) => _RadarChartError(
-          onRetry: () => ref.invalidate(normalizedRadarDataProvider),
-        ),
-      ),
+        }
+
+        // Show empty state immediately (not stale cached chart)
+        if (data.isEmpty) {
+          return const _EmptyState();
+        }
+
+        return _WeeklyRadarChart(
+          normalizedData: data,
+          categoryColors: _cachedCategoryColors ?? categoryColors,
+          categoryOrder: _cachedCategoryOrder ?? categoryOrder,
+        );
+      },
+      loading: () => const _RadarChartShimmer(),
+      error: (_, __) => const _RadarChartShimmer(),
     );
   }
 }
