@@ -28,3 +28,9 @@ class HealthPermissionException extends OnboardingException {
   const HealthPermissionException([String? technicalDetails])
     : super('Unable to request health permissions.', technicalDetails);
 }
+
+/// Thrown when saving profile answers fails.
+class SaveProfileAnswersException extends OnboardingException {
+  const SaveProfileAnswersException([String? technicalDetails])
+      : super('Unable to save profile answers. Please try again.', technicalDetails);
+}

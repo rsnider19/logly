@@ -4,6 +4,7 @@ import 'package:health/health.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/onboarding/data/onboarding_repository.dart';
+import 'package:logly/features/onboarding/domain/onboarding_answers.dart';
 import 'package:logly/features/onboarding/domain/onboarding_exception.dart';
 import 'package:logly/features/onboarding/domain/profile_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,6 +26,16 @@ class OnboardingService {
   /// Checks if the current user has completed onboarding.
   Future<bool> hasCompletedOnboarding() async {
     return _repository.hasCompletedOnboarding();
+  }
+
+  /// Saves profile answers to the server.
+  Future<void> saveProfileAnswers(OnboardingAnswers answers) async {
+    await _repository.saveProfileAnswers(answers);
+  }
+
+  /// Checks if the user has answered the profile questions.
+  Future<bool> hasAnsweredProfileQuestions() async {
+    return _repository.hasAnsweredProfileQuestions();
   }
 
   /// Checks if this is a returning user (has existing favorites).

@@ -58,7 +58,7 @@ class _IntroPagerScreenState extends State<IntroPagerScreen> {
   }
 
   void _navigateToFavorites() {
-    context.go('/onboarding/favorites');
+    context.go('/onboarding/questions');
   }
 
   @override
