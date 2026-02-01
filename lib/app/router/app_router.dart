@@ -8,27 +8,44 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
 /// Provides the app router instance with auth-based redirects.
+///
+/// Uses [ref.listen] + [refreshListenable] so the GoRouter is created once
+/// and redirect logic is re-evaluated when auth/onboarding state changes,
+/// without recreating the router (which would reset navigation state).
 @Riverpod(keepAlive: true)
 GoRouter appRouter(Ref ref) {
-  // Watch auth state to trigger router refresh on auth changes
-  final isAuthenticated = ref.watch(currentUserProvider) != null;
+  final refreshNotifier = ValueNotifier<int>(0);
+  ref.onDispose(refreshNotifier.dispose);
 
-  // Watch onboarding status - use switch to handle async state
-  final onboardingCompletedAsync = ref.watch(onboardingCompletedProvider);
-  final onboardingCompleted = switch (onboardingCompletedAsync) {
-    AsyncData(:final value) => value,
-    _ => null,
-  };
+  // Listen for changes — triggers redirect re-evaluation without rebuilding GoRouter
+  ref.listen(currentUserProvider, (_, __) => refreshNotifier.value++);
+  ref.listen(onboardingCompletedProvider, (_, __) => refreshNotifier.value++);
 
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
     routes: $appRoutes,
+    refreshListenable: refreshNotifier,
     redirect: (context, state) {
+      // Read current state at redirect evaluation time (not at provider build time)
+      final isAuthenticated = ref.read(currentUserProvider) != null;
+      final onboardingCompletedAsync = ref.read(onboardingCompletedProvider);
+      final onboardingCompleted = switch (onboardingCompletedAsync) {
+        AsyncData(:final value) => value,
+        _ => null,
+      };
+
       final location = state.matchedLocation;
       final isAuthRoute = location == '/auth';
       final isOnboardingRoute = location.startsWith('/onboarding');
       final isPreAuthOnboarding = location == '/onboarding' || location == '/onboarding/questions';
+      final isQuestionsFromSettings =
+          location == '/onboarding/questions' && state.uri.queryParameters['source'] == 'settings';
+
+      // Allow authenticated users to access questions from settings
+      if (isAuthenticated && isQuestionsFromSettings) {
+        return null;
+      }
 
       // Allow pre-auth onboarding routes without authentication
       if (!isAuthenticated && isPreAuthOnboarding) {
@@ -45,22 +62,28 @@ GoRouter appRouter(Ref ref) {
         return null;
       }
 
+      // While onboarding status is still loading, don't redirect — avoids
+      // flashing the wrong screen. Redirects re-evaluate once data loads.
+      if (isAuthenticated && !onboardingCompletedAsync.hasValue) {
+        return null;
+      }
+
       // Authenticated user on auth route: go to setup or home
       if (isAuthenticated && isAuthRoute) {
-        if (onboardingCompleted == null) return '/';
+        if (onboardingCompleted == null) return '/onboarding/setup';
         if (!onboardingCompleted) return '/onboarding/setup';
         return '/';
       }
 
       // Authenticated user on pre-auth onboarding routes: redirect to setup or home
       if (isAuthenticated && isPreAuthOnboarding) {
-        if (onboardingCompleted == null) return '/';
+        if (onboardingCompleted == null) return '/onboarding/setup';
         if (!onboardingCompleted) return '/onboarding/setup';
         return '/';
       }
 
       // Authenticated, not on onboarding, but onboarding not completed: go to setup
-      if (isAuthenticated && !isOnboardingRoute && onboardingCompleted == false) {
+      if (isAuthenticated && !isOnboardingRoute && onboardingCompleted != true) {
         return '/onboarding/setup';
       }
 

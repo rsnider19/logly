@@ -126,11 +126,15 @@ class OnboardingIntroRoute extends GoRouteData with $OnboardingIntroRoute {
 /// Onboarding questions route - getting to know you questions.
 @TypedGoRoute<OnboardingQuestionsRoute>(path: '/onboarding/questions')
 class OnboardingQuestionsRoute extends GoRouteData with $OnboardingQuestionsRoute {
-  const OnboardingQuestionsRoute();
+  const OnboardingQuestionsRoute({this.source});
+
+  /// When 'settings', the questions flow was launched from settings
+  /// and should return there on completion.
+  final String? source;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const OnboardingQuestionsShell();
+    return OnboardingQuestionsShell(source: source);
   }
 }
 

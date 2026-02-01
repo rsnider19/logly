@@ -165,10 +165,15 @@ RouteBase get $onboardingQuestionsRoute => GoRouteData.$route(
 
 mixin $OnboardingQuestionsRoute on GoRouteData {
   static OnboardingQuestionsRoute _fromState(GoRouterState state) =>
-      const OnboardingQuestionsRoute();
+      OnboardingQuestionsRoute(source: state.uri.queryParameters['source']);
+
+  OnboardingQuestionsRoute get _self => this as OnboardingQuestionsRoute;
 
   @override
-  String get location => GoRouteData.$location('/onboarding/questions');
+  String get location => GoRouteData.$location(
+    '/onboarding/questions',
+    queryParams: {if (_self.source != null) 'source': _self.source},
+  );
 
   @override
   void go(BuildContext context) => context.go(location);
