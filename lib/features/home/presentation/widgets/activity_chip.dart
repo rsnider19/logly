@@ -26,7 +26,7 @@ class UserActivityChip extends StatelessWidget {
     final color = userActivity.getColor(context);
 
     return ActionChip(
-      padding: EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: 12, right: 8, top: 8, bottom: 8),
       avatar: _isPending
           ? SizedBox(
               width: 18,
@@ -85,6 +85,7 @@ class ActivityChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final color = activity.getColor(context);
 
     return ActionChip(
@@ -94,9 +95,13 @@ class ActivityChip extends StatelessWidget {
       backgroundColor: isFilled ? color : null,
       materialTapTargetSize: materialTapTargetSize,
       side: BorderSide(
-        color: Theme.of(context).colorScheme.surface.withAlpha(
-          Color.getAlphaFromOpacity(0.25),
-        ),
+        color: isFilled
+            ? theme.colorScheme.surface.withAlpha(
+                Color.getAlphaFromOpacity(0.25),
+              )
+            : theme.colorScheme.onSurface.withAlpha(
+                Color.getAlphaFromOpacity(0.25),
+              ),
       ),
       onPressed: onPressed,
     );
