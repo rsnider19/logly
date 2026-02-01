@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:logly/features/activity_catalog/application/catalog_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/home/presentation/widgets/activity_chip.dart';
-import 'package:logly/features/activity_catalog/application/catalog_service.dart';
+import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_favorites_provider.dart';
+import 'package:riverpod/src/providers/future_provider.dart';
 
-/// Bottom sheet for selecting favorite activities from settings.
-class FavoritesBottomSheet extends ConsumerStatefulWidget {
-  const FavoritesBottomSheet({super.key});
+/// Full-screen for selecting favorite activities from settings.
+class FavoritesScreen extends ConsumerStatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  ConsumerState<FavoritesBottomSheet> createState() => _FavoritesBottomSheetState();
+  ConsumerState<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
+class _FavoritesScreenState extends ConsumerState<FavoritesScreen> {
   bool _isSaving = false;
 
   Future<void> _save() async {
@@ -28,7 +31,7 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
     try {
       await ref.read(onboardingFavoritesStateProvider.notifier).saveFavorites();
       if (mounted) {
-        Navigator.of(context).pop();
+        context.pop();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Favorites saved'),
@@ -72,144 +75,130 @@ class _FavoritesBottomSheetState extends ConsumerState<FavoritesBottomSheet> {
       _ => <String>{},
     };
 
-    return DraggableScrollableSheet(
-      initialChildSize: 0.9,
-      minChildSize: 0.5,
-      maxChildSize: 0.95,
-      expand: false,
-      builder: (context, scrollController) {
-        return Column(
-          children: [
-            // Everything scrollable
-            Expanded(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Header
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        'Select Favorites',
-                        style: theme.textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+    return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Select Favorites',
+        showTrendingButton: false,
+        showSettingsButton: false,
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      'Choose the activities you want quick access to.',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-
-                    const SizedBox(height: 8),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: Text(
-                        'Choose the activities you want quick access to.',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Selected favorites
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                      child: _SelectedFavoritesWrap(
-                        selectedIds: selectedIds,
-                        onToggle: _toggleActivity,
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Popular activities section
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
-                      child: Text(
-                        'Popular',
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    popularAsync.when(
-                      data: (activities) => _ActivityChipsWrap(
-                        activities: activities.take(10).toList(),
-                        selectedIds: selectedIds,
-                        onToggle: _toggleActivity,
-                      ),
-                      loading: () => const Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      error: (error, _) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'Failed to load activities',
-                          style: TextStyle(color: theme.colorScheme.error),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // Categories sections
-                    categoriesAsync.when(
-                      data: (categories) {
-                        final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: sortedCategories.map((category) {
-                            return _CategorySection(
-                              category: category,
-                              selectedIds: selectedIds,
-                              onToggle: _toggleActivity,
-                            );
-                          }).toList(),
-                        );
-                      },
-                      loading: () => const Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                      error: (error, _) => Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          'Failed to load categories',
-                          style: TextStyle(color: theme.colorScheme.error),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ),
-
-            // Save button (fixed at bottom)
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: _isSaving ? null : _save,
-                    child: _isSaving
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text('Save'),
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // Selected favorites
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: _SelectedFavoritesWrap(
+                      selectedIds: selectedIds,
+                      onToggle: _toggleActivity,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  // Popular activities section
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                    child: Text(
+                      'Popular',
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  popularAsync.when(
+                    data: (activities) => _ActivityChipsWrap(
+                      activities: activities.take(10).toList(),
+                      selectedIds: selectedIds,
+                      onToggle: _toggleActivity,
+                    ),
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(32),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (error, _) => Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Failed to load activities',
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Categories sections
+                  categoriesAsync.when(
+                    data: (categories) {
+                      final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: sortedCategories.map((category) {
+                          return _CategorySection(
+                            category: category,
+                            selectedIds: selectedIds,
+                            onToggle: _toggleActivity,
+                          );
+                        }).toList(),
+                      );
+                    },
+                    loading: () => const Padding(
+                      padding: EdgeInsets.all(32),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                    error: (error, _) => Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        'Failed to load categories',
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
+          ),
+
+          // Save button (fixed at bottom)
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: _isSaving ? null : _save,
+                  child: _isSaving
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Save'),
                 ),
               ),
             ),
-          ],
-        );
-      },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -298,7 +287,7 @@ class _CategorySection extends ConsumerWidget {
   }
 }
 
-/// Displays selected favorites as wrapped chips (without internal padding).
+/// Displays selected favorites as wrapped chips.
 class _SelectedFavoritesWrap extends ConsumerWidget {
   const _SelectedFavoritesWrap({
     required this.selectedIds,
@@ -355,7 +344,7 @@ class _SelectedActivityChip extends ConsumerWidget {
         onPressed: onTap,
         showIcon: false,
       ),
-      loading: () => _EmptyPlaceholder(),
+      loading: _EmptyPlaceholder.new,
       error: (_, __) => _EmptyPlaceholder(),
     );
   }
@@ -365,7 +354,7 @@ class _SelectedActivityChip extends ConsumerWidget {
 class _EmptyPlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ActivityChip(
+    return const ActivityChip(
       activity: ActivitySummary(
         activityId: '',
         activityCategoryId: '',
@@ -379,18 +368,18 @@ class _EmptyPlaceholder extends StatelessWidget {
 }
 
 /// Provider to fetch activity summary by ID.
-final _activitySummaryByIdProvider =
-    FutureProvider.autoDispose.family<ActivitySummary, String>((ref, activityId) async {
-  final service = ref.watch(catalogServiceProvider);
-  final activity = await service.getActivityById(activityId);
-  return ActivitySummary(
-    activityId: activity.activityId,
-    activityCategoryId: activity.activityCategoryId,
-    name: activity.name,
-    activityCode: activity.activityCode,
-    description: activity.description,
-    activityDateType: activity.activityDateType,
-    isSuggestedFavorite: activity.isSuggestedFavorite,
-    activityCategory: activity.activityCategory,
-  );
-});
+final FutureProviderFamily<ActivitySummary, String> _activitySummaryByIdProvider = FutureProvider.autoDispose
+    .family<ActivitySummary, String>((ref, activityId) async {
+      final service = ref.watch(catalogServiceProvider);
+      final activity = await service.getActivityById(activityId);
+      return ActivitySummary(
+        activityId: activity.activityId,
+        activityCategoryId: activity.activityCategoryId,
+        name: activity.name,
+        activityCode: activity.activityCode,
+        description: activity.description,
+        activityDateType: activity.activityDateType,
+        isSuggestedFavorite: activity.isSuggestedFavorite,
+        activityCategory: activity.activityCategory,
+      );
+    });

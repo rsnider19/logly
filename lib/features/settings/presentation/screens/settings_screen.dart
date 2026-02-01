@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
@@ -13,8 +13,8 @@ import 'package:logly/features/settings/application/settings_service.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
 import 'package:logly/features/settings/presentation/providers/notification_preferences_provider.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
-import 'package:logly/features/settings/presentation/widgets/favorites_bottom_sheet.dart';
 import 'package:logly/features/settings/presentation/widgets/health_sync_bottom_sheet.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -201,8 +201,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     setState(() => _isTogglingNotifications = true);
     try {
-      final result =
-          await ref.read(notificationPreferencesStateProvider.notifier).enableNotifications();
+      final result = await ref.read(notificationPreferencesStateProvider.notifier).enableNotifications();
 
       if (!mounted) return;
 
@@ -395,7 +394,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             title: const Text('Send us feedback'),
             subtitle: Text(
-              'Send us anything you\'d like to see in future updates...',
+              "Send us anything you'd like to see in future updates...",
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
@@ -409,7 +408,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           // Customization Section
           const _SectionHeader(title: 'Customization'),
           ListTile(
-            title: const Text('Measurement System'),
+            title: const Text('Units'),
             trailing: CupertinoSlidingSegmentedControl<UnitSystem>(
               groupValue: unitSystem,
               onValueChanged: (value) {
@@ -432,16 +431,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ListTile(
             title: const Text('Select favorites'),
             trailing: const Icon(LucideIcons.chevronRight),
-            onTap: () {
-              showModalBottomSheet<void>(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                clipBehavior: Clip.antiAlias,
-                showDragHandle: true,
-                builder: (context) => const FavoritesBottomSheet(),
-              );
-            },
+            onTap: () => const SettingsFavoritesRoute().go(context),
           ),
           SwitchListTile(
             title: const Text('Scroll haptics'),

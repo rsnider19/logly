@@ -17,6 +17,7 @@ import 'package:logly/features/onboarding/presentation/screens/favorites_selecti
 import 'package:logly/features/onboarding/presentation/screens/health_permission_screen.dart';
 import 'package:logly/features/onboarding/presentation/screens/intro_pager_screen.dart';
 import 'package:logly/features/profile/presentation/screens/profile_screen.dart';
+import 'package:logly/features/settings/presentation/screens/favorites_screen.dart';
 import 'package:logly/features/settings/presentation/screens/settings_screen.dart';
 
 part 'routes.g.dart';
@@ -310,5 +311,16 @@ class DeveloperRoute extends GoRouteData with $DeveloperRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return const DeveloperScreen();
+  }
+}
+
+/// Settings favorites route - select favorite activities.
+@TypedGoRoute<SettingsFavoritesRoute>(path: '/settings/favorites')
+class SettingsFavoritesRoute extends GoRouteData with $SettingsFavoritesRoute {
+  const SettingsFavoritesRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const FavoritesScreen();
   }
 }
