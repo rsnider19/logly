@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/gen/assets.gen.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Custom bottom navigation bar with profile, home, and log buttons.
 ///
@@ -26,17 +26,16 @@ class CustomBottomNav extends ConsumerWidget {
     final theme = Theme.of(context);
     final user = ref.watch(currentUserProvider);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
+    // Compute the same elevation-tinted color the AppBar uses when
+    // scrolled-under (surfaceContainerLowest + elevation 3 surface tint).
+    final tintedSurface = ElevationOverlay.applySurfaceTint(
+      theme.colorScheme.surfaceContainerLowest,
+      theme.colorScheme.surfaceTint,
+      3,
+    );
+
+    return ColoredBox(
+      color: tintedSurface,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
