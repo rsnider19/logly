@@ -26,7 +26,9 @@ _ProfileData _$ProfileDataFromJson(Map<String, dynamic> json) => _ProfileData(
   ),
 );
 
-Map<String, dynamic> _$ProfileDataToJson(_ProfileData instance) => <String, dynamic>{
+Map<String, dynamic> _$ProfileDataToJson(
+  _ProfileData instance,
+) => <String, dynamic>{
   'user_id': instance.userId,
   'created_at': instance.createdAt.toIso8601String(),
   'onboarding_completed': instance.onboardingCompleted,
