@@ -32,6 +32,7 @@ class OnboardingTopBar extends StatelessWidget {
           // Back button
           SizedBox(
             width: 48,
+            height: 48,
             child: showBack
                 ? IconButton(
                     icon: const Icon(LucideIcons.arrowLeft),
@@ -54,6 +55,7 @@ class OnboardingTopBar extends StatelessWidget {
           // Skip button
           SizedBox(
             width: 48,
+            height: 48,
             child: showSkip
                 ? TextButton(
                     style: TextButton.styleFrom(
