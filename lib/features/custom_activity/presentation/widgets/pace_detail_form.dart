@@ -63,9 +63,6 @@ class PaceDetailForm extends StatelessWidget {
               flex: 3,
               child: DropdownButtonFormField<PaceType>(
                 initialValue: config.paceType,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
                 items: PaceType.values.map((type) {
                   return DropdownMenuItem(
                     value: type,

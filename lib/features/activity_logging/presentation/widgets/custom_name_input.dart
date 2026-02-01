@@ -81,7 +81,6 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
               maxLength: 50,
               decoration: InputDecoration(
                 hintText: 'e.g. Morning Run',
-                border: const OutlineInputBorder(),
                 counterText: hasAccess ? null : '',
               ),
               onChanged: hasAccess ? _onChanged : null,

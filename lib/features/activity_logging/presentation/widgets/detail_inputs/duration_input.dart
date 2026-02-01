@@ -196,16 +196,6 @@ class _TimeField extends StatelessWidget {
         suffixStyle: theme.textTheme.bodyMedium?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        isDense: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: theme.colorScheme.outline),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: theme.colorScheme.outline),
-        ),
       ),
       onChanged: onChanged,
     );

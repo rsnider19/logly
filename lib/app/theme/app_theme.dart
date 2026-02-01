@@ -52,6 +52,9 @@ abstract final class AppTheme {
       navigationRailUseIndicator: true,
       inputDecoratorContentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       inputDecoratorIsDense: true,
+      inputDecoratorBorderWidth: 0,
+      inputDecoratorUnfocusedHasBorder: false,
+      inputDecoratorFocusedHasBorder: false,
       bottomSheetBackgroundColor: SchemeColor.surfaceContainer,
       bottomSheetModalBackgroundColor: SchemeColor.surfaceContainer,
       appBarScrolledUnderElevation: 3,
@@ -65,7 +68,27 @@ abstract final class AppTheme {
   static ThemeData dark = _dark.copyWith(
     inputDecorationTheme: _dark.inputDecorationTheme.copyWith(
       filled: true,
-      fillColor: _dark.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+      fillColor: _dark.colorScheme.surfaceContainerHigh,
+      border: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(9),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide.none,
+        borderRadius: BorderRadius.circular(9),
+      ),
     ),
     chipTheme: _dark.chipTheme.copyWith(
       labelStyle: _dark.chipTheme.labelStyle?.copyWith(

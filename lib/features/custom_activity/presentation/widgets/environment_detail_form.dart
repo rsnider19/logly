@@ -28,7 +28,6 @@ class EnvironmentDetailForm extends StatelessWidget {
             textAlign: TextAlign.right,
             decoration: InputDecoration(
               hintText: config.labelPlaceholder,
-              border: const OutlineInputBorder(),
             ),
             onChanged: onLabelChanged,
             controller: TextEditingController(text: config.label)

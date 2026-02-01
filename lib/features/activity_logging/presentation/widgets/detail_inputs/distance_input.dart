@@ -208,18 +208,6 @@ class _DistanceInputState extends ConsumerState<DistanceInput> {
                         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
                       ],
                       cursorHeight: 20,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        isDense: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: theme.colorScheme.outline),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          borderSide: BorderSide(color: theme.colorScheme.outline),
-                        ),
-                      ),
                       onChanged: _updateValue,
                     ),
                   ),

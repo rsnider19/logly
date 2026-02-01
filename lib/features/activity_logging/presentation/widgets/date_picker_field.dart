@@ -95,7 +95,6 @@ class _DatePickerFieldState extends ConsumerState<DatePickerField> {
               color: theme.colorScheme.onSurfaceVariant,
               size: 16,
             ),
-            border: const OutlineInputBorder(),
             suffixIconConstraints: const BoxConstraints.tightFor(width: 64),
             suffixIcon: _isToday(selectedDate)
                 ? Padding(

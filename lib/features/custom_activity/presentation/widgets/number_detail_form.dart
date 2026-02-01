@@ -119,7 +119,6 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   hintText: widget.config.labelPlaceholder,
-                  border: const OutlineInputBorder(),
                 ),
                 onChanged: widget.onLabelChanged,
                 textCapitalization: TextCapitalization.words,
@@ -144,9 +143,6 @@ class _NumberDetailFormState extends State<NumberDetailForm> {
                 textAlign: TextAlign.right,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   fontFeatures: [const FontFeature.tabularFigures()],
-                ),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.numberWithOptions(decimal: !widget.config.isInteger),
                 inputFormatters: [

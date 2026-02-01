@@ -87,7 +87,6 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   hintText: widget.config.labelPlaceholder,
-                  border: const OutlineInputBorder(),
                 ),
                 onChanged: widget.onLabelChanged,
                 controller: TextEditingController(text: widget.config.label)
@@ -120,7 +119,6 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                       ),
                       decoration: const InputDecoration(
                         suffixText: 'h',
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -139,7 +137,6 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                       ),
                       decoration: const InputDecoration(
                         suffixText: 'm',
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [
@@ -158,7 +155,6 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
                       ),
                       decoration: const InputDecoration(
                         suffixText: 's',
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.number,
                       inputFormatters: [

@@ -69,7 +69,6 @@ class DistanceDetailForm extends ConsumerWidget {
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   hintText: config.labelPlaceholder,
-                  border: const OutlineInputBorder(),
                 ),
                 onChanged: onLabelChanged,
                 controller: TextEditingController(text: config.label)
@@ -94,7 +93,6 @@ class DistanceDetailForm extends ConsumerWidget {
                 textAlign: TextAlign.right,
                 decoration: InputDecoration(
                   suffixText: config.isShort ? shortUnit : longUnit,
-                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
