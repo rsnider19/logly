@@ -30,15 +30,10 @@ Future<AllPeriodSummaries> allPeriodSummaries(Ref ref) async {
   };
 }
 
-/// Provides category summary data for the global time period,
-/// filtered by the global category selection.
+/// Provides category summary data for the global time period.
 @Riverpod(keepAlive: true)
 Future<List<CategorySummary>> categorySummary(Ref ref) async {
   final period = ref.watch(globalTimePeriodProvider);
-  final effectiveFiltersFuture = ref.watch(effectiveGlobalCategoryFiltersProvider.future);
   final allSummaries = await ref.watch(allPeriodSummariesProvider.future);
-  final effectiveFilters = await effectiveFiltersFuture;
-
-  final summaries = allSummaries[period] ?? [];
-  return summaries.where((s) => effectiveFilters.contains(s.activityCategoryId)).toList();
+  return allSummaries[period] ?? [];
 }

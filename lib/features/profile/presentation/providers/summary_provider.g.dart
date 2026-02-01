@@ -55,14 +55,12 @@ final class AllPeriodSummariesProvider
 String _$allPeriodSummariesHash() =>
     r'3cb9323f336666de8c37929f4253865ad6212bc2';
 
-/// Provides category summary data for the global time period,
-/// filtered by the global category selection.
+/// Provides category summary data for the global time period.
 
 @ProviderFor(categorySummary)
 final categorySummaryProvider = CategorySummaryProvider._();
 
-/// Provides category summary data for the global time period,
-/// filtered by the global category selection.
+/// Provides category summary data for the global time period.
 
 final class CategorySummaryProvider
     extends
@@ -74,8 +72,7 @@ final class CategorySummaryProvider
     with
         $FutureModifier<List<CategorySummary>>,
         $FutureProvider<List<CategorySummary>> {
-  /// Provides category summary data for the global time period,
-  /// filtered by the global category selection.
+  /// Provides category summary data for the global time period.
   CategorySummaryProvider._()
     : super(
         from: null,
@@ -102,4 +99,4 @@ final class CategorySummaryProvider
   }
 }
 
-String _$categorySummaryHash() => r'eea8b996fef3e666885fa926ed595dab205a0fe3';
+String _$categorySummaryHash() => r'827baddaaeeecee1ee02e42281e5df94a4750e62';

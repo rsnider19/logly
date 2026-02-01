@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/category_progress_bar.dart';
 import 'package:logly/features/profile/presentation/widgets/collapsible_section.dart';
@@ -47,6 +49,7 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
   Widget build(BuildContext context) {
     final summaryAsync = ref.watch(categorySummaryProvider);
     final categoriesAsync = ref.watch(activityCategoriesProvider);
+    final effectiveFiltersAsync = ref.watch(effectiveGlobalCategoryFiltersProvider);
 
     return categoriesAsync.when(
       data: (categories) {
@@ -79,34 +82,43 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
         final summaryMap = {for (final s in summaries) s.activityCategoryId: s.activityCount};
 
         // Use cached max count during loading to prevent bar scaling jumps
+        // maxCount computed from ALL summaries so bars stay proportional
         final maxCount = isLoading
             ? _cachedMaxCount
             : (summaries.isEmpty
                 ? 1
                 : summaries.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b));
 
-        // Sort categories by sortOrder
+        // Sort categories by sortOrder — show ALL categories always
         final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
 
-        // Only show categories that have summary data (respects global category filter)
-        final summaryCategories = sortedCategories.where((c) => summaryMap.containsKey(c.activityCategoryId)).toList();
-
-        if (summaryCategories.isEmpty) {
+        if (sortedCategories.isEmpty) {
           return const _SummaryEmpty();
         }
 
+        // Resolve effective filters for opacity
+        final effectiveFilters = effectiveFiltersAsync.when(
+          data: (filters) => filters,
+          loading: () => categories.map((c) => c.activityCategoryId).toSet(),
+          error: (_, __) => categories.map((c) => c.activityCategoryId).toSet(),
+        );
+
         return Column(
-          children: summaryCategories.map((category) {
+          children: sortedCategories.map((category) {
             final count = summaryMap[category.activityCategoryId] ?? 0;
             final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
+            final isSelected = effectiveFilters.contains(category.activityCategoryId);
 
-            return CategoryProgressBar(
-              // Key ensures Flutter updates existing widget instead of rebuilding
-              key: ValueKey(category.activityCategoryId),
-              categoryName: category.name,
-              count: count,
-              maxCount: maxCount,
-              color: color,
+            return AnimatedOpacity(
+              duration: const Duration(milliseconds: 200),
+              opacity: isSelected ? 1.0 : 0.2,
+              child: CategoryProgressBar(
+                key: ValueKey(category.activityCategoryId),
+                categoryName: category.name,
+                count: count,
+                maxCount: maxCount,
+                color: color,
+              ),
             );
           }).toList(),
         );
