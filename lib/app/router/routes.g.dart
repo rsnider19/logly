@@ -10,8 +10,8 @@ List<RouteBase> get $appRoutes => [
   $appShellRoute,
   $authRoute,
   $onboardingIntroRoute,
-  $onboardingFavoritesRoute,
-  $onboardingHealthRoute,
+  $onboardingQuestionsRoute,
+  $onboardingSetupRoute,
   $activitySearchRoute,
   $logActivityRoute,
   $categoryDetailRoute,
@@ -157,17 +157,17 @@ mixin $OnboardingIntroRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $onboardingFavoritesRoute => GoRouteData.$route(
-  path: '/onboarding/favorites',
-  factory: $OnboardingFavoritesRoute._fromState,
+RouteBase get $onboardingQuestionsRoute => GoRouteData.$route(
+  path: '/onboarding/questions',
+  factory: $OnboardingQuestionsRoute._fromState,
 );
 
-mixin $OnboardingFavoritesRoute on GoRouteData {
-  static OnboardingFavoritesRoute _fromState(GoRouterState state) =>
-      const OnboardingFavoritesRoute();
+mixin $OnboardingQuestionsRoute on GoRouteData {
+  static OnboardingQuestionsRoute _fromState(GoRouterState state) =>
+      const OnboardingQuestionsRoute();
 
   @override
-  String get location => GoRouteData.$location('/onboarding/favorites');
+  String get location => GoRouteData.$location('/onboarding/questions');
 
   @override
   void go(BuildContext context) => context.go(location);
@@ -183,17 +183,17 @@ mixin $OnboardingFavoritesRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $onboardingHealthRoute => GoRouteData.$route(
-  path: '/onboarding/health',
-  factory: $OnboardingHealthRoute._fromState,
+RouteBase get $onboardingSetupRoute => GoRouteData.$route(
+  path: '/onboarding/setup',
+  factory: $OnboardingSetupRoute._fromState,
 );
 
-mixin $OnboardingHealthRoute on GoRouteData {
-  static OnboardingHealthRoute _fromState(GoRouterState state) =>
-      const OnboardingHealthRoute();
+mixin $OnboardingSetupRoute on GoRouteData {
+  static OnboardingSetupRoute _fromState(GoRouterState state) =>
+      const OnboardingSetupRoute();
 
   @override
-  String get location => GoRouteData.$location('/onboarding/health');
+  String get location => GoRouteData.$location('/onboarding/setup');
 
   @override
   void go(BuildContext context) => context.go(location);

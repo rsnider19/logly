@@ -24,3 +24,10 @@ Future<bool> isReturningUser(Ref ref) async {
   final service = ref.watch(onboardingServiceProvider);
   return service.isReturningUser();
 }
+
+/// Provides whether the current user has answered the profile questions.
+@riverpod
+Future<bool> hasAnsweredProfileQuestions(Ref ref) async {
+  final service = ref.watch(onboardingServiceProvider);
+  return service.hasAnsweredProfileQuestions();
+}

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProfileData {
 
- String get userId; DateTime get createdAt; bool get onboardingCompleted; DateTime? get lastHealthSyncDate;
+ String get userId; DateTime get createdAt; bool get onboardingCompleted; DateTime? get lastHealthSyncDate; String? get gender; DateTime? get dateOfBirth;@_JsonbStringListConverter() List<String>? get motivations;@_JsonbStringListConverter() List<String>? get progressPreferences;@_JsonbStringListConverter() List<String>? get userDescriptors;
 /// Create a copy of ProfileData
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProfileDataCopyWith<ProfileData> get copyWith => _$ProfileDataCopyWithImpl<Prof
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileData&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.lastHealthSyncDate, lastHealthSyncDate) || other.lastHealthSyncDate == lastHealthSyncDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProfileData&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.lastHealthSyncDate, lastHealthSyncDate) || other.lastHealthSyncDate == lastHealthSyncDate)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dateOfBirth, dateOfBirth) || other.dateOfBirth == dateOfBirth)&&const DeepCollectionEquality().equals(other.motivations, motivations)&&const DeepCollectionEquality().equals(other.progressPreferences, progressPreferences)&&const DeepCollectionEquality().equals(other.userDescriptors, userDescriptors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,createdAt,onboardingCompleted,lastHealthSyncDate);
+int get hashCode => Object.hash(runtimeType,userId,createdAt,onboardingCompleted,lastHealthSyncDate,gender,dateOfBirth,const DeepCollectionEquality().hash(motivations),const DeepCollectionEquality().hash(progressPreferences),const DeepCollectionEquality().hash(userDescriptors));
 
 @override
 String toString() {
-  return 'ProfileData(userId: $userId, createdAt: $createdAt, onboardingCompleted: $onboardingCompleted, lastHealthSyncDate: $lastHealthSyncDate)';
+  return 'ProfileData(userId: $userId, createdAt: $createdAt, onboardingCompleted: $onboardingCompleted, lastHealthSyncDate: $lastHealthSyncDate, gender: $gender, dateOfBirth: $dateOfBirth, motivations: $motivations, progressPreferences: $progressPreferences, userDescriptors: $userDescriptors)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProfileDataCopyWith<$Res>  {
   factory $ProfileDataCopyWith(ProfileData value, $Res Function(ProfileData) _then) = _$ProfileDataCopyWithImpl;
 @useResult
 $Res call({
- String userId, DateTime createdAt, bool onboardingCompleted, DateTime? lastHealthSyncDate
+ String userId, DateTime createdAt, bool onboardingCompleted, DateTime? lastHealthSyncDate, String? gender, DateTime? dateOfBirth,@_JsonbStringListConverter() List<String>? motivations,@_JsonbStringListConverter() List<String>? progressPreferences,@_JsonbStringListConverter() List<String>? userDescriptors
 });
 
 
@@ -65,13 +65,18 @@ class _$ProfileDataCopyWithImpl<$Res>
 
 /// Create a copy of ProfileData
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? createdAt = null,Object? onboardingCompleted = null,Object? lastHealthSyncDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? createdAt = null,Object? onboardingCompleted = null,Object? lastHealthSyncDate = freezed,Object? gender = freezed,Object? dateOfBirth = freezed,Object? motivations = freezed,Object? progressPreferences = freezed,Object? userDescriptors = freezed,}) {
   return _then(_self.copyWith(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,lastHealthSyncDate: freezed == lastHealthSyncDate ? _self.lastHealthSyncDate : lastHealthSyncDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
+as String?,dateOfBirth: freezed == dateOfBirth ? _self.dateOfBirth : dateOfBirth // ignore: cast_nullable_to_non_nullable
+as DateTime?,motivations: freezed == motivations ? _self.motivations : motivations // ignore: cast_nullable_to_non_nullable
+as List<String>?,progressPreferences: freezed == progressPreferences ? _self.progressPreferences : progressPreferences // ignore: cast_nullable_to_non_nullable
+as List<String>?,userDescriptors: freezed == userDescriptors ? _self.userDescriptors : userDescriptors // ignore: cast_nullable_to_non_nullable
+as List<String>?,
   ));
 }
 
@@ -156,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate,  String? gender,  DateTime? dateOfBirth, @_JsonbStringListConverter()  List<String>? motivations, @_JsonbStringListConverter()  List<String>? progressPreferences, @_JsonbStringListConverter()  List<String>? userDescriptors)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProfileData() when $default != null:
-return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate);case _:
+return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate,_that.gender,_that.dateOfBirth,_that.motivations,_that.progressPreferences,_that.userDescriptors);case _:
   return orElse();
 
 }
@@ -177,10 +182,10 @@ return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.las
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate,  String? gender,  DateTime? dateOfBirth, @_JsonbStringListConverter()  List<String>? motivations, @_JsonbStringListConverter()  List<String>? progressPreferences, @_JsonbStringListConverter()  List<String>? userDescriptors)  $default,) {final _that = this;
 switch (_that) {
 case _ProfileData():
-return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate);case _:
+return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate,_that.gender,_that.dateOfBirth,_that.motivations,_that.progressPreferences,_that.userDescriptors);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +202,10 @@ return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.las
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  DateTime createdAt,  bool onboardingCompleted,  DateTime? lastHealthSyncDate,  String? gender,  DateTime? dateOfBirth, @_JsonbStringListConverter()  List<String>? motivations, @_JsonbStringListConverter()  List<String>? progressPreferences, @_JsonbStringListConverter()  List<String>? userDescriptors)?  $default,) {final _that = this;
 switch (_that) {
 case _ProfileData() when $default != null:
-return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate);case _:
+return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.lastHealthSyncDate,_that.gender,_that.dateOfBirth,_that.motivations,_that.progressPreferences,_that.userDescriptors);case _:
   return null;
 
 }
@@ -212,13 +217,42 @@ return $default(_that.userId,_that.createdAt,_that.onboardingCompleted,_that.las
 @JsonSerializable()
 
 class _ProfileData implements ProfileData {
-  const _ProfileData({required this.userId, required this.createdAt, required this.onboardingCompleted, this.lastHealthSyncDate});
+  const _ProfileData({required this.userId, required this.createdAt, required this.onboardingCompleted, this.lastHealthSyncDate, this.gender, this.dateOfBirth, @_JsonbStringListConverter() final  List<String>? motivations, @_JsonbStringListConverter() final  List<String>? progressPreferences, @_JsonbStringListConverter() final  List<String>? userDescriptors}): _motivations = motivations,_progressPreferences = progressPreferences,_userDescriptors = userDescriptors;
   factory _ProfileData.fromJson(Map<String, dynamic> json) => _$ProfileDataFromJson(json);
 
 @override final  String userId;
 @override final  DateTime createdAt;
 @override final  bool onboardingCompleted;
 @override final  DateTime? lastHealthSyncDate;
+@override final  String? gender;
+@override final  DateTime? dateOfBirth;
+ final  List<String>? _motivations;
+@override@_JsonbStringListConverter() List<String>? get motivations {
+  final value = _motivations;
+  if (value == null) return null;
+  if (_motivations is EqualUnmodifiableListView) return _motivations;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+ final  List<String>? _progressPreferences;
+@override@_JsonbStringListConverter() List<String>? get progressPreferences {
+  final value = _progressPreferences;
+  if (value == null) return null;
+  if (_progressPreferences is EqualUnmodifiableListView) return _progressPreferences;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+ final  List<String>? _userDescriptors;
+@override@_JsonbStringListConverter() List<String>? get userDescriptors {
+  final value = _userDescriptors;
+  if (value == null) return null;
+  if (_userDescriptors is EqualUnmodifiableListView) return _userDescriptors;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of ProfileData
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +267,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileData&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.lastHealthSyncDate, lastHealthSyncDate) || other.lastHealthSyncDate == lastHealthSyncDate));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProfileData&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.onboardingCompleted, onboardingCompleted) || other.onboardingCompleted == onboardingCompleted)&&(identical(other.lastHealthSyncDate, lastHealthSyncDate) || other.lastHealthSyncDate == lastHealthSyncDate)&&(identical(other.gender, gender) || other.gender == gender)&&(identical(other.dateOfBirth, dateOfBirth) || other.dateOfBirth == dateOfBirth)&&const DeepCollectionEquality().equals(other._motivations, _motivations)&&const DeepCollectionEquality().equals(other._progressPreferences, _progressPreferences)&&const DeepCollectionEquality().equals(other._userDescriptors, _userDescriptors));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,createdAt,onboardingCompleted,lastHealthSyncDate);
+int get hashCode => Object.hash(runtimeType,userId,createdAt,onboardingCompleted,lastHealthSyncDate,gender,dateOfBirth,const DeepCollectionEquality().hash(_motivations),const DeepCollectionEquality().hash(_progressPreferences),const DeepCollectionEquality().hash(_userDescriptors));
 
 @override
 String toString() {
-  return 'ProfileData(userId: $userId, createdAt: $createdAt, onboardingCompleted: $onboardingCompleted, lastHealthSyncDate: $lastHealthSyncDate)';
+  return 'ProfileData(userId: $userId, createdAt: $createdAt, onboardingCompleted: $onboardingCompleted, lastHealthSyncDate: $lastHealthSyncDate, gender: $gender, dateOfBirth: $dateOfBirth, motivations: $motivations, progressPreferences: $progressPreferences, userDescriptors: $userDescriptors)';
 }
 
 
@@ -253,7 +287,7 @@ abstract mixin class _$ProfileDataCopyWith<$Res> implements $ProfileDataCopyWith
   factory _$ProfileDataCopyWith(_ProfileData value, $Res Function(_ProfileData) _then) = __$ProfileDataCopyWithImpl;
 @override @useResult
 $Res call({
- String userId, DateTime createdAt, bool onboardingCompleted, DateTime? lastHealthSyncDate
+ String userId, DateTime createdAt, bool onboardingCompleted, DateTime? lastHealthSyncDate, String? gender, DateTime? dateOfBirth,@_JsonbStringListConverter() List<String>? motivations,@_JsonbStringListConverter() List<String>? progressPreferences,@_JsonbStringListConverter() List<String>? userDescriptors
 });
 
 
@@ -270,13 +304,18 @@ class __$ProfileDataCopyWithImpl<$Res>
 
 /// Create a copy of ProfileData
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? createdAt = null,Object? onboardingCompleted = null,Object? lastHealthSyncDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? createdAt = null,Object? onboardingCompleted = null,Object? lastHealthSyncDate = freezed,Object? gender = freezed,Object? dateOfBirth = freezed,Object? motivations = freezed,Object? progressPreferences = freezed,Object? userDescriptors = freezed,}) {
   return _then(_ProfileData(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
 as DateTime,onboardingCompleted: null == onboardingCompleted ? _self.onboardingCompleted : onboardingCompleted // ignore: cast_nullable_to_non_nullable
 as bool,lastHealthSyncDate: freezed == lastHealthSyncDate ? _self.lastHealthSyncDate : lastHealthSyncDate // ignore: cast_nullable_to_non_nullable
-as DateTime?,
+as DateTime?,gender: freezed == gender ? _self.gender : gender // ignore: cast_nullable_to_non_nullable
+as String?,dateOfBirth: freezed == dateOfBirth ? _self.dateOfBirth : dateOfBirth // ignore: cast_nullable_to_non_nullable
+as DateTime?,motivations: freezed == motivations ? _self._motivations : motivations // ignore: cast_nullable_to_non_nullable
+as List<String>?,progressPreferences: freezed == progressPreferences ? _self._progressPreferences : progressPreferences // ignore: cast_nullable_to_non_nullable
+as List<String>?,userDescriptors: freezed == userDescriptors ? _self._userDescriptors : userDescriptors // ignore: cast_nullable_to_non_nullable
+as List<String>?,
   ));
 }
 

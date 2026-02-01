@@ -1,6 +1,7 @@
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
+import 'package:logly/features/onboarding/domain/onboarding_answers.dart';
 import 'package:logly/features/onboarding/domain/onboarding_exception.dart';
 import 'package:logly/features/onboarding/domain/profile_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -78,6 +79,46 @@ class OnboardingRepository {
       _logger.e('Failed to save favorites', e, st);
       if (e is SaveFavoritesException) rethrow;
       throw SaveFavoritesException(e.toString());
+    }
+  }
+
+  /// Saves profile answers to the profile table.
+  Future<void> saveProfileAnswers(OnboardingAnswers answers) async {
+    try {
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) {
+        throw const SaveProfileAnswersException('User not authenticated');
+      }
+
+      final updates = <String, dynamic>{};
+      if (answers.gender != null) updates['gender'] = answers.gender;
+      if (answers.dateOfBirth != null) {
+        updates['date_of_birth'] =
+            '${answers.dateOfBirth!.year}-${answers.dateOfBirth!.month.toString().padLeft(2, '0')}-${answers.dateOfBirth!.day.toString().padLeft(2, '0')}';
+      }
+      if (answers.unitSystem != null) updates['unit_system'] = answers.unitSystem;
+      if (answers.motivations.isNotEmpty) updates['motivations'] = answers.motivations;
+      if (answers.progressPreferences.isNotEmpty) updates['progress_preferences'] = answers.progressPreferences;
+      if (answers.userDescriptors.isNotEmpty) updates['user_descriptors'] = answers.userDescriptors;
+
+      if (updates.isNotEmpty) {
+        await _supabase.from('profile').update(updates).eq('user_id', userId);
+      }
+    } catch (e, st) {
+      _logger.e('Failed to save profile answers', e, st);
+      if (e is SaveProfileAnswersException) rethrow;
+      throw SaveProfileAnswersException(e.toString());
+    }
+  }
+
+  /// Checks if the user has answered the profile questions (gender and date_of_birth are non-null).
+  Future<bool> hasAnsweredProfileQuestions() async {
+    try {
+      final profile = await getProfile();
+      return profile.gender != null && profile.dateOfBirth != null;
+    } catch (e, st) {
+      _logger.e('Failed to check profile questions status', e, st);
+      throw FetchProfileException(e.toString());
     }
   }
 

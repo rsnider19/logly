@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
+import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
 import 'package:logly/features/settings/application/settings_service.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
 import 'package:logly/features/settings/presentation/providers/notification_preferences_provider.dart';
@@ -379,6 +381,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          // Profile completion banner
+          const _ProfileCompletionBanner(),
+
           // Feedback Section
           const _SectionHeader(title: 'Feedback'),
           ListTile(
@@ -741,6 +746,38 @@ class _HealthSyncListTile extends ConsumerWidget {
       subtitle: subtitle,
       trailing: const Icon(LucideIcons.chevronRight),
       onTap: isSyncing ? null : () => _handleTap(context, ref, healthSyncEnabled: healthSyncEnabled),
+    );
+  }
+}
+
+/// Banner prompting users to complete their profile questions.
+class _ProfileCompletionBanner extends ConsumerWidget {
+  const _ProfileCompletionBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasAnsweredAsync = ref.watch(hasAnsweredProfileQuestionsProvider);
+
+    final hasAnswered = switch (hasAnsweredAsync) {
+      AsyncData(:final value) => value,
+      _ => true, // Hide banner while loading or on error
+    };
+
+    if (hasAnswered) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Card(
+        child: ListTile(
+          leading: Icon(LucideIcons.userRound, color: theme.colorScheme.primary),
+          title: const Text('Complete your profile'),
+          subtitle: const Text('Answer a few questions to personalize your experience.'),
+          trailing: const Icon(LucideIcons.chevronRight),
+          onTap: () => context.go('/onboarding/questions'),
+        ),
+      ),
     );
   }
 }

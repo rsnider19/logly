@@ -20,13 +20,6 @@ GoRouter appRouter(Ref ref) {
     _ => null,
   };
 
-  // Watch returning user status - used to determine if we should skip intro
-  final isReturningUserAsync = ref.watch(isReturningUserProvider);
-  final isReturningUser = switch (isReturningUserAsync) {
-    AsyncData(:final value) => value,
-    _ => null,
-  };
-
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
@@ -35,39 +28,43 @@ GoRouter appRouter(Ref ref) {
       final location = state.matchedLocation;
       final isAuthRoute = location == '/auth';
       final isOnboardingRoute = location.startsWith('/onboarding');
+      final isPreAuthOnboarding = location == '/onboarding' || location == '/onboarding/questions';
 
-      // Redirect to auth if not authenticated and not already on auth route
-      if (!isAuthenticated && !isAuthRoute) {
-        return '/auth';
+      // Allow pre-auth onboarding routes without authentication
+      if (!isAuthenticated && isPreAuthOnboarding) {
+        return null;
       }
 
-      // Redirect to home if authenticated and on auth route
-      if (isAuthenticated && isAuthRoute) {
-        // If onboarding status is not yet loaded, go to home and let next refresh handle it
-        if (onboardingCompleted == null) {
-          return '/';
-        }
-        // If onboarding not completed, redirect to appropriate onboarding route
-        if (!onboardingCompleted) {
-          // If returning user, skip intro and go directly to favorites
-          if (isReturningUser == true) {
-            return '/onboarding/favorites';
-          }
-          return '/onboarding';
-        }
-        return '/';
-      }
-
-      // If authenticated but onboarding not completed, redirect to onboarding
-      if (isAuthenticated && !isOnboardingRoute && onboardingCompleted == false) {
-        // If returning user, skip intro
-        if (isReturningUser == true) {
-          return '/onboarding/favorites';
-        }
+      // Redirect unauthenticated users to the onboarding intro
+      if (!isAuthenticated && !isAuthRoute && !isOnboardingRoute) {
         return '/onboarding';
       }
 
-      // If onboarding completed and on onboarding route, redirect to home
+      // If on auth route and not authenticated, allow it
+      if (!isAuthenticated && isAuthRoute) {
+        return null;
+      }
+
+      // Authenticated user on auth route: go to setup or home
+      if (isAuthenticated && isAuthRoute) {
+        if (onboardingCompleted == null) return '/';
+        if (!onboardingCompleted) return '/onboarding/setup';
+        return '/';
+      }
+
+      // Authenticated user on pre-auth onboarding routes: redirect to setup or home
+      if (isAuthenticated && isPreAuthOnboarding) {
+        if (onboardingCompleted == null) return '/';
+        if (!onboardingCompleted) return '/onboarding/setup';
+        return '/';
+      }
+
+      // Authenticated, not on onboarding, but onboarding not completed: go to setup
+      if (isAuthenticated && !isOnboardingRoute && onboardingCompleted == false) {
+        return '/onboarding/setup';
+      }
+
+      // Authenticated, onboarding complete, but on onboarding route: go home
       if (isAuthenticated && isOnboardingRoute && onboardingCompleted == true) {
         return '/';
       }

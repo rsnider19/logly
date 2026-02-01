@@ -13,9 +13,9 @@ import 'package:logly/features/custom_activity/presentation/screens/create_custo
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
 import 'package:logly/features/home/presentation/widgets/app_shell.dart';
-import 'package:logly/features/onboarding/presentation/screens/favorites_selection_screen.dart';
-import 'package:logly/features/onboarding/presentation/screens/health_permission_screen.dart';
 import 'package:logly/features/onboarding/presentation/screens/intro_pager_screen.dart';
+import 'package:logly/features/onboarding/presentation/screens/onboarding_questions_shell.dart';
+import 'package:logly/features/onboarding/presentation/screens/post_auth_setup_shell.dart';
 import 'package:logly/features/profile/presentation/screens/profile_screen.dart';
 import 'package:logly/features/settings/presentation/screens/favorites_screen.dart';
 import 'package:logly/features/settings/presentation/screens/settings_screen.dart';
@@ -122,25 +122,25 @@ class OnboardingIntroRoute extends GoRouteData with $OnboardingIntroRoute {
   }
 }
 
-/// Onboarding favorites route - favorite activity selection.
-@TypedGoRoute<OnboardingFavoritesRoute>(path: '/onboarding/favorites')
-class OnboardingFavoritesRoute extends GoRouteData with $OnboardingFavoritesRoute {
-  const OnboardingFavoritesRoute();
+/// Onboarding questions route - getting to know you questions.
+@TypedGoRoute<OnboardingQuestionsRoute>(path: '/onboarding/questions')
+class OnboardingQuestionsRoute extends GoRouteData with $OnboardingQuestionsRoute {
+  const OnboardingQuestionsRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const FavoritesSelectionScreen();
+    return const OnboardingQuestionsShell();
   }
 }
 
-/// Onboarding health route - health permission request.
-@TypedGoRoute<OnboardingHealthRoute>(path: '/onboarding/health')
-class OnboardingHealthRoute extends GoRouteData with $OnboardingHealthRoute {
-  const OnboardingHealthRoute();
+/// Onboarding setup route - post-auth favorites and health setup.
+@TypedGoRoute<OnboardingSetupRoute>(path: '/onboarding/setup')
+class OnboardingSetupRoute extends GoRouteData with $OnboardingSetupRoute {
+  const OnboardingSetupRoute();
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
-    return const HealthPermissionScreen();
+    return const PostAuthSetupShell();
   }
 }
 

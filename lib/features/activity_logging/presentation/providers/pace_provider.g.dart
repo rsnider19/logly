@@ -107,7 +107,7 @@ final class CalculatePaceProvider
   }
 }
 
-String _$calculatePaceHash() => r'83a754eac55292204359e129d9ce68765ef7ac53';
+String _$calculatePaceHash() => r'1c38be9b83ca394bbe62c7f6345959f1be89daa3';
 
 /// Calculates pace based on duration and distance.
 ///
