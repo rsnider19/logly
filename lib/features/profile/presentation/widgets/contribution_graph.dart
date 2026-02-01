@@ -184,13 +184,14 @@ class _ContributionGraph extends StatelessWidget {
 
                       // Apply dimming for cells outside the selected time window
                       final isOutOfRange = shouldDim && normalizedDate.isBefore(periodStartDate);
-                      final effectiveColor = isOutOfRange ? color.withValues(alpha: 0.5) : color;
+                      final effectiveColor = isOutOfRange ? color.withValues(alpha: 0.1) : color;
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: cellGap),
                         child: Tooltip(
                           message: '${_formatDate(normalizedDate)}: $count activities',
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
                             width: cellSize,
                             height: cellSize,
                             decoration: BoxDecoration(
