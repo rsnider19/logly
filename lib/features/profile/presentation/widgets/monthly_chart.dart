@@ -131,7 +131,7 @@ class _MonthlyChart extends StatelessWidget {
     'Dec',
   ];
   static const List<String> dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const double chartHeight = 124;
+  static const double chartHeight = 155;
 
   @override
   Widget build(BuildContext context) {
