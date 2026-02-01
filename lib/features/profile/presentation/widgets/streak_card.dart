@@ -55,6 +55,49 @@ class _StreakContent extends StatefulWidget {
 class _StreakContentState extends State<_StreakContent> {
   final autoSizeGroup = AutoSizeGroup();
 
+  void _showConsistencyInfo(BuildContext context) {
+    final theme = Theme.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      useRootNavigator: true,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 24, right: 24, bottom: 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(LucideIcons.chartLine, color: Colors.teal, size: 24),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Consistency Score',
+                    style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Your consistency score shows the percentage of days you logged at least one activity over the '
+                'last 30 days.\n\n'
+                "It's not about being perfect every single day — it's about showing up regularly. "
+                'Even small efforts count!\n\n'
+                'Keep building your routine and watch this number grow. '
+                "You're doing great just by tracking your progress.",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  height: 1.5,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -90,6 +133,8 @@ class _StreakContentState extends State<_StreakContent> {
             suffix: '%',
             autoSizeGroup: autoSizeGroup,
             placeholderText: '88%',
+            showInfoIcon: true,
+            onTap: () => _showConsistencyInfo(context),
           ),
         ),
       ],
@@ -106,6 +151,8 @@ class _StreakStatBox extends StatelessWidget {
     required this.autoSizeGroup,
     required this.placeholderText,
     this.suffix,
+    this.showInfoIcon = false,
+    this.onTap,
   });
 
   final String label;
@@ -115,6 +162,8 @@ class _StreakStatBox extends StatelessWidget {
   final String? suffix;
   final AutoSizeGroup autoSizeGroup;
   final String placeholderText;
+  final bool showInfoIcon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -123,29 +172,48 @@ class _StreakStatBox extends StatelessWidget {
     final displayLabel = suffix != null ? label : '$label days';
 
     return Card.outlined(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Stack(
+          fit: StackFit.passthrough,
           children: [
-            Icon(icon, color: iconColor, size: 32),
-            const SizedBox(height: 8),
-            Text(
-              displayValue,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                fontFeatures: [
-                  const FontFeature.tabularFigures(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Icon(icon, color: iconColor, size: 32),
+                  const SizedBox(height: 8),
+                  Text(
+                    displayValue,
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontFeatures: [
+                        const FontFeature.tabularFigures(),
+                      ],
+                    ),
+                  ).withSkeleton(placeholderText: placeholderText),
+                  AutoSizeText(
+                    displayLabel,
+                    maxLines: 1,
+                    group: autoSizeGroup,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
                 ],
               ),
-            ).withSkeleton(placeholderText: placeholderText),
-            AutoSizeText(
-              displayLabel,
-              maxLines: 1,
-              group: autoSizeGroup,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
             ),
+            if (showInfoIcon)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Icon(
+                  LucideIcons.info,
+                  size: 16,
+                  color: theme.colorScheme.onSurface,
+                ),
+              ),
           ],
         ),
       ),
