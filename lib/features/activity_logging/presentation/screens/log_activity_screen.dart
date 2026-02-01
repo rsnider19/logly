@@ -312,7 +312,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                         const SizedBox(height: 8),
                         TextField(
                           controller: _commentsController,
-                          maxLines: 3,
+                          maxLines: 6,
                           decoration: const InputDecoration(
                             hintText: 'Add comments about this activity...',
                           ),

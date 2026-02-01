@@ -59,7 +59,7 @@ abstract final class AppTheme {
       bottomSheetModalBackgroundColor: SchemeColor.surfaceContainer,
       appBarScrolledUnderElevation: 3,
       appBarBackgroundSchemeColor: SchemeColor.surfaceContainerLowest,
-      cardBackgroundSchemeColor: SchemeColor.surfaceContainer,
+      cardBackgroundSchemeColor: SchemeColor.surfaceContainerHigh,
     ),
     // Direct ThemeData properties.
     visualDensity: FlexColorScheme.comfortablePlatformDensity,

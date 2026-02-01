@@ -23,6 +23,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
+import 'package:logly/widgets/logly_icons.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for editing an existing logged activity.
@@ -297,20 +298,33 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
             tooltip: 'Delete',
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(
+            theme.textTheme.headlineMedium!.fontSize! * theme.textTheme.headlineMedium!.height! + 8,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            child: Row(
+              children: [
+                UserActivityIcon(
+                  userActivity: _userActivity!,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _userActivity!.activity!.name,
+                  textAlign: TextAlign.start,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Activity header
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              _userActivity!.displayName,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
@@ -355,7 +369,7 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: _commentsController,
-                    maxLines: 3,
+                    maxLines: 6,
                     decoration: const InputDecoration(
                       hintText: 'Add comments about this activity...',
                     ),
