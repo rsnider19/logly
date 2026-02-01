@@ -232,27 +232,21 @@ class _MonthlyChart extends StatelessWidget {
 
     switch (timePeriod) {
       case TimePeriod.oneWeek:
-        // Last 7 days (most recent first, reversed for display: oldest on left)
-        return List.generate(7, (i) => today.subtract(Duration(days: i))).reversed.toList();
+        // Last 7 days, most recent on the left
+        return List.generate(7, (i) => today.subtract(Duration(days: i)));
 
       case TimePeriod.oneMonth:
-        // Last 30 days grouped by week (Monday starts)
-        final startDate = today.subtract(const Duration(days: 29));
-        final weeks = <DateTime>{};
-        for (var d = startDate; !d.isAfter(today); d = d.add(const Duration(days: 1))) {
-          final weekStart = d.subtract(Duration(days: d.weekday - 1));
-          weeks.add(weekStart);
-        }
-        final sorted = weeks.toList()..sort();
-        return sorted;
+        // Rolling 7-day windows anchored from today, most recent on the left
+        // e.g. Jan 31 (covers Jan 25-31), Jan 24 (covers Jan 18-24), etc.
+        return List.generate(5, (i) => today.subtract(Duration(days: i * 7)));
 
       case TimePeriod.oneYear:
       case TimePeriod.all:
-        // Last 12 months (most recent first, reversed for display: oldest on left)
+        // Last 12 months, most recent on the left
         return List.generate(12, (i) {
           final date = DateTime(now.year, now.month - i);
           return DateTime(date.year, date.month);
-        }).reversed.toList();
+        });
     }
   }
 
@@ -263,8 +257,13 @@ class _MonthlyChart extends StatelessWidget {
         return DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
 
       case TimePeriod.oneMonth:
+        // Bucket into rolling 7-day windows anchored from today
         final date = DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
-        return date.subtract(Duration(days: date.weekday - 1));
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final daysAgo = today.difference(date).inDays;
+        final windowIndex = daysAgo ~/ 7;
+        return today.subtract(Duration(days: windowIndex * 7));
 
       case TimePeriod.oneYear:
       case TimePeriod.all:

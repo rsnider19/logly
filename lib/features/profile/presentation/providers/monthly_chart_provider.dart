@@ -75,28 +75,33 @@ List<MonthlyCategoryData> _aggregateByDay(List<ActivityCountByDate> rawData) {
       .sortedByDescending((a) => a.activityMonth);
 }
 
-/// Aggregates raw activity counts by week for the last 30 days.
-/// Weeks start on Monday.
+/// Aggregates raw activity counts into rolling 7-day windows for the last 30 days.
+/// Windows are anchored from today: today-6..today, today-13..today-7, etc.
 List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
   final now = DateTime.now();
-  final startDate = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 29));
+  final today = DateTime(now.year, now.month, now.day);
+  final startDate = today.subtract(const Duration(days: 34)); // 5 windows of 7 days
 
   final weeklyTotals = <(DateTime, String), int>{};
   for (final item in rawData) {
     final dateKey = DateTime(item.activityDate.year, item.activityDate.month, item.activityDate.day);
     if (dateKey.isBefore(startDate)) continue;
 
-    // Find the Monday of the week
-    final weekStart = dateKey.subtract(Duration(days: dateKey.weekday - 1));
-    final key = (weekStart, item.activityCategoryId);
+    // Bucket into rolling 7-day window anchored from today
+    final daysAgo = today.difference(dateKey).inDays;
+    final windowIndex = daysAgo ~/ 7;
+    if (windowIndex >= 5) continue; // Only 5 windows
+    final windowKey = today.subtract(Duration(days: windowIndex * 7));
+
+    final key = (windowKey, item.activityCategoryId);
     weeklyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
   }
 
   return weeklyTotals.entries
       .map((e) {
-        final (weekStart, categoryId) = e.key;
+        final (windowKey, categoryId) = e.key;
         return MonthlyCategoryData(
-          activityMonth: weekStart,
+          activityMonth: windowKey,
           activityCount: e.value,
           activityCategoryId: categoryId,
         );
