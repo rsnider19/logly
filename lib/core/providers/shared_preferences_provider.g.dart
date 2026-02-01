@@ -22,12 +22,7 @@ final sharedPreferencesProvider = SharedPreferencesProvider._();
 /// with an initialized SharedPreferences instance.
 
 final class SharedPreferencesProvider
-    extends
-        $FunctionalProvider<
-          SharedPreferences,
-          SharedPreferences,
-          SharedPreferences
-        >
+    extends $FunctionalProvider<SharedPreferences, SharedPreferences, SharedPreferences>
     with $Provider<SharedPreferences> {
   /// Provides the SharedPreferences instance.
   ///

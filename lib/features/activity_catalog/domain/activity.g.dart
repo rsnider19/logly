@@ -11,11 +11,11 @@ _Activity _$ActivityFromJson(Map<String, dynamic> json) => _Activity(
   activityCategoryId: json['activity_category_id'] as String,
   name: json['name'] as String,
   activityCode: json['activity_code'] as String,
-  description: json['description'] as String?,
   activityDateType: $enumDecode(
     _$ActivityDateTypeEnumMap,
     json['activity_date_type'],
   ),
+  description: json['description'] as String?,
   paceType: $enumDecodeNullable(_$PaceTypeEnumMap, json['pace_type']),
   isSuggestedFavorite: json['is_suggested_favorite'] as bool? ?? false,
   activityCategory: json['activity_category'] == null
@@ -40,8 +40,8 @@ Map<String, dynamic> _$ActivityToJson(_Activity instance) => <String, dynamic>{
   'activity_category_id': instance.activityCategoryId,
   'name': instance.name,
   'activity_code': instance.activityCode,
-  'description': instance.description,
   'activity_date_type': _$ActivityDateTypeEnumMap[instance.activityDateType]!,
+  'description': instance.description,
   'pace_type': _$PaceTypeEnumMap[instance.paceType],
   'is_suggested_favorite': instance.isSuggestedFavorite,
   'activity_category': instance.activityCategory?.toJson(),

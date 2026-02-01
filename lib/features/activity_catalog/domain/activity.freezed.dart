@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Activity {
 
- String get activityId; String get activityCategoryId; String get name; String get activityCode; String? get description; ActivityDateType get activityDateType; PaceType? get paceType; bool get isSuggestedFavorite;/// The category this activity belongs to (populated via join).
+ String get activityId; String get activityCategoryId; String get name; String get activityCode; ActivityDateType get activityDateType; String? get description; PaceType? get paceType; bool get isSuggestedFavorite;/// The category this activity belongs to (populated via join).
  ActivityCategory? get activityCategory;/// Detail configurations for this activity (populated via join).
  List<ActivityDetail> get activityDetail;/// Subactivities for this activity (populated via join).
  List<SubActivity> get subActivity;
@@ -31,16 +31,16 @@ $ActivityCopyWith<Activity> get copyWith => _$ActivityCopyWithImpl<Activity>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Activity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.paceType, paceType) || other.paceType == paceType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory)&&const DeepCollectionEquality().equals(other.activityDetail, activityDetail)&&const DeepCollectionEquality().equals(other.subActivity, subActivity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Activity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.description, description) || other.description == description)&&(identical(other.paceType, paceType) || other.paceType == paceType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory)&&const DeepCollectionEquality().equals(other.activityDetail, activityDetail)&&const DeepCollectionEquality().equals(other.subActivity, subActivity));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,description,activityDateType,paceType,isSuggestedFavorite,activityCategory,const DeepCollectionEquality().hash(activityDetail),const DeepCollectionEquality().hash(subActivity));
+int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,activityDateType,description,paceType,isSuggestedFavorite,activityCategory,const DeepCollectionEquality().hash(activityDetail),const DeepCollectionEquality().hash(subActivity));
 
 @override
 String toString() {
-  return 'Activity(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, description: $description, activityDateType: $activityDateType, paceType: $paceType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory, activityDetail: $activityDetail, subActivity: $subActivity)';
+  return 'Activity(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, activityDateType: $activityDateType, description: $description, paceType: $paceType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory, activityDetail: $activityDetail, subActivity: $subActivity)';
 }
 
 
@@ -51,7 +51,7 @@ abstract mixin class $ActivityCopyWith<$Res>  {
   factory $ActivityCopyWith(Activity value, $Res Function(Activity) _then) = _$ActivityCopyWithImpl;
 @useResult
 $Res call({
- String activityId, String activityCategoryId, String name, String activityCode, String? description, ActivityDateType activityDateType, PaceType? paceType, bool isSuggestedFavorite, ActivityCategory? activityCategory, List<ActivityDetail> activityDetail, List<SubActivity> subActivity
+ String activityId, String activityCategoryId, String name, String activityCode, ActivityDateType activityDateType, String? description, PaceType? paceType, bool isSuggestedFavorite, ActivityCategory? activityCategory, List<ActivityDetail> activityDetail, List<SubActivity> subActivity
 });
 
 
@@ -68,15 +68,15 @@ class _$ActivityCopyWithImpl<$Res>
 
 /// Create a copy of Activity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? description = freezed,Object? activityDateType = null,Object? paceType = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,Object? activityDetail = null,Object? subActivity = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? activityDateType = null,Object? description = freezed,Object? paceType = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,Object? activityDetail = null,Object? subActivity = null,}) {
   return _then(_self.copyWith(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCode: null == activityCode ? _self.activityCode : activityCode // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
-as ActivityDateType,paceType: freezed == paceType ? _self.paceType : paceType // ignore: cast_nullable_to_non_nullable
+as String,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
+as ActivityDateType,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,paceType: freezed == paceType ? _self.paceType : paceType // ignore: cast_nullable_to_non_nullable
 as PaceType?,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
 as bool,activityCategory: freezed == activityCategory ? _self.activityCategory : activityCategory // ignore: cast_nullable_to_non_nullable
 as ActivityCategory?,activityDetail: null == activityDetail ? _self.activityDetail : activityDetail // ignore: cast_nullable_to_non_nullable
@@ -178,10 +178,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Activity() when $default != null:
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
   return orElse();
 
 }
@@ -199,10 +199,10 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)  $default,) {final _that = this;
 switch (_that) {
 case _Activity():
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -219,10 +219,10 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  PaceType? paceType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory,  List<ActivityDetail> activityDetail,  List<SubActivity> subActivity)?  $default,) {final _that = this;
 switch (_that) {
 case _Activity() when $default != null:
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.paceType,_that.isSuggestedFavorite,_that.activityCategory,_that.activityDetail,_that.subActivity);case _:
   return null;
 
 }
@@ -234,15 +234,15 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 @JsonSerializable()
 
 class _Activity extends Activity {
-  const _Activity({required this.activityId, required this.activityCategoryId, required this.name, required this.activityCode, this.description, required this.activityDateType, this.paceType, this.isSuggestedFavorite = false, this.activityCategory, final  List<ActivityDetail> activityDetail = const [], final  List<SubActivity> subActivity = const []}): _activityDetail = activityDetail,_subActivity = subActivity,super._();
+  const _Activity({required this.activityId, required this.activityCategoryId, required this.name, required this.activityCode, required this.activityDateType, this.description, this.paceType, this.isSuggestedFavorite = false, this.activityCategory, final  List<ActivityDetail> activityDetail = const [], final  List<SubActivity> subActivity = const []}): _activityDetail = activityDetail,_subActivity = subActivity,super._();
   factory _Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
 
 @override final  String activityId;
 @override final  String activityCategoryId;
 @override final  String name;
 @override final  String activityCode;
-@override final  String? description;
 @override final  ActivityDateType activityDateType;
+@override final  String? description;
 @override final  PaceType? paceType;
 @override@JsonKey() final  bool isSuggestedFavorite;
 /// The category this activity belongs to (populated via join).
@@ -279,16 +279,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Activity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.paceType, paceType) || other.paceType == paceType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory)&&const DeepCollectionEquality().equals(other._activityDetail, _activityDetail)&&const DeepCollectionEquality().equals(other._subActivity, _subActivity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Activity&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.description, description) || other.description == description)&&(identical(other.paceType, paceType) || other.paceType == paceType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory)&&const DeepCollectionEquality().equals(other._activityDetail, _activityDetail)&&const DeepCollectionEquality().equals(other._subActivity, _subActivity));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,description,activityDateType,paceType,isSuggestedFavorite,activityCategory,const DeepCollectionEquality().hash(_activityDetail),const DeepCollectionEquality().hash(_subActivity));
+int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,activityDateType,description,paceType,isSuggestedFavorite,activityCategory,const DeepCollectionEquality().hash(_activityDetail),const DeepCollectionEquality().hash(_subActivity));
 
 @override
 String toString() {
-  return 'Activity(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, description: $description, activityDateType: $activityDateType, paceType: $paceType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory, activityDetail: $activityDetail, subActivity: $subActivity)';
+  return 'Activity(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, activityDateType: $activityDateType, description: $description, paceType: $paceType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory, activityDetail: $activityDetail, subActivity: $subActivity)';
 }
 
 
@@ -299,7 +299,7 @@ abstract mixin class _$ActivityCopyWith<$Res> implements $ActivityCopyWith<$Res>
   factory _$ActivityCopyWith(_Activity value, $Res Function(_Activity) _then) = __$ActivityCopyWithImpl;
 @override @useResult
 $Res call({
- String activityId, String activityCategoryId, String name, String activityCode, String? description, ActivityDateType activityDateType, PaceType? paceType, bool isSuggestedFavorite, ActivityCategory? activityCategory, List<ActivityDetail> activityDetail, List<SubActivity> subActivity
+ String activityId, String activityCategoryId, String name, String activityCode, ActivityDateType activityDateType, String? description, PaceType? paceType, bool isSuggestedFavorite, ActivityCategory? activityCategory, List<ActivityDetail> activityDetail, List<SubActivity> subActivity
 });
 
 
@@ -316,15 +316,15 @@ class __$ActivityCopyWithImpl<$Res>
 
 /// Create a copy of Activity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? description = freezed,Object? activityDateType = null,Object? paceType = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,Object? activityDetail = null,Object? subActivity = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? activityDateType = null,Object? description = freezed,Object? paceType = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,Object? activityDetail = null,Object? subActivity = null,}) {
   return _then(_Activity(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCode: null == activityCode ? _self.activityCode : activityCode // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
-as ActivityDateType,paceType: freezed == paceType ? _self.paceType : paceType // ignore: cast_nullable_to_non_nullable
+as String,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
+as ActivityDateType,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,paceType: freezed == paceType ? _self.paceType : paceType // ignore: cast_nullable_to_non_nullable
 as PaceType?,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
 as bool,activityCategory: freezed == activityCategory ? _self.activityCategory : activityCategory // ignore: cast_nullable_to_non_nullable
 as ActivityCategory?,activityDetail: null == activityDetail ? _self._activityDetail : activityDetail // ignore: cast_nullable_to_non_nullable

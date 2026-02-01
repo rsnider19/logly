@@ -15,9 +15,7 @@ final authStateProvider = AuthStateProvider._();
 
 /// Provides a stream of auth state changes from Supabase.
 
-final class AuthStateProvider
-    extends
-        $FunctionalProvider<AsyncValue<AuthState>, AuthState, Stream<AuthState>>
+final class AuthStateProvider extends $FunctionalProvider<AsyncValue<AuthState>, AuthState, Stream<AuthState>>
     with $FutureModifier<AuthState>, $StreamProvider<AuthState> {
   /// Provides a stream of auth state changes from Supabase.
   AuthStateProvider._()
@@ -36,8 +34,7 @@ final class AuthStateProvider
 
   @$internal
   @override
-  $StreamProviderElement<AuthState> $createElement($ProviderPointer pointer) =>
-      $StreamProviderElement(pointer);
+  $StreamProviderElement<AuthState> $createElement($ProviderPointer pointer) => $StreamProviderElement(pointer);
 
   @override
   Stream<AuthState> create(Ref ref) {
@@ -58,8 +55,7 @@ final currentUserProvider = CurrentUserProvider._();
 ///
 /// This provider rebuilds whenever the auth state changes.
 
-final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?>
-    with $Provider<User?> {
+final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?> with $Provider<User?> {
   /// Provides the currently authenticated user, or null if not authenticated.
   ///
   /// This provider rebuilds whenever the auth state changes.
@@ -79,8 +75,7 @@ final class CurrentUserProvider extends $FunctionalProvider<User?, User?, User?>
 
   @$internal
   @override
-  $ProviderElement<User?> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<User?> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   User? create(Ref ref) {
@@ -105,9 +100,7 @@ final isAuthenticatedProvider = IsAuthenticatedProvider._();
 
 /// Provides whether the user is currently authenticated.
 
-final class IsAuthenticatedProvider
-    extends $FunctionalProvider<bool, bool, bool>
-    with $Provider<bool> {
+final class IsAuthenticatedProvider extends $FunctionalProvider<bool, bool, bool> with $Provider<bool> {
   /// Provides whether the user is currently authenticated.
   IsAuthenticatedProvider._()
     : super(
@@ -125,8 +118,7 @@ final class IsAuthenticatedProvider
 
   @$internal
   @override
-  $ProviderElement<bool> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<bool> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   bool create(Ref ref) {

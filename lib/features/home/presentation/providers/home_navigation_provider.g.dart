@@ -12,13 +12,11 @@ part of 'home_navigation_provider.dart';
 /// HomeScreen listens to this to scroll back to the top.
 
 @ProviderFor(HomeScrollToTopTriggerNotifier)
-final homeScrollToTopTriggerProvider =
-    HomeScrollToTopTriggerNotifierProvider._();
+final homeScrollToTopTriggerProvider = HomeScrollToTopTriggerNotifierProvider._();
 
 /// Trigger counter that increments when the home tab icon is tapped.
 /// HomeScreen listens to this to scroll back to the top.
-final class HomeScrollToTopTriggerNotifierProvider
-    extends $NotifierProvider<HomeScrollToTopTriggerNotifier, int> {
+final class HomeScrollToTopTriggerNotifierProvider extends $NotifierProvider<HomeScrollToTopTriggerNotifier, int> {
   /// Trigger counter that increments when the home tab icon is tapped.
   /// HomeScreen listens to this to scroll back to the top.
   HomeScrollToTopTriggerNotifierProvider._()
@@ -48,8 +46,7 @@ final class HomeScrollToTopTriggerNotifierProvider
   }
 }
 
-String _$homeScrollToTopTriggerNotifierHash() =>
-    r'068a0514548345677eb0aff7661e9ce9675cfa13';
+String _$homeScrollToTopTriggerNotifierHash() => r'068a0514548345677eb0aff7661e9ce9675cfa13';
 
 /// Trigger counter that increments when the home tab icon is tapped.
 /// HomeScreen listens to this to scroll back to the top.
@@ -60,14 +57,7 @@ abstract class _$HomeScrollToTopTriggerNotifier extends $Notifier<int> {
   @override
   void runBuild() {
     final ref = this.ref as $Ref<int, int>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<int, int>,
-              int,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
     element.handleCreate(ref, build);
   }
 }
@@ -78,8 +68,7 @@ abstract class _$HomeScrollToTopTriggerNotifier extends $Notifier<int> {
 final homeNavigationStateProvider = HomeNavigationStateNotifierProvider._();
 
 /// Notifier for managing the bottom navigation state.
-final class HomeNavigationStateNotifierProvider
-    extends $NotifierProvider<HomeNavigationStateNotifier, int> {
+final class HomeNavigationStateNotifierProvider extends $NotifierProvider<HomeNavigationStateNotifier, int> {
   /// Notifier for managing the bottom navigation state.
   HomeNavigationStateNotifierProvider._()
     : super(
@@ -108,8 +97,7 @@ final class HomeNavigationStateNotifierProvider
   }
 }
 
-String _$homeNavigationStateNotifierHash() =>
-    r'7e287df667a89abed27101769793431a5945bdda';
+String _$homeNavigationStateNotifierHash() => r'7e287df667a89abed27101769793431a5945bdda';
 
 /// Notifier for managing the bottom navigation state.
 
@@ -119,14 +107,7 @@ abstract class _$HomeNavigationStateNotifier extends $Notifier<int> {
   @override
   void runBuild() {
     final ref = this.ref as $Ref<int, int>;
-    final element =
-        ref.element
-            as $ClassProviderElement<
-              AnyNotifier<int, int>,
-              int,
-              Object?,
-              Object?
-            >;
+    final element = ref.element as $ClassProviderElement<AnyNotifier<int, int>, int, Object?, Object?>;
     element.handleCreate(ref, build);
   }
 }

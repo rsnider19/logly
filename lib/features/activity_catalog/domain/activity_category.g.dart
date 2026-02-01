@@ -11,9 +11,9 @@ _ActivityCategory _$ActivityCategoryFromJson(Map<String, dynamic> json) =>
       activityCategoryId: json['activity_category_id'] as String,
       name: json['name'] as String,
       activityCategoryCode: json['activity_category_code'] as String,
-      description: json['description'] as String?,
       hexColor: json['hex_color'] as String,
       sortOrder: (json['sort_order'] as num).toInt(),
+      description: json['description'] as String?,
     );
 
 Map<String, dynamic> _$ActivityCategoryToJson(_ActivityCategory instance) =>
@@ -21,7 +21,7 @@ Map<String, dynamic> _$ActivityCategoryToJson(_ActivityCategory instance) =>
       'activity_category_id': instance.activityCategoryId,
       'name': instance.name,
       'activity_category_code': instance.activityCategoryCode,
-      'description': instance.description,
       'hex_color': instance.hexColor,
       'sort_order': instance.sortOrder,
+      'description': instance.description,
     };

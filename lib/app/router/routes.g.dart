@@ -19,6 +19,7 @@ List<RouteBase> get $appRoutes => [
   $editActivityRoute,
   $createCustomActivityRoute,
   $developerRoute,
+  $settingsFavoritesRoute,
 ];
 
 RouteBase get $appShellRoute => StatefulShellRouteData.$route(
@@ -423,6 +424,32 @@ mixin $DeveloperRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/developer');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $settingsFavoritesRoute => GoRouteData.$route(
+  path: '/settings/favorites',
+  factory: $SettingsFavoritesRoute._fromState,
+);
+
+mixin $SettingsFavoritesRoute on GoRouteData {
+  static SettingsFavoritesRoute _fromState(GoRouterState state) =>
+      const SettingsFavoritesRoute();
+
+  @override
+  String get location => GoRouteData.$location('/settings/favorites');
 
   @override
   void go(BuildContext context) => context.go(location);

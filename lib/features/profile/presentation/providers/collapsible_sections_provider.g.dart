@@ -11,13 +11,11 @@ part of 'collapsible_sections_provider.dart';
 /// Notifier for managing collapsible section states.
 
 @ProviderFor(CollapsibleSectionsStateNotifier)
-final collapsibleSectionsStateProvider =
-    CollapsibleSectionsStateNotifierProvider._();
+final collapsibleSectionsStateProvider = CollapsibleSectionsStateNotifierProvider._();
 
 /// Notifier for managing collapsible section states.
 final class CollapsibleSectionsStateNotifierProvider
-    extends
-        $NotifierProvider<CollapsibleSectionsStateNotifier, Map<String, bool>> {
+    extends $NotifierProvider<CollapsibleSectionsStateNotifier, Map<String, bool>> {
   /// Notifier for managing collapsible section states.
   CollapsibleSectionsStateNotifierProvider._()
     : super(
@@ -35,8 +33,7 @@ final class CollapsibleSectionsStateNotifierProvider
 
   @$internal
   @override
-  CollapsibleSectionsStateNotifier create() =>
-      CollapsibleSectionsStateNotifier();
+  CollapsibleSectionsStateNotifier create() => CollapsibleSectionsStateNotifier();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Map<String, bool> value) {
@@ -47,13 +44,11 @@ final class CollapsibleSectionsStateNotifierProvider
   }
 }
 
-String _$collapsibleSectionsStateNotifierHash() =>
-    r'6e7824f9f49a72d31c4d1df2ab83637c388e00bc';
+String _$collapsibleSectionsStateNotifierHash() => r'6e7824f9f49a72d31c4d1df2ab83637c388e00bc';
 
 /// Notifier for managing collapsible section states.
 
-abstract class _$CollapsibleSectionsStateNotifier
-    extends $Notifier<Map<String, bool>> {
+abstract class _$CollapsibleSectionsStateNotifier extends $Notifier<Map<String, bool>> {
   Map<String, bool> build();
   @$mustCallSuper
   @override

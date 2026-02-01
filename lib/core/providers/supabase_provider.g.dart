@@ -19,8 +19,7 @@ final supabaseProvider = SupabaseProvider._();
 ///
 /// The client must be initialized in bootstrap before this provider is used.
 
-final class SupabaseProvider
-    extends $FunctionalProvider<SupabaseClient, SupabaseClient, SupabaseClient>
+final class SupabaseProvider extends $FunctionalProvider<SupabaseClient, SupabaseClient, SupabaseClient>
     with $Provider<SupabaseClient> {
   /// Provides the Supabase client instance.
   ///
@@ -41,8 +40,7 @@ final class SupabaseProvider
 
   @$internal
   @override
-  $ProviderElement<SupabaseClient> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+  $ProviderElement<SupabaseClient> $createElement($ProviderPointer pointer) => $ProviderElement(pointer);
 
   @override
   SupabaseClient create(Ref ref) {

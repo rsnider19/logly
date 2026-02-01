@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ActivitySummary {
 
- String get activityId; String get activityCategoryId; String get name; String get activityCode; String? get description; ActivityDateType get activityDateType; bool get isSuggestedFavorite;/// The category this activity belongs to (populated via join).
+ String get activityId; String get activityCategoryId; String get name; String get activityCode; ActivityDateType get activityDateType; String? get description; bool get isSuggestedFavorite;/// The category this activity belongs to (populated via join).
  ActivityCategory? get activityCategory;
 /// Create a copy of ActivitySummary
 /// with the given fields replaced by the non-null parameter values.
@@ -29,16 +29,16 @@ $ActivitySummaryCopyWith<ActivitySummary> get copyWith => _$ActivitySummaryCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivitySummary&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ActivitySummary&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.description, description) || other.description == description)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,description,activityDateType,isSuggestedFavorite,activityCategory);
+int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,activityDateType,description,isSuggestedFavorite,activityCategory);
 
 @override
 String toString() {
-  return 'ActivitySummary(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, description: $description, activityDateType: $activityDateType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory)';
+  return 'ActivitySummary(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, activityDateType: $activityDateType, description: $description, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $ActivitySummaryCopyWith<$Res>  {
   factory $ActivitySummaryCopyWith(ActivitySummary value, $Res Function(ActivitySummary) _then) = _$ActivitySummaryCopyWithImpl;
 @useResult
 $Res call({
- String activityId, String activityCategoryId, String name, String activityCode, String? description, ActivityDateType activityDateType, bool isSuggestedFavorite, ActivityCategory? activityCategory
+ String activityId, String activityCategoryId, String name, String activityCode, ActivityDateType activityDateType, String? description, bool isSuggestedFavorite, ActivityCategory? activityCategory
 });
 
 
@@ -66,15 +66,15 @@ class _$ActivitySummaryCopyWithImpl<$Res>
 
 /// Create a copy of ActivitySummary
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? description = freezed,Object? activityDateType = null,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? activityDateType = null,Object? description = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,}) {
   return _then(_self.copyWith(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCode: null == activityCode ? _self.activityCode : activityCode // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
-as ActivityDateType,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
+as String,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
+as ActivityDateType,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
 as bool,activityCategory: freezed == activityCategory ? _self.activityCategory : activityCategory // ignore: cast_nullable_to_non_nullable
 as ActivityCategory?,
   ));
@@ -173,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ActivitySummary() when $default != null:
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.isSuggestedFavorite,_that.activityCategory);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.isSuggestedFavorite,_that.activityCategory);case _:
   return orElse();
 
 }
@@ -194,10 +194,10 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)  $default,) {final _that = this;
 switch (_that) {
 case _ActivitySummary():
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.isSuggestedFavorite,_that.activityCategory);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.isSuggestedFavorite,_that.activityCategory);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -214,10 +214,10 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  String? description,  ActivityDateType activityDateType,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String activityId,  String activityCategoryId,  String name,  String activityCode,  ActivityDateType activityDateType,  String? description,  bool isSuggestedFavorite,  ActivityCategory? activityCategory)?  $default,) {final _that = this;
 switch (_that) {
 case _ActivitySummary() when $default != null:
-return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.description,_that.activityDateType,_that.isSuggestedFavorite,_that.activityCategory);case _:
+return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activityCode,_that.activityDateType,_that.description,_that.isSuggestedFavorite,_that.activityCategory);case _:
   return null;
 
 }
@@ -229,15 +229,15 @@ return $default(_that.activityId,_that.activityCategoryId,_that.name,_that.activ
 @JsonSerializable()
 
 class _ActivitySummary extends ActivitySummary {
-  const _ActivitySummary({required this.activityId, required this.activityCategoryId, required this.name, required this.activityCode, this.description, required this.activityDateType, this.isSuggestedFavorite = false, this.activityCategory}): super._();
+  const _ActivitySummary({required this.activityId, required this.activityCategoryId, required this.name, required this.activityCode, required this.activityDateType, this.description, this.isSuggestedFavorite = false, this.activityCategory}): super._();
   factory _ActivitySummary.fromJson(Map<String, dynamic> json) => _$ActivitySummaryFromJson(json);
 
 @override final  String activityId;
 @override final  String activityCategoryId;
 @override final  String name;
 @override final  String activityCode;
-@override final  String? description;
 @override final  ActivityDateType activityDateType;
+@override final  String? description;
 @override@JsonKey() final  bool isSuggestedFavorite;
 /// The category this activity belongs to (populated via join).
 @override final  ActivityCategory? activityCategory;
@@ -255,16 +255,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivitySummary&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.description, description) || other.description == description)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ActivitySummary&&(identical(other.activityId, activityId) || other.activityId == activityId)&&(identical(other.activityCategoryId, activityCategoryId) || other.activityCategoryId == activityCategoryId)&&(identical(other.name, name) || other.name == name)&&(identical(other.activityCode, activityCode) || other.activityCode == activityCode)&&(identical(other.activityDateType, activityDateType) || other.activityDateType == activityDateType)&&(identical(other.description, description) || other.description == description)&&(identical(other.isSuggestedFavorite, isSuggestedFavorite) || other.isSuggestedFavorite == isSuggestedFavorite)&&(identical(other.activityCategory, activityCategory) || other.activityCategory == activityCategory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,description,activityDateType,isSuggestedFavorite,activityCategory);
+int get hashCode => Object.hash(runtimeType,activityId,activityCategoryId,name,activityCode,activityDateType,description,isSuggestedFavorite,activityCategory);
 
 @override
 String toString() {
-  return 'ActivitySummary(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, description: $description, activityDateType: $activityDateType, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory)';
+  return 'ActivitySummary(activityId: $activityId, activityCategoryId: $activityCategoryId, name: $name, activityCode: $activityCode, activityDateType: $activityDateType, description: $description, isSuggestedFavorite: $isSuggestedFavorite, activityCategory: $activityCategory)';
 }
 
 
@@ -275,7 +275,7 @@ abstract mixin class _$ActivitySummaryCopyWith<$Res> implements $ActivitySummary
   factory _$ActivitySummaryCopyWith(_ActivitySummary value, $Res Function(_ActivitySummary) _then) = __$ActivitySummaryCopyWithImpl;
 @override @useResult
 $Res call({
- String activityId, String activityCategoryId, String name, String activityCode, String? description, ActivityDateType activityDateType, bool isSuggestedFavorite, ActivityCategory? activityCategory
+ String activityId, String activityCategoryId, String name, String activityCode, ActivityDateType activityDateType, String? description, bool isSuggestedFavorite, ActivityCategory? activityCategory
 });
 
 
@@ -292,15 +292,15 @@ class __$ActivitySummaryCopyWithImpl<$Res>
 
 /// Create a copy of ActivitySummary
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? description = freezed,Object? activityDateType = null,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? activityId = null,Object? activityCategoryId = null,Object? name = null,Object? activityCode = null,Object? activityDateType = null,Object? description = freezed,Object? isSuggestedFavorite = null,Object? activityCategory = freezed,}) {
   return _then(_ActivitySummary(
 activityId: null == activityId ? _self.activityId : activityId // ignore: cast_nullable_to_non_nullable
 as String,activityCategoryId: null == activityCategoryId ? _self.activityCategoryId : activityCategoryId // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,activityCode: null == activityCode ? _self.activityCode : activityCode // ignore: cast_nullable_to_non_nullable
-as String,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String?,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
-as ActivityDateType,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
+as String,activityDateType: null == activityDateType ? _self.activityDateType : activityDateType // ignore: cast_nullable_to_non_nullable
+as ActivityDateType,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,isSuggestedFavorite: null == isSuggestedFavorite ? _self.isSuggestedFavorite : isSuggestedFavorite // ignore: cast_nullable_to_non_nullable
 as bool,activityCategory: freezed == activityCategory ? _self.activityCategory : activityCategory // ignore: cast_nullable_to_non_nullable
 as ActivityCategory?,
   ));
