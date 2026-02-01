@@ -39,21 +39,49 @@ class ContributionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sectionsNotifier = ref.watch(collapsibleSectionsStateProvider.notifier);
     final isExpanded = ref.watch(collapsibleSectionsStateProvider)[ProfileSections.contribution] ?? true;
-    final contributionAsync = ref.watch(contributionDataProvider);
-    final timePeriod = ref.watch(globalTimePeriodProvider);
 
     return CollapsibleSection(
       title: 'Activities Last Year',
       isExpanded: isExpanded,
       onToggle: () => sectionsNotifier.toggle(ProfileSections.contribution),
-      child: contributionAsync.when(
-        data: (data) => _ContributionContent(data: data, timePeriod: timePeriod),
-        loading: () => const _ContributionShimmer(),
-        error: (error, _) => _ContributionError(
-          onRetry: () => ref.invalidate(contributionDataProvider),
-        ),
-      ),
+      child: const _CachedContributionContent(),
     );
+  }
+}
+
+class _CachedContributionContent extends ConsumerStatefulWidget {
+  const _CachedContributionContent();
+
+  @override
+  ConsumerState<_CachedContributionContent> createState() => _CachedContributionContentState();
+}
+
+class _CachedContributionContentState extends ConsumerState<_CachedContributionContent> {
+  Map<DateTime, int>? _cachedData;
+
+  @override
+  Widget build(BuildContext context) {
+    final contributionAsync = ref.watch(contributionDataProvider);
+    final timePeriod = ref.watch(globalTimePeriodProvider);
+
+    final data = contributionAsync.value ?? _cachedData;
+    final hasError = contributionAsync.hasError && _cachedData == null;
+
+    if (contributionAsync.hasValue) {
+      _cachedData = contributionAsync.value;
+    }
+
+    if (data == null) {
+      return const _ContributionShimmer();
+    }
+
+    if (hasError) {
+      return _ContributionError(
+        onRetry: () => ref.invalidate(contributionDataProvider),
+      );
+    }
+
+    return _ContributionContent(data: data, timePeriod: timePeriod);
   }
 }
 
