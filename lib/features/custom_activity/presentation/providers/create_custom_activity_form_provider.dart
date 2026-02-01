@@ -40,6 +40,12 @@ class CreateCustomActivityFormState {
   /// Whether the form has been modified from its initial state.
   bool get isDirty => categoryId != null || name.isNotEmpty || details.isNotEmpty;
 
+  /// Whether a Duration detail already exists.
+  bool get hasDuration => details.any((d) => d is DurationDetailConfig);
+
+  /// Whether a Distance detail already exists.
+  bool get hasDistance => details.any((d) => d is DistanceDetailConfig);
+
   /// Whether an Environment detail already exists.
   bool get hasEnvironment => details.any((d) => d is EnvironmentDetailConfig);
 
@@ -49,11 +55,11 @@ class CreateCustomActivityFormState {
   /// Whether the detail limit (10) has been reached.
   bool get isAtDetailLimit => details.length >= 10;
 
-  /// Whether a Duration detail is marked for pace calculation.
-  bool get hasDurationForPace => details.any((d) => d is DurationDetailConfig && d.useForPace);
+  /// Whether a Duration detail exists for pace calculation.
+  bool get hasDurationForPace => hasDuration;
 
-  /// Whether a Distance detail is marked for pace calculation.
-  bool get hasDistanceForPace => details.any((d) => d is DistanceDetailConfig && d.useForPace);
+  /// Whether a Distance detail exists for pace calculation.
+  bool get hasDistanceForPace => hasDistance;
 
   /// Whether pace dependencies are met.
   bool get arePaceDependenciesMet => hasDurationForPace && hasDistanceForPace;
@@ -108,6 +114,8 @@ class CreateCustomActivityFormStateNotifier extends _$CreateCustomActivityFormSt
     if (state.isAtDetailLimit) return;
 
     // Don't allow duplicate single-instance types
+    if (detail is DurationDetailConfig && state.hasDuration) return;
+    if (detail is DistanceDetailConfig && state.hasDistance) return;
     if (detail is EnvironmentDetailConfig && state.hasEnvironment) return;
     if (detail is PaceDetailConfig && state.hasPace) return;
 
@@ -195,29 +203,6 @@ class CreateCustomActivityFormStateNotifier extends _$CreateCustomActivityFormSt
     });
   }
 
-  /// Updates a Duration detail's useForPace flag.
-  void updateDurationUseForPace(String detailId, {required bool useForPace}) {
-    // If enabling, disable all other durations
-    if (useForPace) {
-      state = state.copyWith(
-        details: state.details.map((d) {
-          if (d is DurationDetailConfig) {
-            return d.copyWith(useForPace: d.id == detailId);
-          }
-          return d;
-        }).toList(),
-        clearError: true,
-      );
-    } else {
-      updateDetail(detailId, (d) {
-        if (d is DurationDetailConfig) {
-          return d.copyWith(useForPace: false);
-        }
-        return d;
-      });
-    }
-  }
-
   /// Updates a Distance detail's label.
   void updateDistanceLabel(String detailId, String label) {
     updateDetail(detailId, (d) {
@@ -248,29 +233,6 @@ class CreateCustomActivityFormStateNotifier extends _$CreateCustomActivityFormSt
       }
       return d;
     });
-  }
-
-  /// Updates a Distance detail's useForPace flag.
-  void updateDistanceUseForPace(String detailId, {required bool useForPace}) {
-    // If enabling, disable all other distances
-    if (useForPace) {
-      state = state.copyWith(
-        details: state.details.map((d) {
-          if (d is DistanceDetailConfig) {
-            return d.copyWith(useForPace: d.id == detailId);
-          }
-          return d;
-        }).toList(),
-        clearError: true,
-      );
-    } else {
-      updateDetail(detailId, (d) {
-        if (d is DistanceDetailConfig) {
-          return d.copyWith(useForPace: false);
-        }
-        return d;
-      });
-    }
   }
 
   /// Updates an Environment detail's label.
@@ -392,6 +354,6 @@ class CreateCustomActivityValidation {
     if (!_state.hasDurationForPace) missing.add('Duration');
     if (!_state.hasDistanceForPace) missing.add('Distance');
 
-    return 'Pace requires ${missing.join(' and ')} marked for pace calculation';
+    return 'Pace requires a ${missing.join(' and ')} detail';
   }
 }

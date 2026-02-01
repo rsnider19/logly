@@ -71,12 +71,12 @@ class CustomActivityService {
     // Validate pace dependencies
     final hasPace = details.any((d) => d is PaceDetailConfig);
     if (hasPace) {
-      final hasDurationForPace = details.any((d) => d is DurationDetailConfig && d.useForPace);
-      final hasDistanceForPace = details.any((d) => d is DistanceDetailConfig && d.useForPace);
+      final hasDuration = details.any((d) => d is DurationDetailConfig);
+      final hasDistance = details.any((d) => d is DistanceDetailConfig);
 
-      if (!hasDurationForPace || !hasDistanceForPace) {
+      if (!hasDuration || !hasDistance) {
         throw const CustomActivityValidationException(
-          'Pace requires a Duration and Distance marked for pace calculation',
+          'Pace requires both a Duration and Distance detail',
         );
       }
     }

@@ -67,11 +67,12 @@ class CustomActivityRepository {
 
       // Insert activity details
       if (details.isNotEmpty) {
+        final hasPace = details.any((d) => d is PaceDetailConfig);
         final detailRecords = <Map<String, dynamic>>[];
 
         for (var i = 0; i < details.length; i++) {
           final detail = details[i];
-          final record = _buildDetailRecord(activityId, detail, i * 10);
+          final record = _buildDetailRecord(activityId, detail, i * 10, hasPace: hasPace);
           if (record != null) {
             detailRecords.add(record);
           }
@@ -98,7 +99,12 @@ class CustomActivityRepository {
   }
 
   /// Builds a detail record for insertion into activity_detail table.
-  Map<String, dynamic>? _buildDetailRecord(String activityId, ActivityDetailConfig config, int sortOrder) {
+  Map<String, dynamic>? _buildDetailRecord(
+    String activityId,
+    ActivityDetailConfig config,
+    int sortOrder, {
+    required bool hasPace,
+  }) {
     return switch (config) {
       NumberDetailConfig(:final label, :final isInteger, :final maxValue) => {
         'activity_id': activityId,
@@ -108,8 +114,9 @@ class CustomActivityRepository {
         'min_numeric': 0,
         'max_numeric': maxValue,
         'slider_interval': isInteger ? 1 : 0.1,
+        'use_for_pace_calculation': false,
       },
-      DurationDetailConfig(:final label, :final maxSeconds, :final useForPace) => {
+      DurationDetailConfig(:final label, :final maxSeconds) => {
         'activity_id': activityId,
         'label': label,
         'activity_detail_type': 'duration',
@@ -117,9 +124,9 @@ class CustomActivityRepository {
         'min_duration_in_sec': 0,
         'max_duration_in_sec': maxSeconds,
         'slider_interval': 60,
-        'use_for_pace_calculation': useForPace,
+        'use_for_pace_calculation': hasPace,
       },
-      DistanceDetailConfig(:final label, :final isShort, :final maxValue, :final useForPace) => {
+      DistanceDetailConfig(:final label, :final isShort, :final maxValue) => {
         'activity_id': activityId,
         'label': label,
         'activity_detail_type': 'distance',
@@ -129,13 +136,14 @@ class CustomActivityRepository {
         'slider_interval': 0.1,
         'metric_uom': isShort ? MetricUom.meters.name : MetricUom.kilometers.name,
         'imperial_uom': isShort ? ImperialUom.yards.name : ImperialUom.miles.name,
-        'use_for_pace_calculation': useForPace,
+        'use_for_pace_calculation': hasPace,
       },
       EnvironmentDetailConfig(:final label) => {
         'activity_id': activityId,
         'label': label.isEmpty ? 'Environment' : label,
         'activity_detail_type': 'environment',
         'sort_order': sortOrder,
+        'use_for_pace_calculation': false,
       },
       PaceDetailConfig() => null, // Pace is stored on activity, not as a detail
     };

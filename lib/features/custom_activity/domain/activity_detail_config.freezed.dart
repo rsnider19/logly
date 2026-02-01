@@ -197,12 +197,12 @@ return pace(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String id,  String label,  bool isInteger,  double maxValue)?  number,TResult Function( String id,  String label,  int maxSeconds,  bool useForPace)?  duration,TResult Function( String id,  String label,  bool isShort,  double maxValue,  bool useForPace)?  distance,TResult Function( String id,  String label)?  environment,TResult Function( String id,  PaceType paceType)?  pace,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String id,  String label,  bool isInteger,  double maxValue)?  number,TResult Function( String id,  String label,  int maxSeconds)?  duration,TResult Function( String id,  String label,  bool isShort,  double maxValue)?  distance,TResult Function( String id,  String label)?  environment,TResult Function( String id,  PaceType paceType)?  pace,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case NumberDetailConfig() when number != null:
 return number(_that.id,_that.label,_that.isInteger,_that.maxValue);case DurationDetailConfig() when duration != null:
-return duration(_that.id,_that.label,_that.maxSeconds,_that.useForPace);case DistanceDetailConfig() when distance != null:
-return distance(_that.id,_that.label,_that.isShort,_that.maxValue,_that.useForPace);case EnvironmentDetailConfig() when environment != null:
+return duration(_that.id,_that.label,_that.maxSeconds);case DistanceDetailConfig() when distance != null:
+return distance(_that.id,_that.label,_that.isShort,_that.maxValue);case EnvironmentDetailConfig() when environment != null:
 return environment(_that.id,_that.label);case PaceDetailConfig() when pace != null:
 return pace(_that.id,_that.paceType);case _:
   return orElse();
@@ -222,12 +222,12 @@ return pace(_that.id,_that.paceType);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String id,  String label,  bool isInteger,  double maxValue)  number,required TResult Function( String id,  String label,  int maxSeconds,  bool useForPace)  duration,required TResult Function( String id,  String label,  bool isShort,  double maxValue,  bool useForPace)  distance,required TResult Function( String id,  String label)  environment,required TResult Function( String id,  PaceType paceType)  pace,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String id,  String label,  bool isInteger,  double maxValue)  number,required TResult Function( String id,  String label,  int maxSeconds)  duration,required TResult Function( String id,  String label,  bool isShort,  double maxValue)  distance,required TResult Function( String id,  String label)  environment,required TResult Function( String id,  PaceType paceType)  pace,}) {final _that = this;
 switch (_that) {
 case NumberDetailConfig():
 return number(_that.id,_that.label,_that.isInteger,_that.maxValue);case DurationDetailConfig():
-return duration(_that.id,_that.label,_that.maxSeconds,_that.useForPace);case DistanceDetailConfig():
-return distance(_that.id,_that.label,_that.isShort,_that.maxValue,_that.useForPace);case EnvironmentDetailConfig():
+return duration(_that.id,_that.label,_that.maxSeconds);case DistanceDetailConfig():
+return distance(_that.id,_that.label,_that.isShort,_that.maxValue);case EnvironmentDetailConfig():
 return environment(_that.id,_that.label);case PaceDetailConfig():
 return pace(_that.id,_that.paceType);}
 }
@@ -243,12 +243,12 @@ return pace(_that.id,_that.paceType);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String id,  String label,  bool isInteger,  double maxValue)?  number,TResult? Function( String id,  String label,  int maxSeconds,  bool useForPace)?  duration,TResult? Function( String id,  String label,  bool isShort,  double maxValue,  bool useForPace)?  distance,TResult? Function( String id,  String label)?  environment,TResult? Function( String id,  PaceType paceType)?  pace,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String id,  String label,  bool isInteger,  double maxValue)?  number,TResult? Function( String id,  String label,  int maxSeconds)?  duration,TResult? Function( String id,  String label,  bool isShort,  double maxValue)?  distance,TResult? Function( String id,  String label)?  environment,TResult? Function( String id,  PaceType paceType)?  pace,}) {final _that = this;
 switch (_that) {
 case NumberDetailConfig() when number != null:
 return number(_that.id,_that.label,_that.isInteger,_that.maxValue);case DurationDetailConfig() when duration != null:
-return duration(_that.id,_that.label,_that.maxSeconds,_that.useForPace);case DistanceDetailConfig() when distance != null:
-return distance(_that.id,_that.label,_that.isShort,_that.maxValue,_that.useForPace);case EnvironmentDetailConfig() when environment != null:
+return duration(_that.id,_that.label,_that.maxSeconds);case DistanceDetailConfig() when distance != null:
+return distance(_that.id,_that.label,_that.isShort,_that.maxValue);case EnvironmentDetailConfig() when environment != null:
 return environment(_that.id,_that.label);case PaceDetailConfig() when pace != null:
 return pace(_that.id,_that.paceType);case _:
   return null;
@@ -341,13 +341,12 @@ as double,
 @JsonSerializable()
 
 class DurationDetailConfig extends ActivityDetailConfig {
-  const DurationDetailConfig({required this.id, this.label = '', this.maxSeconds = 7200, this.useForPace = false, final  String? $type}): $type = $type ?? 'duration',super._();
+  const DurationDetailConfig({required this.id, this.label = 'Duration', this.maxSeconds = 7200, final  String? $type}): $type = $type ?? 'duration',super._();
   factory DurationDetailConfig.fromJson(Map<String, dynamic> json) => _$DurationDetailConfigFromJson(json);
 
 @override final  String id;
 @JsonKey() final  String label;
 @JsonKey() final  int maxSeconds;
-@JsonKey() final  bool useForPace;
 
 @JsonKey(name: 'detailType')
 final String $type;
@@ -366,16 +365,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DurationDetailConfig&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.maxSeconds, maxSeconds) || other.maxSeconds == maxSeconds)&&(identical(other.useForPace, useForPace) || other.useForPace == useForPace));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DurationDetailConfig&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.maxSeconds, maxSeconds) || other.maxSeconds == maxSeconds));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,label,maxSeconds,useForPace);
+int get hashCode => Object.hash(runtimeType,id,label,maxSeconds);
 
 @override
 String toString() {
-  return 'ActivityDetailConfig.duration(id: $id, label: $label, maxSeconds: $maxSeconds, useForPace: $useForPace)';
+  return 'ActivityDetailConfig.duration(id: $id, label: $label, maxSeconds: $maxSeconds)';
 }
 
 
@@ -386,7 +385,7 @@ abstract mixin class $DurationDetailConfigCopyWith<$Res> implements $ActivityDet
   factory $DurationDetailConfigCopyWith(DurationDetailConfig value, $Res Function(DurationDetailConfig) _then) = _$DurationDetailConfigCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String label, int maxSeconds, bool useForPace
+ String id, String label, int maxSeconds
 });
 
 
@@ -403,13 +402,12 @@ class _$DurationDetailConfigCopyWithImpl<$Res>
 
 /// Create a copy of ActivityDetailConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,Object? maxSeconds = null,Object? useForPace = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,Object? maxSeconds = null,}) {
   return _then(DurationDetailConfig(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,maxSeconds: null == maxSeconds ? _self.maxSeconds : maxSeconds // ignore: cast_nullable_to_non_nullable
-as int,useForPace: null == useForPace ? _self.useForPace : useForPace // ignore: cast_nullable_to_non_nullable
-as bool,
+as int,
   ));
 }
 
@@ -420,14 +418,13 @@ as bool,
 @JsonSerializable()
 
 class DistanceDetailConfig extends ActivityDetailConfig {
-  const DistanceDetailConfig({required this.id, this.label = '', this.isShort = false, this.maxValue = 50.0, this.useForPace = false, final  String? $type}): $type = $type ?? 'distance',super._();
+  const DistanceDetailConfig({required this.id, this.label = 'Distance', this.isShort = false, this.maxValue = 50.0, final  String? $type}): $type = $type ?? 'distance',super._();
   factory DistanceDetailConfig.fromJson(Map<String, dynamic> json) => _$DistanceDetailConfigFromJson(json);
 
 @override final  String id;
 @JsonKey() final  String label;
 @JsonKey() final  bool isShort;
 @JsonKey() final  double maxValue;
-@JsonKey() final  bool useForPace;
 
 @JsonKey(name: 'detailType')
 final String $type;
@@ -446,16 +443,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DistanceDetailConfig&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.isShort, isShort) || other.isShort == isShort)&&(identical(other.maxValue, maxValue) || other.maxValue == maxValue)&&(identical(other.useForPace, useForPace) || other.useForPace == useForPace));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DistanceDetailConfig&&(identical(other.id, id) || other.id == id)&&(identical(other.label, label) || other.label == label)&&(identical(other.isShort, isShort) || other.isShort == isShort)&&(identical(other.maxValue, maxValue) || other.maxValue == maxValue));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,label,isShort,maxValue,useForPace);
+int get hashCode => Object.hash(runtimeType,id,label,isShort,maxValue);
 
 @override
 String toString() {
-  return 'ActivityDetailConfig.distance(id: $id, label: $label, isShort: $isShort, maxValue: $maxValue, useForPace: $useForPace)';
+  return 'ActivityDetailConfig.distance(id: $id, label: $label, isShort: $isShort, maxValue: $maxValue)';
 }
 
 
@@ -466,7 +463,7 @@ abstract mixin class $DistanceDetailConfigCopyWith<$Res> implements $ActivityDet
   factory $DistanceDetailConfigCopyWith(DistanceDetailConfig value, $Res Function(DistanceDetailConfig) _then) = _$DistanceDetailConfigCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String label, bool isShort, double maxValue, bool useForPace
+ String id, String label, bool isShort, double maxValue
 });
 
 
@@ -483,14 +480,13 @@ class _$DistanceDetailConfigCopyWithImpl<$Res>
 
 /// Create a copy of ActivityDetailConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,Object? isShort = null,Object? maxValue = null,Object? useForPace = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? label = null,Object? isShort = null,Object? maxValue = null,}) {
   return _then(DistanceDetailConfig(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,isShort: null == isShort ? _self.isShort : isShort // ignore: cast_nullable_to_non_nullable
 as bool,maxValue: null == maxValue ? _self.maxValue : maxValue // ignore: cast_nullable_to_non_nullable
-as double,useForPace: null == useForPace ? _self.useForPace : useForPace // ignore: cast_nullable_to_non_nullable
-as bool,
+as double,
   ));
 }
 

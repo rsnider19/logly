@@ -13,8 +13,6 @@ class DistanceDetailForm extends ConsumerWidget {
     required this.onLabelChanged,
     required this.onIsShortChanged,
     required this.onMaxValueChanged,
-    required this.onUseForPaceChanged,
-    this.paceEnabled = true,
     super.key,
   });
 
@@ -22,8 +20,6 @@ class DistanceDetailForm extends ConsumerWidget {
   final ValueChanged<String> onLabelChanged;
   final ValueChanged<bool> onIsShortChanged;
   final ValueChanged<double> onMaxValueChanged;
-  final ValueChanged<bool> onUseForPaceChanged;
-  final bool paceEnabled;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -116,20 +112,6 @@ class DistanceDetailForm extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-
-        // Use for pace calculation toggle
-        if (paceEnabled)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Use for pace', style: theme.textTheme.bodyMedium),
-              Switch(
-                value: config.useForPace,
-                onChanged: onUseForPaceChanged,
-              ),
-            ],
-          ),
       ],
     );
   }

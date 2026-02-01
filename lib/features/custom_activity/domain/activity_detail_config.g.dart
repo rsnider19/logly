@@ -28,9 +28,8 @@ DurationDetailConfig _$DurationDetailConfigFromJson(
   Map<String, dynamic> json,
 ) => DurationDetailConfig(
   id: json['id'] as String,
-  label: json['label'] as String? ?? '',
+  label: json['label'] as String? ?? 'Duration',
   maxSeconds: (json['max_seconds'] as num?)?.toInt() ?? 7200,
-  useForPace: json['use_for_pace'] as bool? ?? false,
   $type: json['detailType'] as String?,
 );
 
@@ -40,7 +39,6 @@ Map<String, dynamic> _$DurationDetailConfigToJson(
   'id': instance.id,
   'label': instance.label,
   'max_seconds': instance.maxSeconds,
-  'use_for_pace': instance.useForPace,
   'detailType': instance.$type,
 };
 
@@ -48,10 +46,9 @@ DistanceDetailConfig _$DistanceDetailConfigFromJson(
   Map<String, dynamic> json,
 ) => DistanceDetailConfig(
   id: json['id'] as String,
-  label: json['label'] as String? ?? '',
+  label: json['label'] as String? ?? 'Distance',
   isShort: json['is_short'] as bool? ?? false,
   maxValue: (json['max_value'] as num?)?.toDouble() ?? 50.0,
-  useForPace: json['use_for_pace'] as bool? ?? false,
   $type: json['detailType'] as String?,
 );
 
@@ -62,7 +59,6 @@ Map<String, dynamic> _$DistanceDetailConfigToJson(
   'label': instance.label,
   'is_short': instance.isShort,
   'max_value': instance.maxValue,
-  'use_for_pace': instance.useForPace,
   'detailType': instance.$type,
 };
 

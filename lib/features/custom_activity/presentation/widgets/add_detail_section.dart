@@ -21,6 +21,8 @@ class AddDetailSection extends StatelessWidget {
   const AddDetailSection({
     required this.onAddDetail,
     required this.isAtLimit,
+    required this.hasDuration,
+    required this.hasDistance,
     required this.hasEnvironment,
     required this.hasPace,
     super.key,
@@ -28,6 +30,8 @@ class AddDetailSection extends StatelessWidget {
 
   final void Function(ActivityDetailConfig) onAddDetail;
   final bool isAtLimit;
+  final bool hasDuration;
+  final bool hasDistance;
   final bool hasEnvironment;
   final bool hasPace;
 
@@ -99,6 +103,8 @@ class AddDetailSection extends StatelessWidget {
     if (isAtLimit) return true;
 
     return switch (type) {
+      DetailType.duration => hasDuration,
+      DetailType.distance => hasDistance,
       DetailType.environment => hasEnvironment,
       DetailType.pace => hasPace,
       _ => false,

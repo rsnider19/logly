@@ -42,7 +42,7 @@ class PaceDetailForm extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Pace requires both a Duration and Distance detail marked for pace calculation.',
+                    'Pace requires both a Duration and Distance detail.',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onErrorContainer,
                     ),

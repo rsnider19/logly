@@ -8,16 +8,12 @@ class DurationDetailForm extends StatefulWidget {
     required this.config,
     required this.onLabelChanged,
     required this.onMaxSecondsChanged,
-    required this.onUseForPaceChanged,
-    this.paceEnabled = true,
     super.key,
   });
 
   final DurationDetailConfig config;
   final ValueChanged<String> onLabelChanged;
   final ValueChanged<int> onMaxSecondsChanged;
-  final ValueChanged<bool> onUseForPaceChanged;
-  final bool paceEnabled;
 
   @override
   State<DurationDetailForm> createState() => _DurationDetailFormState();
@@ -177,20 +173,6 @@ class _DurationDetailFormState extends State<DurationDetailForm> {
             ),
           ],
         ),
-        const SizedBox(height: 16),
-
-        // Use for pace calculation toggle
-        if (widget.paceEnabled)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Use for pace', style: theme.textTheme.bodyMedium),
-              Switch(
-                value: widget.config.useForPace,
-                onChanged: widget.onUseForPaceChanged,
-              ),
-            ],
-          ),
       ],
     );
   }

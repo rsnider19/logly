@@ -26,19 +26,17 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
   @FreezedUnionValue('duration')
   const factory ActivityDetailConfig.duration({
     required String id,
-    @Default('') String label,
+    @Default('Duration') String label,
     @Default(7200) int maxSeconds,
-    @Default(false) bool useForPace,
   }) = DurationDetailConfig;
 
   /// Distance detail (short: m/yd or long: km/mi).
   @FreezedUnionValue('distance')
   const factory ActivityDetailConfig.distance({
     required String id,
-    @Default('') String label,
+    @Default('Distance') String label,
     @Default(false) bool isShort,
     @Default(50.0) double maxValue,
-    @Default(false) bool useForPace,
   }) = DistanceDetailConfig;
 
   /// Environment detail (indoor/outdoor).
@@ -48,7 +46,7 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
     @Default('Environment') String label,
   }) = EnvironmentDetailConfig;
 
-  /// Pace detail (requires duration and distance marked for pace).
+  /// Pace detail (requires duration and distance details).
   @FreezedUnionValue('pace')
   const factory ActivityDetailConfig.pace({
     required String id,
@@ -98,8 +96,10 @@ sealed class ActivityDetailConfig with _$ActivityDetailConfig {
 
   /// Returns true if this detail type is limited to a single instance.
   bool get isSingleInstance => switch (this) {
+    NumberDetailConfig() => false,
+    DurationDetailConfig() => true,
+    DistanceDetailConfig() => true,
     EnvironmentDetailConfig() => true,
     PaceDetailConfig() => true,
-    _ => false,
   };
 }
