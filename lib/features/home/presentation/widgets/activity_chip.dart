@@ -45,7 +45,7 @@ class UserActivityChip extends StatelessWidget {
       shape: const StadiumBorder(),
       backgroundColor: _isPending ? theme.colorScheme.surfaceContainerHighest : color,
       side: BorderSide(
-        color: theme.colorScheme.onSurface.withAlpha(
+        color: theme.colorScheme.surface.withAlpha(
           Color.getAlphaFromOpacity(0.25),
         ),
       ),
@@ -95,7 +95,7 @@ class ActivityChip extends StatelessWidget {
       backgroundColor: isFilled ? color : null,
       materialTapTargetSize: materialTapTargetSize,
       side: BorderSide(
-        color: Theme.of(context).colorScheme.onSurface.withAlpha(
+        color: Theme.of(context).colorScheme.surface.withAlpha(
           Color.getAlphaFromOpacity(0.25),
         ),
       ),
