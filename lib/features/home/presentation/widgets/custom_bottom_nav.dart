@@ -66,9 +66,12 @@ class CustomBottomNav extends ConsumerWidget {
               _NavButton(
                 isSelected: currentIndex == 1,
                 onTap: () => onTap(1),
-                child: SvgPicture.asset(
-                  Assets.logoLight,
-                  height: 28,
+                child: Transform.translate(
+                  offset: Offset(0, 4),
+                  child: SvgPicture.asset(
+                    Assets.logoLight,
+                    height: 36,
+                  ),
                 ),
               ),
 
