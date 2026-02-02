@@ -19,7 +19,12 @@ class OnboardingRepository {
   /// Fetches the current user's profile via the my_profile() RPC.
   Future<ProfileData> getProfile() async {
     try {
-      final response = await _supabase.rpc<Map<String, dynamic>>('my_profile');
+      final userId = _supabase.auth.currentUser?.id;
+      if (userId == null) {
+        throw const CompleteOnboardingException('User not authenticated');
+      }
+
+      final response = await _supabase.from('profile').select().eq('user_id', userId).single();
       return ProfileData.fromJson(response);
     } catch (e, st) {
       _logger.e('Failed to fetch profile', e, st);
