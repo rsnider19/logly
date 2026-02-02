@@ -18,9 +18,9 @@
 
 ### Data Pipeline
 
-- [ ] **PIPE-01**: SSE stream connection from Flutter client to `chat` edge function
-- [ ] **PIPE-02**: Auth token (JWT) forwarded to edge function
-- [ ] **PIPE-03**: Stream timeout and disconnect handling
+- [x] **PIPE-01**: SSE stream connection from Flutter client to `chat` edge function
+- [x] **PIPE-02**: Auth token (JWT) forwarded to edge function
+- [x] **PIPE-03**: Stream timeout and disconnect handling
 
 ### Chat UI
 
@@ -109,9 +109,9 @@
 | EDGE-06 | Phase 1: Edge Function | Complete |
 | EDGE-07 | Phase 1: Edge Function | Complete |
 | EDGE-08 | Phase 1: Edge Function | Complete |
-| PIPE-01 | Phase 2: Stream Client | Pending |
-| PIPE-02 | Phase 2: Stream Client | Pending |
-| PIPE-03 | Phase 2: Stream Client | Pending |
+| PIPE-01 | Phase 2: Stream Client | Complete |
+| PIPE-02 | Phase 2: Stream Client | Complete |
+| PIPE-03 | Phase 2: Stream Client | Complete |
 | CHAT-01 | Phase 3: Chat Screen | Pending |
 | CHAT-02 | Phase 3: Chat Screen | Pending |
 | CHAT-03 | Phase 3: Chat Screen | Pending |

@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** Users can ask natural language questions about their logged data and get friendly, encouraging, data-backed responses
-**Current focus:** Phase 2 - Stream Client
+**Current focus:** Phase 3 - Chat Screen
 
 ## Current Position
 
-Phase: 2 of 5 (Stream Client)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-02 -- Completed 02-02-PLAN.md (Service Layer & State Notifier)
+Phase: 3 of 5 (Chat Screen)
+Plan: 0 of TBD in current phase
+Status: Not started
+Last activity: 2026-02-02 -- Completed Phase 2 (Stream Client)
 
 Progress: [████████░░░░░░░░░░░░] 40%
 
@@ -70,5 +70,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 02-02-PLAN.md (Service Layer & State Notifier) -- Phase 2 complete
+Stopped at: Completed Phase 2 (Stream Client)
 Resume file: None

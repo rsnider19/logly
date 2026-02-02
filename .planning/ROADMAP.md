@@ -13,7 +13,7 @@ Build an AI-powered chat feature from scratch that lets Logly users ask natural 
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Edge Function** - New `chat` Supabase edge function with text-to-SQL pipeline, SSE streaming, and security guardrails
-- [ ] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
+- [x] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
 - [ ] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
 - [ ] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
 - [ ] **Phase 5: Observability** - Server-side logging of generated SQL, durations, token usage, and metrics storage for reporting
@@ -48,8 +48,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md -- Domain models (ChatEvent, ChatStreamState, ChatException), SSE line-buffer parser, and ChatRepository
-- [ ] 02-02-PLAN.md -- TypewriterBuffer, ChatService with stall detection and retry, ChatStreamStateNotifier provider
+- [x] 02-01-PLAN.md -- Domain models (ChatEvent, ChatStreamState, ChatException), SSE line-buffer parser, and ChatRepository
+- [x] 02-02-PLAN.md -- TypewriterBuffer, ChatService with stall detection and retry, ChatStreamStateNotifier provider
 
 ### Phase 3: Chat Screen
 **Goal**: Users can open a chat screen, type a question, and see a streaming AI response with step-by-step progress indicators, markdown formatting, and graceful error handling
@@ -108,7 +108,7 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Edge Function | 3/3 | Complete | 2026-02-02 |
-| 2. Stream Client | 0/2 | Not started | - |
+| 2. Stream Client | 2/2 | Complete | 2026-02-02 |
 | 3. Chat Screen | 0/3 | Not started | - |
 | 4. Conversation & Discovery | 0/3 | Not started | - |
 | 5. Observability | 0/2 | Not started | - |
