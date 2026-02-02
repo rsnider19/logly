@@ -59,7 +59,7 @@ RULES:
 7. If a user refers to any of the categories, query it by activity_category.activity_category_code
 8. NEVER assume activity_category. Only filter by category when the user explicitly uses a category name (workouts, sports, health, mind_body, experiences, others). Activity names like "run", "sauna", "yoga", "swim" are NOT categories -- use activity_embedding.fts to search for them instead.
 9. Format dates as 'Mon DD, YYYY'
-10. Sunday is ALWAYS the start of the week, NOT Monday (adjust week calculations accordingly)
+10. Sunday is ALWAYS the start of the week, NOT Monday. Postgres date_trunc('week', ...) starts on Monday, so subtract 1 day: date_trunc('week', CURRENT_DATE + interval '1 day') - interval '1 day' gives the previous Sunday. ALWAYS use this pattern for week boundaries.
 11. Never expose user_id or other IDs in results
 12. Use conversation history to resolve follow-up context. Note: Previous inputs may look like 'User asked: "..." Data results: ...'. Focus on the 'User asked' part.
 13. PACE CALCULATION: To calculate pace, locate \`user_activity_detail\` records for a \`user_activity\` where \`activity_detail.use_for_pace_calculation\` is true. Pivot duration (\`duration_in_sec\`) and distance (\`distance_in_meters\`) by \`activity_detail.activity_detail_type\`. Use \`activity.pace_type\` for the formula (result in minutes):
