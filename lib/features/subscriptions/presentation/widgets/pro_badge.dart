@@ -10,11 +10,15 @@ import 'package:logly/features/subscriptions/presentation/providers/entitlement_
 class ProBadge extends ConsumerWidget {
   const ProBadge({
     required this.feature,
+    this.margin,
     super.key,
   });
 
   /// The premium feature this badge represents.
   final FeatureCode feature;
+
+  /// Optional margin to apply to the badge.
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -25,18 +29,21 @@ class ProBadge extends ConsumerWidget {
     //   return const SizedBox.shrink();
     // }
 
-    return MediaQuery.withNoTextScaling(
-      child: DecoratedBox(
-        decoration: const ShapeDecoration(
-          color: Colors.amber,
-          shape: StadiumBorder(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: Text(
-            'PRO',
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: Colors.black,
+    return Padding(
+      padding: margin ?? EdgeInsets.zero,
+      child: MediaQuery.withNoTextScaling(
+        child: DecoratedBox(
+          decoration: const ShapeDecoration(
+            color: Colors.amber,
+            shape: StadiumBorder(),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: Text(
+              'PRO',
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: Colors.black,
+              ),
             ),
           ),
         ),

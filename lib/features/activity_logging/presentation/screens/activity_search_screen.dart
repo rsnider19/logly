@@ -281,7 +281,10 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            const ProBadge(feature: FeatureCode.createCustomActivity),
+            const ProBadge(
+              feature: FeatureCode.createCustomActivity,
+              margin: EdgeInsets.only(left: 8),
+            ),
           ],
         ),
         trailing: const Icon(LucideIcons.chevronRight),

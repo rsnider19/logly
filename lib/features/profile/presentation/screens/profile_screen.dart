@@ -97,7 +97,10 @@ class _InsightsFab extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text('LoglyAI'),
-          ProBadge(feature: FeatureCode.aiInsights),
+          ProBadge(
+            feature: FeatureCode.aiInsights,
+            margin: EdgeInsets.only(left: 8),
+          ),
         ],
       ),
       icon: const Icon(LucideIcons.sparkles, size: 20),
