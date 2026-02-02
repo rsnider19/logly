@@ -49,8 +49,7 @@ const DANGEROUS_KEYWORDS = [
  * These catch common injection vectors that bypass keyword checks.
  */
 const INJECTION_PATTERNS = [
-  /;\s*$/, // Trailing semicolon (potential multi-statement)
-  /;\s*\w/, // Semicolon followed by another statement
+  /;\s*\w/, // Semicolon followed by another statement (multi-statement injection)
   /--.*\n.*\w/, // SQL line comment followed by more SQL (mid-query comment injection)
   /\/\*/, // Block comment start
   /\*\//, // Block comment end
@@ -71,10 +70,13 @@ const INJECTION_PATTERNS = [
  * @returns ValidationResult with valid flag and optional error message
  */
 export function validateSqlQuery(sql: string): ValidationResult {
-  const trimmed = sql.trim();
+  // Strip trailing semicolons -- LLMs commonly append them to generated SQL
+  const trimmed = sql.trim().replace(/;\s*$/, "");
+  console.log(`[Security] Validating SQL (${trimmed.length} chars): ${trimmed}`);
 
   // Check maximum query length
   if (trimmed.length > MAX_QUERY_LENGTH) {
+    console.error(`[Security] REJECTED: exceeds max length (${trimmed.length} > ${MAX_QUERY_LENGTH})`);
     return {
       valid: false,
       error: `Query exceeds maximum length of ${MAX_QUERY_LENGTH} characters`,
@@ -83,6 +85,7 @@ export function validateSqlQuery(sql: string): ValidationResult {
 
   // Must start with SELECT
   if (!trimmed.toUpperCase().startsWith("SELECT")) {
+    console.error(`[Security] REJECTED: does not start with SELECT. Starts with: ${trimmed.substring(0, 20)}`);
     return {
       valid: false,
       error: "Only SELECT queries are allowed",
@@ -93,6 +96,7 @@ export function validateSqlQuery(sql: string): ValidationResult {
   for (const keyword of DANGEROUS_KEYWORDS) {
     const pattern = new RegExp(`\\b${keyword}\\b`, "i");
     if (pattern.test(sql)) {
+      console.error(`[Security] REJECTED: forbidden keyword '${keyword}' found in: ${sql}`);
       return {
         valid: false,
         error: `Query contains forbidden keyword: ${keyword}`,
@@ -103,13 +107,15 @@ export function validateSqlQuery(sql: string): ValidationResult {
   // Check for injection patterns
   for (const pattern of INJECTION_PATTERNS) {
     if (pattern.test(sql)) {
+      console.error(`[Security] REJECTED: injection pattern ${pattern} matched in: ${sql}`);
       return {
         valid: false,
-        error: "Query contains potentially dangerous pattern",
+        error: `Query contains potentially dangerous pattern: ${pattern}`,
       };
     }
   }
 
+  console.log("[Security] SQL validation passed");
   return { valid: true };
 }
 
