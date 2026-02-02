@@ -59,12 +59,9 @@ Deno.serve((r) =>
     // ----------------------------------------------------------------
     const rateLimitResult = await checkRateLimit(userId);
     if (!rateLimitResult.allowed) {
-      const retryMessage = rateLimitResult.resetMs
-        ? ` Please try again in a few minutes.`
-        : "";
       return new Response(
         JSON.stringify({
-          message: `You've sent too many requests.${retryMessage}`,
+          message: "You've been busy! Give me a moment to catch up. Try again in a few minutes.",
           code: "rate_limited",
         }),
         { status: 429, headers: { "Content-Type": "application/json" } },

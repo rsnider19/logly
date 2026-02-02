@@ -316,3 +316,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/activity/deno.json"
 entrypoint = "./functions/activity/index.ts"
+
+[functions.chat]
+enabled = true
+verify_jwt = false
+import_map = "./functions/chat/deno.json"
+entrypoint = "./functions/chat/index.ts"

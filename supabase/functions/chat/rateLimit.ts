@@ -1,33 +1,21 @@
 /**
- * Per-user rate limiting via Upstash Redis.
+ * Per-user rate limiting via Postgres.
  *
- * Uses a sliding window algorithm (20 requests per hour per user)
- * to prevent abuse of the chat function.
+ * Uses an hourly window with a counter in the `chat_rate_limits` table
+ * (20 requests per hour per user) to prevent abuse of the chat function.
  *
- * The Ratelimit instance is created at module level for connection
- * reuse across warm invocations of the edge function.
- *
- * Fail-open strategy: if Upstash is unreachable, the request is
- * allowed through and the error is logged. This prevents a Redis
- * outage from taking down the entire chat feature.
+ * Fail-open strategy: if Postgres is unreachable, the request is
+ * allowed through and the error is logged. This prevents a database
+ * issue from taking down the entire chat feature.
  *
  * Environment variables required:
- * - UPSTASH_REDIS_REST_URL
- * - UPSTASH_REDIS_REST_TOKEN
+ * - SUPABASE_DB_URL
  */
 
-import { Ratelimit } from "npm:@upstash/ratelimit";
-import { Redis } from "npm:@upstash/redis";
+import { Client } from "jsr:@db/postgres";
 
-/**
- * Module-level Ratelimit instance for connection reuse across warm invocations.
- * Redis.fromEnv() reads UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.
- */
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(20, "1 h"),
-  analytics: true,
-});
+/** Maximum requests allowed per hourly window. */
+const MAX_REQUESTS_PER_HOUR = 20;
 
 /**
  * Result of a rate limit check.
@@ -43,23 +31,46 @@ export interface RateLimitResult {
 /**
  * Checks whether the given user is within the rate limit.
  *
- * Fail-open: if Upstash is unreachable, logs the error and allows the request.
+ * Uses an upsert on `chat_rate_limits` keyed by (user_id, window_start)
+ * where window_start is truncated to the current hour. If the count
+ * exceeds MAX_REQUESTS_PER_HOUR, the request is blocked.
+ *
+ * Fail-open: if Postgres is unreachable, logs the error and allows the request.
  *
  * @param userId - The authenticated user's ID
  * @returns RateLimitResult indicating whether the request is allowed
  */
 export async function checkRateLimit(userId: string): Promise<RateLimitResult> {
-  try {
-    const { success, reset } = await ratelimit.limit(userId);
+  const client = new Client(Deno.env.get("SUPABASE_DB_URL"));
 
-    if (!success) {
-      return { allowed: false, resetMs: reset };
+  try {
+    await client.connect();
+
+    // Upsert: increment the counter for the current hour window,
+    // or insert a new row with count=1 if none exists.
+    // Returns the current count and window_start after the upsert.
+    const result = await client.queryObject<{ request_count: number; window_start: string }>`
+      INSERT INTO public.chat_rate_limits (user_id, window_start, request_count)
+      VALUES (${userId}::uuid, date_trunc('hour', now()), 1)
+      ON CONFLICT (user_id, window_start)
+      DO UPDATE SET request_count = chat_rate_limits.request_count + 1
+      RETURNING request_count, window_start
+    `;
+
+    const { request_count, window_start } = result.rows[0];
+
+    if (request_count > MAX_REQUESTS_PER_HOUR) {
+      // Calculate when the current window expires (window_start + 1 hour)
+      const resetMs = new Date(window_start).getTime() + 60 * 60 * 1000;
+      return { allowed: false, resetMs };
     }
 
     return { allowed: true };
   } catch (err) {
-    // Fail open: if Upstash is down, allow the request and log the error
-    console.error("[RateLimit] Upstash error (failing open):", err);
+    // Fail open: if Postgres is down, allow the request and log the error
+    console.error("[RateLimit] Postgres error (failing open):", err);
     return { allowed: true };
+  } finally {
+    await client.end();
   }
 }
