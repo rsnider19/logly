@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:logly/features/auth/presentation/providers/auth_service_provider.dart';
 import 'package:logly/features/health_integration/presentation/providers/health_sync_provider.dart';
 import 'package:logly/features/home/presentation/widgets/custom_app_bar.dart';
@@ -523,6 +524,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           ),
 
           const SizedBox(height: 32),
+          const _AppVersionFooter(),
+          const SizedBox(height: 32),
         ],
       ),
     );
@@ -921,6 +924,40 @@ class _NoActivitiesFoundBottomSheet extends StatelessWidget {
           SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
         ],
       ),
+    );
+  }
+}
+
+class _AppVersionFooter extends StatelessWidget {
+  const _AppVersionFooter();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return FutureBuilder<PackageInfo>(
+      future: PackageInfo.fromPlatform(),
+      builder: (context, snapshot) {
+        final version = snapshot.data?.version ?? '';
+
+        return Column(
+          children: [
+            Text(
+              'Logly',
+              style: theme.textTheme.titleMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              version.isNotEmpty ? 'v$version' : '',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
