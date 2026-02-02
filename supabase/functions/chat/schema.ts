@@ -32,7 +32,7 @@ FK: activity_embedding.activity_id → activity.activity_id
 FK: sub_activity.activity_id → activity.activity_id
 
 ### public.user_activity
-(user_activity_id,user_id,activity_id,activity_timestamp,comments,activity_name_override)
+(user_activity_id,user_id,activity_id,activity_date,comments,activity_name_override)
 FK: user_activity.activity_id → activity.activity_id
 FK: user_activity.user_id → profile.user_id
 

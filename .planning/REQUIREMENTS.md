@@ -7,14 +7,14 @@
 
 ### Edge Function
 
-- [ ] **EDGE-01**: New `chat` Supabase edge function with text-to-SQL pipeline
-- [ ] **EDGE-02**: Accepts natural language question and converts to Postgres query via OpenAI GPT
-- [ ] **EDGE-03**: Executes generated SQL read-only against user-scoped data
-- [ ] **EDGE-04**: Analyzes query results and generates friendly, encouraging response
-- [ ] **EDGE-05**: Streams response via SSE (step progress events + response text)
-- [ ] **EDGE-06**: Supports multi-turn context via OpenAI's `previous_response_id`
-- [ ] **EDGE-07**: Write protection via RLS policies and SQL validation
-- [ ] **EDGE-08**: Statement timeout on generated queries
+- [x] **EDGE-01**: New `chat` Supabase edge function with text-to-SQL pipeline
+- [x] **EDGE-02**: Accepts natural language question and converts to Postgres query via OpenAI GPT
+- [x] **EDGE-03**: Executes generated SQL read-only against user-scoped data
+- [x] **EDGE-04**: Analyzes query results and generates friendly, encouraging response
+- [x] **EDGE-05**: Streams response via SSE (step progress events + response text)
+- [x] **EDGE-06**: Supports multi-turn context via OpenAI's `previous_response_id`
+- [x] **EDGE-07**: Write protection via RLS policies and SQL validation
+- [x] **EDGE-08**: Statement timeout on generated queries
 
 ### Data Pipeline
 
@@ -101,14 +101,14 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| EDGE-01 | Phase 1: Edge Function | Pending |
-| EDGE-02 | Phase 1: Edge Function | Pending |
-| EDGE-03 | Phase 1: Edge Function | Pending |
-| EDGE-04 | Phase 1: Edge Function | Pending |
-| EDGE-05 | Phase 1: Edge Function | Pending |
-| EDGE-06 | Phase 1: Edge Function | Pending |
-| EDGE-07 | Phase 1: Edge Function | Pending |
-| EDGE-08 | Phase 1: Edge Function | Pending |
+| EDGE-01 | Phase 1: Edge Function | Complete |
+| EDGE-02 | Phase 1: Edge Function | Complete |
+| EDGE-03 | Phase 1: Edge Function | Complete |
+| EDGE-04 | Phase 1: Edge Function | Complete |
+| EDGE-05 | Phase 1: Edge Function | Complete |
+| EDGE-06 | Phase 1: Edge Function | Complete |
+| EDGE-07 | Phase 1: Edge Function | Complete |
+| EDGE-08 | Phase 1: Edge Function | Complete |
 | PIPE-01 | Phase 2: Stream Client | Pending |
 | PIPE-02 | Phase 2: Stream Client | Pending |
 | PIPE-03 | Phase 2: Stream Client | Pending |

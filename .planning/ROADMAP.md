@@ -12,7 +12,7 @@ Build an AI-powered chat feature from scratch that lets Logly users ask natural 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Edge Function** - New `chat` Supabase edge function with text-to-SQL pipeline, SSE streaming, and security guardrails
+- [x] **Phase 1: Edge Function** - New `chat` Supabase edge function with text-to-SQL pipeline, SSE streaming, and security guardrails
 - [ ] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
 - [ ] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
 - [ ] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md -- Foundation: schema, prompts, SQL security validation, SSE stream handler
-- [ ] 01-02-PLAN.md -- Pipeline: rate limiting, RLS query executor, SQL generator, response generator, orchestrator
-- [ ] 01-03-PLAN.md -- Entry point: auth/subscription/rate-limit gating, Deno config, integration verification
+- [x] 01-01-PLAN.md -- Foundation: schema, prompts, SQL security validation, SSE stream handler
+- [x] 01-02-PLAN.md -- Pipeline: rate limiting, RLS query executor, SQL generator, response generator, orchestrator
+- [x] 01-03-PLAN.md -- Entry point: auth/subscription/rate-limit gating, Deno config, integration verification
 
 ### Phase 2: Stream Client
 **Goal**: The Flutter app can open an authenticated SSE connection to the `chat` edge function and parse the stream into typed domain events that higher layers can consume
@@ -107,7 +107,7 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Edge Function | 0/3 | Not started | - |
+| 1. Edge Function | 3/3 | Complete | 2026-02-02 |
 | 2. Stream Client | 0/2 | Not started | - |
 | 3. Chat Screen | 0/3 | Not started | - |
 | 4. Conversation & Discovery | 0/3 | Not started | - |
