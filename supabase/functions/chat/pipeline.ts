@@ -112,6 +112,7 @@ export function runPipeline(input: PipelineInput): Response {
       }
 
       // SQL validation (silent -- no user-visible step event)
+      console.log(`[Pipeline] Generated SQL: ${sqlResult.parsed.sqlQuery}`);
       const validation = validateSqlQuery(sqlResult.parsed.sqlQuery);
       if (!validation.valid) {
         console.error(

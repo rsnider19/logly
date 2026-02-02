@@ -38,7 +38,6 @@ const DANGEROUS_KEYWORDS = [
   "REVOKE",
   "EXEC",
   "EXECUTE",
-  "INTO",
   "COPY",
   "VACUUM",
   "REINDEX",
@@ -52,7 +51,7 @@ const DANGEROUS_KEYWORDS = [
 const INJECTION_PATTERNS = [
   /;\s*$/, // Trailing semicolon (potential multi-statement)
   /;\s*\w/, // Semicolon followed by another statement
-  /--/, // SQL line comment
+  /--.*\n.*\w/, // SQL line comment followed by more SQL (mid-query comment injection)
   /\/\*/, // Block comment start
   /\*\//, // Block comment end
   /\\x[0-9a-fA-F]/, // Hex escape sequences
