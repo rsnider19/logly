@@ -78,10 +78,8 @@ export async function executeWithRLS(
       `SET LOCAL statement_timeout = '${QUERY_TIMEOUT_MS}ms'`,
     );
 
-    // Switch to authenticated role for RLS enforcement
-    await client.queryObject("SET LOCAL ROLE authenticated");
-
-    // Set JWT claims so auth.uid() works correctly.
+    // Set JWT claims BEFORE switching role -- superuser has unrestricted
+    // set_config access, whereas the authenticated role may not.
     // auth.uid() uses coalesce to check both formats:
     //   1. request.jwt.claim.sub (legacy individual claim)
     //   2. request.jwt.claims->>'sub' (modern JSON blob)
@@ -93,9 +91,20 @@ export async function executeWithRLS(
       `SELECT set_config('request.jwt.claims', '${JSON.stringify({ sub: userId, role: "authenticated" })}', true)`,
     );
 
+    // Verify auth.uid() resolves correctly before switching role
+    const uidCheck = await client.queryObject<{ uid: string }>(
+      "SELECT auth.uid() as uid",
+    );
+    console.log(`[QueryExecutor] auth.uid() = ${uidCheck.rows[0]?.uid}, expected = ${userId}`);
+
+    // Switch to authenticated role for RLS enforcement
+    await client.queryObject("SET LOCAL ROLE authenticated");
+
     // Execute the generated SQL -- RLS policies now filter by auth.uid()
+    console.log(`[QueryExecutor] Executing SQL as authenticated role for user ${userId}`);
     const result = await client.queryObject(sql);
     const rows = result.rows;
+    console.log(`[QueryExecutor] Query returned ${rows.length} rows`);
 
     // Commit to finalize the transaction
     await client.queryObject("COMMIT");
