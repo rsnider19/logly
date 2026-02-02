@@ -45,11 +45,11 @@ Plans:
   1. Sending a question from Flutter opens an SSE connection to the edge function and yields a `Stream<ChatEvent>` of typed domain events (step, text delta, response ID, error, done)
   2. The user's Supabase JWT is forwarded with every request so the edge function can authenticate and scope data
   3. If the stream stalls or the network drops, the connection times out and surfaces a clear error event rather than hanging indefinitely
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Domain models (ChatEvent, ChatStreamState, ChatException), SSE line-buffer parser, and ChatRepository
+- [ ] 02-02-PLAN.md -- TypewriterBuffer, ChatService with stall detection and retry, ChatStreamStateNotifier provider
 
 ### Phase 3: Chat Screen
 **Goal**: Users can open a chat screen, type a question, and see a streaming AI response with step-by-step progress indicators, markdown formatting, and graceful error handling
