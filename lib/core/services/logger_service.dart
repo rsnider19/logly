@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -19,6 +21,7 @@ class LoggerService {
               colors: false,
             ),
             level: kReleaseMode ? Level.warning : Level.debug,
+            output: MyConsoleOutput(),
           ),
       _enableSentry = enableSentry;
 
@@ -86,5 +89,12 @@ class LoggerService {
         );
       }
     }
+  }
+}
+
+class MyConsoleOutput extends ConsoleOutput {
+  @override
+  void output(OutputEvent event) {
+    event.lines.forEach(developer.log);
   }
 }

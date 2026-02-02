@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,7 +39,7 @@ class CustomBottomNav extends ConsumerWidget {
       color: tintedSurface,
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -46,31 +47,25 @@ class CustomBottomNav extends ConsumerWidget {
               _NavButton(
                 isSelected: currentIndex == 0,
                 onTap: () => onTap(0),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  backgroundImage: user?.userMetadata?['avatar_url'] != null
-                      ? NetworkImage(user!.userMetadata!['avatar_url'] as String)
-                      : null,
-                  child: user?.userMetadata?['avatar_url'] == null
-                      ? Icon(
-                          LucideIcons.user,
-                          size: 20,
-                          color: theme.colorScheme.onPrimaryContainer,
-                        )
-                      : null,
-                ),
+                child: user?.userMetadata?['avatar_url'] != null
+                    ? CachedNetworkImage(
+                        imageUrl: user!.userMetadata!['avatar_url'] as String,
+                      )
+                    : Icon(
+                        LucideIcons.user,
+                        size: 20,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
               ),
 
               // Home button (center)
-              _NavButton(
-                isSelected: currentIndex == 1,
+              GestureDetector(
                 onTap: () => onTap(1),
                 child: Transform.translate(
                   offset: Offset(0, 4),
                   child: SvgPicture.asset(
                     Assets.logoLight,
-                    height: 36,
+                    height: 24,
                   ),
                 ),
               ),
@@ -79,17 +74,10 @@ class CustomBottomNav extends ConsumerWidget {
               _NavButton(
                 isSelected: false,
                 onTap: () => context.push('/activities/search'),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    LucideIcons.plus,
-                    size: 24,
-                    color: theme.colorScheme.onPrimary,
-                  ),
+                child: Icon(
+                  LucideIcons.plus,
+                  size: 24,
+                  color: theme.colorScheme.onPrimary,
                 ),
               ),
             ],
@@ -113,12 +101,13 @@ class _NavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: child,
+    return IconButton(
+      onPressed: onTap,
+      icon: CircleAvatar(
+        radius: 12,
+        child: ClipOval(
+          child: child,
+        ),
       ),
     );
   }
