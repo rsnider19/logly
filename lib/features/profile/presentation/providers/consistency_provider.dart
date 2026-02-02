@@ -13,20 +13,14 @@ Future<int> consistencyScore(Ref ref) async {
   // Watch all futures before any async gap to avoid disposal between awaits
   final dataFuture = ref.watch(activityCountsByDateProvider.future);
   final profileFuture = ref.watch(profileDataProvider.future);
-
   final (data, profile) = await (dataFuture, profileFuture).wait;
 
   final thirtyDaysAgo = DateTime.now().date.subtract(const Duration(days: 30));
-  final userJoinedDate = profile.createdAt.date;
-
-  final startDate = userJoinedDate.isBefore(thirtyDaysAgo) ? thirtyDaysAgo : userJoinedDate;
-  final daysInPeriod = DateTime.now().date.difference(startDate).inDays.coerceAtLeast(1) + 1;
-
   final activeDays = data
-      .where((e) => !e.activityDate.isBefore(startDate))
+      .where((e) => !e.activityDate.isBefore(thirtyDaysAgo))
       .map((e) => e.activityDate.date)
       .toSet()
       .length;
 
-  return (activeDays / daysInPeriod * 100).round();
+  return (activeDays / 30 * 100).round();
 }
