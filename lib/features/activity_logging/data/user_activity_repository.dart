@@ -242,6 +242,23 @@ class UserActivityRepository {
     }
   }
 
+  /// Fetches sub-activity usage frequency for an activity, ordered by most used.
+  ///
+  /// Returns a list of sub-activity IDs sorted by usage count descending.
+  Future<List<String>> getSubActivityFrequency(String activityId) async {
+    try {
+      final response = await _supabase.rpc(
+        'get_sub_activity_frequency',
+        params: {'p_activity_id': activityId},
+      );
+
+      return (response as List).map((e) => (e as Map<String, dynamic>)['sub_activity_id'] as String).toList();
+    } catch (e, st) {
+      _logger.e('Failed to fetch sub-activity frequency for activity $activityId', e, st);
+      throw FetchUserActivitiesException(e.toString());
+    }
+  }
+
   /// Deletes a user activity by ID.
   Future<void> delete(String userActivityId) async {
     try {

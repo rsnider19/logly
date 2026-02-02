@@ -13,14 +13,17 @@ class ViewAllChip extends StatelessWidget {
   });
 
   /// The color to use for the chip outline and text.
-  final Color categoryColor;
+  final Color? categoryColor;
 
   /// Called when the chip is pressed.
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ActionChip(
+      padding: EdgeInsets.only(left: 8, top: 8, right: 2, bottom: 8),
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -38,7 +41,7 @@ class ViewAllChip extends StatelessWidget {
       ),
       shape: const StadiumBorder(),
       backgroundColor: Colors.transparent,
-      side: BorderSide(color: categoryColor),
+      side: theme.chipTheme.side?.copyWith(color: categoryColor),
       onPressed: onPressed,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
+import 'package:logly/features/activity_catalog/domain/sub_activity.dart';
 import 'package:logly/features/activity_logging/data/favorite_repository.dart';
 import 'package:logly/features/activity_logging/data/user_activity_repository.dart';
 import 'package:logly/features/activity_logging/domain/activity_logging_exception.dart';
@@ -220,6 +221,54 @@ class ActivityLoggingService {
     _logger.d('Deleting activity $userActivityId');
 
     await _userActivityRepository.delete(userActivityId);
+  }
+
+  // ==================== Sub-Activity Frequency ====================
+
+  /// Returns sub-activities ordered by usage frequency for the given activity.
+  ///
+  /// Frequently used sub-activities appear first, followed by unused ones
+  /// in their original order. Falls back to original order if no history.
+  Future<List<SubActivity>> getSubActivitiesOrderedByFrequency(
+    String activityId,
+    List<SubActivity> allSubActivities,
+  ) async {
+    if (activityId.isEmpty || allSubActivities.isEmpty) {
+      return allSubActivities;
+    }
+
+    try {
+      final frequencyOrder = await _userActivityRepository.getSubActivityFrequency(activityId);
+
+      if (frequencyOrder.isEmpty) {
+        return allSubActivities;
+      }
+
+      final subActivityMap = {for (final sa in allSubActivities) sa.subActivityId: sa};
+      final ordered = <SubActivity>[];
+      final usedIds = <String>{};
+
+      // Add frequently used ones first (in frequency order)
+      for (final id in frequencyOrder) {
+        final sa = subActivityMap[id];
+        if (sa != null) {
+          ordered.add(sa);
+          usedIds.add(id);
+        }
+      }
+
+      // Add remaining in original order
+      for (final sa in allSubActivities) {
+        if (!usedIds.contains(sa.subActivityId)) {
+          ordered.add(sa);
+        }
+      }
+
+      return ordered;
+    } catch (e) {
+      _logger.e('Failed to get sub-activity frequency, using original order', e, StackTrace.current);
+      return allSubActivities;
+    }
   }
 
   // ==================== Favorites ====================
