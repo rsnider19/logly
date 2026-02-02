@@ -16,7 +16,7 @@
 
 import OpenAI from "npm:openai@4.103.0";
 import { z } from "npm:zod";
-import { NL_TO_SQL_INSTRUCTIONS } from "./prompts.ts";
+import { buildNlToSqlInstructions } from "./prompts.ts";
 
 /** Model used for NL-to-SQL conversion. */
 const NL_TO_SQL_MODEL = "gpt-4o-mini";
@@ -142,7 +142,7 @@ export async function generateSQL(
   // Build request with optional follow-up chaining
   const response = await openai.responses.create({
     model: NL_TO_SQL_MODEL,
-    instructions: NL_TO_SQL_INSTRUCTIONS,
+    instructions: buildNlToSqlInstructions(userId),
     input: userInput,
     ...(previousConversionId && {
       previous_response_id: previousConversionId,
