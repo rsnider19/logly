@@ -101,43 +101,43 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| EDGE-01 | — | Pending |
-| EDGE-02 | — | Pending |
-| EDGE-03 | — | Pending |
-| EDGE-04 | — | Pending |
-| EDGE-05 | — | Pending |
-| EDGE-06 | — | Pending |
-| EDGE-07 | — | Pending |
-| EDGE-08 | — | Pending |
-| PIPE-01 | — | Pending |
-| PIPE-02 | — | Pending |
-| PIPE-03 | — | Pending |
-| CHAT-01 | — | Pending |
-| CHAT-02 | — | Pending |
-| CHAT-03 | — | Pending |
-| CHAT-04 | — | Pending |
-| CHAT-05 | — | Pending |
-| CHAT-06 | — | Pending |
-| CHAT-07 | — | Pending |
-| CHAT-08 | — | Pending |
-| CHAT-09 | — | Pending |
-| CONV-01 | — | Pending |
-| CONV-02 | — | Pending |
-| DISC-01 | — | Pending |
-| DISC-02 | — | Pending |
-| ACCS-01 | — | Pending |
-| OBSV-01 | — | Pending |
-| OBSV-02 | — | Pending |
-| OBSV-03 | — | Pending |
-| OBSV-04 | — | Pending |
-| OBSV-05 | — | Pending |
-| OBSV-06 | — | Pending |
+| EDGE-01 | Phase 1: Edge Function | Pending |
+| EDGE-02 | Phase 1: Edge Function | Pending |
+| EDGE-03 | Phase 1: Edge Function | Pending |
+| EDGE-04 | Phase 1: Edge Function | Pending |
+| EDGE-05 | Phase 1: Edge Function | Pending |
+| EDGE-06 | Phase 1: Edge Function | Pending |
+| EDGE-07 | Phase 1: Edge Function | Pending |
+| EDGE-08 | Phase 1: Edge Function | Pending |
+| PIPE-01 | Phase 2: Stream Client | Pending |
+| PIPE-02 | Phase 2: Stream Client | Pending |
+| PIPE-03 | Phase 2: Stream Client | Pending |
+| CHAT-01 | Phase 3: Chat Screen | Pending |
+| CHAT-02 | Phase 3: Chat Screen | Pending |
+| CHAT-03 | Phase 3: Chat Screen | Pending |
+| CHAT-04 | Phase 3: Chat Screen | Pending |
+| CHAT-05 | Phase 3: Chat Screen | Pending |
+| CHAT-06 | Phase 3: Chat Screen | Pending |
+| CHAT-07 | Phase 3: Chat Screen | Pending |
+| CHAT-08 | Phase 3: Chat Screen | Pending |
+| CHAT-09 | Phase 4: Conversation & Discovery | Pending |
+| CONV-01 | Phase 4: Conversation & Discovery | Pending |
+| CONV-02 | Phase 4: Conversation & Discovery | Pending |
+| DISC-01 | Phase 4: Conversation & Discovery | Pending |
+| DISC-02 | Phase 3: Chat Screen | Pending |
+| ACCS-01 | Phase 3: Chat Screen | Pending |
+| OBSV-01 | Phase 5: Observability | Pending |
+| OBSV-02 | Phase 5: Observability | Pending |
+| OBSV-03 | Phase 5: Observability | Pending |
+| OBSV-04 | Phase 5: Observability | Pending |
+| OBSV-05 | Phase 5: Observability | Pending |
+| OBSV-06 | Phase 5: Observability | Pending |
 
 **Coverage:**
 - v1 requirements: 31 total
-- Mapped to phases: 0
-- Unmapped: 31 ⚠️
+- Mapped to phases: 31
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after initial definition*
+*Last updated: 2026-02-02 after roadmap creation*
