@@ -268,19 +268,18 @@ class _MonthlyChart extends StatelessWidget {
 
     switch (timePeriod) {
       case TimePeriod.oneWeek:
-        // Last 7 days, most recent on the left
-        return List.generate(7, (i) => today.subtract(Duration(days: i)));
+        // Last 7 days, oldest on the left
+        return List.generate(7, (i) => today.subtract(Duration(days: 6 - i)));
 
       case TimePeriod.oneMonth:
-        // Rolling 7-day windows anchored from today, most recent on the left
-        // e.g. Jan 31 (covers Jan 25-31), Jan 24 (covers Jan 18-24), etc.
-        return List.generate(5, (i) => today.subtract(Duration(days: i * 7)));
+        // Rolling 7-day windows anchored from today, oldest on the left
+        return List.generate(5, (i) => today.subtract(Duration(days: (4 - i) * 7)));
 
       case TimePeriod.oneYear:
       case TimePeriod.all:
-        // Last 12 months, most recent on the left
+        // Last 12 months, oldest on the left
         return List.generate(12, (i) {
-          final date = DateTime(now.year, now.month - i);
+          final date = DateTime(now.year, now.month - (11 - i));
           return DateTime(date.year, date.month);
         });
     }

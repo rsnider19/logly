@@ -25,9 +25,9 @@ class ProBadge extends ConsumerWidget {
     final entitlements = ref.watch(entitlementStateProvider);
     final theme = Theme.of(context);
 
-    // if (entitlements.isLoading || entitlements.hasFeature(feature)) {
-    //   return const SizedBox.shrink();
-    // }
+    if (entitlements.isLoading || entitlements.hasFeature(feature)) {
+      return const SizedBox.shrink();
+    }
 
     return Padding(
       padding: margin ?? EdgeInsets.zero,
