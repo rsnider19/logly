@@ -378,9 +378,6 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
                   TextField(
                     controller: _commentsController,
                     maxLines: 6,
-                    decoration: const InputDecoration(
-                      hintText: 'Add comments about this activity...',
-                    ),
                     onChanged: (value) {
                       ref
                           .read(activityFormStateProvider.notifier)

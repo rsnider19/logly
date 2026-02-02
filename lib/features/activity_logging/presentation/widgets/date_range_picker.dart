@@ -7,98 +7,60 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Date range picker for multi-day activities.
 ///
-/// Includes a toggle to enable multi-day mode and uses
+/// Always shows start and end date fields. Uses
 /// [ActivityFormStateNotifier.setActivityDate] and [setEndDate].
-class DateRangePicker extends ConsumerWidget {
+class DateRangePicker extends ConsumerStatefulWidget {
   const DateRangePicker({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DateRangePicker> createState() => _DateRangePickerState();
+}
+
+class _DateRangePickerState extends ConsumerState<DateRangePicker> {
+  @override
+  void initState() {
+    super.initState();
+    // Ensure end date is always set for multi-day mode
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final formState = ref.read(activityFormStateProvider);
+      if (formState.endDate == null) {
+        ref.read(activityFormStateProvider.notifier).setEndDate(formState.activityDate);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final formState = ref.watch(activityFormStateProvider);
     final startDate = formState.activityDate;
-    final endDate = formState.endDate;
-    final isMultiDay = endDate != null;
+    final endDate = formState.endDate ?? startDate;
     final dateFormat = DateFormat.yMMMd();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                'Date',
-                style: theme.textTheme.bodyLarge,
-              ),
-            ),
-            Row(
-              children: [
-                Text(
-                  'Multi-day',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(width: 4),
-                Switch(
-                  value: isMultiDay,
-                  onChanged: (value) {
-                    if (value) {
-                      // Enable multi-day with end date same as start
-                      ref.read(activityFormStateProvider.notifier).setEndDate(startDate);
-                    } else {
-                      // Disable multi-day
-                      ref.read(activityFormStateProvider.notifier).setEndDate(null);
-                    }
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        if (isMultiDay) ...[
-          Row(
-            children: [
-              Expanded(
-                child: _DateField(
-                  label: 'Start',
-                  date: startDate,
-                  onTap: () => _selectStartDate(context, ref, startDate, endDate),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Icon(
-                  LucideIcons.arrowRight,
-                  color: theme.colorScheme.onSurfaceVariant,
-                  size: 20,
-                ),
-              ),
-              Expanded(
-                child: _DateField(
-                  label: 'End',
-                  date: endDate,
-                  onTap: () => _selectEndDate(context, ref, startDate, endDate),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            _formatDateRange(startDate, endDate, dateFormat),
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.primary,
-            ),
-          ),
-        ] else ...[
-          _DateField(
+        Expanded(
+          child: _DateField(
+            label: 'Start',
             date: startDate,
-            showToday: true,
-            onTap: () => _selectStartDate(context, ref, startDate, null),
+            onTap: () => _selectStartDate(context, ref, startDate, endDate),
           ),
-        ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Icon(
+            LucideIcons.arrowRight,
+            color: theme.colorScheme.onSurfaceVariant,
+            size: 20,
+          ),
+        ),
+        Expanded(
+          child: _DateField(
+            label: 'End',
+            date: endDate,
+            onTap: () => _selectEndDate(context, ref, startDate, endDate),
+          ),
+        ),
       ],
     );
   }

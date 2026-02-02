@@ -25,6 +25,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/subactivity
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:logly/widgets/logly_icons.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Screen for logging a new activity.
@@ -261,22 +262,35 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
             tooltip: isFavorited ? 'Remove from favorites' : 'Add to favorites',
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(
+            theme.textTheme.headlineMedium!.fontSize! * theme.textTheme.headlineMedium!.height! + 8,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+            child: Row(
+              children: [
+                ActivityIcon(
+                  activity: activity,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  activity.name,
+                  textAlign: TextAlign.start,
+                  style: theme.textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
       body: formState.activity == null
           ? const Center(child: CircularProgressIndicator())
           : Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Activity name
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    activity.name,
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
@@ -322,9 +336,6 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
                         TextField(
                           controller: _commentsController,
                           maxLines: 6,
-                          decoration: const InputDecoration(
-                            hintText: 'Add comments about this activity...',
-                          ),
                           onChanged: (value) {
                             ref
                                 .read(activityFormStateProvider.notifier)

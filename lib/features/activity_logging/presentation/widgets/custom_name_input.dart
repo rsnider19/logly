@@ -57,33 +57,38 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
     final theme = Theme.of(context);
     final hasAccess = ref.watch(hasActivityNameOverrideProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Row(
-          children: [
-            Text(
-              'Custom Name',
-              style: theme.textTheme.bodyLarge,
-            ),
-            const ProBadge(feature: FeatureCode.activityNameOverride),
-          ],
+        Expanded(
+          flex: 3,
+          child: Text(
+            'Custom Name',
+            style: theme.textTheme.bodyLarge,
+          ),
         ),
-        const SizedBox(height: 8),
-        GestureDetector(
-          behavior: !hasAccess ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
-          onTap: hasAccess ? null : () => unawaited(_showPaywall()),
-          child: IgnorePointer(
-            ignoring: !hasAccess,
-            child: TextField(
-              controller: _controller,
-              enabled: hasAccess,
-              maxLength: 50,
-              decoration: InputDecoration(
-                hintText: 'e.g. Morning Run',
-                counterText: hasAccess ? null : '',
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 5,
+          child: GestureDetector(
+            behavior: !hasAccess ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+            onTap: hasAccess ? null : () => unawaited(_showPaywall()),
+            child: IgnorePointer(
+              ignoring: !hasAccess,
+              child: TextField(
+                controller: _controller,
+                enabled: hasAccess,
+                maxLength: 50,
+                decoration: InputDecoration(
+                  hintText: 'e.g. Morning Run',
+                  counterText: hasAccess ? null : '',
+                  suffixIcon: const Padding(
+                    padding: EdgeInsets.only(right: 12),
+                    child: ProBadge(feature: FeatureCode.activityNameOverride),
+                  ),
+                  suffixIconConstraints: const BoxConstraints(),
+                ),
+                onChanged: hasAccess ? _onChanged : null,
               ),
-              onChanged: hasAccess ? _onChanged : null,
             ),
           ),
         ),

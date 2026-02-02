@@ -74,51 +74,61 @@ class _DatePickerFieldState extends ConsumerState<DatePickerField> {
       _controller.text = formattedDate;
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        Text(
-          'Date',
-          style: theme.textTheme.bodyLarge,
+        Expanded(
+          flex: 3,
+          child: Text(
+            'Date',
+            style: theme.textTheme.bodyLarge,
+          ),
         ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _controller,
-          readOnly: true,
-          showCursor: false,
-          canRequestFocus: false,
-          style: theme.textTheme.bodyLarge,
-          decoration: InputDecoration(
-            prefixIconConstraints: const BoxConstraints.tightFor(width: 36),
-            prefixIcon: Icon(
-              LucideIcons.calendar,
-              color: theme.colorScheme.onSurfaceVariant,
-              size: 16,
-            ),
-            suffixIconConstraints: const BoxConstraints.tightFor(width: 64),
-            suffixIcon: _isToday(selectedDate)
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: MediaQuery.withNoTextScaling(
-                        child: Text(
-                          'Today',
-                          textAlign: TextAlign.center,
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onPrimaryContainer,
+        const SizedBox(width: 8),
+        Expanded(
+          flex: 5,
+          child: TextField(
+            controller: _controller,
+            readOnly: true,
+            showCursor: false,
+            canRequestFocus: false,
+            style: theme.textTheme.bodyLarge,
+            decoration: InputDecoration(
+              prefixIconConstraints: const BoxConstraints(),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.only(left: 12, right: 2),
+                child: Icon(
+                  LucideIcons.calendar,
+                  color: theme.colorScheme.onSurfaceVariant,
+                  size: 16,
+                ),
+              ),
+              suffixIconConstraints: const BoxConstraints(),
+              suffixIcon: _isToday(selectedDate)
+                  ? Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: DecoratedBox(
+                        decoration: ShapeDecoration(
+                          color: theme.colorScheme.primaryContainer,
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: MediaQuery.withNoTextScaling(
+                            child: Text(
+                              'TODAY',
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: theme.colorScheme.onPrimaryContainer,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                : null,
+                    )
+                  : null,
+            ),
+            onTap: () => _selectDate(selectedDate),
           ),
-          onTap: () => _selectDate(selectedDate),
         ),
       ],
     );
