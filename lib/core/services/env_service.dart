@@ -75,37 +75,35 @@ class EnvService {
 
   /// RevenueCat API key.
   ///
-  /// Uses REVENUE_CAT_API_KEY_TEST for sandbox testing in development,
-  /// or platform-specific keys (REVENUE_CAT_API_KEY_APPLE / REVENUE_CAT_API_KEY_GOOGLE)
-  /// for production, selected based on the current platform.
+  /// Uses platform-specific keys (REVENUE_CAT_API_KEY_APPLE / REVENUE_CAT_API_KEY_GOOGLE)
+  /// first, falling back to REVENUE_CAT_API_KEY_TEST for development/sandbox.
   static String get revenueCatApiKey {
-    // First check for test key (used in development/sandbox)
+    final appleKey = dotenv.env['REVENUE_CAT_API_KEY_APPLE'];
+    final googleKey = dotenv.env['REVENUE_CAT_API_KEY_GOOGLE'];
+
+    // Use platform-specific production keys first
+    if (Platform.isIOS || Platform.isMacOS) {
+      if (appleKey != null && appleKey.isNotEmpty) {
+        return appleKey;
+      }
+    } else {
+      if (googleKey != null && googleKey.isNotEmpty) {
+        return googleKey;
+      }
+    }
+
+    // Fall back to test key (development/sandbox)
     final testKey = dotenv.env['REVENUE_CAT_API_KEY_TEST'];
     if (testKey != null && testKey.isNotEmpty) {
       return testKey;
     }
 
-    // Fall back to platform-specific production keys
-    final appleKey = dotenv.env['REVENUE_CAT_API_KEY_APPLE'];
-    final googleKey = dotenv.env['REVENUE_CAT_API_KEY_GOOGLE'];
-
-    if (Platform.isIOS || Platform.isMacOS) {
-      if (appleKey == null || appleKey.isEmpty) {
-        throw const EnvironmentException(
-          'RevenueCat API key not configured',
-          'REVENUE_CAT_API_KEY_APPLE is missing from env file',
-        );
-      }
-      return appleKey;
-    }
-
-    if (googleKey == null || googleKey.isEmpty) {
-      throw const EnvironmentException(
-        'RevenueCat API key not configured',
-        'REVENUE_CAT_API_KEY_GOOGLE is missing from env file',
-      );
-    }
-    return googleKey;
+    // No key found
+    final platform = (Platform.isIOS || Platform.isMacOS) ? 'APPLE' : 'GOOGLE';
+    throw EnvironmentException(
+      'RevenueCat API key not configured',
+      'REVENUE_CAT_API_KEY_$platform is missing from env file',
+    );
   }
 
   /// RevenueCat API key for Apple platforms (production).
