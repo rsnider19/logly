@@ -19,23 +19,26 @@ class ProBadge extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final entitlements = ref.watch(entitlementStateProvider);
+    final theme = Theme.of(context);
 
-    if (entitlements.isLoading || entitlements.hasFeature(feature)) {
-      return const SizedBox.shrink();
-    }
+    // if (entitlements.isLoading || entitlements.hasFeature(feature)) {
+    //   return const SizedBox.shrink();
+    // }
 
-    return Container(
-      margin: const EdgeInsets.only(left: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: const ShapeDecoration(
-        color: Colors.amber,
-        shape: StadiumBorder(),
-      ),
-      child: const Text(
-        'PRO',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 12,
+    return MediaQuery.withNoTextScaling(
+      child: DecoratedBox(
+        decoration: const ShapeDecoration(
+          color: Colors.amber,
+          shape: StadiumBorder(),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          child: Text(
+            'PRO',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: Colors.black,
+            ),
+          ),
         ),
       ),
     );
