@@ -30,12 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Generated SQL is automatically scoped to the authenticated user's data via RLS enforcement -- no cross-user data is ever returned
   4. Long-running or malformed queries are terminated by a statement timeout before they can degrade the database
   5. A follow-up question sent with `previous_response_id` produces a context-aware response that references the prior conversation
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Foundation: schema, prompts, SQL security validation, SSE stream handler
+- [ ] 01-02-PLAN.md -- Pipeline: rate limiting, RLS query executor, SQL generator, response generator, orchestrator
+- [ ] 01-03-PLAN.md -- Entry point: auth/subscription/rate-limit gating, Deno config, integration verification
 
 ### Phase 2: Stream Client
 **Goal**: The Flutter app can open an authenticated SSE connection to the `chat` edge function and parse the stream into typed domain events that higher layers can consume
