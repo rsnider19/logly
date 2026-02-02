@@ -10,24 +10,24 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 2 of 5 (Stream Client)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-02-02 -- Completed 02-01-PLAN.md (Domain Models & SSE Data Layer)
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-02-02 -- Completed 02-02-PLAN.md (Service Layer & State Notifier)
 
-Progress: [██████░░░░░░░░░░░░░░] 30%
+Progress: [████████░░░░░░░░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Total execution time: ~21 min
+- Total plans completed: 5
+- Total execution time: ~26 min
 
 **By Phase:**
 
 | Phase | Plans | Status |
 |-------|-------|--------|
 | 01-edge-function | 3/3 | Complete |
-| 02-stream-client | 1/2 | In progress |
+| 02-stream-client | 2/2 | Complete |
 
 *Updated after each plan completion*
 
@@ -55,6 +55,9 @@ Recent decisions affecting current work:
 - [02-01]: Used @JsonKey for camelCase server fields (responseId, conversionId) to override global snake_case config
 - [02-01]: Cast response.data as Stream<List<int>> instead of http.ByteStream to avoid transitive dependency import
 - [02-01]: Null-aware map element syntax (?value) for optional request body fields in Dart 3.10
+- [02-02]: Property access over destructuring in switch cases to avoid variable shadowing
+- [02-02]: unawaited() wrapper for StreamController.close() in non-async methods
+- [02-02]: Callback-based state emission (onStateUpdate) from service to notifier pattern
 
 ### Pending Todos
 
@@ -67,5 +70,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 02-01-PLAN.md (Domain Models & SSE Data Layer)
+Stopped at: Completed 02-02-PLAN.md (Service Layer & State Notifier) -- Phase 2 complete
 Resume file: None
