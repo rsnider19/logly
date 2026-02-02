@@ -26,7 +26,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Requirements**: EDGE-01, EDGE-02, EDGE-03, EDGE-04, EDGE-05, EDGE-06, EDGE-07, EDGE-08
 **Success Criteria** (what must be TRUE):
   1. Calling the `chat` edge function with a natural language question and valid JWT returns a streamed SSE response containing step events and a friendly text answer
-  2. Generated SQL is executed via a dedicated read-only Postgres role so that write operations are impossible
+  2. Generated SQL is write-protected via RLS policies and SQL validation so that write operations are impossible
   3. Generated SQL is automatically scoped to the authenticated user's data via RLS enforcement -- no cross-user data is ever returned
   4. Long-running or malformed queries are terminated by a statement timeout before they can degrade the database
   5. A follow-up question sent with `previous_response_id` produces a context-aware response that references the prior conversation

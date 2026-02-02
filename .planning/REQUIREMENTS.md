@@ -13,7 +13,7 @@
 - [ ] **EDGE-04**: Analyzes query results and generates friendly, encouraging response
 - [ ] **EDGE-05**: Streams response via SSE (step progress events + response text)
 - [ ] **EDGE-06**: Supports multi-turn context via OpenAI's `previous_response_id`
-- [ ] **EDGE-07**: Dedicated read-only Postgres role with RLS enforcement
+- [ ] **EDGE-07**: Write protection via RLS policies and SQL validation
 - [ ] **EDGE-08**: Statement timeout on generated queries
 
 ### Data Pipeline
