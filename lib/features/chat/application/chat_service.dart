@@ -168,7 +168,7 @@ class ChatService {
     String query,
     String? previousResponseId,
     String? previousConversionId,
-    String? conversationId,
+    String? inputConversationId,
     void Function(ChatStreamState) onStateUpdate, {
     required bool isRetry,
   }) async {
@@ -178,7 +178,7 @@ class ChatService {
       var fullText = '';
       String? responseId;
       String? conversionId;
-      String? conversationId;
+      String? conversationId = inputConversationId;
       var followUpSuggestions = <String>[];
       String? currentStepName;
       String? currentStepStatus;
@@ -189,7 +189,7 @@ class ChatService {
             query: query,
             previousResponseId: previousResponseId,
             previousConversionId: previousConversionId,
-            conversationId: conversationId,
+            conversationId: inputConversationId,
           )
           .timeout(
             const Duration(seconds: 30),
