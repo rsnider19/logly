@@ -25,8 +25,17 @@ class ChatScreen extends ConsumerStatefulWidget {
 }
 
 class _ChatScreenState extends ConsumerState<ChatScreen> {
+  final _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   void _handleSendMessage(String query) {
     ref.read(chatUiStateProvider.notifier).clearLastErrorQuery();
+    _textController.clear();
     unawaited(ref.read(chatUiStateProvider.notifier).sendMessage(query));
   }
 
@@ -41,8 +50,19 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     final userId = currentUser?.id ?? 'anonymous';
     final theme = Theme.of(context);
 
-    // Check for error query restoration
-    final lastErrorQuery = ref.read(chatUiStateProvider.notifier).lastErrorQuery;
+    // Listen for error transitions and restore user's question text.
+    ref.listen(chatStreamStateProvider, (prev, next) {
+      if (next.status == ChatConnectionStatus.error &&
+          prev?.status != ChatConnectionStatus.error) {
+        final errorQuery = ref.read(chatUiStateProvider.notifier).lastErrorQuery;
+        if (errorQuery != null) {
+          _textController.text = errorQuery;
+          _textController.selection = TextSelection.fromPosition(
+            TextPosition(offset: errorQuery.length),
+          );
+        }
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -56,9 +76,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         theme: ChatTheme.fromThemeData(theme),
         builders: Builders(
           composerBuilder: (_) => ChatComposer(
+            controller: _textController,
             onSendMessage: _handleSendMessage,
             onStopStreaming: _handleStopStreaming,
-            initialText: lastErrorQuery,
           ),
           emptyChatListBuilder: (_) => ChatEmptyState(
             onSuggestionTap: _handleSendMessage,

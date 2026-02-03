@@ -12,13 +12,19 @@ import 'package:provider/provider.dart' as provider;
 /// Reports its height to [ComposerHeightNotifier] so the
 /// `flutter_chat_ui` Chat widget can reserve correct padding
 /// for the message list.
+///
+/// The [TextEditingController] is owned by the parent (ChatScreen)
+/// so it persists across rebuilds and supports error text restoration.
 class ChatComposer extends ConsumerStatefulWidget {
   const ChatComposer({
+    required this.controller,
     required this.onSendMessage,
     required this.onStopStreaming,
-    this.initialText,
     super.key,
   });
+
+  /// External text editing controller owned by the parent widget.
+  final TextEditingController controller;
 
   /// Callback when the user submits a message.
   final void Function(String query) onSendMessage;
@@ -26,31 +32,26 @@ class ChatComposer extends ConsumerStatefulWidget {
   /// Callback to stop the current streaming response.
   final VoidCallback onStopStreaming;
 
-  /// Optional text to pre-fill the input (e.g. after an error).
-  final String? initialText;
-
   @override
   ConsumerState<ChatComposer> createState() => _ChatComposerState();
 }
 
 class _ChatComposerState extends ConsumerState<ChatComposer> {
   final GlobalKey _composerKey = GlobalKey();
-  late final TextEditingController _textController;
   bool _hasText = false;
+
+  TextEditingController get _textController => widget.controller;
 
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController(text: widget.initialText);
     _hasText = _textController.text.trim().isNotEmpty;
     _textController.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
-    _textController
-      ..removeListener(_onTextChanged)
-      ..dispose();
+    _textController.removeListener(_onTextChanged);
     super.dispose();
   }
 
