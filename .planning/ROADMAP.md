@@ -95,11 +95,11 @@ Plans:
   2. Each log record includes three separate duration measurements: NL-to-SQL generation time, SQL execution time, and response generation time
   3. Each log record includes token usage counts (input tokens and output tokens) for every OpenAI API call made during the request
   4. A Supabase query can produce a report showing total token cost, average latency per step, and error rates over a given time period
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md -- Database schema (chat_telemetry_log table), telemetry persistence module, observability report queries
+- [ ] 05-02-PLAN.md -- Pipeline integration: token usage capture in generators, timing capture, telemetry persistence wiring
 
 ## Progress
 
