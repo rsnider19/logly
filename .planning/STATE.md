@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** Users can ask natural language questions about their logged data and get friendly, encouraging, data-backed responses
-**Current focus:** Phase 4 - Conversation & Discovery
+**Current focus:** Phase 4 Complete - Ready for Phase 5
 
 ## Current Position
 
 Phase: 4 of 5 (Conversation & Discovery)
-Plan: 3 of 3 in current phase
+Plan: 4 of 4 in current phase
 Status: Phase complete
-Last activity: 2026-02-03 -- Completed 04-03-PLAN.md (Backend Persistence)
+Last activity: 2026-02-03 -- Completed 04-04-PLAN.md (UI Integration)
 
-Progress: [████████████████████] 100%
+Progress: [████████████████████] 100% (Phase 4)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Total execution time: ~58 min
+- Total plans completed: 13
+- Total execution time: ~103 min
 
 **By Phase:**
 
@@ -29,7 +29,8 @@ Progress: [████████████████████] 100%
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
 | 03-chat-screen | 4/4 | Complete |
-| 04-conversation-discovery | 3/3 | Complete |
+| 04-conversation-discovery | 4/4 | Complete |
+| 05-observability | 0/2 | Not started |
 
 *Updated after each plan completion*
 
@@ -81,6 +82,10 @@ Recent decisions affecting current work:
 - [04-03]: Backend owns all writes; Flutter client is read-only
 - [04-03]: Conversation created on first message with truncated title
 - [04-03]: User message saved before processing; AI message saved after completion
+- [04-04]: Follow-up chips displayed in message list below AI message (not in composer area)
+- [04-04]: Soft delete for conversations (deleted_at timestamp, not hard delete)
+- [04-04]: Empty state on chat screen open (no auto-load of previous conversation)
+- [04-04]: Buffered streaming to prevent follow-up marker from appearing during stream
 
 ### Pending Todos
 
@@ -93,5 +98,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 04-03-PLAN.md (Backend Persistence)
+Stopped at: Completed 04-04-PLAN.md (UI Integration)
 Resume file: None
