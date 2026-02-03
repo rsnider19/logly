@@ -33,6 +33,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   final _textController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    // Reset to empty state when screen initializes (navigating to chat)
+    // Uses addPostFrameCallback to avoid modifying providers during build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _startNewChat();
+    });
+  }
+
+  @override
   void dispose() {
     _textController.dispose();
     super.dispose();
