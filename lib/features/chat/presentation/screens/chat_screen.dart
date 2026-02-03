@@ -56,8 +56,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   void _startNewChat() {
-    // Clear loaded suggestions
-    _loadedFollowUpSuggestions = [];
+    // Clear loaded suggestions and trigger rebuild
+    setState(() {
+      _loadedFollowUpSuggestions = [];
+    });
     // Clear current messages from UI and reset stream state
     unawaited(ref.read(chatUiStateProvider.notifier).clearMessages());
   }
