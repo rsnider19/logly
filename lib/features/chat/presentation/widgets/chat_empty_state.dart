@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/features/chat/presentation/providers/chat_starter_prompts_provider.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Welcome screen shown when the chat has no messages.
 ///
-/// Displays the LoglyAI branding and three tappable suggestion
+/// Displays the LoglyAI branding and tappable suggestion
 /// chips that send a pre-defined question when tapped.
-class ChatEmptyState extends StatelessWidget {
+/// Prompts are fetched dynamically from Supabase.
+class ChatEmptyState extends ConsumerWidget {
   const ChatEmptyState({required this.onSuggestionTap, super.key});
 
   /// Called with the suggestion text when the user taps a chip.
   final void Function(String question) onSuggestionTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final promptsAsync = ref.watch(chatStarterPromptsProvider);
 
     return Center(
       child: Padding(
@@ -51,17 +55,26 @@ class ChatEmptyState extends StatelessWidget {
               runSpacing: 8,
               alignment: WrapAlignment.center,
               children: [
-                _SuggestionChip(
-                  label: 'What did I do this week?',
-                  onTap: () => onSuggestionTap('What did I do this week?'),
-                ),
-                _SuggestionChip(
-                  label: 'What are my most consistent habits?',
-                  onTap: () => onSuggestionTap('What are my most consistent habits?'),
-                ),
-                _SuggestionChip(
-                  label: 'How active was I last month?',
-                  onTap: () => onSuggestionTap('How active was I last month?'),
+                ...promptsAsync.when(
+                  data: (prompts) => prompts
+                      .map(
+                        (prompt) => _SuggestionChip(
+                          label: prompt,
+                          onTap: () => onSuggestionTap(prompt),
+                        ),
+                      )
+                      .toList(),
+                  loading: () => [
+                    // Show shimmer placeholder chips during loading
+                    for (int i = 0; i < 3; i++) const _ShimmerChip(),
+                  ],
+                  error: (_, _) => [
+                    // Fallback to static prompt on error (provider already has fallback, but defensive)
+                    _SuggestionChip(
+                      label: 'What did I do this week?',
+                      onTap: () => onSuggestionTap('What did I do this week?'),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -87,6 +100,24 @@ class _SuggestionChip extends StatelessWidget {
       onPressed: onTap,
       avatar: const Icon(LucideIcons.messageSquare, size: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    );
+  }
+}
+
+/// Shimmer placeholder chip shown while loading prompts.
+class _ShimmerChip extends StatelessWidget {
+  const _ShimmerChip();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: 180,
+      height: 36,
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
     );
   }
 }
