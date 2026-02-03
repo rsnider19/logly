@@ -14,13 +14,14 @@ class ChatConversationRepository {
 
   final SupabaseClient _supabase;
 
-  /// Gets all conversations for the current user, ordered by most recent.
+  /// Gets all non-deleted conversations for the current user, ordered by most recent.
   ///
-  /// Used for the conversation history list.
+  /// Used for the conversation history list. Soft-deleted conversations are excluded.
   Future<List<ChatConversation>> getAll({int limit = 50, int offset = 0}) async {
     final response = await _supabase
         .from('chat_conversations')
         .select()
+        .isFilter('deleted_at', null) // Exclude soft-deleted conversations
         .order('updated_at', ascending: false)
         .range(offset, offset + limit - 1);
 
@@ -41,11 +42,15 @@ class ChatConversationRepository {
     return ChatConversation.fromJson(response);
   }
 
-  /// Deletes a conversation (cascades to messages via FK).
+  /// Soft-deletes a conversation by setting deleted_at timestamp.
   ///
-  /// This is the only write operation allowed from client - user-initiated delete.
+  /// The conversation and its messages are retained in the database for analytics
+  /// but hidden from the user's history list.
   Future<void> delete(String conversationId) async {
-    await _supabase.from('chat_conversations').delete().eq('conversation_id', conversationId);
+    await _supabase
+        .from('chat_conversations')
+        .update({'deleted_at': DateTime.now().toUtc().toIso8601String()})
+        .eq('conversation_id', conversationId);
   }
 }
 
