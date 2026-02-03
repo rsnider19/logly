@@ -61,12 +61,12 @@ Plans:
   3. After sending a question, the user sees step progress indicators (spinner with friendly label per step, checkmark when complete) followed by a streaming text response appearing token-by-token below the steps
   4. AI responses render markdown formatting (bold, lists, headers) correctly
   5. When a request fails (network error, timeout, server error), the user sees a friendly error message with a retry option -- no technical details exposed
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
-- [ ] 03-03: TBD
+- [ ] 03-01-PLAN.md -- Route, navigation, bridge provider (Riverpod-to-ChatController), stream cancellation
+- [ ] 03-02-PLAN.md -- ChatScreen with Chat widget, custom composer (send/stop), empty state (welcome + chips)
+- [ ] 03-03-PLAN.md -- Error text restoration, polish, and visual verification checkpoint
 
 ### Phase 4: Conversation & Discovery
 **Goal**: Users can have multi-turn conversations with context, see suggested starter questions on an empty chat, see follow-up suggestions after each response, and have their chat history persisted across sessions
