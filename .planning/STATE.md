@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 4 of 5 (Conversation & Discovery)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-03 -- Completed 04-01-PLAN.md (Chat History Data Foundation)
+Last activity: 2026-02-03 -- Completed 04-02-PLAN.md (Follow-up Suggestions & Starter Prompts)
 
-Progress: [██████████████████░░] 90%
+Progress: [███████████████████░] 95%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Total execution time: ~43 min
+- Total plans completed: 11
+- Total execution time: ~46 min
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [██████████████████░░] 90%
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
 | 03-chat-screen | 4/4 | Complete |
-| 04-conversation-discovery | 1/3 | In Progress |
+| 04-conversation-discovery | 2/3 | In Progress |
 
 *Updated after each plan completion*
 
@@ -75,6 +75,9 @@ Recent decisions affecting current work:
 - [03-04]: 5 chars per tick reduces state updates from ~200/sec to ~60/sec
 - [03-04]: addPostFrameCallback ensures cross-listener ordering without coupling providers
 - [04-01]: Required params before optional in Freezed models per lint rules
+- [04-02]: Follow-up suggestions embedded in done SSE event (not separate event type)
+- [04-02]: HTML comment marker for follow-up JSON (hidden from markdown rendering)
+- [04-02]: Strip marker from text deltas during streaming to hide from UI
 
 ### Pending Todos
 
@@ -87,5 +90,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 04-01-PLAN.md (Chat History Data Foundation)
+Stopped at: Completed 04-02-PLAN.md (Follow-up Suggestions & Starter Prompts)
 Resume file: None
