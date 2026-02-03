@@ -200,6 +200,8 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
         'stepCount': streamState.completedSteps.length,
         if (_stepStartTime != null)
           'stepDurationMs': DateTime.now().difference(_stepStartTime!).inMilliseconds,
+        if (streamState.followUpSuggestions.isNotEmpty)
+          'followUpSuggestions': streamState.followUpSuggestions,
       },
     );
 

@@ -51,6 +51,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   void _handleSendMessage(String query) {
     ref.read(chatUiStateProvider.notifier).clearLastErrorQuery();
     _textController.clear();
+    // Clear loaded suggestions when user sends a message
+    _loadedFollowUpSuggestions = [];
+    setState(() {});
     unawaited(ref.read(chatUiStateProvider.notifier).sendMessage(query));
   }
 
@@ -189,7 +192,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         chatController: controller,
         theme: ChatTheme.fromThemeData(theme),
         builders: Builders(
-          composerBuilder: (_) => _buildComposerWithFollowUps(),
+          composerBuilder: (_) => _buildComposer(),
           emptyChatListBuilder: (_) => ChatEmptyState(
             onSuggestionTap: _handleSendMessage,
           ),
@@ -203,64 +206,25 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   }
 
   // ---------------------------------------------------------------------------
-  // Builder: composer with follow-up chips
+  // Builder: composer
   // ---------------------------------------------------------------------------
 
-  Widget _buildComposerWithFollowUps() {
-    final streamState = ref.watch(chatStreamStateProvider);
-
-    // Determine follow-up suggestions source
-    // 1. From stream state (fresh conversation)
-    // 2. From loaded conversation (history)
-    var suggestions = <String>[];
-    if (streamState.status == ChatConnectionStatus.completed && streamState.followUpSuggestions.isNotEmpty) {
-      suggestions = streamState.followUpSuggestions;
-    } else if (_loadedFollowUpSuggestions.isNotEmpty) {
-      suggestions = _loadedFollowUpSuggestions;
-    }
-
+  Widget _buildComposer() {
     final theme = Theme.of(context);
-
-    // Compute the same elevation-tinted color the AppBar uses when
-    // scrolled-under (surfaceContainerLowest + elevation 3 surface tint).
-    final tintedSurface = ElevationOverlay.applySurfaceTint(
-      theme.colorScheme.surfaceContainerLowest,
-      theme.colorScheme.surfaceTint,
-      3,
-    );
 
     // The composerBuilder in flutter_chat_ui expects a widget that will be placed
     // inside a Stack (positioned at bottom). We return a Positioned wrapping the
-    // entire composer area (follow-up chips + input).
+    // composer area.
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
       child: ColoredBox(
         color: theme.colorScheme.surface,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (suggestions.isNotEmpty)
-              FollowUpChips(
-                suggestions: suggestions,
-                onTap: (question) {
-                  // Clear loaded suggestions when user taps a chip
-                  _loadedFollowUpSuggestions = [];
-                  _handleSendMessage(question);
-                },
-              ),
-            ChatComposer(
-              controller: _textController,
-              onSendMessage: (query) {
-                // Clear loaded suggestions when user sends a message
-                _loadedFollowUpSuggestions = [];
-                _handleSendMessage(query);
-              },
-              onStopStreaming: _handleStopStreaming,
-            ),
-          ],
+        child: ChatComposer(
+          controller: _textController,
+          onSendMessage: _handleSendMessage,
+          onStopStreaming: _handleStopStreaming,
         ),
       ),
     );
@@ -324,7 +288,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       );
     }
 
-    // AI completed message -- render with step summary + GptMarkdown
+    // Determine if this AI message should show follow-up chips.
+    // Chips show if: the message has follow-up suggestions AND it's the last AI message
+    // (i.e., the user hasn't sent another message yet).
+    final followUpSuggestions = _getFollowUpSuggestionsForMessage(message, index);
+
+    // AI completed message -- render with step summary + GptMarkdown + optional follow-up chips
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -333,8 +302,56 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           padding: const EdgeInsets.symmetric(vertical: 4),
           child: GptMarkdown(message.text, style: theme.textTheme.bodyLarge),
         ),
+        if (followUpSuggestions.isNotEmpty)
+          FollowUpChips(
+            suggestions: followUpSuggestions,
+            onTap: _handleSendMessage,
+          ),
       ],
     );
+  }
+
+  /// Returns follow-up suggestions for an AI message if it should display chips.
+  ///
+  /// Shows chips only for the most recent AI message that has suggestions,
+  /// and only when no newer user message exists after it (i.e., the conversation
+  /// hasn't continued yet).
+  List<String> _getFollowUpSuggestionsForMessage(TextMessage message, int index) {
+    final controller = ref.read(chatUiStateProvider);
+    final messages = controller.messages;
+
+    // flutter_chat_ui displays messages in reverse chronological order (newest first).
+    // Index 0 is the most recent message.
+    // We want to show chips only on the LAST AI message (lowest index AI message).
+
+    // If this is not the most recent message (index > 0), check if there are newer messages
+    // from the user. If so, hide chips (conversation has continued).
+    if (index > 0) {
+      // Check if there's a user message newer than this one
+      for (var i = 0; i < index; i++) {
+        final newerMsg = messages[i];
+        if (newerMsg is TextMessage && newerMsg.authorId != kLoglyAiUserId && newerMsg.authorId != kSystemUserId) {
+          // User sent a message after this AI message - don't show chips
+          return [];
+        }
+      }
+    }
+
+    // Get suggestions from message metadata or loaded suggestions (for history)
+    final metadata = message.metadata;
+    if (metadata != null) {
+      final suggestions = metadata['followUpSuggestions'];
+      if (suggestions is List && suggestions.isNotEmpty) {
+        return suggestions.cast<String>();
+      }
+    }
+
+    // For loaded conversations, check if this is the last message and use loaded suggestions
+    if (index == 0 && _loadedFollowUpSuggestions.isNotEmpty) {
+      return _loadedFollowUpSuggestions;
+    }
+
+    return [];
   }
 
   // ---------------------------------------------------------------------------
