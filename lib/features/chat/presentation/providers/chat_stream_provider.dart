@@ -27,8 +27,9 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
   @override
   ChatStreamState build() {
     _service = ref.watch(chatServiceProvider);
-    // Placeholder for cleanup if cancellation is added later.
-    ref.onDispose(() {});
+    ref.onDispose(() {
+      _service.cancel();
+    });
     return const ChatStreamState();
   }
 
@@ -70,6 +71,32 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
         conversionId: _lastConversionId,
       );
     }
+  }
+
+  /// Cancels the in-progress stream and preserves partial text.
+  ///
+  /// Signals the service to stop processing events and emits a
+  /// `completed` state with whatever text has been received so far.
+  void cancelStream() {
+    if (state.status != ChatConnectionStatus.streaming &&
+        state.status != ChatConnectionStatus.connecting &&
+        state.status != ChatConnectionStatus.completing) {
+      return;
+    }
+
+    _service.cancel();
+    state = ChatStreamState(
+      status: ChatConnectionStatus.completed,
+      displayText: state.displayText,
+      fullText: state.fullText,
+      completedSteps: state.completedSteps,
+      responseId: state.responseId,
+      conversionId: state.conversionId,
+    );
+
+    // Capture IDs for next follow-up
+    _lastResponseId = state.responseId;
+    _lastConversionId = state.conversionId;
   }
 
   /// Resets the conversation, clearing follow-up IDs and returning to idle.

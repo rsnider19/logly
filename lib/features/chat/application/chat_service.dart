@@ -27,6 +27,17 @@ class ChatService {
   final ChatRepository _repository;
   final LoggerService _logger;
 
+  /// Whether the current stream has been cancelled by the user.
+  bool _cancelled = false;
+
+  /// Signals cancellation of the current stream.
+  ///
+  /// The running `_executeStream` will detect this flag on the next
+  /// iteration and emit a `completed` state with partial text preserved.
+  void cancel() {
+    _cancelled = true;
+  }
+
   /// Sends a question through the chat pipeline with stall detection,
   /// auto-retry, and typewriter buffering.
   ///
@@ -41,6 +52,7 @@ class ChatService {
     String? previousResponseId,
     String? previousConversionId,
   }) async {
+    _cancelled = false;
     onStateUpdate(
       const ChatStreamState(status: ChatConnectionStatus.connecting),
     );
@@ -155,6 +167,22 @@ class ChatService {
           );
 
       await for (final event in eventStream) {
+        // Check for user-initiated cancellation
+        if (_cancelled) {
+          _logger.i('Chat stream cancelled by user');
+          onStateUpdate(
+            ChatStreamState(
+              status: ChatConnectionStatus.completed,
+              displayText: typewriter.currentText,
+              fullText: fullText,
+              completedSteps: List.unmodifiable(completedSteps),
+              responseId: responseId,
+              conversionId: conversionId,
+            ),
+          );
+          return;
+        }
+
         switch (event) {
           case ChatStepEvent():
             if (event.status == 'complete') {
@@ -250,6 +278,19 @@ class ChatService {
       // After the SSE stream closes, listen to typewriter draining
       // and emit display text updates as characters drip out.
       await for (final displayText in typewriter.stream) {
+        if (_cancelled) {
+          onStateUpdate(
+            ChatStreamState(
+              status: ChatConnectionStatus.completed,
+              displayText: typewriter.currentText,
+              fullText: fullText,
+              completedSteps: List.unmodifiable(completedSteps),
+              responseId: responseId,
+              conversionId: conversionId,
+            ),
+          );
+          return;
+        }
         onStateUpdate(
           ChatStreamState(
             status: ChatConnectionStatus.completing,
