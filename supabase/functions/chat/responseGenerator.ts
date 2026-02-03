@@ -35,6 +35,11 @@ export interface ResponseGeneratorParams {
 export interface ResponseGeneratorResult {
   fullResponse: string;
   responseId: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+    cachedTokens: number;
+  };
 }
 
 // ============================================================
@@ -116,6 +121,7 @@ export async function generateStreamingResponse(
 
   let fullResponse = "";
   let responseId = "";
+  let usage = { inputTokens: 0, outputTokens: 0, cachedTokens: 0 };
 
   for await (const event of stream) {
     // Handle text deltas (token-by-token streaming)
@@ -127,11 +133,16 @@ export async function generateStreamingResponse(
       }
     }
 
-    // Capture response ID from completed response
+    // Capture response ID and usage from completed response
     if (event.type === "response.completed") {
       responseId = event.response.id;
+      usage = {
+        inputTokens: event.response.usage?.input_tokens ?? 0,
+        outputTokens: event.response.usage?.output_tokens ?? 0,
+        cachedTokens: event.response.usage?.input_tokens_details?.cached_tokens ?? 0,
+      };
     }
   }
 
-  return { fullResponse, responseId };
+  return { fullResponse, responseId, usage };
 }
