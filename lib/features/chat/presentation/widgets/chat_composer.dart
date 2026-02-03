@@ -92,65 +92,60 @@ class _ChatComposerState extends ConsumerState<ChatComposer> {
     // the correct bottom padding (matches flutter_chat_ui Composer pattern).
     WidgetsBinding.instance.addPostFrameCallback((_) => _measureAndReportHeight());
 
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: SafeArea(
-        key: _composerKey,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surface,
-            border: Border(
-              top: BorderSide(color: theme.colorScheme.outlineVariant, width: 0.5),
-            ),
+    return SafeArea(
+      key: _composerKey,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
+        decoration: BoxDecoration(
+          color: theme.colorScheme.surface,
+          border: Border(
+            top: BorderSide(color: theme.colorScheme.outlineVariant, width: 0.5),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _textController,
-                  enabled: !isStreaming,
-                  maxLines: 5,
-                  minLines: 1,
-                  textInputAction: TextInputAction.newline,
-                  decoration: InputDecoration(
-                    hintText: isStreaming ? 'Waiting for response...' : 'Ask about your activities...',
-                    filled: true,
-                    fillColor: theme.colorScheme.surfaceContainerHighest,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(24),
-                      borderSide: BorderSide.none,
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _textController,
+                enabled: !isStreaming,
+                maxLines: 5,
+                minLines: 1,
+                textInputAction: TextInputAction.newline,
+                decoration: InputDecoration(
+                  hintText: isStreaming ? 'Waiting for response...' : 'Ask about your activities...',
+                  filled: true,
+                  fillColor: theme.colorScheme.surfaceContainerHighest,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(24),
+                    borderSide: BorderSide.none,
                   ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 ),
               ),
-              const SizedBox(width: 8),
-              if (isStreaming)
-                IconButton.filled(
-                  icon: const Icon(LucideIcons.square, size: 18),
-                  onPressed: widget.onStopStreaming,
-                  style: IconButton.styleFrom(
-                    backgroundColor: theme.colorScheme.error,
-                    foregroundColor: theme.colorScheme.onError,
-                  ),
-                )
-              else
-                IconButton.filled(
-                  icon: const Icon(LucideIcons.sendHorizontal, size: 18),
-                  onPressed: _hasText ? _handleSend : null,
-                  style: IconButton.styleFrom(
-                    backgroundColor:
-                        _hasText ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
-                    foregroundColor:
-                        _hasText ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant,
-                  ),
+            ),
+            const SizedBox(width: 8),
+            if (isStreaming)
+              IconButton.filled(
+                icon: const Icon(LucideIcons.square, size: 18),
+                onPressed: widget.onStopStreaming,
+                style: IconButton.styleFrom(
+                  backgroundColor: theme.colorScheme.error,
+                  foregroundColor: theme.colorScheme.onError,
                 ),
-            ],
-          ),
+              )
+            else
+              IconButton.filled(
+                icon: const Icon(LucideIcons.sendHorizontal, size: 18),
+                onPressed: _hasText ? _handleSend : null,
+                style: IconButton.styleFrom(
+                  backgroundColor:
+                      _hasText ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+                  foregroundColor:
+                      _hasText ? theme.colorScheme.onPrimary : theme.colorScheme.onSurfaceVariant,
+                ),
+              ),
+          ],
         ),
       ),
     );

@@ -206,28 +206,36 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       suggestions = _loadedFollowUpSuggestions;
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (suggestions.isNotEmpty)
-          FollowUpChips(
-            suggestions: suggestions,
-            onTap: (question) {
-              // Clear loaded suggestions when user taps a chip
+    // The composerBuilder in flutter_chat_ui expects a widget that will be placed
+    // inside a Stack (positioned at bottom). We return a Positioned wrapping the
+    // entire composer area (follow-up chips + input).
+    return Positioned(
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (suggestions.isNotEmpty)
+            FollowUpChips(
+              suggestions: suggestions,
+              onTap: (question) {
+                // Clear loaded suggestions when user taps a chip
+                _loadedFollowUpSuggestions = [];
+                _handleSendMessage(question);
+              },
+            ),
+          ChatComposer(
+            controller: _textController,
+            onSendMessage: (query) {
+              // Clear loaded suggestions when user sends a message
               _loadedFollowUpSuggestions = [];
-              _handleSendMessage(question);
+              _handleSendMessage(query);
             },
+            onStopStreaming: _handleStopStreaming,
           ),
-        ChatComposer(
-          controller: _textController,
-          onSendMessage: (query) {
-            // Clear loaded suggestions when user sends a message
-            _loadedFollowUpSuggestions = [];
-            _handleSendMessage(query);
-          },
-          onStopStreaming: _handleStopStreaming,
-        ),
-      ],
+        ],
+      ),
     );
   }
 
