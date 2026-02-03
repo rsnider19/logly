@@ -6,12 +6,17 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flyer_chat_text_stream_message/flyer_chat_text_stream_message.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
+import 'package:logly/features/chat/data/chat_message_repository.dart';
+import 'package:logly/features/chat/domain/chat_conversation.dart';
+import 'package:logly/features/chat/domain/chat_message.dart' as domain;
 import 'package:logly/features/chat/domain/chat_stream_state.dart';
 import 'package:logly/features/chat/presentation/providers/chat_stream_provider.dart';
 import 'package:logly/features/chat/presentation/providers/chat_ui_provider.dart';
 import 'package:logly/features/chat/presentation/widgets/chat_composer.dart';
 import 'package:logly/features/chat/presentation/widgets/chat_empty_state.dart';
+import 'package:logly/features/chat/presentation/widgets/follow_up_chips.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Main chat screen that assembles the `flutter_chat_ui` [Chat] widget
@@ -43,6 +48,87 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ref.read(chatStreamStateProvider.notifier).cancelStream();
   }
 
+  Future<void> _openHistory() async {
+    final selectedConversation = await const ChatHistoryRoute().push<ChatConversation>(context);
+    if (selectedConversation != null && mounted) {
+      await _loadConversation(selectedConversation);
+    }
+  }
+
+  void _startNewChat() {
+    // Clear loaded suggestions
+    _loadedFollowUpSuggestions = [];
+    // Clear current messages from UI and reset stream state
+    unawaited(ref.read(chatUiStateProvider.notifier).clearMessages());
+  }
+
+  Future<void> _loadConversation(ChatConversation conversation) async {
+    // Clear current messages
+    await ref.read(chatUiStateProvider.notifier).clearMessages();
+
+    // Set the conversation context for follow-up chaining
+    ref.read(chatStreamStateProvider.notifier).setConversationContext(
+      responseId: conversation.lastResponseId,
+      conversionId: conversation.lastConversionId,
+    );
+
+    // Load messages from Supabase
+    final messageRepo = ref.read(chatMessageRepositoryProvider);
+    final messages = await messageRepo.getByConversation(conversation.conversationId);
+
+    // Add messages to UI controller
+    final controller = ref.read(chatUiStateProvider);
+    final user = ref.watch(currentUserProvider);
+    final currentUserId = user?.id ?? 'anonymous';
+
+    for (final msg in messages) {
+      final uiMessage = _domainToUiMessage(msg, currentUserId);
+      await controller.insertMessage(uiMessage);
+    }
+
+    // If last message is from assistant and has follow-ups, show them
+    if (messages.isNotEmpty && messages.last.role == domain.ChatMessageRole.assistant) {
+      final lastMetadata = messages.last.metadata;
+      if (lastMetadata?.followUpSuggestions != null && lastMetadata!.followUpSuggestions!.isNotEmpty) {
+        // Manually update state with follow-up suggestions by triggering a state update
+        // We need to access the notifier's internal state - but we can't directly set followUpSuggestions
+        // The follow-up suggestions are part of ChatStreamState, which is separate from the messages
+        // For loaded conversations, we need to store the suggestions separately
+        _loadedFollowUpSuggestions = lastMetadata.followUpSuggestions!;
+        if (mounted) setState(() {});
+      }
+    }
+  }
+
+  /// Follow-up suggestions from a loaded conversation (not from stream state).
+  List<String> _loadedFollowUpSuggestions = [];
+
+  Message _domainToUiMessage(domain.ChatMessage msg, String currentUserId) {
+    final authorId = msg.role == domain.ChatMessageRole.user ? currentUserId : kLoglyAiUserId;
+
+    if (msg.role == domain.ChatMessageRole.system) {
+      return Message.system(
+        id: msg.messageId,
+        authorId: kSystemUserId,
+        text: msg.content,
+        createdAt: msg.createdAt,
+      );
+    }
+
+    return Message.text(
+      id: msg.messageId,
+      authorId: authorId,
+      text: msg.content,
+      createdAt: msg.createdAt,
+      metadata: msg.metadata != null
+          ? {
+              'followUpSuggestions': msg.metadata!.followUpSuggestions,
+              'steps': msg.metadata!.steps,
+            }
+          : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = ref.watch(chatUiStateProvider);
@@ -71,6 +157,18 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       appBar: AppBar(
         title: const Text('LoglyAI'),
         centerTitle: false,
+        actions: [
+          IconButton(
+            icon: const Icon(LucideIcons.history),
+            tooltip: 'Chat History',
+            onPressed: _openHistory,
+          ),
+          IconButton(
+            icon: const Icon(LucideIcons.squarePen),
+            tooltip: 'New Chat',
+            onPressed: _startNewChat,
+          ),
+        ],
       ),
       body: Chat(
         currentUserId: userId,
@@ -78,11 +176,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         chatController: controller,
         theme: ChatTheme.fromThemeData(theme),
         builders: Builders(
-          composerBuilder: (_) => ChatComposer(
-            controller: _textController,
-            onSendMessage: _handleSendMessage,
-            onStopStreaming: _handleStopStreaming,
-          ),
+          composerBuilder: (_) => _buildComposerWithFollowUps(),
           emptyChatListBuilder: (_) => ChatEmptyState(
             onSuggestionTap: _handleSendMessage,
           ),
@@ -92,6 +186,48 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           systemMessageBuilder: _buildSystemMessage,
         ),
       ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Builder: composer with follow-up chips
+  // ---------------------------------------------------------------------------
+
+  Widget _buildComposerWithFollowUps() {
+    final streamState = ref.watch(chatStreamStateProvider);
+
+    // Determine follow-up suggestions source
+    // 1. From stream state (fresh conversation)
+    // 2. From loaded conversation (history)
+    var suggestions = <String>[];
+    if (streamState.status == ChatConnectionStatus.completed && streamState.followUpSuggestions.isNotEmpty) {
+      suggestions = streamState.followUpSuggestions;
+    } else if (_loadedFollowUpSuggestions.isNotEmpty) {
+      suggestions = _loadedFollowUpSuggestions;
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (suggestions.isNotEmpty)
+          FollowUpChips(
+            suggestions: suggestions,
+            onTap: (question) {
+              // Clear loaded suggestions when user taps a chip
+              _loadedFollowUpSuggestions = [];
+              _handleSendMessage(question);
+            },
+          ),
+        ChatComposer(
+          controller: _textController,
+          onSendMessage: (query) {
+            // Clear loaded suggestions when user sends a message
+            _loadedFollowUpSuggestions = [];
+            _handleSendMessage(query);
+          },
+          onStopStreaming: _handleStopStreaming,
+        ),
+      ],
     );
   }
 

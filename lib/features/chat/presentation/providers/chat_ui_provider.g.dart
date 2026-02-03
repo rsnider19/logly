@@ -66,7 +66,7 @@ final class ChatUiStateNotifierProvider
 }
 
 String _$chatUiStateNotifierHash() =>
-    r'46904557bfb4d79a75be4deb0add96c9a759aef8';
+    r'ae692dd86f8994d68e4558cc43047e21739663c1';
 
 /// Bridge provider that translates [ChatStreamState] emissions from the
 /// stream layer into [InMemoryChatController] operations (insert, update,
