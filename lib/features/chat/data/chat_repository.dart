@@ -27,11 +27,13 @@ class ChatRepository {
   ///
   /// The Supabase client automatically attaches the user's JWT.
   /// Optional [previousResponseId] and [previousConversionId] enable
-  /// follow-up question chaining.
+  /// follow-up question chaining. Optional [conversationId] continues
+  /// an existing conversation.
   Stream<ChatEvent> sendQuestion({
     required String query,
     String? previousResponseId,
     String? previousConversionId,
+    String? conversationId,
   }) async* {
     try {
       final response = await _supabase.functions.invoke(
@@ -40,6 +42,7 @@ class ChatRepository {
           'query': query,
           'previousResponseId': ?previousResponseId,
           'previousConversionId': ?previousConversionId,
+          'conversationId': ?conversationId,
         },
       );
 

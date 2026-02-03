@@ -70,6 +70,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ref.read(chatStreamStateProvider.notifier).setConversationContext(
       responseId: conversation.lastResponseId,
       conversionId: conversation.lastConversionId,
+      conversationId: conversation.conversationId,
     );
 
     // Load messages from Supabase

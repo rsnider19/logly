@@ -24,6 +24,9 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
   /// Last conversion ID for follow-up chaining (persists across requests).
   String? _lastConversionId;
 
+  /// Current conversation ID for multi-turn chaining (persists across requests).
+  String? _currentConversationId;
+
   @override
   ChatStreamState build() {
     _service = ref.watch(chatServiceProvider);
@@ -57,11 +60,16 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
         },
         previousResponseId: _lastResponseId,
         previousConversionId: _lastConversionId,
+        conversationId: _currentConversationId,
       );
 
       // Capture IDs for next follow-up
       _lastResponseId = state.responseId;
       _lastConversionId = state.conversionId;
+      // Capture conversation ID (set by backend on first message)
+      if (state.conversationId != null) {
+        _currentConversationId = state.conversationId;
+      }
     } on Exception catch (e) {
       final errorMessage = e is ChatException ? e.message : 'An unexpected error occurred. Please try again.';
       state = ChatStreamState(
@@ -105,6 +113,7 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
   void resetConversation() {
     _lastResponseId = null;
     _lastConversionId = null;
+    _currentConversationId = null;
     state = const ChatStreamState();
   }
 
@@ -115,13 +124,15 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
 
   /// Sets the conversation context for continuing an existing conversation.
   ///
-  /// Called when loading from history. The [responseId] and [conversionId]
-  /// are used for follow-up question chaining with the backend.
+  /// Called when loading from history. The [responseId], [conversionId], and
+  /// [conversationId] are used for follow-up question chaining with the backend.
   void setConversationContext({
     String? responseId,
     String? conversionId,
+    String? conversationId,
   }) {
     _lastResponseId = responseId;
     _lastConversionId = conversionId;
+    _currentConversationId = conversationId;
   }
 }

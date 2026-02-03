@@ -67,6 +67,9 @@ class ChatService {
   /// [onStateUpdate] is called for each state change, allowing the
   /// caller (typically a Riverpod notifier) to control state emission.
   ///
+  /// [conversationId] is passed for multi-turn conversations (backend uses
+  /// to continue existing conversation rather than create new one).
+  ///
   /// Retries once silently on failure. If retry also fails, emits
   /// an error state with a user-friendly message.
   Future<void> sendQuestion({
@@ -74,6 +77,7 @@ class ChatService {
     required void Function(ChatStreamState) onStateUpdate,
     String? previousResponseId,
     String? previousConversionId,
+    String? conversationId,
   }) async {
     _cancelled = false;
     onStateUpdate(
@@ -85,6 +89,7 @@ class ChatService {
         query,
         previousResponseId,
         previousConversionId,
+        conversationId,
         onStateUpdate,
         isRetry: false,
       );
@@ -101,6 +106,7 @@ class ChatService {
           query,
           previousResponseId,
           previousConversionId,
+          conversationId,
           onStateUpdate,
           isRetry: true,
         );
@@ -134,6 +140,7 @@ class ChatService {
           query,
           previousResponseId,
           previousConversionId,
+          conversationId,
           onStateUpdate,
           isRetry: true,
         );
@@ -161,6 +168,7 @@ class ChatService {
     String query,
     String? previousResponseId,
     String? previousConversionId,
+    String? conversationId,
     void Function(ChatStreamState) onStateUpdate, {
     required bool isRetry,
   }) async {
@@ -181,6 +189,7 @@ class ChatService {
             query: query,
             previousResponseId: previousResponseId,
             previousConversionId: previousConversionId,
+            conversationId: conversationId,
           )
           .timeout(
             const Duration(seconds: 30),
