@@ -110,7 +110,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       sizeFactor: animation,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: child,
+        child: Align(
+          alignment: isSentByMe ? Alignment.centerRight : Alignment.centerLeft,
+          child: isSentByMe
+              ? ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.85,
+                  ),
+                  child: child,
+                )
+              : child,
+        ),
       ),
     );
   }
