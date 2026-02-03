@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Edge Function** - New `chat` Supabase edge function with text-to-SQL pipeline, SSE streaming, and security guardrails
 - [x] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
 - [x] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
-- [ ] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
+- [x] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
 - [ ] **Phase 5: Observability** - Server-side logging of generated SQL, durations, token usage, and metrics storage for reporting
 
 ## Phase Details
@@ -81,10 +81,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 04-01-PLAN.md -- Data foundation: Supabase migration (chat_conversations, chat_messages), Drift tables, Freezed domain models
-- [ ] 04-02-PLAN.md -- Edge function follow-up suggestions, starter prompts repository, dynamic empty state
-- [ ] 04-03-PLAN.md -- ChatFollowUpEvent parsing, Supabase repositories, persistence service with Drift caching
-- [ ] 04-04-PLAN.md -- UI integration: follow-up chips, persistence wiring, conversation loading on screen open
+- [x] 04-01-PLAN.md -- Data foundation: Supabase migration (chat_conversations, chat_messages), Drift tables, Freezed domain models
+- [x] 04-02-PLAN.md -- Edge function follow-up suggestions, starter prompts repository, dynamic empty state
+- [x] 04-03-PLAN.md -- ChatFollowUpEvent parsing, Supabase repositories, persistence service with Drift caching
+- [x] 04-04-PLAN.md -- UI integration: follow-up chips, persistence wiring, conversation loading on screen open
 
 ### Phase 5: Observability
 **Goal**: Every AI chat interaction is logged server-side with generated SQL, step durations, and token usage so that cost, quality, and performance can be monitored and reported
@@ -112,5 +112,5 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 | 1. Edge Function | 3/3 | Complete | 2026-02-02 |
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
 | 3. Chat Screen | 4/4 | Complete | 2026-02-03 |
-| 4. Conversation & Discovery | 0/4 | Ready | - |
+| 4. Conversation & Discovery | 4/4 | Complete | 2026-02-03 |
 | 5. Observability | 0/2 | Not started | - |
