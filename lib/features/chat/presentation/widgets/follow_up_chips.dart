@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -33,39 +34,36 @@ class FollowUpChips extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Continue the conversation:',
+            'Follow up with:',
             style: theme.textTheme.labelSmall?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
           ),
           const SizedBox(height: 8),
           Wrap(
-            spacing: 8,
             runSpacing: 8,
-            children: suggestions.take(3).map((suggestion) {
-              return ConstrainedBox(
-                // Limit chip width to prevent single chip from taking full width
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width * 0.7,
-                ),
-                child: ActionChip(
-                  label: Text(
-                    suggestion,
-                    style: theme.textTheme.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+            children: suggestions.take(3).mapIndexed((index, suggestion) {
+              return FractionallySizedBox(
+                widthFactor: 0.5,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: index == 0 ? 4 : 0,
+                    left: index == 1 ? 4 : 0,
                   ),
-                  onPressed: () => onTap(suggestion),
-                  avatar: Icon(
-                    LucideIcons.cornerDownRight,
-                    size: 14,
-                    color: theme.colorScheme.primary,
+                  child: ActionChip(
+                    label: Text(
+                      '$suggestion\n',
+                      style: theme.textTheme.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                    onPressed: () => onTap(suggestion),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    side: BorderSide.none,
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  side: BorderSide.none,
                 ),
               );
             }).toList(),

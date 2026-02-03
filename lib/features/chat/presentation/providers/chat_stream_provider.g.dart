@@ -69,7 +69,7 @@ final class ChatStreamStateNotifierProvider
 }
 
 String _$chatStreamStateNotifierHash() =>
-    r'f444b9f7d67131f3bca4936ac4014411d1e64d2a';
+    r'1288b72f450cec9748dd6b5ad9dd4285e2342eb5';
 
 /// Riverpod notifier exposing [ChatStreamState] to the UI layer.
 ///

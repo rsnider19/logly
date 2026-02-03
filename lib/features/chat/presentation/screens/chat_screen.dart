@@ -219,6 +219,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       suggestions = _loadedFollowUpSuggestions;
     }
 
+    final theme = Theme.of(context);
+
+    // Compute the same elevation-tinted color the AppBar uses when
+    // scrolled-under (surfaceContainerLowest + elevation 3 surface tint).
+    final tintedSurface = ElevationOverlay.applySurfaceTint(
+      theme.colorScheme.surfaceContainerLowest,
+      theme.colorScheme.surfaceTint,
+      3,
+    );
+
     // The composerBuilder in flutter_chat_ui expects a widget that will be placed
     // inside a Stack (positioned at bottom). We return a Positioned wrapping the
     // entire composer area (follow-up chips + input).
@@ -226,28 +236,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       left: 0,
       right: 0,
       bottom: 0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (suggestions.isNotEmpty)
-            FollowUpChips(
-              suggestions: suggestions,
-              onTap: (question) {
-                // Clear loaded suggestions when user taps a chip
+      child: ColoredBox(
+        color: theme.colorScheme.surface,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            if (suggestions.isNotEmpty)
+              FollowUpChips(
+                suggestions: suggestions,
+                onTap: (question) {
+                  // Clear loaded suggestions when user taps a chip
+                  _loadedFollowUpSuggestions = [];
+                  _handleSendMessage(question);
+                },
+              ),
+            ChatComposer(
+              controller: _textController,
+              onSendMessage: (query) {
+                // Clear loaded suggestions when user sends a message
                 _loadedFollowUpSuggestions = [];
-                _handleSendMessage(question);
+                _handleSendMessage(query);
               },
+              onStopStreaming: _handleStopStreaming,
             ),
-          ChatComposer(
-            controller: _textController,
-            onSendMessage: (query) {
-              // Clear loaded suggestions when user sends a message
-              _loadedFollowUpSuggestions = [];
-              _handleSendMessage(query);
-            },
-            onStopStreaming: _handleStopStreaming,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
