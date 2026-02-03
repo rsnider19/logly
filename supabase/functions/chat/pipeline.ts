@@ -35,6 +35,7 @@ import {
   updateConversationIds,
   getConversationContext,
 } from "./persistence.ts";
+import { persistTelemetry, TelemetryRecord } from "./telemetry.ts";
 
 // ============================================================
 // Types
@@ -85,6 +86,17 @@ export function runPipeline(input: PipelineInput): Response {
 
   // Run pipeline asynchronously -- the Response is returned immediately
   (async () => {
+    // Telemetry: timing capture
+    const requestStart = performance.now();
+    let firstTextTime: number | null = null;
+
+    // Initialize telemetry record with known values
+    const telemetry: Partial<TelemetryRecord> = {
+      userId,
+      userQuestion: query,
+      isOffTopic: false,
+    };
+
     // Persistence: conversation ID resolved early for tracking
     let conversationId: string | undefined;
     // Completed steps tracked for message metadata
@@ -101,6 +113,7 @@ export function runPipeline(input: PipelineInput): Response {
         query,
         inputConversationId
       );
+      telemetry.conversationId = conversationId;
 
       // Save user message before processing
       await saveUserMessage(conversationId, query);
@@ -129,13 +142,23 @@ export function runPipeline(input: PipelineInput): Response {
       progress.sendStep(STEP_NAMES.UNDERSTANDING, "start");
 
       let sqlResult;
+      const sqlStart = performance.now();
       try {
         sqlResult = await generateSQL({
           query: sanitizedQuery,
           userId,
           previousConversionId,
         });
+        telemetry.nlToSqlDurationMs = Math.round(performance.now() - sqlStart);
+        telemetry.sqlModel = "gpt-4o-mini";
+        telemetry.sqlInputTokens = sqlResult.usage.inputTokens;
+        telemetry.sqlOutputTokens = sqlResult.usage.outputTokens;
+        telemetry.sqlCachedTokens = sqlResult.usage.cachedTokens;
       } catch (err) {
+        telemetry.nlToSqlDurationMs = Math.round(performance.now() - sqlStart);
+        telemetry.errorType = "sql_generation";
+        telemetry.errorMessage = String(err);
+        telemetry.failedStep = "understanding";
         console.error("[Pipeline] NL-to-SQL generation failed:", err);
         progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
         progress.sendError(
@@ -146,6 +169,8 @@ export function runPipeline(input: PipelineInput): Response {
 
       // Handle off-topic questions
       if (sqlResult.parsed.offTopic) {
+        telemetry.isOffTopic = true;
+        telemetry.aiResponse = sqlResult.parsed.redirectMessage;
         progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
         completedStepNames.push(STEP_NAMES.UNDERSTANDING);
         // Send the redirect message as a text_delta so it appears as a chat message
@@ -173,6 +198,10 @@ export function runPipeline(input: PipelineInput): Response {
       // SQL validation (silent -- no user-visible step event)
       const validation = validateSqlQuery(sqlResult.parsed.sqlQuery);
       if (!validation.valid) {
+        telemetry.errorType = "sql_validation";
+        telemetry.errorMessage = validation.error ?? "Invalid SQL generated";
+        telemetry.failedStep = "understanding";
+        telemetry.generatedSql = sqlResult.parsed.sqlQuery;
         console.error(
           `[Pipeline] SQL validation failed: ${validation.error}`,
           `SQL: ${sqlResult.parsed.sqlQuery}`,
@@ -183,6 +212,9 @@ export function runPipeline(input: PipelineInput): Response {
         );
         return;
       }
+
+      // Capture generated SQL after validation succeeds
+      telemetry.generatedSql = sqlResult.parsed.sqlQuery;
 
       progress.sendConversionId(sqlResult.conversionId);
       progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
@@ -195,12 +227,19 @@ export function runPipeline(input: PipelineInput): Response {
       progress.sendStep(STEP_NAMES.LOOKING_UP, "start");
 
       let queryResult;
+      const execStart = performance.now();
       try {
         queryResult = await executeWithRLS(
           sqlResult.parsed.sqlQuery,
           userId,
         );
+        telemetry.sqlExecutionDurationMs = Math.round(performance.now() - execStart);
+        telemetry.resultRowCount = queryResult.rows.length;
       } catch (err) {
+        telemetry.sqlExecutionDurationMs = Math.round(performance.now() - execStart);
+        telemetry.errorType = "sql_execution";
+        telemetry.errorMessage = String(err);
+        telemetry.failedStep = "looking_up";
         console.error("[Pipeline] Query execution failed:", err);
         progress.sendStep(STEP_NAMES.LOOKING_UP, "complete");
         progress.sendError(
@@ -216,6 +255,7 @@ export function runPipeline(input: PipelineInput): Response {
       // Response streaming (no spinner -- direct text)
       // Uses buffering to prevent follow-up marker from appearing in stream
       // ============================================
+      const respStart = performance.now();
       try {
         let fullResponseText = "";
         // Buffer to hold text that might contain start of marker
@@ -225,7 +265,7 @@ export function runPipeline(input: PipelineInput): Response {
         // Flag to stop streaming once marker is detected
         let markerDetected = false;
 
-        const { responseId } = await generateStreamingResponse({
+        const { responseId, usage: responseUsage } = await generateStreamingResponse({
           query: sanitizedQuery,
           rows: queryResult.rows,
           truncated: queryResult.truncated,
@@ -233,6 +273,11 @@ export function runPipeline(input: PipelineInput): Response {
           hashedUserId: hashedUser,
           onTextDelta: (delta) => {
             fullResponseText += delta;
+
+            // Capture first text time for TTFB
+            if (firstTextTime === null) {
+              firstTextTime = performance.now();
+            }
 
             // If marker already detected, don't stream anything more
             if (markerDetected) return;
@@ -276,6 +321,17 @@ export function runPipeline(input: PipelineInput): Response {
           progress.sendTextDelta(buffer);
         }
 
+        // Capture response generation telemetry
+        telemetry.responseGenerationDurationMs = Math.round(performance.now() - respStart);
+        telemetry.ttfbMs = firstTextTime !== null
+          ? Math.round(firstTextTime - requestStart)
+          : null;
+        telemetry.responseModel = "gpt-4o-mini";
+        telemetry.responseInputTokens = responseUsage.inputTokens;
+        telemetry.responseOutputTokens = responseUsage.outputTokens;
+        telemetry.responseCachedTokens = responseUsage.cachedTokens;
+        telemetry.responseId = responseId;
+
         progress.sendResponseId(responseId);
 
         // Extract follow-up suggestions from accumulated response text
@@ -285,6 +341,10 @@ export function runPipeline(input: PipelineInput): Response {
         const cleanContent = fullResponseText
           .replace(/<!-- FOLLOW_UPS:.*-->/, "")
           .trim();
+
+        // Capture final telemetry fields
+        telemetry.aiResponse = cleanContent;
+        telemetry.followUpSuggestions = followUps.length > 0 ? followUps : undefined;
         if (conversationId) {
           await saveAssistantMessage(conversationId, cleanContent, {
             followUpSuggestions: followUps.length > 0 ? followUps : undefined,
@@ -302,6 +362,10 @@ export function runPipeline(input: PipelineInput): Response {
 
         progress.sendDone(conversationId!, followUps);
       } catch (err) {
+        telemetry.responseGenerationDurationMs = Math.round(performance.now() - respStart);
+        telemetry.errorType = "response_generation";
+        telemetry.errorMessage = String(err);
+        telemetry.failedStep = "response";
         console.error("[Pipeline] Response generation failed:", err);
         progress.sendError(
           "I had trouble putting together your answer. Could you try again?"
@@ -309,12 +373,18 @@ export function runPipeline(input: PipelineInput): Response {
       }
     } catch (err) {
       // Catch-all for unexpected errors
+      telemetry.errorType = "unexpected";
+      telemetry.errorMessage = String(err);
       console.error("[Pipeline] Unexpected error:", err);
       progress.sendError(
         "Something unexpected happened. Could you try again?"
       );
     } finally {
       progress.close();
+      // Fire-and-forget telemetry persistence
+      persistTelemetry(telemetry as TelemetryRecord).catch((e) =>
+        console.error("[Pipeline] Telemetry persistence failed:", e)
+      );
     }
   })();
 
