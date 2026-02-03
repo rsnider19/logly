@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** Users can ask natural language questions about their logged data and get friendly, encouraging, data-backed responses
-**Current focus:** Phase 4 Complete - Ready for Phase 5
+**Current focus:** Phase 5 Observability - In Progress
 
 ## Current Position
 
-Phase: 4 of 5 (Conversation & Discovery)
-Plan: 4 of 4 in current phase
-Status: Phase complete
-Last activity: 2026-02-03 -- Completed 04-04-PLAN.md (UI Integration)
+Phase: 5 of 5 (Observability)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-03 -- Completed 05-01-PLAN.md (Telemetry Schema & Persistence)
 
-Progress: [████████████████████] 100% (Phase 4)
+Progress: [████████████████████████████░░] 93% (14/15 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Total execution time: ~103 min
+- Total plans completed: 14
+- Total execution time: ~106 min
 
 **By Phase:**
 
@@ -30,7 +30,7 @@ Progress: [████████████████████] 100% (P
 | 02-stream-client | 2/2 | Complete |
 | 03-chat-screen | 4/4 | Complete |
 | 04-conversation-discovery | 4/4 | Complete |
-| 05-observability | 0/2 | Not started |
+| 05-observability | 1/2 | In progress |
 
 *Updated after each plan completion*
 
@@ -86,6 +86,9 @@ Recent decisions affecting current work:
 - [04-04]: Soft delete for conversations (deleted_at timestamp, not hard delete)
 - [04-04]: Empty state on chat screen open (no auto-load of previous conversation)
 - [04-04]: Buffered streaming to prevent follow-up marker from appearing during stream
+- [05-01]: sql_fingerprint computed by database trigger (not edge function)
+- [05-01]: All timing/token columns NULLABLE for partial failure support
+- [05-01]: No user-facing RLS policies (service role only access)
 
 ### Pending Todos
 
@@ -98,5 +101,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 04-04-PLAN.md (UI Integration)
+Stopped at: Completed 05-01-PLAN.md (Telemetry Schema & Persistence)
 Resume file: None

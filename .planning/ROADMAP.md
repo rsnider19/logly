@@ -98,7 +98,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01-PLAN.md -- Database schema (chat_telemetry_log table), telemetry persistence module, observability report queries
+- [x] 05-01-PLAN.md -- Database schema (chat_telemetry_log table), telemetry persistence module, observability report queries
 - [ ] 05-02-PLAN.md -- Pipeline integration: token usage capture in generators, timing capture, telemetry persistence wiring
 
 ## Progress
@@ -113,4 +113,4 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
 | 3. Chat Screen | 4/4 | Complete | 2026-02-03 |
 | 4. Conversation & Discovery | 4/4 | Complete | 2026-02-03 |
-| 5. Observability | 0/2 | Not started | - |
+| 5. Observability | 1/2 | In progress | - |
