@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** Users can ask natural language questions about their logged data and get friendly, encouraging, data-backed responses
-**Current focus:** Phase 5 Observability - In Progress
+**Current focus:** Phase 5 Observability - Complete
 
 ## Current Position
 
 Phase: 5 of 5 (Observability)
-Plan: 1 of 2 in current phase
-Status: In progress
-Last activity: 2026-02-03 -- Completed 05-01-PLAN.md (Telemetry Schema & Persistence)
+Plan: 2 of 2 in current phase
+Status: Phase complete
+Last activity: 2026-02-03 -- Completed 05-02-PLAN.md (Telemetry Pipeline Integration)
 
-Progress: [████████████████████████████░░] 93% (14/15 plans)
+Progress: [██████████████████████████████] 100% (15/15 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Total execution time: ~106 min
+- Total plans completed: 15
+- Total execution time: ~110 min
 
 **By Phase:**
 
@@ -30,7 +30,7 @@ Progress: [███████████████████████
 | 02-stream-client | 2/2 | Complete |
 | 03-chat-screen | 4/4 | Complete |
 | 04-conversation-discovery | 4/4 | Complete |
-| 05-observability | 1/2 | In progress |
+| 05-observability | 2/2 | Complete |
 
 *Updated after each plan completion*
 
@@ -89,6 +89,9 @@ Recent decisions affecting current work:
 - [05-01]: sql_fingerprint computed by database trigger (not edge function)
 - [05-01]: All timing/token columns NULLABLE for partial failure support
 - [05-01]: No user-facing RLS policies (service role only access)
+- [05-02]: Token usage extracted from OpenAI response.usage including cached_tokens
+- [05-02]: TTFB calculated from absolute request start (not response generation start)
+- [05-02]: Telemetry persisted fire-and-forget in finally block (never blocks response)
 
 ### Pending Todos
 
@@ -101,5 +104,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 05-01-PLAN.md (Telemetry Schema & Persistence)
+Stopped at: Completed 05-02-PLAN.md (Telemetry Pipeline Integration) - PROJECT COMPLETE
 Resume file: None
