@@ -54,13 +54,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     ref.listen(chatStreamStateProvider, (prev, next) {
       if (next.status == ChatConnectionStatus.error &&
           prev?.status != ChatConnectionStatus.error) {
-        final errorQuery = ref.read(chatUiStateProvider.notifier).lastErrorQuery;
-        if (errorQuery != null) {
-          _textController.text = errorQuery;
-          _textController.selection = TextSelection.fromPosition(
-            TextPosition(offset: errorQuery.length),
-          );
-        }
+        // Defer to next frame to ensure _handleError has set lastErrorQuery
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          final errorQuery = ref.read(chatUiStateProvider.notifier).lastErrorQuery;
+          if (errorQuery != null && mounted) {
+            _textController.text = errorQuery;
+            _textController.selection = TextSelection.fromPosition(
+              TextPosition(offset: errorQuery.length),
+            );
+          }
+        });
       }
     });
 
