@@ -214,9 +214,17 @@ export function runPipeline(input: PipelineInput): Response {
 
       // ============================================
       // Response streaming (no spinner -- direct text)
+      // Uses buffering to prevent follow-up marker from appearing in stream
       // ============================================
       try {
         let fullResponseText = "";
+        // Buffer to hold text that might contain start of marker
+        let buffer = "";
+        // Max length of marker prefix to buffer (length of "<!-- FOLLOW_UPS:")
+        const MARKER_PREFIX_LEN = FOLLOW_UP_MARKER.length;
+        // Flag to stop streaming once marker is detected
+        let markerDetected = false;
+
         const { responseId } = await generateStreamingResponse({
           query: sanitizedQuery,
           rows: queryResult.rows,
@@ -225,13 +233,48 @@ export function runPipeline(input: PipelineInput): Response {
           hashedUserId: hashedUser,
           onTextDelta: (delta) => {
             fullResponseText += delta;
-            // Strip follow-up marker from streamed text so it doesn't appear in UI
-            const cleanDelta = delta.includes(FOLLOW_UP_MARKER)
-              ? delta.split(FOLLOW_UP_MARKER)[0]
-              : delta;
-            if (cleanDelta) progress.sendTextDelta(cleanDelta);
+
+            // If marker already detected, don't stream anything more
+            if (markerDetected) return;
+
+            // Add delta to buffer
+            buffer += delta;
+
+            // Check if buffer contains the start of the marker
+            const markerStart = buffer.indexOf(FOLLOW_UP_MARKER);
+            if (markerStart !== -1) {
+              // Marker found - emit everything before it, then stop streaming
+              markerDetected = true;
+              const cleanText = buffer.slice(0, markerStart);
+              if (cleanText) progress.sendTextDelta(cleanText);
+              buffer = ""; // Clear buffer (rest is follow-up data)
+              return;
+            }
+
+            // Check if buffer might have partial marker at end
+            // Look for any prefix of FOLLOW_UP_MARKER at the end of buffer
+            let safeLength = buffer.length;
+            for (let i = 1; i <= Math.min(buffer.length, MARKER_PREFIX_LEN); i++) {
+              const suffix = buffer.slice(-i);
+              if (FOLLOW_UP_MARKER.startsWith(suffix)) {
+                safeLength = buffer.length - i;
+                break;
+              }
+            }
+
+            // Emit safe portion, keep potential marker prefix in buffer
+            if (safeLength > 0) {
+              const safeText = buffer.slice(0, safeLength);
+              progress.sendTextDelta(safeText);
+              buffer = buffer.slice(safeLength);
+            }
           },
         });
+
+        // Emit any remaining buffered text (if no marker was found)
+        if (!markerDetected && buffer) {
+          progress.sendTextDelta(buffer);
+        }
 
         progress.sendResponseId(responseId);
 
