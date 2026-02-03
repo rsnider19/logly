@@ -43,22 +43,30 @@ class FollowUpChips extends StatelessWidget {
             spacing: 8,
             runSpacing: 8,
             children: suggestions.take(3).map((suggestion) {
-              return ActionChip(
-                label: Text(
-                  suggestion,
-                  style: theme.textTheme.bodySmall,
+              return ConstrainedBox(
+                // Limit chip width to prevent single chip from taking full width
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width * 0.7,
                 ),
-                onPressed: () => onTap(suggestion),
-                avatar: Icon(
-                  LucideIcons.cornerDownRight,
-                  size: 14,
-                  color: theme.colorScheme.primary,
+                child: ActionChip(
+                  label: Text(
+                    suggestion,
+                    style: theme.textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                  onPressed: () => onTap(suggestion),
+                  avatar: Icon(
+                    LucideIcons.cornerDownRight,
+                    size: 14,
+                    color: theme.colorScheme.primary,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  side: BorderSide.none,
                 ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                side: BorderSide.none,
               );
             }).toList(),
           ),
