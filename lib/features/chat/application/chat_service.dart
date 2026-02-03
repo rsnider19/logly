@@ -147,6 +147,8 @@ class ChatService {
       var fullText = '';
       String? responseId;
       String? conversionId;
+      String? conversationId;
+      var followUpSuggestions = <String>[];
       String? currentStepName;
       String? currentStepStatus;
       final completedSteps = <ChatCompletedStep>[];
@@ -258,7 +260,12 @@ class ChatService {
           case ChatErrorEvent(:final message):
             throw ChatConnectionException(message);
 
-          case ChatDoneEvent():
+          case ChatDoneEvent(
+              conversationId: final doneConversationId,
+              followUpSuggestions: final doneSuggestions,
+            ):
+            conversationId = doneConversationId;
+            followUpSuggestions = doneSuggestions;
             typewriter.markDone();
             onStateUpdate(
               ChatStreamState(
@@ -270,6 +277,8 @@ class ChatService {
                 completedSteps: List.unmodifiable(completedSteps),
                 responseId: responseId,
                 conversionId: conversionId,
+                conversationId: conversationId,
+                followUpSuggestions: followUpSuggestions,
               ),
             );
         }
@@ -287,6 +296,8 @@ class ChatService {
               completedSteps: List.unmodifiable(completedSteps),
               responseId: responseId,
               conversionId: conversionId,
+              conversationId: conversationId,
+              followUpSuggestions: followUpSuggestions,
             ),
           );
           return;
@@ -299,6 +310,8 @@ class ChatService {
             completedSteps: List.unmodifiable(completedSteps),
             responseId: responseId,
             conversionId: conversionId,
+            conversationId: conversationId,
+            followUpSuggestions: followUpSuggestions,
           ),
         );
       }
@@ -312,6 +325,8 @@ class ChatService {
           completedSteps: List.unmodifiable(completedSteps),
           responseId: responseId,
           conversionId: conversionId,
+          conversationId: conversationId,
+          followUpSuggestions: followUpSuggestions,
         ),
       );
     } finally {

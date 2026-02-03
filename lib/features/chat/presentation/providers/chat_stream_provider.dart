@@ -107,4 +107,21 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
     _lastConversionId = null;
     state = const ChatStreamState();
   }
+
+  /// Resets conversation state to start fresh.
+  ///
+  /// Called when user taps "New Chat" button. Alias for [resetConversation].
+  void startNewConversation() => resetConversation();
+
+  /// Sets the conversation context for continuing an existing conversation.
+  ///
+  /// Called when loading from history. The [responseId] and [conversionId]
+  /// are used for follow-up question chaining with the backend.
+  void setConversationContext({
+    String? responseId,
+    String? conversionId,
+  }) {
+    _lastResponseId = responseId;
+    _lastConversionId = conversionId;
+  }
 }
