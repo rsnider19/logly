@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 3 of 5 (Chat Screen)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-02 -- Completed 03-01-PLAN.md (Route, Navigation, Bridge Provider)
+Last activity: 2026-02-02 -- Completed 03-02-PLAN.md (Chat Screen with Custom Composer and Empty State)
 
-Progress: [████████████░░░░░░░░] 60%
+Progress: [██████████████░░░░░░] 70%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
-- Total execution time: ~32 min
+- Total plans completed: 7
+- Total execution time: ~36 min
 
 **By Phase:**
 
@@ -28,7 +28,7 @@ Progress: [████████████░░░░░░░░] 60%
 |-------|-------|--------|
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
-| 03-chat-screen | 1/3 | In progress |
+| 03-chat-screen | 2/3 | In progress |
 
 *Updated after each plan completion*
 
@@ -63,6 +63,10 @@ Recent decisions affecting current work:
 - [03-01]: Error handling removes user+AI messages, inserts system message, stores query for input restoration
 - [03-01]: Fire-and-forget stream trigger with unawaited(), state arrives via ref.listen
 - [03-01]: Cancellation flag checked in both SSE event loop and typewriter drain loop
+- [03-02]: Added provider as direct dependency for ComposerHeightNotifier access from flutter_chat_ui
+- [03-02]: Custom composer uses Positioned in Chat Stack with height reporting via addPostFrameCallback
+- [03-02]: StreamState mapping: domain ChatStreamState -> package StreamState for FlyerChatTextStreamMessage
+- [03-02]: unawaited() for sendMessage in _handleSendMessage to satisfy discarded_futures lint
 
 ### Pending Todos
 
@@ -75,5 +79,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 03-01-PLAN.md (Route, Navigation, Bridge Provider)
+Stopped at: Completed 03-02-PLAN.md (Chat Screen with Custom Composer and Empty State)
 Resume file: None

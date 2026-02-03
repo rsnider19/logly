@@ -64,8 +64,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md -- Route, navigation, bridge provider (Riverpod-to-ChatController), stream cancellation
-- [ ] 03-02-PLAN.md -- ChatScreen with Chat widget, custom composer (send/stop), empty state (welcome + chips)
+- [x] 03-01-PLAN.md -- Route, navigation, bridge provider (Riverpod-to-ChatController), stream cancellation
+- [x] 03-02-PLAN.md -- ChatScreen with Chat widget, custom composer (send/stop), empty state (welcome + chips)
 - [ ] 03-03-PLAN.md -- Error text restoration, polish, and visual verification checkpoint
 
 ### Phase 4: Conversation & Discovery
@@ -109,6 +109,6 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 |-------|----------------|--------|-----------|
 | 1. Edge Function | 3/3 | Complete | 2026-02-02 |
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
-| 3. Chat Screen | 0/3 | Not started | - |
+| 3. Chat Screen | 2/3 | In progress | - |
 | 4. Conversation & Discovery | 0/3 | Not started | - |
 | 5. Observability | 0/2 | Not started | - |
