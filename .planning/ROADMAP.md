@@ -78,12 +78,13 @@ Plans:
   2. When the user opens the chat screen with no messages, they see suggested starter questions they can tap to send immediately
   3. After each AI response, 2-3 contextual follow-up suggestions appear as tappable chips that send without additional typing
   4. Closing and reopening the app preserves the conversation -- the user sees their previous messages and can continue where they left off
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
-- [ ] 04-03: TBD
+- [ ] 04-01-PLAN.md -- Data foundation: Supabase migration (chat_conversations, chat_messages), Drift tables, Freezed domain models
+- [ ] 04-02-PLAN.md -- Edge function follow-up suggestions, starter prompts repository, dynamic empty state
+- [ ] 04-03-PLAN.md -- ChatFollowUpEvent parsing, Supabase repositories, persistence service with Drift caching
+- [ ] 04-04-PLAN.md -- UI integration: follow-up chips, persistence wiring, conversation loading on screen open
 
 ### Phase 5: Observability
 **Goal**: Every AI chat interaction is logged server-side with generated SQL, step durations, and token usage so that cost, quality, and performance can be monitored and reported
@@ -111,5 +112,5 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 | 1. Edge Function | 3/3 | Complete | 2026-02-02 |
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
 | 3. Chat Screen | 4/4 | Complete | 2026-02-03 |
-| 4. Conversation & Discovery | 0/3 | Not started | - |
+| 4. Conversation & Discovery | 0/4 | Ready | - |
 | 5. Observability | 0/2 | Not started | - |
