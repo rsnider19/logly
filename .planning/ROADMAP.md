@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Edge Function** - New `chat` Supabase edge function with text-to-SQL pipeline, SSE streaming, and security guardrails
 - [x] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
-- [ ] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
+- [x] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
 - [ ] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
 - [ ] **Phase 5: Observability** - Server-side logging of generated SQL, durations, token usage, and metrics storage for reporting
 
@@ -67,7 +67,7 @@ Plans:
 - [x] 03-01-PLAN.md -- Route, navigation, bridge provider (Riverpod-to-ChatController), stream cancellation
 - [x] 03-02-PLAN.md -- ChatScreen with Chat widget, custom composer (send/stop), empty state (welcome + chips)
 - [x] 03-03-PLAN.md -- Error text restoration, polish, and visual verification checkpoint
-- [ ] 03-04-PLAN.md -- Gap closure: step summary visibility, smooth streaming, message alignment, error restoration fix
+- [x] 03-04-PLAN.md -- Gap closure: step summary visibility, smooth streaming, message alignment, error restoration fix
 
 ### Phase 4: Conversation & Discovery
 **Goal**: Users can have multi-turn conversations with context, see suggested starter questions on an empty chat, see follow-up suggestions after each response, and have their chat history persisted across sessions
@@ -110,6 +110,6 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 |-------|----------------|--------|-----------|
 | 1. Edge Function | 3/3 | Complete | 2026-02-02 |
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
-| 3. Chat Screen | 3/4 | In progress (gap closure) | - |
+| 3. Chat Screen | 4/4 | Complete | 2026-02-03 |
 | 4. Conversation & Discovery | 0/3 | Not started | - |
 | 5. Observability | 0/2 | Not started | - |
