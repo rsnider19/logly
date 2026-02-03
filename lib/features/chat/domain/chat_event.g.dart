@@ -66,7 +66,19 @@ Map<String, dynamic> _$ChatErrorEventToJson(ChatErrorEvent instance) =>
     <String, dynamic>{'message': instance.message, 'type': instance.$type};
 
 ChatDoneEvent _$ChatDoneEventFromJson(Map<String, dynamic> json) =>
-    ChatDoneEvent($type: json['type'] as String?);
+    ChatDoneEvent(
+      conversationId: json['conversation_id'] as String,
+      followUpSuggestions:
+          (json['follow_up_suggestions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      $type: json['type'] as String?,
+    );
 
 Map<String, dynamic> _$ChatDoneEventToJson(ChatDoneEvent instance) =>
-    <String, dynamic>{'type': instance.$type};
+    <String, dynamic>{
+      'conversation_id': instance.conversationId,
+      'follow_up_suggestions': instance.followUpSuggestions,
+      'type': instance.$type,
+    };

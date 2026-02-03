@@ -65,6 +65,12 @@ abstract class ChatStreamState with _$ChatStreamState {
     /// Conversion ID for SQL context chaining.
     String? conversionId,
 
+    /// The conversation ID (set by backend on first message, persists across requests).
+    String? conversationId,
+
+    /// Follow-up question suggestions (populated from done event).
+    @Default([]) List<String> followUpSuggestions,
+
     /// User-friendly error message.
     String? errorMessage,
 

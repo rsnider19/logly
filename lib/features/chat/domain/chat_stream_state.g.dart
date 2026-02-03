@@ -30,6 +30,12 @@ _ChatStreamState _$ChatStreamStateFromJson(Map<String, dynamic> json) =>
           const [],
       responseId: json['response_id'] as String?,
       conversionId: json['conversion_id'] as String?,
+      conversationId: json['conversation_id'] as String?,
+      followUpSuggestions:
+          (json['follow_up_suggestions'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       errorMessage: json['error_message'] as String?,
       isRetrying: json['is_retrying'] as bool? ?? false,
     );
@@ -45,6 +51,8 @@ Map<String, dynamic> _$ChatStreamStateToJson(
   'completed_steps': instance.completedSteps.map((e) => e.toJson()).toList(),
   'response_id': instance.responseId,
   'conversion_id': instance.conversionId,
+  'conversation_id': instance.conversationId,
+  'follow_up_suggestions': instance.followUpSuggestions,
   'error_message': instance.errorMessage,
   'is_retrying': instance.isRetrying,
 };

@@ -286,7 +286,9 @@ mixin _$ChatStreamState {
  String? get currentStepStatus;/// History of completed pipeline steps.
  List<ChatCompletedStep> get completedSteps;/// Response ID for follow-up question chaining.
  String? get responseId;/// Conversion ID for SQL context chaining.
- String? get conversionId;/// User-friendly error message.
+ String? get conversionId;/// The conversation ID (set by backend on first message, persists across requests).
+ String? get conversationId;/// Follow-up question suggestions (populated from done event).
+ List<String> get followUpSuggestions;/// User-friendly error message.
  String? get errorMessage;/// Whether a silent auto-retry is in progress.
  bool get isRetrying;
 /// Create a copy of ChatStreamState
@@ -301,16 +303,16 @@ $ChatStreamStateCopyWith<ChatStreamState> get copyWith => _$ChatStreamStateCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatStreamState&&(identical(other.status, status) || other.status == status)&&(identical(other.displayText, displayText) || other.displayText == displayText)&&(identical(other.fullText, fullText) || other.fullText == fullText)&&(identical(other.currentStepName, currentStepName) || other.currentStepName == currentStepName)&&(identical(other.currentStepStatus, currentStepStatus) || other.currentStepStatus == currentStepStatus)&&const DeepCollectionEquality().equals(other.completedSteps, completedSteps)&&(identical(other.responseId, responseId) || other.responseId == responseId)&&(identical(other.conversionId, conversionId) || other.conversionId == conversionId)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isRetrying, isRetrying) || other.isRetrying == isRetrying));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatStreamState&&(identical(other.status, status) || other.status == status)&&(identical(other.displayText, displayText) || other.displayText == displayText)&&(identical(other.fullText, fullText) || other.fullText == fullText)&&(identical(other.currentStepName, currentStepName) || other.currentStepName == currentStepName)&&(identical(other.currentStepStatus, currentStepStatus) || other.currentStepStatus == currentStepStatus)&&const DeepCollectionEquality().equals(other.completedSteps, completedSteps)&&(identical(other.responseId, responseId) || other.responseId == responseId)&&(identical(other.conversionId, conversionId) || other.conversionId == conversionId)&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&const DeepCollectionEquality().equals(other.followUpSuggestions, followUpSuggestions)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isRetrying, isRetrying) || other.isRetrying == isRetrying));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,status,displayText,fullText,currentStepName,currentStepStatus,const DeepCollectionEquality().hash(completedSteps),responseId,conversionId,errorMessage,isRetrying);
+int get hashCode => Object.hash(runtimeType,status,displayText,fullText,currentStepName,currentStepStatus,const DeepCollectionEquality().hash(completedSteps),responseId,conversionId,conversationId,const DeepCollectionEquality().hash(followUpSuggestions),errorMessage,isRetrying);
 
 @override
 String toString() {
-  return 'ChatStreamState(status: $status, displayText: $displayText, fullText: $fullText, currentStepName: $currentStepName, currentStepStatus: $currentStepStatus, completedSteps: $completedSteps, responseId: $responseId, conversionId: $conversionId, errorMessage: $errorMessage, isRetrying: $isRetrying)';
+  return 'ChatStreamState(status: $status, displayText: $displayText, fullText: $fullText, currentStepName: $currentStepName, currentStepStatus: $currentStepStatus, completedSteps: $completedSteps, responseId: $responseId, conversionId: $conversionId, conversationId: $conversationId, followUpSuggestions: $followUpSuggestions, errorMessage: $errorMessage, isRetrying: $isRetrying)';
 }
 
 
@@ -321,7 +323,7 @@ abstract mixin class $ChatStreamStateCopyWith<$Res>  {
   factory $ChatStreamStateCopyWith(ChatStreamState value, $Res Function(ChatStreamState) _then) = _$ChatStreamStateCopyWithImpl;
 @useResult
 $Res call({
- ChatConnectionStatus status, String displayText, String fullText, String? currentStepName, String? currentStepStatus, List<ChatCompletedStep> completedSteps, String? responseId, String? conversionId, String? errorMessage, bool isRetrying
+ ChatConnectionStatus status, String displayText, String fullText, String? currentStepName, String? currentStepStatus, List<ChatCompletedStep> completedSteps, String? responseId, String? conversionId, String? conversationId, List<String> followUpSuggestions, String? errorMessage, bool isRetrying
 });
 
 
@@ -338,7 +340,7 @@ class _$ChatStreamStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatStreamState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? displayText = null,Object? fullText = null,Object? currentStepName = freezed,Object? currentStepStatus = freezed,Object? completedSteps = null,Object? responseId = freezed,Object? conversionId = freezed,Object? errorMessage = freezed,Object? isRetrying = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? status = null,Object? displayText = null,Object? fullText = null,Object? currentStepName = freezed,Object? currentStepStatus = freezed,Object? completedSteps = null,Object? responseId = freezed,Object? conversionId = freezed,Object? conversationId = freezed,Object? followUpSuggestions = null,Object? errorMessage = freezed,Object? isRetrying = null,}) {
   return _then(_self.copyWith(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatConnectionStatus,displayText: null == displayText ? _self.displayText : displayText // ignore: cast_nullable_to_non_nullable
@@ -348,7 +350,9 @@ as String?,currentStepStatus: freezed == currentStepStatus ? _self.currentStepSt
 as String?,completedSteps: null == completedSteps ? _self.completedSteps : completedSteps // ignore: cast_nullable_to_non_nullable
 as List<ChatCompletedStep>,responseId: freezed == responseId ? _self.responseId : responseId // ignore: cast_nullable_to_non_nullable
 as String?,conversionId: freezed == conversionId ? _self.conversionId : conversionId // ignore: cast_nullable_to_non_nullable
-as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,conversationId: freezed == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
+as String?,followUpSuggestions: null == followUpSuggestions ? _self.followUpSuggestions : followUpSuggestions // ignore: cast_nullable_to_non_nullable
+as List<String>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,isRetrying: null == isRetrying ? _self.isRetrying : isRetrying // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -435,10 +439,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? errorMessage,  bool isRetrying)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? conversationId,  List<String> followUpSuggestions,  String? errorMessage,  bool isRetrying)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ChatStreamState() when $default != null:
-return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.errorMessage,_that.isRetrying);case _:
+return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.conversationId,_that.followUpSuggestions,_that.errorMessage,_that.isRetrying);case _:
   return orElse();
 
 }
@@ -456,10 +460,10 @@ return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepN
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? errorMessage,  bool isRetrying)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? conversationId,  List<String> followUpSuggestions,  String? errorMessage,  bool isRetrying)  $default,) {final _that = this;
 switch (_that) {
 case _ChatStreamState():
-return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.errorMessage,_that.isRetrying);case _:
+return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.conversationId,_that.followUpSuggestions,_that.errorMessage,_that.isRetrying);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -476,10 +480,10 @@ return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepN
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? errorMessage,  bool isRetrying)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ChatConnectionStatus status,  String displayText,  String fullText,  String? currentStepName,  String? currentStepStatus,  List<ChatCompletedStep> completedSteps,  String? responseId,  String? conversionId,  String? conversationId,  List<String> followUpSuggestions,  String? errorMessage,  bool isRetrying)?  $default,) {final _that = this;
 switch (_that) {
 case _ChatStreamState() when $default != null:
-return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.errorMessage,_that.isRetrying);case _:
+return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepName,_that.currentStepStatus,_that.completedSteps,_that.responseId,_that.conversionId,_that.conversationId,_that.followUpSuggestions,_that.errorMessage,_that.isRetrying);case _:
   return null;
 
 }
@@ -491,7 +495,7 @@ return $default(_that.status,_that.displayText,_that.fullText,_that.currentStepN
 @JsonSerializable()
 
 class _ChatStreamState implements ChatStreamState {
-  const _ChatStreamState({this.status = ChatConnectionStatus.idle, this.displayText = '', this.fullText = '', this.currentStepName, this.currentStepStatus, final  List<ChatCompletedStep> completedSteps = const [], this.responseId, this.conversionId, this.errorMessage, this.isRetrying = false}): _completedSteps = completedSteps;
+  const _ChatStreamState({this.status = ChatConnectionStatus.idle, this.displayText = '', this.fullText = '', this.currentStepName, this.currentStepStatus, final  List<ChatCompletedStep> completedSteps = const [], this.responseId, this.conversionId, this.conversationId, final  List<String> followUpSuggestions = const [], this.errorMessage, this.isRetrying = false}): _completedSteps = completedSteps,_followUpSuggestions = followUpSuggestions;
   factory _ChatStreamState.fromJson(Map<String, dynamic> json) => _$ChatStreamStateFromJson(json);
 
 /// Current connection/stream status.
@@ -517,6 +521,17 @@ class _ChatStreamState implements ChatStreamState {
 @override final  String? responseId;
 /// Conversion ID for SQL context chaining.
 @override final  String? conversionId;
+/// The conversation ID (set by backend on first message, persists across requests).
+@override final  String? conversationId;
+/// Follow-up question suggestions (populated from done event).
+ final  List<String> _followUpSuggestions;
+/// Follow-up question suggestions (populated from done event).
+@override@JsonKey() List<String> get followUpSuggestions {
+  if (_followUpSuggestions is EqualUnmodifiableListView) return _followUpSuggestions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_followUpSuggestions);
+}
+
 /// User-friendly error message.
 @override final  String? errorMessage;
 /// Whether a silent auto-retry is in progress.
@@ -535,16 +550,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatStreamState&&(identical(other.status, status) || other.status == status)&&(identical(other.displayText, displayText) || other.displayText == displayText)&&(identical(other.fullText, fullText) || other.fullText == fullText)&&(identical(other.currentStepName, currentStepName) || other.currentStepName == currentStepName)&&(identical(other.currentStepStatus, currentStepStatus) || other.currentStepStatus == currentStepStatus)&&const DeepCollectionEquality().equals(other._completedSteps, _completedSteps)&&(identical(other.responseId, responseId) || other.responseId == responseId)&&(identical(other.conversionId, conversionId) || other.conversionId == conversionId)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isRetrying, isRetrying) || other.isRetrying == isRetrying));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ChatStreamState&&(identical(other.status, status) || other.status == status)&&(identical(other.displayText, displayText) || other.displayText == displayText)&&(identical(other.fullText, fullText) || other.fullText == fullText)&&(identical(other.currentStepName, currentStepName) || other.currentStepName == currentStepName)&&(identical(other.currentStepStatus, currentStepStatus) || other.currentStepStatus == currentStepStatus)&&const DeepCollectionEquality().equals(other._completedSteps, _completedSteps)&&(identical(other.responseId, responseId) || other.responseId == responseId)&&(identical(other.conversionId, conversionId) || other.conversionId == conversionId)&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&const DeepCollectionEquality().equals(other._followUpSuggestions, _followUpSuggestions)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.isRetrying, isRetrying) || other.isRetrying == isRetrying));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,status,displayText,fullText,currentStepName,currentStepStatus,const DeepCollectionEquality().hash(_completedSteps),responseId,conversionId,errorMessage,isRetrying);
+int get hashCode => Object.hash(runtimeType,status,displayText,fullText,currentStepName,currentStepStatus,const DeepCollectionEquality().hash(_completedSteps),responseId,conversionId,conversationId,const DeepCollectionEquality().hash(_followUpSuggestions),errorMessage,isRetrying);
 
 @override
 String toString() {
-  return 'ChatStreamState(status: $status, displayText: $displayText, fullText: $fullText, currentStepName: $currentStepName, currentStepStatus: $currentStepStatus, completedSteps: $completedSteps, responseId: $responseId, conversionId: $conversionId, errorMessage: $errorMessage, isRetrying: $isRetrying)';
+  return 'ChatStreamState(status: $status, displayText: $displayText, fullText: $fullText, currentStepName: $currentStepName, currentStepStatus: $currentStepStatus, completedSteps: $completedSteps, responseId: $responseId, conversionId: $conversionId, conversationId: $conversationId, followUpSuggestions: $followUpSuggestions, errorMessage: $errorMessage, isRetrying: $isRetrying)';
 }
 
 
@@ -555,7 +570,7 @@ abstract mixin class _$ChatStreamStateCopyWith<$Res> implements $ChatStreamState
   factory _$ChatStreamStateCopyWith(_ChatStreamState value, $Res Function(_ChatStreamState) _then) = __$ChatStreamStateCopyWithImpl;
 @override @useResult
 $Res call({
- ChatConnectionStatus status, String displayText, String fullText, String? currentStepName, String? currentStepStatus, List<ChatCompletedStep> completedSteps, String? responseId, String? conversionId, String? errorMessage, bool isRetrying
+ ChatConnectionStatus status, String displayText, String fullText, String? currentStepName, String? currentStepStatus, List<ChatCompletedStep> completedSteps, String? responseId, String? conversionId, String? conversationId, List<String> followUpSuggestions, String? errorMessage, bool isRetrying
 });
 
 
@@ -572,7 +587,7 @@ class __$ChatStreamStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatStreamState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? displayText = null,Object? fullText = null,Object? currentStepName = freezed,Object? currentStepStatus = freezed,Object? completedSteps = null,Object? responseId = freezed,Object? conversionId = freezed,Object? errorMessage = freezed,Object? isRetrying = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? status = null,Object? displayText = null,Object? fullText = null,Object? currentStepName = freezed,Object? currentStepStatus = freezed,Object? completedSteps = null,Object? responseId = freezed,Object? conversionId = freezed,Object? conversationId = freezed,Object? followUpSuggestions = null,Object? errorMessage = freezed,Object? isRetrying = null,}) {
   return _then(_ChatStreamState(
 status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as ChatConnectionStatus,displayText: null == displayText ? _self.displayText : displayText // ignore: cast_nullable_to_non_nullable
@@ -582,7 +597,9 @@ as String?,currentStepStatus: freezed == currentStepStatus ? _self.currentStepSt
 as String?,completedSteps: null == completedSteps ? _self._completedSteps : completedSteps // ignore: cast_nullable_to_non_nullable
 as List<ChatCompletedStep>,responseId: freezed == responseId ? _self.responseId : responseId // ignore: cast_nullable_to_non_nullable
 as String?,conversionId: freezed == conversionId ? _self.conversionId : conversionId // ignore: cast_nullable_to_non_nullable
-as String?,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,conversationId: freezed == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
+as String?,followUpSuggestions: null == followUpSuggestions ? _self._followUpSuggestions : followUpSuggestions // ignore: cast_nullable_to_non_nullable
+as List<String>,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
 as String?,isRetrying: null == isRetrying ? _self.isRetrying : isRetrying // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
