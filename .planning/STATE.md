@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 3 of 5 (Chat Screen)
-Plan: 0 of TBD in current phase
-Status: Not started
-Last activity: 2026-02-02 -- Completed Phase 2 (Stream Client)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-02-02 -- Completed 03-01-PLAN.md (Route, Navigation, Bridge Provider)
 
-Progress: [████████░░░░░░░░░░░░] 40%
+Progress: [████████████░░░░░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Total execution time: ~26 min
+- Total plans completed: 6
+- Total execution time: ~32 min
 
 **By Phase:**
 
@@ -28,6 +28,7 @@ Progress: [████████░░░░░░░░░░░░] 40%
 |-------|-------|--------|
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
+| 03-chat-screen | 1/3 | In progress |
 
 *Updated after each plan completion*
 
@@ -58,6 +59,10 @@ Recent decisions affecting current work:
 - [02-02]: Property access over destructuring in switch cases to avoid variable shadowing
 - [02-02]: unawaited() wrapper for StreamController.close() in non-async methods
 - [02-02]: Callback-based state emission (onStateUpdate) from service to notifier pattern
+- [03-01]: TextStreamMessage.metadata map used as data channel for step progress and stream status
+- [03-01]: Error handling removes user+AI messages, inserts system message, stores query for input restoration
+- [03-01]: Fire-and-forget stream trigger with unawaited(), state arrives via ref.listen
+- [03-01]: Cancellation flag checked in both SSE event loop and typewriter drain loop
 
 ### Pending Todos
 
@@ -70,5 +75,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed Phase 2 (Stream Client)
+Stopped at: Completed 03-01-PLAN.md (Route, Navigation, Bridge Provider)
 Resume file: None
