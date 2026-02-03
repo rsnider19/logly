@@ -82,11 +82,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     await ref.read(chatUiStateProvider.notifier).clearMessages();
 
     // Set the conversation context for follow-up chaining
-    ref.read(chatStreamStateProvider.notifier).setConversationContext(
-      responseId: conversation.lastResponseId,
-      conversionId: conversation.lastConversionId,
-      conversationId: conversation.conversationId,
-    );
+    ref
+        .read(chatStreamStateProvider.notifier)
+        .setConversationContext(
+          responseId: conversation.lastResponseId,
+          conversionId: conversation.lastConversionId,
+          conversationId: conversation.conversationId,
+        );
 
     // Load messages from Supabase
     final messageRepo = ref.read(chatMessageRepositoryProvider);
@@ -154,8 +156,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     // Listen for error transitions and restore user's question text.
     ref.listen(chatStreamStateProvider, (prev, next) {
-      if (next.status == ChatConnectionStatus.error &&
-          prev?.status != ChatConnectionStatus.error) {
+      if (next.status == ChatConnectionStatus.error && prev?.status != ChatConnectionStatus.error) {
         // Defer to next frame to ensure _handleError has set lastErrorQuery
         WidgetsBinding.instance.addPostFrameCallback((_) {
           final errorQuery = ref.read(chatUiStateProvider.notifier).lastErrorQuery;
@@ -303,9 +304,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           child: GptMarkdown(message.text, style: theme.textTheme.bodyLarge),
         ),
         if (followUpSuggestions.isNotEmpty)
-          FollowUpChips(
-            suggestions: followUpSuggestions,
-            onTap: _handleSendMessage,
+          Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: FollowUpChips(
+              suggestions: followUpSuggestions,
+              onTap: _handleSendMessage,
+            ),
           ),
       ],
     );
@@ -326,15 +330,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     // If this is not the most recent message (index > 0), check if there are newer messages
     // from the user. If so, hide chips (conversation has continued).
-    if (index > 0) {
-      // Check if there's a user message newer than this one
-      for (var i = 0; i < index; i++) {
-        final newerMsg = messages[i];
-        if (newerMsg is TextMessage && newerMsg.authorId != kLoglyAiUserId && newerMsg.authorId != kSystemUserId) {
-          // User sent a message after this AI message - don't show chips
-          return [];
-        }
-      }
+    if (message != messages.last) {
+      return [];
     }
 
     // Get suggestions from message metadata or loaded suggestions (for history)
@@ -436,9 +433,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       ChatConnectionStatus.completing => StreamStateStreaming(state.displayText),
       ChatConnectionStatus.completed => StreamStateCompleted(state.fullText),
       ChatConnectionStatus.error => StreamStateError(
-          state.errorMessage ?? 'Something went wrong',
-          accumulatedText: state.displayText.isNotEmpty ? state.displayText : null,
-        ),
+        state.errorMessage ?? 'Something went wrong',
+        accumulatedText: state.displayText.isNotEmpty ? state.displayText : null,
+      ),
     };
   }
 
@@ -462,7 +459,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       return Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Text(
-          'Processed in ${steps.length} steps ($duration' 's)',
+          'Processed in ${steps.length} steps ($duration'
+          's)',
           style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
       );

@@ -27,49 +27,46 @@ class FollowUpChips extends StatelessWidget {
 
     final theme = Theme.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Follow up with:',
-            style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          'Follow up with:',
+          style: theme.textTheme.labelSmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            runSpacing: 8,
-            children: suggestions.take(3).mapIndexed((index, suggestion) {
-              return FractionallySizedBox(
-                widthFactor: 0.5,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: index == 0 ? 4 : 0,
-                    left: index == 1 ? 4 : 0,
-                  ),
-                  child: ActionChip(
-                    label: Text(
-                      '$suggestion\n',
-                      style: theme.textTheme.bodySmall,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                    ),
-                    onPressed: () => onTap(suggestion),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                    side: BorderSide.none,
-                  ),
+        ),
+        const SizedBox(height: 8),
+        Wrap(
+          runSpacing: 8,
+          children: suggestions.take(3).mapIndexed((index, suggestion) {
+            return FractionallySizedBox(
+              widthFactor: 0.5,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  right: index == 0 ? 4 : 0,
+                  left: index == 1 ? 4 : 0,
                 ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
+                child: ActionChip(
+                  label: Text(
+                    '$suggestion\n',
+                    style: theme.textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  onPressed: () => onTap(suggestion),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                  side: BorderSide.none,
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }
