@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/profile_filter_bar.dart';
@@ -109,13 +110,7 @@ class _InsightsFab extends ConsumerWidget {
 
   Future<void> _onPressed(BuildContext context, WidgetRef ref, bool hasAccess) async {
     if (hasAccess) {
-      // Navigate to AI Insights screen (not yet implemented)
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('AI Insights coming soon!'),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      const ChatRoute().go(context);
     } else {
       // Show paywall - no manual invalidation needed, StateNotifier listens for updates
       final purchased = await ref.read(subscriptionServiceProvider).showPaywall();

@@ -9,6 +9,7 @@ import 'package:logly/features/activity_logging/presentation/screens/category_de
 import 'package:logly/features/activity_logging/presentation/screens/edit_activity_screen.dart';
 import 'package:logly/features/activity_logging/presentation/screens/log_activity_screen.dart';
 import 'package:logly/features/auth/presentation/screens/sign_in_screen.dart';
+import 'package:logly/features/chat/presentation/screens/chat_screen.dart';
 import 'package:logly/features/custom_activity/presentation/screens/create_custom_activity_screen.dart';
 import 'package:logly/features/developer/presentation/screens/developer_screen.dart';
 import 'package:logly/features/home/presentation/screens/home_screen.dart';
@@ -98,6 +99,17 @@ class SettingsRoute extends GoRouteData with $SettingsRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) {
     return const NoTransitionPage(child: SettingsScreen());
+  }
+}
+
+/// Chat route - LoglyAI chat screen (full-screen push, not inside shell).
+@TypedGoRoute<ChatRoute>(path: '/chat')
+class ChatRoute extends GoRouteData with $ChatRoute {
+  const ChatRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return const ChatScreen();
   }
 }
 

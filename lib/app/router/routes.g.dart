@@ -8,6 +8,7 @@ part of 'routes.dart';
 
 List<RouteBase> get $appRoutes => [
   $appShellRoute,
+  $chatRoute,
   $authRoute,
   $onboardingIntroRoute,
   $onboardingQuestionsRoute,
@@ -94,6 +95,29 @@ mixin $SettingsRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/settings');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $chatRoute =>
+    GoRouteData.$route(path: '/chat', factory: $ChatRoute._fromState);
+
+mixin $ChatRoute on GoRouteData {
+  static ChatRoute _fromState(GoRouterState state) => const ChatRoute();
+
+  @override
+  String get location => GoRouteData.$location('/chat');
 
   @override
   void go(BuildContext context) => context.go(location);
