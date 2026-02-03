@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 4 of 5 (Conversation & Discovery)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-03 -- Completed 04-02-PLAN.md (Follow-up Suggestions & Starter Prompts)
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-02-03 -- Completed 04-03-PLAN.md (Backend Persistence)
 
-Progress: [███████████████████░] 95%
+Progress: [████████████████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Total execution time: ~46 min
+- Total plans completed: 12
+- Total execution time: ~58 min
 
 **By Phase:**
 
@@ -29,7 +29,7 @@ Progress: [███████████████████░] 95%
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
 | 03-chat-screen | 4/4 | Complete |
-| 04-conversation-discovery | 2/3 | In Progress |
+| 04-conversation-discovery | 3/3 | Complete |
 
 *Updated after each plan completion*
 
@@ -78,6 +78,9 @@ Recent decisions affecting current work:
 - [04-02]: Follow-up suggestions embedded in done SSE event (not separate event type)
 - [04-02]: HTML comment marker for follow-up JSON (hidden from markdown rendering)
 - [04-02]: Strip marker from text deltas during streaming to hide from UI
+- [04-03]: Backend owns all writes; Flutter client is read-only
+- [04-03]: Conversation created on first message with truncated title
+- [04-03]: User message saved before processing; AI message saved after completion
 
 ### Pending Todos
 
@@ -90,5 +93,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-03
-Stopped at: Completed 04-02-PLAN.md (Follow-up Suggestions & Starter Prompts)
+Stopped at: Completed 04-03-PLAN.md (Backend Persistence)
 Resume file: None
