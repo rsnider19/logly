@@ -208,7 +208,7 @@ class _ConversationTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          '${dateFormat.format(conversation.updatedAt)} at ${timeFormat.format(conversation.updatedAt)}',
+          '${dateFormat.format(conversation.updatedAt.toLocal())} at ${timeFormat.format(conversation.updatedAt.toLocal())}',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),

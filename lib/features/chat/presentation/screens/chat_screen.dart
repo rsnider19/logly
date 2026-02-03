@@ -330,7 +330,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
     // If this is not the most recent message (index > 0), check if there are newer messages
     // from the user. If so, hide chips (conversation has continued).
-    if (message != messages.last) {
+    if (message != messages.lastOrNull) {
       return [];
     }
 

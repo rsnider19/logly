@@ -65,7 +65,7 @@ class CustomBottomNav extends ConsumerWidget {
                   offset: Offset(0, 4),
                   child: SvgPicture.asset(
                     Assets.logoLight,
-                    height: 24,
+                    height: 28,
                   ),
                 ),
               ),
@@ -104,7 +104,7 @@ class _NavButton extends StatelessWidget {
     return IconButton(
       onPressed: onTap,
       icon: CircleAvatar(
-        radius: 12,
+        radius: 16,
         child: ClipOval(
           child: child,
         ),
