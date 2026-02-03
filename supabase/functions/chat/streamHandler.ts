@@ -50,6 +50,7 @@ export interface ErrorMessage {
 
 export interface DoneMessage {
   type: "done";
+  follow_up_suggestions?: string[];
 }
 
 export type StreamMessage =
@@ -77,8 +78,8 @@ export interface ProgressStream {
   sendConversionId(conversionId: string): void;
   /** Send an error message (user-friendly). */
   sendError(message: string): void;
-  /** Send the done signal indicating the stream is complete. */
-  sendDone(): void;
+  /** Send completion signal with optional follow-up suggestions. */
+  sendDone(followUpSuggestions?: string[]): void;
   /** Close the stream. Always call in a finally block. */
   close(): void;
 }
@@ -153,8 +154,12 @@ export function createProgressStream(): ProgressStream {
       sendMessage({ type: "error", message });
     },
 
-    sendDone(): void {
-      sendMessage({ type: "done" });
+    sendDone(followUpSuggestions?: string[]): void {
+      const message: DoneMessage = { type: "done" };
+      if (followUpSuggestions && followUpSuggestions.length > 0) {
+        message.follow_up_suggestions = followUpSuggestions;
+      }
+      sendMessage(message);
     },
 
     close(): void {

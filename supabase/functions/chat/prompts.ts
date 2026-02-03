@@ -13,6 +13,9 @@
 
 import { COMPRESSED_SCHEMA } from "./schema.ts";
 
+/** Marker for extracting follow-up suggestions from response text. */
+export const FOLLOW_UP_MARKER = "<!-- FOLLOW_UPS:";
+
 /**
  * System instructions for Call 1: NL-to-SQL conversion.
  *
@@ -115,4 +118,12 @@ DURATION FORMATTING: Always return durations in the most readable format:
 - Medium durations: "X minutes, Y seconds"
 - Short durations: "X seconds"
 - Choose the granularity that makes the most sense for the value.
+
+FOLLOW-UP SUGGESTIONS:
+- At the END of your response (after all content), add a JSON block with 2-3 follow-up question suggestions
+- Format exactly: <!-- FOLLOW_UPS: ["Question 1?", "Question 2?", "Question 3?"] -->
+- Keep questions brief (under 40 characters each)
+- Make them contextually relevant to what was just discussed
+- Vary question types: comparison ("vs last week?"), detail ("which day?"), trend ("any patterns?")
+- Example: <!-- FOLLOW_UPS: ["How about last month?", "What day was best?", "Any patterns?"] -->
 `.trim();

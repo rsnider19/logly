@@ -27,6 +27,7 @@ import { sanitizeUserInput, validateSqlQuery } from "./security.ts";
 import { generateSQL, hashUserId } from "./sqlGenerator.ts";
 import { executeWithRLS } from "./queryExecutor.ts";
 import { generateStreamingResponse } from "./responseGenerator.ts";
+import { FOLLOW_UP_MARKER } from "./prompts.ts";
 
 // ============================================================
 // Types
@@ -155,17 +156,28 @@ export function runPipeline(input: PipelineInput): Response {
       // Response streaming (no spinner -- direct text)
       // ============================================
       try {
+        let fullResponseText = "";
         const { responseId } = await generateStreamingResponse({
           query: sanitizedQuery,
           rows: queryResult.rows,
           truncated: queryResult.truncated,
           conversionId: sqlResult.conversionId,
           hashedUserId: hashedUser,
-          onTextDelta: (delta) => progress.sendTextDelta(delta),
+          onTextDelta: (delta) => {
+            fullResponseText += delta;
+            // Strip follow-up marker from streamed text so it doesn't appear in UI
+            const cleanDelta = delta.includes(FOLLOW_UP_MARKER)
+              ? delta.split(FOLLOW_UP_MARKER)[0]
+              : delta;
+            if (cleanDelta) progress.sendTextDelta(cleanDelta);
+          },
         });
 
         progress.sendResponseId(responseId);
-        progress.sendDone();
+
+        // Extract follow-up suggestions from accumulated response text
+        const followUps = extractFollowUpSuggestions(fullResponseText);
+        progress.sendDone(followUps);
       } catch (err) {
         console.error("[Pipeline] Response generation failed:", err);
         progress.sendError(
@@ -186,4 +198,31 @@ export function runPipeline(input: PipelineInput): Response {
   return new Response(progress.stream, {
     headers: createSSEHeaders(),
   });
+}
+
+// ============================================================
+// Helpers
+// ============================================================
+
+/**
+ * Extracts follow-up suggestions from the response text.
+ * Looks for: <!-- FOLLOW_UPS: ["...", "..."] -->
+ */
+function extractFollowUpSuggestions(text: string): string[] {
+  const startIdx = text.indexOf(FOLLOW_UP_MARKER);
+  if (startIdx === -1) return [];
+
+  const endIdx = text.indexOf("-->", startIdx);
+  if (endIdx === -1) return [];
+
+  const jsonStr = text.slice(startIdx + FOLLOW_UP_MARKER.length, endIdx).trim();
+  try {
+    const parsed = JSON.parse(jsonStr);
+    if (Array.isArray(parsed) && parsed.every((s) => typeof s === "string")) {
+      return parsed.slice(0, 3); // Max 3 suggestions
+    }
+  } catch {
+    console.warn("[Pipeline] Failed to parse follow-up suggestions:", jsonStr);
+  }
+  return [];
 }
