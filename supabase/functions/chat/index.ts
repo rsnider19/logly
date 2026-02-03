@@ -74,11 +74,13 @@ Deno.serve((r) =>
     let query: string;
     let previousResponseId: string | undefined;
     let previousConversionId: string | undefined;
+    let conversationId: string | undefined;
     try {
       const body = await req.json();
       query = body.query;
       previousResponseId = body.previousResponseId;
       previousConversionId = body.previousConversionId;
+      conversationId = body.conversationId;
 
       if (!query || typeof query !== "string") {
         return new Response(
@@ -99,7 +101,7 @@ Deno.serve((r) =>
     console.log(
       `[Chat] Request from user ${userId}: "${query}"${
         previousResponseId ? ` (follow-up to ${previousResponseId})` : ""
-      }`,
+      }${conversationId ? ` (conversation ${conversationId})` : ""}`,
     );
 
     // ----------------------------------------------------------------
@@ -110,6 +112,7 @@ Deno.serve((r) =>
       userId,
       previousResponseId,
       previousConversionId,
+      conversationId,
     });
   }),
 );

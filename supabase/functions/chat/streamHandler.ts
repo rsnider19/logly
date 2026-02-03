@@ -50,6 +50,7 @@ export interface ErrorMessage {
 
 export interface DoneMessage {
   type: "done";
+  conversation_id: string;
   follow_up_suggestions?: string[];
 }
 
@@ -78,8 +79,8 @@ export interface ProgressStream {
   sendConversionId(conversionId: string): void;
   /** Send an error message (user-friendly). */
   sendError(message: string): void;
-  /** Send completion signal with optional follow-up suggestions. */
-  sendDone(followUpSuggestions?: string[]): void;
+  /** Send completion signal with conversation ID and optional follow-up suggestions. */
+  sendDone(conversationId: string, followUpSuggestions?: string[]): void;
   /** Close the stream. Always call in a finally block. */
   close(): void;
 }
@@ -154,8 +155,11 @@ export function createProgressStream(): ProgressStream {
       sendMessage({ type: "error", message });
     },
 
-    sendDone(followUpSuggestions?: string[]): void {
-      const message: DoneMessage = { type: "done" };
+    sendDone(conversationId: string, followUpSuggestions?: string[]): void {
+      const message: DoneMessage = {
+        type: "done",
+        conversation_id: conversationId,
+      };
       if (followUpSuggestions && followUpSuggestions.length > 0) {
         message.follow_up_suggestions = followUpSuggestions;
       }

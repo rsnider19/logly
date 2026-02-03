@@ -28,6 +28,13 @@ import { generateSQL, hashUserId } from "./sqlGenerator.ts";
 import { executeWithRLS } from "./queryExecutor.ts";
 import { generateStreamingResponse } from "./responseGenerator.ts";
 import { FOLLOW_UP_MARKER } from "./prompts.ts";
+import {
+  getOrCreateConversation,
+  saveUserMessage,
+  saveAssistantMessage,
+  updateConversationIds,
+  getConversationContext,
+} from "./persistence.ts";
 
 // ============================================================
 // Types
@@ -41,6 +48,7 @@ export interface PipelineInput {
   userId: string;
   previousResponseId?: string;
   previousConversionId?: string;
+  conversationId?: string;
 }
 
 // ============================================================
@@ -67,13 +75,47 @@ const STEP_NAMES = {
  * @returns HTTP Response with SSE stream body
  */
 export function runPipeline(input: PipelineInput): Response {
-  const { query, userId, previousConversionId } = input;
+  const {
+    query,
+    userId,
+    previousConversionId: inputPreviousConversionId,
+    conversationId: inputConversationId,
+  } = input;
   const progress = createProgressStream();
 
   // Run pipeline asynchronously -- the Response is returned immediately
   (async () => {
+    // Persistence: conversation ID resolved early for tracking
+    let conversationId: string | undefined;
+    // Completed steps tracked for message metadata
+    const completedStepNames: string[] = [];
+
     try {
       const hashedUser = await hashUserId(userId);
+
+      // ============================================
+      // Get or create conversation (backend owns persistence)
+      // ============================================
+      conversationId = await getOrCreateConversation(
+        userId,
+        query,
+        inputConversationId
+      );
+
+      // Save user message before processing
+      await saveUserMessage(conversationId, query);
+
+      // If continuing conversation, load context for follow-up chaining
+      let previousConversionId = inputPreviousConversionId;
+      if (inputConversationId && !inputPreviousConversionId) {
+        const context = await getConversationContext(
+          inputConversationId,
+          userId
+        );
+        if (context?.lastConversionId) {
+          previousConversionId = context.lastConversionId;
+        }
+      }
 
       // ============================================
       // Sanitize input (no user-visible step)
@@ -105,10 +147,26 @@ export function runPipeline(input: PipelineInput): Response {
       // Handle off-topic questions
       if (sqlResult.parsed.offTopic) {
         progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
+        completedStepNames.push(STEP_NAMES.UNDERSTANDING);
         // Send the redirect message as a text_delta so it appears as a chat message
         progress.sendTextDelta(sqlResult.parsed.redirectMessage);
         progress.sendConversionId(sqlResult.conversionId);
-        progress.sendDone();
+
+        // Save off-topic response to conversation
+        if (conversationId) {
+          await saveAssistantMessage(
+            conversationId,
+            sqlResult.parsed.redirectMessage,
+            { steps: completedStepNames }
+          );
+          await updateConversationIds(
+            conversationId,
+            undefined,
+            sqlResult.conversionId
+          );
+        }
+
+        progress.sendDone(conversationId!);
         return;
       }
 
@@ -128,6 +186,7 @@ export function runPipeline(input: PipelineInput): Response {
 
       progress.sendConversionId(sqlResult.conversionId);
       progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
+      completedStepNames.push(STEP_NAMES.UNDERSTANDING);
 
       // ============================================
       // Step 2: "Looking up your data..."
@@ -151,6 +210,7 @@ export function runPipeline(input: PipelineInput): Response {
       }
 
       progress.sendStep(STEP_NAMES.LOOKING_UP, "complete");
+      completedStepNames.push(STEP_NAMES.LOOKING_UP);
 
       // ============================================
       // Response streaming (no spinner -- direct text)
@@ -177,18 +237,38 @@ export function runPipeline(input: PipelineInput): Response {
 
         // Extract follow-up suggestions from accumulated response text
         const followUps = extractFollowUpSuggestions(fullResponseText);
-        progress.sendDone(followUps);
+
+        // Save AI response to database (clean content without follow-up marker)
+        const cleanContent = fullResponseText
+          .replace(/<!-- FOLLOW_UPS:.*-->/, "")
+          .trim();
+        if (conversationId) {
+          await saveAssistantMessage(conversationId, cleanContent, {
+            followUpSuggestions: followUps.length > 0 ? followUps : undefined,
+            steps:
+              completedStepNames.length > 0 ? completedStepNames : undefined,
+          });
+
+          // Update conversation with latest IDs for follow-up chaining
+          await updateConversationIds(
+            conversationId,
+            responseId,
+            sqlResult.conversionId
+          );
+        }
+
+        progress.sendDone(conversationId!, followUps);
       } catch (err) {
         console.error("[Pipeline] Response generation failed:", err);
         progress.sendError(
-          "I had trouble putting together your answer. Could you try again?",
+          "I had trouble putting together your answer. Could you try again?"
         );
       }
     } catch (err) {
       // Catch-all for unexpected errors
       console.error("[Pipeline] Unexpected error:", err);
       progress.sendError(
-        "Something unexpected happened. Could you try again?",
+        "Something unexpected happened. Could you try again?"
       );
     } finally {
       progress.close();
