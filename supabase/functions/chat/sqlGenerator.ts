@@ -99,6 +99,11 @@ export interface GenerateSQLParams {
 export interface GenerateSQLResult {
   parsed: NlToSqlResult;
   conversionId: string;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+    cachedTokens: number;
+  };
 }
 
 // ============================================================
@@ -157,6 +162,13 @@ export async function generateSQL(
     max_output_tokens: 300,
   });
 
+  // Extract usage from response
+  const usage = {
+    inputTokens: response.usage?.input_tokens ?? 0,
+    outputTokens: response.usage?.output_tokens ?? 0,
+    cachedTokens: response.usage?.input_tokens_details?.cached_tokens ?? 0,
+  };
+
   const content = response.output_text;
   if (!content) {
     throw new Error("No response from NL-to-SQL model");
@@ -200,9 +212,17 @@ export async function generateSQL(
       parsed = NlToSqlResponse.parse(JSON.parse(repairContent));
       console.log("[NL-to-SQL] Self-correction successful.");
 
+      // Extract usage from repair response
+      const repairUsage = {
+        inputTokens: repairResponse.usage?.input_tokens ?? 0,
+        outputTokens: repairResponse.usage?.output_tokens ?? 0,
+        cachedTokens: repairResponse.usage?.input_tokens_details?.cached_tokens ?? 0,
+      };
+
       return {
         parsed,
         conversionId: repairResponse.id,
+        usage: repairUsage,
       };
     } catch (repairError) {
       console.error(`[NL-to-SQL] Self-correction failed: ${repairError}`);
@@ -215,5 +235,6 @@ export async function generateSQL(
   return {
     parsed,
     conversionId: response.id,
+    usage,
   };
 }
