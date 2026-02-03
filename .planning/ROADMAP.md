@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Stream Client** - Flutter data layer with SSE stream parsing, domain models, and auth-forwarded connection to edge function
 - [x] **Phase 3: Chat Screen** - Core chat UI with streaming display, step progress, markdown rendering, navigation, and pro gate
 - [x] **Phase 4: Conversation & Discovery** - Multi-turn context retention, chat history persistence, starter questions, and follow-up suggestions
-- [ ] **Phase 5: Observability** - Server-side logging of generated SQL, durations, token usage, and metrics storage for reporting
+- [x] **Phase 5: Observability** - Server-side logging of generated SQL, durations, token usage, and metrics storage for reporting
 
 ## Phase Details
 
@@ -99,7 +99,7 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md -- Database schema (chat_telemetry_log table), telemetry persistence module, observability report queries
-- [ ] 05-02-PLAN.md -- Pipeline integration: token usage capture in generators, timing capture, telemetry persistence wiring
+- [x] 05-02-PLAN.md -- Pipeline integration: token usage capture in generators, timing capture, telemetry persistence wiring
 
 ## Progress
 
@@ -113,4 +113,4 @@ Note: Phase 5 (Observability) depends only on Phase 1 and can partially overlap 
 | 2. Stream Client | 2/2 | Complete | 2026-02-02 |
 | 3. Chat Screen | 4/4 | Complete | 2026-02-03 |
 | 4. Conversation & Discovery | 4/4 | Complete | 2026-02-03 |
-| 5. Observability | 1/2 | In progress | - |
+| 5. Observability | 2/2 | Complete | 2026-02-03 |
