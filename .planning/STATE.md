@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 3 of 5 (Chat Screen)
-Plan: 3 of 3 in current phase (awaiting visual verification checkpoint)
-Status: In progress
-Last activity: 2026-02-02 -- Completed 03-03-PLAN.md Task 1 (Error Text Restoration and Composer Polish)
+Plan: 4 of 4 in current phase (gap closure complete)
+Status: Awaiting UAT re-verification
+Last activity: 2026-02-03 -- Completed 03-04-PLAN.md (UAT Gap Closure)
 
-Progress: [████████████████░░░░] 80%
+Progress: [█████████████████░░░] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Total execution time: ~38 min
+- Total plans completed: 9
+- Total execution time: ~40 min
 
 **By Phase:**
 
@@ -28,7 +28,7 @@ Progress: [████████████████░░░░] 80%
 |-------|-------|--------|
 | 01-edge-function | 3/3 | Complete |
 | 02-stream-client | 2/2 | Complete |
-| 03-chat-screen | 3/3 | Awaiting visual verification |
+| 03-chat-screen | 4/4 | Awaiting UAT re-verification |
 
 *Updated after each plan completion*
 
@@ -70,6 +70,9 @@ Recent decisions affecting current work:
 - [03-03]: Parent-owned TextEditingController in ChatScreen for persistence across composer rebuilds
 - [03-03]: ref.listen on chatStreamStateProvider for error transition detection and query restoration
 - [03-03]: _textController.clear() in parent _handleSendMessage for suggestion chip send support
+- [03-04]: 16ms base interval matches 60fps frame timing for smoother animation
+- [03-04]: 5 chars per tick reduces state updates from ~200/sec to ~60/sec
+- [03-04]: addPostFrameCallback ensures cross-listener ordering without coupling providers
 
 ### Pending Todos
 
@@ -81,6 +84,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02
-Stopped at: Completed 03-03-PLAN.md Task 1 (awaiting human-verify checkpoint for visual verification)
+Last session: 2026-02-03
+Stopped at: Completed 03-04-PLAN.md (UAT gap closure - all 4 fixes applied)
 Resume file: None
