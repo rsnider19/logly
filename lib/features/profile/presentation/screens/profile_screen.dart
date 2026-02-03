@@ -110,7 +110,7 @@ class _InsightsFab extends ConsumerWidget {
 
   Future<void> _onPressed(BuildContext context, WidgetRef ref, bool hasAccess) async {
     if (hasAccess) {
-      const ChatRoute().go(context);
+      await const ChatRoute().push<void>(context);
     } else {
       // Show paywall - no manual invalidation needed, StateNotifier listens for updates
       final purchased = await ref.read(subscriptionServiceProvider).showPaywall();
