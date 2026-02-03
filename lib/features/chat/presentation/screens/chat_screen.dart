@@ -140,10 +140,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
       );
     }
 
-    // AI completed message -- render with GptMarkdown
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: GptMarkdown(message.text, style: theme.textTheme.bodyLarge),
+    // AI completed message -- render with step summary + GptMarkdown
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildStepProgress(message.metadata, theme),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: GptMarkdown(message.text, style: theme.textTheme.bodyLarge),
+        ),
+      ],
     );
   }
 
