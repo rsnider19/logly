@@ -14,7 +14,7 @@
  */
 
 import OpenAI from "npm:openai@4.103.0";
-import { RESPONSE_INSTRUCTIONS } from "./prompts.ts";
+import { RESPONSE_INSTRUCTIONS, FOLLOW_UP_INSTRUCTIONS } from "./prompts.ts";
 
 /** Model used for response generation. */
 const RESPONSE_MODEL = "gpt-4o-mini";
@@ -145,4 +145,59 @@ export async function generateStreamingResponse(
   }
 
   return { fullResponse, responseId, usage };
+}
+
+// ============================================================
+// Follow-Up Suggestions
+// ============================================================
+
+export interface FollowUpParams {
+  question: string;
+  response: string;
+  hashedUserId: string;
+}
+
+/**
+ * Generates follow-up question suggestions based on the conversation.
+ *
+ * Uses a fast, non-streaming call with low max_tokens to generate
+ * 2-3 contextual follow-up questions the user might want to ask next.
+ *
+ * @param params - Original question, AI response, and hashed user ID
+ * @returns Array of 2-3 follow-up question strings
+ */
+export async function generateFollowUpSuggestions(
+  params: FollowUpParams,
+): Promise<string[]> {
+  const { question, response, hashedUserId } = params;
+  const openai = new OpenAI();
+
+  const userInput = `User asked: "${question}"\n\nAssistant responded: "${response}"`;
+
+  try {
+    const result = await openai.responses.create({
+      model: RESPONSE_MODEL,
+      instructions: FOLLOW_UP_INSTRUCTIONS,
+      input: userInput,
+      temperature: 0.7,
+      user: hashedUserId,
+      max_output_tokens: 150,
+    });
+
+    const content = result.output_text;
+    if (!content) return [];
+
+    // Extract JSON array from response
+    const jsonMatch = content.match(/\[[\s\S]*?\]/);
+    if (!jsonMatch) return [];
+
+    const parsed = JSON.parse(jsonMatch[0]);
+    if (Array.isArray(parsed) && parsed.every((s) => typeof s === "string")) {
+      return parsed.slice(0, 3); // Max 3 suggestions
+    }
+  } catch (err) {
+    console.warn("[FollowUp] Failed to generate suggestions:", err);
+  }
+
+  return [];
 }

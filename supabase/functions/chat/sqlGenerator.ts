@@ -2,9 +2,7 @@
  * NL-to-SQL conversion via OpenAI GPT-4o-mini.
  *
  * Converts natural language questions into SQL queries using structured
- * output with off-topic detection. Uses a discriminated union schema:
- * the LLM returns either { offTopic: false, sqlQuery: "SELECT ..." }
- * or { offTopic: true, redirectMessage: "..." }.
+ * output. Returns { sqlQuery: "SELECT ..." }.
  *
  * Includes a self-correction retry: if the first response fails to parse,
  * a repair request is chained via previous_response_id to fix the output.
@@ -26,25 +24,11 @@ const NL_TO_SQL_MODEL = "gpt-4o-mini";
 // ============================================================
 
 /**
- * Schema for a normal SQL query response.
+ * Schema for a SQL query response.
  */
-const SqlQueryResponse = z.object({
-  offTopic: z.literal(false),
+const NlToSqlResponse = z.object({
   sqlQuery: z.string().min(1),
 });
-
-/**
- * Schema for an off-topic redirect response.
- */
-const OffTopicResponse = z.object({
-  offTopic: z.literal(true),
-  redirectMessage: z.string().min(1),
-});
-
-/**
- * Discriminated union: either a SQL query or an off-topic redirect.
- */
-const NlToSqlResponse = z.union([SqlQueryResponse, OffTopicResponse]);
 
 export type NlToSqlResult = z.infer<typeof NlToSqlResponse>;
 
@@ -65,23 +49,12 @@ const apiSchema = {
   schema: {
     type: "object",
     properties: {
-      offTopic: {
-        type: "boolean",
-        description:
-          "true if the question is not about Logly activity data, false otherwise",
-      },
       sqlQuery: {
         type: "string",
-        description:
-          "The SQL query to execute (only when offTopic is false)",
-      },
-      redirectMessage: {
-        type: "string",
-        description:
-          "A friendly redirect message (only when offTopic is true)",
+        description: "The SQL query to execute",
       },
     },
-    required: ["offTopic"],
+    required: ["sqlQuery"],
     additionalProperties: false,
   },
 };
@@ -127,13 +100,13 @@ export async function hashUserId(userId: string): Promise<string> {
 // ============================================================
 
 /**
- * Generates a SQL query (or off-topic redirect) from a natural language question.
+ * Generates a SQL query from a natural language question.
  *
  * Uses OpenAI GPT-4o-mini with structured JSON output. On parse failure,
  * triggers a self-correction retry chained via previous_response_id.
  *
  * @param params - Query text, userId, and optional previous conversion ID
- * @returns Parsed result (SQL or redirect) plus the OpenAI response ID for chaining
+ * @returns Parsed result with SQL query plus the OpenAI response ID for chaining
  */
 export async function generateSQL(
   params: GenerateSQLParams,

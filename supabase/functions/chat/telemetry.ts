@@ -41,9 +41,6 @@ export interface TelemetryRecord {
   errorMessage?: string;
   failedStep?: string;
 
-  // Flags
-  isOffTopic: boolean;
-
   // Model tracking
   sqlModel?: string;
   responseModel?: string;
@@ -93,9 +90,6 @@ export async function persistTelemetry(record: TelemetryRecord): Promise<void> {
       error_type: record.errorType,
       error_message: record.errorMessage,
       failed_step: record.failedStep,
-
-      // Flags
-      is_off_topic: record.isOffTopic,
 
       // Model tracking
       sql_model: record.sqlModel,

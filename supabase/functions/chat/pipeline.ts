@@ -26,8 +26,10 @@ import { createProgressStream, createSSEHeaders } from "./streamHandler.ts";
 import { sanitizeUserInput, validateSqlQuery } from "./security.ts";
 import { generateSQL, hashUserId } from "./sqlGenerator.ts";
 import { executeWithRLS } from "./queryExecutor.ts";
-import { generateStreamingResponse } from "./responseGenerator.ts";
-import { FOLLOW_UP_MARKER } from "./prompts.ts";
+import {
+  generateStreamingResponse,
+  generateFollowUpSuggestions,
+} from "./responseGenerator.ts";
 import {
   getOrCreateConversation,
   saveUserMessage,
@@ -94,7 +96,6 @@ export function runPipeline(input: PipelineInput): Response {
     const telemetry: Partial<TelemetryRecord> = {
       userId,
       userQuestion: query,
-      isOffTopic: false,
     };
 
     // Persistence: conversation ID resolved early for tracking
@@ -167,34 +168,6 @@ export function runPipeline(input: PipelineInput): Response {
         return;
       }
 
-      // Handle off-topic questions
-      if (sqlResult.parsed.offTopic) {
-        telemetry.isOffTopic = true;
-        telemetry.aiResponse = sqlResult.parsed.redirectMessage;
-        progress.sendStep(STEP_NAMES.UNDERSTANDING, "complete");
-        completedStepNames.push(STEP_NAMES.UNDERSTANDING);
-        // Send the redirect message as a text_delta so it appears as a chat message
-        progress.sendTextDelta(sqlResult.parsed.redirectMessage);
-        progress.sendConversionId(sqlResult.conversionId);
-
-        // Save off-topic response to conversation
-        if (conversationId) {
-          await saveAssistantMessage(
-            conversationId,
-            sqlResult.parsed.redirectMessage,
-            { steps: completedStepNames }
-          );
-          await updateConversationIds(
-            conversationId,
-            undefined,
-            sqlResult.conversionId
-          );
-        }
-
-        progress.sendDone(conversationId!);
-        return;
-      }
-
       // SQL validation (silent -- no user-visible step event)
       const validation = validateSqlQuery(sqlResult.parsed.sqlQuery);
       if (!validation.valid) {
@@ -253,17 +226,10 @@ export function runPipeline(input: PipelineInput): Response {
 
       // ============================================
       // Response streaming (no spinner -- direct text)
-      // Uses buffering to prevent follow-up marker from appearing in stream
       // ============================================
       const respStart = performance.now();
       try {
         let fullResponseText = "";
-        // Buffer to hold text that might contain start of marker
-        let buffer = "";
-        // Max length of marker prefix to buffer (length of "<!-- FOLLOW_UPS:")
-        const MARKER_PREFIX_LEN = FOLLOW_UP_MARKER.length;
-        // Flag to stop streaming once marker is detected
-        let markerDetected = false;
 
         const { responseId, usage: responseUsage } = await generateStreamingResponse({
           query: sanitizedQuery,
@@ -279,47 +245,10 @@ export function runPipeline(input: PipelineInput): Response {
               firstTextTime = performance.now();
             }
 
-            // If marker already detected, don't stream anything more
-            if (markerDetected) return;
-
-            // Add delta to buffer
-            buffer += delta;
-
-            // Check if buffer contains the start of the marker
-            const markerStart = buffer.indexOf(FOLLOW_UP_MARKER);
-            if (markerStart !== -1) {
-              // Marker found - emit everything before it, then stop streaming
-              markerDetected = true;
-              const cleanText = buffer.slice(0, markerStart);
-              if (cleanText) progress.sendTextDelta(cleanText);
-              buffer = ""; // Clear buffer (rest is follow-up data)
-              return;
-            }
-
-            // Check if buffer might have partial marker at end
-            // Look for any prefix of FOLLOW_UP_MARKER at the end of buffer
-            let safeLength = buffer.length;
-            for (let i = 1; i <= Math.min(buffer.length, MARKER_PREFIX_LEN); i++) {
-              const suffix = buffer.slice(-i);
-              if (FOLLOW_UP_MARKER.startsWith(suffix)) {
-                safeLength = buffer.length - i;
-                break;
-              }
-            }
-
-            // Emit safe portion, keep potential marker prefix in buffer
-            if (safeLength > 0) {
-              const safeText = buffer.slice(0, safeLength);
-              progress.sendTextDelta(safeText);
-              buffer = buffer.slice(safeLength);
-            }
+            // Stream directly to client
+            progress.sendTextDelta(delta);
           },
         });
-
-        // Emit any remaining buffered text (if no marker was found)
-        if (!markerDetected && buffer) {
-          progress.sendTextDelta(buffer);
-        }
 
         // Capture response generation telemetry
         telemetry.responseGenerationDurationMs = Math.round(performance.now() - respStart);
@@ -334,19 +263,18 @@ export function runPipeline(input: PipelineInput): Response {
 
         progress.sendResponseId(responseId);
 
-        // Extract follow-up suggestions from accumulated response text
-        const followUps = extractFollowUpSuggestions(fullResponseText);
-
-        // Save AI response to database (clean content without follow-up marker)
-        const cleanContent = fullResponseText
-          .replace(/<!-- FOLLOW_UPS:.*-->/, "")
-          .trim();
+        // Generate follow-up suggestions in a separate call
+        const followUps = await generateFollowUpSuggestions({
+          question: sanitizedQuery,
+          response: fullResponseText,
+          hashedUserId: hashedUser,
+        });
 
         // Capture final telemetry fields
-        telemetry.aiResponse = cleanContent;
+        telemetry.aiResponse = fullResponseText;
         telemetry.followUpSuggestions = followUps.length > 0 ? followUps : undefined;
         if (conversationId) {
-          await saveAssistantMessage(conversationId, cleanContent, {
+          await saveAssistantMessage(conversationId, fullResponseText, {
             followUpSuggestions: followUps.length > 0 ? followUps : undefined,
             steps:
               completedStepNames.length > 0 ? completedStepNames : undefined,
@@ -393,29 +321,3 @@ export function runPipeline(input: PipelineInput): Response {
   });
 }
 
-// ============================================================
-// Helpers
-// ============================================================
-
-/**
- * Extracts follow-up suggestions from the response text.
- * Looks for: <!-- FOLLOW_UPS: ["...", "..."] -->
- */
-function extractFollowUpSuggestions(text: string): string[] {
-  const startIdx = text.indexOf(FOLLOW_UP_MARKER);
-  if (startIdx === -1) return [];
-
-  const endIdx = text.indexOf("-->", startIdx);
-  if (endIdx === -1) return [];
-
-  const jsonStr = text.slice(startIdx + FOLLOW_UP_MARKER.length, endIdx).trim();
-  try {
-    const parsed = JSON.parse(jsonStr);
-    if (Array.isArray(parsed) && parsed.every((s) => typeof s === "string")) {
-      return parsed.slice(0, 3); // Max 3 suggestions
-    }
-  } catch {
-    console.warn("[Pipeline] Failed to parse follow-up suggestions:", jsonStr);
-  }
-  return [];
-}
