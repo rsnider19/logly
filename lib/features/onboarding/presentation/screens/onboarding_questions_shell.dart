@@ -95,7 +95,7 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   }
 
   void _skip() {
-    _next();
+    context.go('/auth');
   }
 
   @override
