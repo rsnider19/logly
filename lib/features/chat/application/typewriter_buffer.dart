@@ -3,15 +3,15 @@ import 'dart:async';
 /// Buffers incoming text deltas and emits characters at a controlled rate
 /// to create a typewriter effect.
 ///
-/// - Normal mode: 16ms per tick, up to 5 chars/tick (~300 chars/sec, ~60 fps)
-/// - Drain mode (after done signal): 1ms per tick, 5 chars/tick (fast drain)
+/// - Normal mode: 5ms per tick, 1 char/tick (200 chars/sec, smooth single-char drip)
+/// - Drain mode (after done signal): 1ms per tick, 1 char/tick (fast drain)
 ///
 /// Each emission on [stream] is the full accumulated text so far,
 /// not just the new characters. This makes it easy for the UI to display
 /// the latest emission directly.
 class TypewriterBuffer {
   TypewriterBuffer({
-    this.normalInterval = const Duration(milliseconds: 16),
+    this.normalInterval = const Duration(milliseconds: 5),
     this.drainInterval = const Duration(milliseconds: 1),
   });
 
@@ -79,8 +79,8 @@ class TypewriterBuffer {
       }
 
       final bufferStr = _pendingBuffer.toString();
-      // Emit up to 5 characters per tick for smoother animation
-      final chunkSize = bufferStr.length.clamp(1, 5);
+      // Emit exactly 1 character per tick for smooth typewriter effect
+      const chunkSize = 1;
       final chunk = bufferStr.substring(0, chunkSize);
       _pendingBuffer
         ..clear()
