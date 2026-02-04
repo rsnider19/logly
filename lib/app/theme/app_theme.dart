@@ -105,5 +105,10 @@ abstract final class AppTheme {
         borderRadius: BorderRadius.circular(12),
       ),
     ),
+    bottomSheetTheme: _dark.bottomSheetTheme.copyWith(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
   );
 }
