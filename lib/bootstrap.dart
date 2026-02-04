@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:dartx/dartx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart' show DefaultCacheManager;
@@ -12,6 +13,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 /// Bootstraps the application with the given environment path.
 ///
@@ -99,6 +101,9 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder) async {
   }
 
   await DefaultCacheManager().emptyCache();
+
+  // Configure VisibilityDetector for immediate haptic feedback
+  VisibilityDetectorController.instance.updateInterval = 100.milliseconds;
 
   if (kDebugMode) {
     debugPrint('✓ Sentry ${Sentry.isEnabled ? "enabled" : "disabled"}');
