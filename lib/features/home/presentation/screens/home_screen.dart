@@ -37,7 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 500) {
       // Load more when near the bottom
       unawaited(ref.read(dailyActivitiesStateProvider.notifier).loadMore());
     }
@@ -48,13 +48,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void scrollToTop() {
-    unawaited(
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      ),
-    );
+    if (_scrollController.hasClients) {
+      unawaited(
+        _scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        ),
+      );
+    }
   }
 
   /// Generates placeholder summaries for loading state.
@@ -93,12 +95,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             onRefresh: _onRefresh,
             child: ListView.builder(
               controller: _scrollController,
-              itemCount: state.summaries.length + (state.isLoadingMore ? 1 : 0),
+              itemCount: state.summaries.length + (state.isLoadingMore ? 3 : 0),
               itemBuilder: (context, index) {
-                if (index == state.summaries.length) {
-                  return const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
+                if (index >= state.summaries.length) {
+                  // Show loading skeleton rows
+                  final placeholderIndex = index - state.summaries.length;
+                  final lastDate = state.summaries.isNotEmpty ? state.summaries.last.activityDate : DateTime.now();
+                  return SkellyWrapper(
+                    isLoading: true,
+                    child: DailyActivityRow(
+                      summary: DailyActivitySummary(
+                        activityDate: lastDate.subtract(Duration(days: placeholderIndex + 1)),
+                        activityCount: 0,
+                      ),
+                    ),
                   );
                 }
                 final summary = state.summaries[index];
