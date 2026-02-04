@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -29,30 +27,32 @@ class HapticItem extends StatefulWidget {
 }
 
 class _HapticItemState extends State<HapticItem> {
-  bool _hasFired = false;
-
-  @override
-  void didUpdateWidget(HapticItem oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // Reset if the id changes (e.g. list item recycled).
-    if (oldWidget.id != widget.id) {
-      _hasFired = false;
-    }
-  }
-
-  void _onVisibilityChanged(VisibilityInfo info) {
-    if (_hasFired || !widget.isEnabled) return;
-    if (info.visibleFraction > 0.1) {
-      _hasFired = true;
-      unawaited(HapticFeedback.lightImpact());
-    }
-  }
+  bool _isFirstCallback = true;
+  bool hasEntered = false;
 
   @override
   Widget build(BuildContext context) {
+    // Early return when haptics disabled (matches old implementation)
+    if (!widget.isEnabled) {
+      return widget.child;
+    }
+
     return VisibilityDetector(
-      key: Key(widget.id),
-      onVisibilityChanged: _onVisibilityChanged,
+      key: ValueKey(widget.id),
+      onVisibilityChanged: (info) {
+        // Skip the first callback (fires immediately on build for visible items)
+        if (_isFirstCallback) {
+          _isFirstCallback = false;
+          hasEntered = info.visibleFraction > 0.1;
+          return;
+        }
+
+        final isVisible = info.visibleFraction > 0.1;
+        if (isVisible && !hasEntered) {
+          HapticFeedback.lightImpact();
+        }
+        hasEntered = isVisible;
+      },
       child: widget.child,
     );
   }
