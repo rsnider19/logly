@@ -1,0 +1,2 @@
+ALTER TABLE profile
+ADD COLUMN IF NOT EXISTS haptic_feedback_enabled BOOLEAN NOT NULL DEFAULT true;
