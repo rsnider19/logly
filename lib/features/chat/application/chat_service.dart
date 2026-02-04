@@ -11,29 +11,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'chat_service.g.dart';
 
-/// Marker used by the backend to embed follow-up suggestions in response text.
-/// Format: <!-- FOLLOW_UPS: ["...", "..."] -->
-const _followUpMarkerStart = '<!-- FOLLOW_UPS:';
-const _followUpMarkerEnd = '-->';
-
-/// Strips the follow-up suggestions marker from response text.
-///
-/// The marker may span multiple lines and look like:
-/// <!-- FOLLOW_UPS: ["Question 1?", "Question 2?"] -->
-String _stripFollowUpMarker(String text) {
-  final startIdx = text.indexOf(_followUpMarkerStart);
-  if (startIdx == -1) return text;
-
-  final endIdx = text.indexOf(_followUpMarkerEnd, startIdx);
-  if (endIdx == -1) {
-    // Marker started but not closed -- strip from start to end
-    return text.substring(0, startIdx).trim();
-  }
-
-  // Remove the entire marker including closing -->
-  return (text.substring(0, startIdx) + text.substring(endIdx + _followUpMarkerEnd.length)).trim();
-}
-
 /// Business logic layer orchestrating the chat stream lifecycle.
 ///
 /// Transforms raw [ChatEvent] streams from [ChatRepository] into smooth,
@@ -349,13 +326,11 @@ class ChatService {
       }
 
       // Typewriter stream closed -- all characters drained
-      // Strip follow-up marker from final text (may have accumulated if streamed in one delta)
-      final cleanFullText = _stripFollowUpMarker(fullText);
       onStateUpdate(
         ChatStreamState(
           status: ChatConnectionStatus.completed,
-          displayText: cleanFullText,
-          fullText: cleanFullText,
+          displayText: fullText,
+          fullText: fullText,
           completedSteps: List.unmodifiable(completedSteps),
           responseId: responseId,
           conversionId: conversionId,
