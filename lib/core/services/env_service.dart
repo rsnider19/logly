@@ -112,6 +112,18 @@ class EnvService {
   /// RevenueCat API key for Google/Android (production).
   static String? get revenueCatGoogleApiKey => dotenv.env['REVENUE_CAT_API_KEY_GOOGLE'];
 
+  /// Google Places API key for location search.
+  static String get googlePlacesApiKey {
+    final value = dotenv.env['GOOGLE_PLACES_API_KEY'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'Google Places API key not configured',
+        'GOOGLE_PLACES_API_KEY is missing from env file',
+      );
+    }
+    return value;
+  }
+
   /// Sentry DSN for error reporting.
   ///
   /// Returns null if not configured (e.g., development environment),

@@ -46,6 +46,10 @@
 	<string>Granting access will allow us to import your Apple Health data into Logly</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Granting access will allow us to import your Apple Health data into Logly</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Logly uses your location to show nearby places and auto-fill locations for your activities.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Logly uses your location to track where you complete activities.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
