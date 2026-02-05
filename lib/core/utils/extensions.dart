@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/utils/date_utils.dart' as app_date_utils;
 
@@ -25,6 +28,22 @@ extension StringExtensions on String {
   String truncate(int maxLength, {String ellipsis = '...'}) {
     if (length <= maxLength) return this;
     return '${substring(0, maxLength - ellipsis.length)}$ellipsis';
+  }
+
+  Size measureTextSize(
+    BuildContext context, {
+    TextStyle? textStyle,
+    double maxWidth = double.infinity,
+    int? maxLines,
+  }) {
+    final textPainter = TextPainter(
+      text: TextSpan(text: this, style: textStyle ?? DefaultTextStyle.of(context).style),
+      textDirection: TextDirection.ltr,
+      textScaler: MediaQuery.of(context).textScaler,
+      maxLines: maxLines,
+    )..layout(maxWidth: maxWidth);
+
+    return textPainter.size;
   }
 }
 
