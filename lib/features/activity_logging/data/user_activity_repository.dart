@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
@@ -16,6 +17,12 @@ class UserActivityRepository {
 
   final SupabaseClient _supabase;
   final LoggerService _logger;
+
+  /// Formats a DateTime as ISO date string (YYYY-MM-DD) for Supabase date queries.
+  String _formatDate(DateTime date) {
+    final d = date.date;
+    return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  }
 
   /// The select statement for fetching user activities with related data.
   static const String _selectWithRelations = '''
@@ -52,14 +59,12 @@ class UserActivityRepository {
   /// Fetches user activities for a specific date.
   Future<List<UserActivity>> getByDate(DateTime date) async {
     try {
-      final startOfDay = DateTime(date.year, date.month, date.day);
-      final endOfDay = startOfDay.add(const Duration(days: 1));
+      final dateStr = _formatDate(date);
 
       final response = await _supabase
           .from('user_activity')
           .select(_selectWithRelations)
-          .gte('activity_timestamp', startOfDay.toIso8601String())
-          .lt('activity_timestamp', endOfDay.toIso8601String())
+          .eq('activity_date', dateStr)
           .order('activity_timestamp', ascending: false);
 
       return (response as List).map((e) => UserActivity.fromJson(e as Map<String, dynamic>)).toList();
@@ -69,17 +74,17 @@ class UserActivityRepository {
     }
   }
 
-  /// Fetches user activities for a date range.
+  /// Fetches user activities for a date range (inclusive).
   Future<List<UserActivity>> getByDateRange(DateTime startDate, DateTime endDate) async {
     try {
-      final start = DateTime(startDate.year, startDate.month, startDate.day);
-      final end = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
+      final startStr = _formatDate(startDate);
+      final endStr = _formatDate(endDate);
 
       final response = await _supabase
           .from('user_activity')
           .select(_selectWithRelations)
-          .gte('activity_timestamp', start.toIso8601String())
-          .lt('activity_timestamp', end.toIso8601String())
+          .gte('activity_date', startStr)
+          .lte('activity_date', endStr)
           .order('activity_timestamp', ascending: false);
 
       return (response as List).map((e) => UserActivity.fromJson(e as Map<String, dynamic>)).toList();
@@ -89,22 +94,22 @@ class UserActivityRepository {
     }
   }
 
-  /// Fetches user activities for a specific activity within a date range.
+  /// Fetches user activities for a specific activity within a date range (inclusive).
   Future<List<UserActivity>> getByActivityIdAndDateRange(
     String activityId,
     DateTime startDate,
     DateTime endDate,
   ) async {
     try {
-      final start = DateTime(startDate.year, startDate.month, startDate.day);
-      final end = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
+      final startStr = _formatDate(startDate);
+      final endStr = _formatDate(endDate);
 
       final response = await _supabase
           .from('user_activity')
           .select(_selectWithRelations)
           .eq('activity_id', activityId)
-          .gte('activity_timestamp', start.toIso8601String())
-          .lt('activity_timestamp', end.toIso8601String())
+          .gte('activity_date', startStr)
+          .lte('activity_date', endStr)
           .order('activity_timestamp', ascending: false);
 
       return (response as List).map((e) => UserActivity.fromJson(e as Map<String, dynamic>)).toList();

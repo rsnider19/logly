@@ -12,6 +12,9 @@ _UserActivity _$UserActivityFromJson(Map<String, dynamic> json) =>
       userId: json['user_id'] as String,
       activityId: json['activity_id'] as String,
       activityTimestamp: DateTime.parse(json['activity_timestamp'] as String),
+      activityDate: json['activity_date'] == null
+          ? null
+          : DateTime.parse(json['activity_date'] as String),
       createdAt: json['created_at'] == null
           ? null
           : DateTime.parse(json['created_at'] as String),
@@ -43,6 +46,7 @@ Map<String, dynamic> _$UserActivityToJson(_UserActivity instance) =>
       'user_id': instance.userId,
       'activity_id': instance.activityId,
       'activity_timestamp': instance.activityTimestamp.toIso8601String(),
+      'activity_date': instance.activityDate?.toIso8601String(),
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
       'comments': instance.comments,

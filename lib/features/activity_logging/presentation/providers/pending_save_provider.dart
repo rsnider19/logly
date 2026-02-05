@@ -172,9 +172,10 @@ class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
   Future<void> _refreshActivityProviders() async {
     await Future.wait([
       ref.refresh(dailyActivitiesStateProvider.future),
-      ref.refresh(streakProvider.future),
-      ref.refresh(allPeriodSummariesProvider.future),
-      ref.refresh(activityCountsByDateProvider.future),
+      ref.refresh(userStatsProvider.future),
+      ref.refresh(periodCategoryCountsProvider.future),
+      ref.refresh(dailyCategoryCountsProvider.future),
+      ref.refresh(dowCategoryCountsProvider.future),
     ]);
 
     await Future.wait([

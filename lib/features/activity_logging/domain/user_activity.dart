@@ -15,6 +15,7 @@ abstract class UserActivity with _$UserActivity {
     required String userId,
     required String activityId,
     required DateTime activityTimestamp,
+    @JsonKey(name: 'activity_date') DateTime? activityDate,
     DateTime? createdAt,
     DateTime? updatedAt,
     String? comments,

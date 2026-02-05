@@ -411,11 +411,13 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       // Home screen
       ref.refresh(dailyActivitiesStateProvider.future),
       // Profile screen - streak card
-      ref.refresh(streakProvider.future),
+      ref.refresh(userStatsProvider.future),
       // Profile screen - source for summary
-      ref.refresh(allPeriodSummariesProvider.future),
-      // Profile screen - source for charts
-      ref.refresh(activityCountsByDateProvider.future),
+      ref.refresh(periodCategoryCountsProvider.future),
+      // Profile screen - source for charts (contribution + monthly)
+      ref.refresh(dailyCategoryCountsProvider.future),
+      // Profile screen - source for radar chart
+      ref.refresh(dowCategoryCountsProvider.future),
     ]);
 
     // Then refresh the derived providers that widgets watch directly

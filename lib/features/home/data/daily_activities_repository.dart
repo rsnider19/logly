@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
@@ -15,6 +16,12 @@ class DailyActivitiesRepository {
 
   final SupabaseClient _supabase;
   final LoggerService _logger;
+
+  /// Formats a DateTime as ISO date string (YYYY-MM-DD) for Supabase date queries.
+  String _formatDate(DateTime date) {
+    final d = date.date;
+    return '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+  }
 
   /// The select statement for fetching user activities with related data.
   ///
@@ -38,14 +45,11 @@ class DailyActivitiesRepository {
     DateTime endDate,
   ) async {
     try {
-      final start = DateTime(startDate.year, startDate.month, startDate.day);
-      final end = DateTime(endDate.year, endDate.month, endDate.day).add(const Duration(days: 1));
-
       final response = await _supabase
           .from('user_activity')
           .select(_selectWithRelations)
-          .gte('activity_timestamp', start.toIso8601String())
-          .lt('activity_timestamp', end.toIso8601String())
+          .gte('activity_date', _formatDate(startDate))
+          .lte('activity_date', _formatDate(endDate))
           .order('activity_timestamp', ascending: false);
 
       final activities = (response as List).map((e) => UserActivity.fromJson(e as Map<String, dynamic>)).toList();
@@ -58,16 +62,17 @@ class DailyActivitiesRepository {
   }
 
   /// Groups a list of user activities by date into DailyActivitySummary objects.
+  ///
+  /// Uses [UserActivity.activityDate] (the user's intended date) rather than
+  /// [UserActivity.activityTimestamp] to ensure activities appear on the
+  /// correct day regardless of timezone.
   List<DailyActivitySummary> _groupActivitiesByDate(List<UserActivity> activities) {
     final groupedByDate = <DateTime, List<UserActivity>>{};
 
     for (final activity in activities) {
-      final date = DateTime(
-        activity.activityTimestamp.year,
-        activity.activityTimestamp.month,
-        activity.activityTimestamp.day,
-      );
-
+      // Use activityDate (the user's intended date) for grouping.
+      // Fall back to activityTimestamp date if activityDate is null.
+      final date = (activity.activityDate ?? activity.activityTimestamp).date;
       groupedByDate.putIfAbsent(date, () => []).add(activity);
     }
 
