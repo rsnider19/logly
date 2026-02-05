@@ -66,6 +66,7 @@ const apiSchema = {
 export interface GenerateSQLParams {
   query: string;
   userId: string;
+  currentDate: string;
   previousConversionId?: string;
 }
 
@@ -111,7 +112,7 @@ export async function hashUserId(userId: string): Promise<string> {
 export async function generateSQL(
   params: GenerateSQLParams,
 ): Promise<GenerateSQLResult> {
-  const { query, userId, previousConversionId } = params;
+  const { query, userId, currentDate, previousConversionId } = params;
   const openai = new OpenAI();
   const hashedUser = await hashUserId(userId);
 
@@ -120,7 +121,7 @@ export async function generateSQL(
   // Build request with optional follow-up chaining
   const response = await openai.responses.create({
     model: NL_TO_SQL_MODEL,
-    instructions: buildNlToSqlInstructions(userId),
+    instructions: buildNlToSqlInstructions(userId, currentDate),
     input: userInput,
     ...(previousConversionId && {
       previous_response_id: previousConversionId,

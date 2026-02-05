@@ -24,15 +24,23 @@ import { COMPRESSED_SCHEMA } from "./schema.ts";
  * - GPT-4o-mini compatible structured output format
  */
 /**
- * Builds the NL-to-SQL system instructions with the user's ID injected.
+ * Builds the NL-to-SQL system instructions with the user's ID and current date injected.
  *
  * The userId is embedded directly in the prompt so the model generates
  * correct `WHERE user_id = '<uuid>'::uuid` filters rather than using
  * CURRENT_USER (which returns the Postgres role name, not the UUID).
+ *
+ * The currentDate is included so the model correctly interprets relative
+ * date references like "last month", "September", "this week", etc.
+ * Without this, the model defaults to dates from its training data (2023).
  */
-export function buildNlToSqlInstructions(userId: string): string {
+export function buildNlToSqlInstructions(userId: string, currentDate: string): string {
   return `
 You are an expert Postgres SQL generator. Convert natural language to SQL.
+
+TODAY'S DATE: ${currentDate}
+Use this date to interpret relative time references like "last month", "this week", "yesterday", etc.
+IMPORTANT: When a user says "last [month]" (e.g., "last April"), they mean the most recent occurrence of that month IN THE PAST. If today is February 2026, "last April" means April 2025, NOT April 2026 (which hasn't happened yet). Similarly, "September" or "last September" in February 2026 means September 2025.
 
 CRITICAL INSTRUCTIONS:
 - The conversation history contains friendly, chatty responses from another agent.

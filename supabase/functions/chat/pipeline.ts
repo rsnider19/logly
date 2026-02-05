@@ -142,12 +142,18 @@ export function runPipeline(input: PipelineInput): Response {
       // ============================================
       progress.sendStep(STEP_NAMES.UNDERSTANDING, "start");
 
+      // Generate current date in ISO format for NL-to-SQL context
+      // This helps the model correctly interpret relative date references
+      // like "last month", "September", "this week", etc.
+      const currentDate = new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
+
       let sqlResult;
       const sqlStart = performance.now();
       try {
         sqlResult = await generateSQL({
           query: sanitizedQuery,
           userId,
+          currentDate,
           previousConversionId,
         });
         telemetry.nlToSqlDurationMs = Math.round(performance.now() - sqlStart);
