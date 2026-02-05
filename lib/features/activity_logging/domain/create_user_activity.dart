@@ -31,6 +31,12 @@ abstract class CreateUserActivity with _$CreateUserActivity {
 
     /// Detail values for this activity.
     @Default([]) List<CreateUserActivityDetail> details,
+
+    /// User's GPS longitude at time of logging (silent capture).
+    double? loggedLocationLng,
+
+    /// User's GPS latitude at time of logging (silent capture).
+    double? loggedLocationLat,
   }) = _CreateUserActivity;
 
   const CreateUserActivity._();
@@ -70,6 +76,8 @@ abstract class CreateUserActivity with _$CreateUserActivity {
           '${activityDate.year}-${activityDate.month.toString().padLeft(2, '0')}-${activityDate.day.toString().padLeft(2, '0')}',
       'comments': comments,
       'activity_name_override': activityNameOverride,
+      'logged_location_lng': loggedLocationLng,
+      'logged_location_lat': loggedLocationLat,
     };
   }
 }

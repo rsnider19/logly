@@ -22,7 +22,12 @@ abstract class UserActivityDetail with _$UserActivityDetail {
     double? distanceInMeters,
     double? liquidVolumeInLiters,
     double? weightInKilograms,
+
+    /// @deprecated Use locationId instead. Kept for historical data.
     String? latLng,
+
+    /// Foreign key to location table (Google place_id).
+    String? locationId,
 
     /// The activity detail configuration (populated via join).
     ActivityDetail? activityDetail,
@@ -41,7 +46,8 @@ abstract class UserActivityDetail with _$UserActivityDetail {
       distanceInMeters != null ||
       liquidVolumeInLiters != null ||
       weightInKilograms != null ||
-      latLng != null;
+      latLng != null ||
+      locationId != null;
 
   /// Gets the appropriate value based on the detail type.
   Object? get value {
@@ -62,7 +68,8 @@ abstract class UserActivityDetail with _$UserActivityDetail {
       case ActivityDetailType.weight:
         return weightInKilograms;
       case ActivityDetailType.location:
-        return latLng;
+        // Prefer locationId over deprecated latLng
+        return locationId ?? latLng;
     }
   }
 }

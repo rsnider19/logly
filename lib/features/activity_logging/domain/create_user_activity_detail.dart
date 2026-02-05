@@ -18,7 +18,12 @@ abstract class CreateUserActivityDetail with _$CreateUserActivityDetail {
     double? distanceInMeters,
     double? liquidVolumeInLiters,
     double? weightInKilograms,
+
+    /// @deprecated Use locationId instead.
     String? latLng,
+
+    /// Google place_id reference to the location table.
+    String? locationId,
   }) = _CreateUserActivityDetail;
 
   const CreateUserActivityDetail._();
@@ -34,5 +39,6 @@ abstract class CreateUserActivityDetail with _$CreateUserActivityDetail {
       distanceInMeters != null ||
       liquidVolumeInLiters != null ||
       weightInKilograms != null ||
-      latLng != null;
+      latLng != null ||
+      locationId != null;
 }
