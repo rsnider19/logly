@@ -6,6 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Logly is a Flutter mobile app for tracking and logging personal activities (fitness, wellness, lifestyle). Users can log activities with metrics, sync health data from Apple HealthKit/Google Health Connect, view statistics and streaks, and get AI-powered insights.
 
+- **App version**: 4.1.4
+- **Flutter**: 3.38.6 (managed via FVM)
+- **Dart SDK**: ^3.9.0
+
 ## Build & Run Commands
 
 ```bash
@@ -114,21 +118,83 @@ Three environments configured via `.env` files in `env/` directory:
 
 Each flavor has its own entry point (`lib/main_*.dart`) that passes the env path to `bootstrap()`.
 
+### Bootstrap & Initialization
+
+`lib/bootstrap.dart` initializes in order:
+1. Load env vars (`EnvService.load`)
+2. Init Sentry (non-debug only, with AppException enrichment)
+3. Init Supabase
+4. Init RevenueCat (platform-specific API keys via `EnvService.revenueCatApiKey`)
+5. Init SharedPreferences
+6. Clear image cache
+
+Post-app initialization (in `App.initState` via `addPostFrameCallback`):
+1. Notification service
+2. Health sync initializer (auto-syncs if enabled + previously synced)
+3. Subscription initializer (syncs RevenueCat login with auth state)
+4. Sentry user context (syncs auth state)
+
+### Supabase Edge Functions
+
+Six Deno/TypeScript edge functions in `supabase/functions/`:
+- `activity` - Activity data operations
+- `ai-insights` - AI chat completions (streaming)
+- `embed` - Generate embeddings for activity search
+- `search-activities` - Hybrid search (FTS + vector)
+- `revenue-cat` - Webhook handler for subscription events
+- `migrate-user` - Data migration utility
+
 ### Project Structure
 
-- `lib/app/` - App widget, database
-- `lib/services/` - Service classes (e.g., DotEnvService)
-- `lib/features/` - Feature modules (UI, state, models)
-  - `application/` - services and providers that could be used by multiple features
-  - `domain/` - freezed domain models and drift tables
-  - `data/` - repositories and data access
-    - `graphql/` - GraphQL queries and mutations
-  - `presentation` - UI and state management
-    - `screens/` - screens
-    - `widgets/` - widgets
-    - `providers/` - providers
-- `lib/gen/` - Generated asset references
-- `supabase/schema.ts` - Generated database types (reference for table structures)
+```
+lib/
+├── app/                    # App widget, router, theme, database
+│   ├── router/             # GoRouter config (app_router.dart, routes.dart)
+│   ├── theme/              # AppTheme (FlexColorScheme)
+│   └── database/           # Drift SQLite setup and cache tables
+├── core/                   # Shared infrastructure
+│   ├── providers/          # logger, supabase, shared_preferences, scaffold_messenger
+│   ├── services/           # EnvService, LoggerService, SentryInitializer
+│   ├── exceptions/         # AppException base class
+│   └── utils/              # date_utils, extensions (String, DateTime, AsyncValue)
+├── features/               # Feature modules (see below)
+├── widgets/                # Shared widgets (SkeletonLoader, SupabaseImage, HapticItem, LoglyIcons)
+└── gen/                    # Generated asset references (Flutter Gen)
+
+supabase/
+├── schema.ts               # Generated database types (reference for table structures)
+├── migrations/             # SQL migration files
+└── functions/              # Deno/TypeScript edge functions
+
+specs/                      # Feature specification docs (01-core.md through 11-ai-insights.md)
+```
+
+#### Feature Modules
+
+12 feature modules under `lib/features/`:
+
+| Module | Description |
+|--------|-------------|
+| `auth` | Apple/Google sign-in, session management |
+| `activity_catalog` | Browse/search activities and categories |
+| `activity_logging` | Log, edit, delete activities with metrics |
+| `custom_activity` | User-created custom activities |
+| `home` | Daily activity feed, trending activities |
+| `onboarding` | Intro pager, profile questions, favorites selection |
+| `profile` | User stats, streaks, activity heatmap, charts |
+| `settings` | Preferences, notifications, account management |
+| `health_integration` | Apple HealthKit / Google Health Connect sync |
+| `subscriptions` | RevenueCat integration, entitlements, paywalls |
+| `ai_insights` | AI chat for activity insights (premium) |
+| `developer` | Dev-only debugging tools |
+
+#### Feature Module Anatomy
+
+Each feature follows this layer structure:
+- `domain/` - Freezed models, exception classes
+- `data/` - Repositories (Supabase data access)
+- `application/` - Services (business logic, validation, coordination)
+- `presentation/` - screens/, widgets/, providers/
 
 ## Code Styles
 
@@ -147,7 +213,7 @@ Each flavor has its own entry point (`lib/main_*.dart`) that passes the env path
 
 ### SPEC Files
 
-Each feature has a `SPEC.md` with: Overview, Requirements, Architecture, Components, Data Operations, Integration, Testing Requirements, Future Considerations, checkbox-based Success Criteria, and a checklist of items to complete.
+Feature specifications are in `specs/` at the repo root (numbered files: `01-core.md` through `11-ai-insights.md`). Each spec includes: Overview, Requirements, Architecture, Components, Data Operations, Integration, Testing Requirements, Future Considerations, checkbox-based Success Criteria, and a checklist of items to complete. Some features also have a `SPEC.md` within their feature directory for additional context.
 
 ### Domain Models
 
@@ -174,7 +240,7 @@ abstract class LogEntry with _$LogEntry {
 class LogEntryRepository {
   LogEntryRepository(this._supabase, this._logger);
   final SupabaseClient _supabase;
-  final Logger _logger;
+  final LoggerService _logger;
 
   Future<LogEntry> getById(String id) async {
     try {
@@ -216,9 +282,9 @@ class LogEntryRepository {
 }
 
 @Riverpod(keepAlive: true)
-LogEntryRepository logEntryRepository(LogEntryRepositoryRef ref) {
+LogEntryRepository logEntryRepository(Ref ref) {
   return LogEntryRepository(
-    ref.watch(supabaseProvider), 
+    ref.watch(supabaseProvider),
     ref.watch(loggerProvider),
   );
 }
@@ -232,7 +298,7 @@ Business logic layer: validate input, coordinate repositories/providers, enrich 
 class LogEntryService {
   LogEntryService(this._repository, this._logger);
   final LogEntryRepository _repository;
-  final Logger _logger;
+  final LoggerService _logger;
 
   Future<LogEntry> logActivity({
     required String activityId,
@@ -251,23 +317,33 @@ class LogEntryService {
 }
 
 @Riverpod(keepAlive: true)
-LogEntryService logEntryService(LogEntryServiceRef ref) {
+LogEntryService logEntryService(Ref ref) {
   return LogEntryService(
-    ref.watch(logEntryRepositoryProvider), 
-    ref.watch(loggerProvider)
+    ref.watch(logEntryRepositoryProvider),
+    ref.watch(loggerProvider),
   );
 }
 ```
 
 ### Exception Handling
 
-Custom exceptions per feature with `message` (user-facing) and `technicalDetails` (logging):
+Custom exceptions per feature with `message` (user-facing) and `technicalDetails` (logging). All feature exceptions extend `AppException` from `lib/core/exceptions/app_exception.dart`:
 
 ```dart
-abstract class FeatureException implements Exception {
-  const FeatureException(this.message, [this.technicalDetails]);
+// Base class (in lib/core/exceptions/app_exception.dart)
+abstract class AppException implements Exception {
+  const AppException(this.message, [this.technicalDetails]);
   final String message;
   final String? technicalDetails;
+}
+
+// Feature-specific exception (in lib/features/{feature}/domain/{feature}_exception.dart)
+class AuthException extends AppException {
+  const AuthException(super.message, [super.technicalDetails]);
+}
+
+class AuthSignInCancelledException extends AuthException {
+  const AuthSignInCancelledException() : super('Sign in was cancelled');
 }
 ```
 
@@ -285,19 +361,21 @@ Write unit tests for repositories (mock Supabase client), services (mock reposit
 ### Validation & Configuration
 
 - Services validate (not repositories), throw specific exceptions
-- Use environment variables via `DotEnvService` for config
+- Use environment variables via `EnvService` (`lib/core/services/env_service.dart`) for config
 
 ### UI/UX
 
-- Prefer shadcn_flutter for UI components with dark mode support, fallback to Material Design 3 if needed
+- **Theming**: `flex_color_scheme` with `FlexScheme.shadNeutral`, dark mode only (`ThemeMode.dark`). Theme defined in `lib/app/theme/app_theme.dart`
+- **UI Framework**: Material Design 3 for all components
+- **Icons**: `lucide_icons_flutter` for consistent iconography
 - Loading (shimmer/progress that keeps the same widget shape and dimensions as the content), error (retry button), empty states (CTA)
 - Confirmation dialogs for destructive actions
 - Accessibility: semantic labels, contrast, 48x48dp touch targets
-- screenshots may be give to you as general guidance and does not neessitate pixel perfection:
+- Screenshots may be given as general guidance and do not necessitate pixel perfection:
   - use placeholders for images that you see
   - don't worry about the exact colors, fonts, or spacing
   - focus on the layout and functionality
-  - if you are unsure about something, use your best judgement
+  - if you are unsure about something, use your best judgment
 
 ### Permissions
 
@@ -316,3 +394,28 @@ Mock repositories with delays for realistic UX testing. Easy swap to real implem
 ### Success Criteria
 
 SPEC.md checklist: domain models, data operations, repositories, services, providers, integration, tests, docs.
+
+## Key Dependencies
+
+Major packages beyond standard Flutter:
+
+| Package | Purpose |
+|---------|---------|
+| `supabase_flutter` / `supabase_auth_ui` | Backend and auth UI |
+| `purchases_flutter` / `purchases_ui_flutter` | RevenueCat subscriptions |
+| `health` | Apple HealthKit / Google Health Connect |
+| `sentry_flutter` | Error reporting and performance monitoring |
+| `mixpanel_flutter` | User analytics |
+| `growthbook_sdk_flutter` | Feature flags |
+| `fl_chart` | Charts (profile stats) |
+| `flex_color_scheme` | Material Design 3 theming |
+| `lucide_icons_flutter` | Icons |
+| `flutter_chat_ui` / `flutter_chat_core` | AI insights chat UI |
+| `drift` / `sqlite3_flutter_libs` | Local SQLite database |
+| `go_router` / `go_router_builder` | Routing with code generation |
+| `shimmer` | Loading skeleton effects |
+
+## CI/CD
+
+- **GitHub Actions** (`.github/workflows/main.yaml`): Semantic PR check, Flutter build validation, spell check. Runs on push/PR to main.
+- **Codemagic** (`codemagic.yaml`): Production builds triggered by `v*` tags. Builds AAB (Google Play internal track) and IPA (App Store). Uses mac_mini_m2.
