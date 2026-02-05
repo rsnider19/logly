@@ -2,7 +2,18 @@
 # Ensures Dart SDK and FVM are installed.
 # Used as a Claude Code SessionStart hook.
 
-install_dart() {
+install_dart_via_apt() {
+  # Per https://dart.dev/get-dart#install
+  echo "Installing Dart SDK via apt-get..."
+  sudo apt-get update -y 2>&1
+  sudo apt-get install -y apt-transport-https 2>&1
+  sudo sh -c 'wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/dart.gpg'
+  sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main" > /etc/apt/sources.list.d/dart_stable.list'
+  sudo apt-get update -y 2>&1
+  sudo apt-get install -y dart 2>&1
+}
+
+install_dart_via_download() {
   local os arch platform dart_zip dart_url install_dir
   os="$(uname -s)"
   arch="$(uname -m)"
@@ -21,14 +32,7 @@ install_dart() {
     *) echo "Unsupported OS: $os" >&2; return 1 ;;
   esac
 
-  # macOS: try brew first
-  if [ "$platform" = "macos" ] && command -v brew &>/dev/null; then
-    echo "Installing Dart SDK via Homebrew..."
-    brew install dart-sdk 2>&1
-    return $?
-  fi
-
-  # Direct download fallback (Linux, or macOS without brew)
+  # Check required tools
   if ! command -v curl &>/dev/null; then
     echo "curl is required to download Dart SDK" >&2; return 1
   fi
@@ -47,6 +51,20 @@ install_dart() {
   rm -f "/tmp/${dart_zip}"
 
   export PATH="$install_dir/dart-sdk/bin:$PATH"
+}
+
+install_dart() {
+  local os
+  os="$(uname -s)"
+
+  # Linux: try apt-get first (recommended method)
+  if [ "$os" = "Linux" ] && command -v apt-get &>/dev/null; then
+    install_dart_via_apt && return 0
+    echo "apt-get install failed, falling back to direct download..." >&2
+  fi
+
+  # macOS or Linux fallback: direct download
+  install_dart_via_download
 }
 
 # ── Dart ──
@@ -74,7 +92,8 @@ fi
 
 # ── Persist PATH for the session ──
 if [ -n "$CLAUDE_ENV_FILE" ]; then
-  echo "export PATH=\"$HOME/.dart-sdk/dart-sdk/bin:$HOME/.pub-cache/bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"
+  # Include both possible Dart locations: apt (/usr/lib/dart/bin) and manual (~/.dart-sdk/dart-sdk/bin)
+  echo "export PATH=\"/usr/lib/dart/bin:$HOME/.dart-sdk/dart-sdk/bin:$HOME/.pub-cache/bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"
 fi
 
 # ── Install Flutter SDK via FVM ──
