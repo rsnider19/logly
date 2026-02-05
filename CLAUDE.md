@@ -139,6 +139,22 @@ Each flavor has its own entry point (`lib/main_*.dart`) that passes the env path
 - Trailing commas: preserved
 - Generated files are excluded from analysis
 
+### dartx Extensions
+
+Use `dartx` package extensions for common operations instead of manual implementations:
+
+```dart
+import 'package:dartx/dartx.dart';
+
+// Get date-only DateTime (strips time component)
+final dateOnly = dateTime.date;  // NOT: DateTime(dt.year, dt.month, dt.day)
+
+// Other useful dartx extensions
+list.sortedBy((e) => e.name);      // Returns new sorted list
+list.distinctBy((e) => e.id);       // Remove duplicates by key
+string.isNullOrEmpty;               // Null-safe empty check
+```
+
 ### Git
 
 - always use conventional commits for commit messages
