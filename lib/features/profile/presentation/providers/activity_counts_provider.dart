@@ -1,15 +1,36 @@
 import 'package:logly/features/profile/data/daily_activity_repository.dart';
-import 'package:logly/features/profile/domain/activity_count_by_date.dart';
+import 'package:logly/features/profile/domain/daily_category_counts.dart';
+import 'package:logly/features/profile/domain/dow_category_counts.dart';
+import 'package:logly/features/profile/domain/period_category_counts.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'activity_counts_provider.g.dart';
 
-/// Raw activity counts by date - single source of truth.
+/// Period category counts - single source for summary chart.
 ///
-/// All derived providers (monthly chart, weekly radar, contribution graph)
-/// watch this provider. Invalidating this provider refreshes all dependents.
+/// All derived providers for summary chart watch this provider.
+/// Invalidating this provider refreshes all dependents.
 @Riverpod(keepAlive: true)
-Future<List<ActivityCountByDate>> activityCountsByDate(Ref ref) async {
+Future<List<PeriodCategoryCounts>> periodCategoryCounts(Ref ref) async {
   final repository = ref.watch(dailyActivityRepositoryProvider);
-  return repository.getAllActivityCounts();
+  return repository.getPeriodCategoryCounts();
+}
+
+/// Daily category counts - source for contribution graph and monthly chart.
+///
+/// Fetches last 365 days of data. Invalidating this provider refreshes
+/// both contribution graph and monthly chart.
+@Riverpod(keepAlive: true)
+Future<List<DailyCategoryCounts>> dailyCategoryCounts(Ref ref) async {
+  final repository = ref.watch(dailyActivityRepositoryProvider);
+  return repository.getDailyCategoryCounts(daysAgo: 365);
+}
+
+/// Day-of-week category counts - source for radar chart.
+///
+/// Pre-aggregated by day-of-week with counts for all time periods.
+@Riverpod(keepAlive: true)
+Future<List<DowCategoryCounts>> dowCategoryCounts(Ref ref) async {
+  final repository = ref.watch(dailyActivityRepositoryProvider);
+  return repository.getDowCategoryCounts();
 }

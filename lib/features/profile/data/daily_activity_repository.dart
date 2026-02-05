@@ -1,13 +1,10 @@
-import 'package:dartx/dartx.dart';
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
-import 'package:logly/features/profile/domain/activity_count_by_date.dart';
-import 'package:logly/features/profile/domain/category_summary.dart';
-import 'package:logly/features/profile/domain/day_activity_count.dart';
-import 'package:logly/features/profile/domain/monthly_category_data.dart';
+import 'package:logly/features/profile/domain/daily_category_counts.dart';
+import 'package:logly/features/profile/domain/dow_category_counts.dart';
+import 'package:logly/features/profile/domain/period_category_counts.dart';
 import 'package:logly/features/profile/domain/profile_exception.dart';
-import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -20,133 +17,48 @@ class DailyActivityRepository {
   final SupabaseClient _supabase;
   final LoggerService _logger;
 
-  /// Fetches category summary from the time_period_activity_counts_by_category view.
-  ///
-  /// The view pre-computes counts for all time periods, so we just select the
-  /// appropriate column based on the requested period.
-  Future<List<CategorySummary>> getCategorySummary(TimePeriod period) async {
+  /// Fetches period counts per category from period_category_counts view.
+  Future<List<PeriodCategoryCounts>> getPeriodCategoryCounts() async {
     try {
       final response = await _supabase
-          .from('time_period_activity_counts_by_category')
-          .select('activity_category_id, week, month, year, all_time, activity_category(*)');
+          .from('period_category_counts')
+          .select('activity_category_id, past_week, past_month, past_year, all_time');
 
-      final countField = switch (period) {
-        TimePeriod.oneWeek => 'week',
-        TimePeriod.oneMonth => 'month',
-        TimePeriod.oneYear => 'year',
-        TimePeriod.all => 'all_time',
-      };
-
-      return (response as List).map((e) {
-        return CategorySummary(
-          activityCategoryId: e['activity_category_id'] as String,
-          activityCount: (e[countField] as num?)?.toInt() ?? 0,
-        );
-      }).toList();
+      return (response as List).map((e) => PeriodCategoryCounts.fromJson(e as Map<String, dynamic>)).toList();
     } catch (e, st) {
-      _logger.e('Failed to fetch category summary', e, st);
+      _logger.e('Failed to fetch period category counts', e, st);
       throw FetchSummaryException(e.toString());
     }
   }
 
-  /// Fetches daily totals for contribution graph.
-  ///
-  /// Fetches raw data from the view and aggregates by date on client side.
-  Future<List<DayActivityCount>> getDailyTotals({
-    required DateTime startDate,
-    required DateTime endDate,
-  }) async {
+  /// Fetches daily counts with category breakdown from daily_category_counts view.
+  /// Filters to last [daysAgo] days (default 365 for contribution chart).
+  Future<List<DailyCategoryCounts>> getDailyCategoryCounts({int daysAgo = 365}) async {
     try {
+      final startDate = DateTime.now().subtract(Duration(days: daysAgo));
       final response = await _supabase
-          .from('activity_counts_by_date')
-          .select('activity_date, count')
-          .gte('activity_date', startDate.toIso8601String().split('T')[0])
-          .lte('activity_date', endDate.toIso8601String().split('T')[0]);
+          .from('daily_category_counts')
+          .select('activity_date, categories')
+          .gte('activity_date', startDate.toIso8601String().split('T')[0]);
 
-      // Aggregate by date on client
-      final dailyTotals = <String, int>{};
-      for (final row in response as List) {
-        final date = row['activity_date'] as String;
-        final count = row['count'] as int;
-        dailyTotals.update(date, (v) => v + count, ifAbsent: () => count);
-      }
-
-      return dailyTotals.entries.map((e) {
-        return DayActivityCount(
-          date: DateTime.parse(e.key),
-          count: e.value,
-        );
-      }).toList();
+      return (response as List).map((e) => DailyCategoryCounts.fromJson(e as Map<String, dynamic>)).toList();
     } catch (e, st) {
-      _logger.e('Failed to fetch daily totals', e, st);
-      throw FetchContributionException(e.toString());
-    }
-  }
-
-  /// Fetches monthly category data for the stacked bar chart.
-  ///
-  /// Fetches raw daily data and aggregates by month on client side
-  /// since PostgREST cannot group by derived month.
-  Future<List<MonthlyCategoryData>> getMonthlyData() async {
-    try {
-      final endDate = DateTime.now();
-      final startDate = DateTime(endDate.year - 1, endDate.month);
-
-      final response = await _supabase
-          .from('activity_counts_by_date')
-          .select('activity_date, activity_category_id, count')
-          .gte('activity_date', startDate.toIso8601String().split('T')[0])
-          .lte('activity_date', endDate.toIso8601String().split('T')[0]);
-
-      // Aggregate by month + category on client
-      final monthlyTotals = <(int, int, String), int>{};
-      for (final row in response as List) {
-        final date = DateTime.parse(row['activity_date'] as String);
-        final categoryId = row['activity_category_id'] as String;
-        final count = row['count'] as int;
-        final key = (date.year, date.month, categoryId);
-        monthlyTotals.update(key, (v) => v + count, ifAbsent: () => count);
-      }
-
-      final result = monthlyTotals.entries
-          .map((e) {
-            final (year, month, categoryId) = e.key;
-            return MonthlyCategoryData(
-              activityMonth: DateTime(year, month),
-              activityCount: e.value,
-              activityCategoryId: categoryId,
-            );
-          })
-          .sortedByDescending((a) => a.activityMonth);
-
-      return result;
-    } catch (e, st) {
-      _logger.e('Failed to fetch monthly data', e, st);
-      throw FetchMonthlyDataException(e.toString());
-    }
-  }
-
-  /// Fetches all activity counts by date - single source of truth.
-  ///
-  /// This data is used by multiple derived providers (monthly chart,
-  /// weekly radar, contribution graph). Fetching once and deriving from
-  /// this single source enables efficient invalidation.
-  Future<List<ActivityCountByDate>> getAllActivityCounts() async {
-    try {
-      final response = await _supabase
-          .from('activity_counts_by_date')
-          .select('activity_date, activity_category_id, count');
-
-      return (response as List).map((e) {
-        return ActivityCountByDate(
-          activityDate: DateTime.parse(e['activity_date'] as String),
-          activityCategoryId: e['activity_category_id'] as String,
-          count: e['count'] as int,
-        );
-      }).toList();
-    } catch (e, st) {
-      _logger.e('Failed to fetch all activity counts', e, st);
+      _logger.e('Failed to fetch daily category counts', e, st);
       throw FetchDailyCountsException(e.toString());
+    }
+  }
+
+  /// Fetches day-of-week counts per category from dow_category_counts view.
+  Future<List<DowCategoryCounts>> getDowCategoryCounts() async {
+    try {
+      final response = await _supabase
+          .from('dow_category_counts')
+          .select('day_of_week, activity_category_id, past_week, past_month, past_year, all_time');
+
+      return (response as List).map((e) => DowCategoryCounts.fromJson(e as Map<String, dynamic>)).toList();
+    } catch (e, st) {
+      _logger.e('Failed to fetch dow category counts', e, st);
+      throw FetchWeeklyDataException(e.toString());
     }
   }
 }

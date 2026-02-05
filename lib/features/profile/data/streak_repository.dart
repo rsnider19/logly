@@ -2,7 +2,7 @@ import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/providers/supabase_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/profile/domain/profile_exception.dart';
-import 'package:logly/features/profile/domain/streak_data.dart';
+import 'package:logly/features/profile/domain/user_stats.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -15,22 +15,21 @@ class StreakRepository {
   final SupabaseClient _supabase;
   final LoggerService _logger;
 
-  /// Fetches the current user's streak data.
-  Future<StreakData> getStreak() async {
+  /// Fetches user stats (streaks + consistency) from user_stats view.
+  Future<UserStats> getUserStats() async {
     try {
-      final response = await _supabase.rpc<Map<String, dynamic>?>('user_activity_streak');
+      final response = await _supabase
+          .from('user_stats')
+          .select('current_streak, longest_streak, consistency_pct')
+          .maybeSingle();
 
       if (response == null) {
-        return const StreakData(
-          currentStreak: 0,
-          longestStreak: 0,
-          workoutDaysThisWeek: 0,
-        );
+        return const UserStats(currentStreak: 0, longestStreak: 0, consistencyPct: 0);
       }
 
-      return StreakData.fromJson(response);
+      return UserStats.fromJson(response);
     } catch (e, st) {
-      _logger.e('Failed to fetch streak data', e, st);
+      _logger.e('Failed to fetch user stats', e, st);
       throw FetchStreakException(e.toString());
     }
   }

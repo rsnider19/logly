@@ -1,12 +1,15 @@
-import 'package:logly/features/profile/application/profile_service.dart';
-import 'package:logly/features/profile/domain/streak_data.dart';
+import 'package:logly/features/profile/data/streak_repository.dart';
+import 'package:logly/features/profile/domain/user_stats.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'streak_provider.g.dart';
 
-/// Provides the user's streak data.
+/// Provides the user's stats (streaks + consistency).
+///
+/// Fetches from the user_stats view which contains current streak,
+/// longest streak, and consistency percentage.
 @riverpod
-Future<StreakData> streak(Ref ref) async {
-  final service = ref.watch(profileServiceProvider);
-  return service.getStreak();
+Future<UserStats> userStats(Ref ref) async {
+  final repository = ref.watch(streakRepositoryProvider);
+  return repository.getUserStats();
 }

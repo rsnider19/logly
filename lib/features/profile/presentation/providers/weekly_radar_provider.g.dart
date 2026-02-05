@@ -10,16 +10,18 @@ part of 'weekly_radar_provider.dart';
 // ignore_for_file: type=lint, type=warning
 /// Provides weekly radar data aggregated by day of week and category.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the global time period.
+/// Derives from [dowCategoryCountsProvider] which contains pre-aggregated
+/// counts for all time periods. Extracts the appropriate column and converts
+/// Postgres dow (0=Sun) to ISO 8601 (1=Mon, 7=Sun).
 
 @ProviderFor(weeklyRadarData)
 final weeklyRadarDataProvider = WeeklyRadarDataProvider._();
 
 /// Provides weekly radar data aggregated by day of week and category.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the global time period.
+/// Derives from [dowCategoryCountsProvider] which contains pre-aggregated
+/// counts for all time periods. Extracts the appropriate column and converts
+/// Postgres dow (0=Sun) to ISO 8601 (1=Mon, 7=Sun).
 
 final class WeeklyRadarDataProvider
     extends
@@ -33,8 +35,9 @@ final class WeeklyRadarDataProvider
         $FutureProvider<List<WeeklyCategoryData>> {
   /// Provides weekly radar data aggregated by day of week and category.
   ///
-  /// Derives from the single source [activityCountsByDateProvider] and
-  /// filters by the global time period.
+  /// Derives from [dowCategoryCountsProvider] which contains pre-aggregated
+  /// counts for all time periods. Extracts the appropriate column and converts
+  /// Postgres dow (0=Sun) to ISO 8601 (1=Mon, 7=Sun).
   WeeklyRadarDataProvider._()
     : super(
         from: null,
@@ -61,7 +64,7 @@ final class WeeklyRadarDataProvider
   }
 }
 
-String _$weeklyRadarDataHash() => r'cc51c25be8a99903e7d1c2b640ea149905783784';
+String _$weeklyRadarDataHash() => r'0fc6a2d103f02faac220d107b47ebe4701c4b457';
 
 /// Provides filtered weekly radar data based on global category filters.
 

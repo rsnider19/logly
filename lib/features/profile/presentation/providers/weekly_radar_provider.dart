@@ -1,5 +1,4 @@
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
-import 'package:logly/features/profile/domain/activity_count_by_date.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/domain/weekly_category_data.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
@@ -10,13 +9,29 @@ part 'weekly_radar_provider.g.dart';
 
 /// Provides weekly radar data aggregated by day of week and category.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// filters by the global time period.
+/// Derives from [dowCategoryCountsProvider] which contains pre-aggregated
+/// counts for all time periods. Extracts the appropriate column and converts
+/// Postgres dow (0=Sun) to ISO 8601 (1=Mon, 7=Sun).
 @riverpod
 Future<List<WeeklyCategoryData>> weeklyRadarData(Ref ref) async {
   final period = ref.watch(globalTimePeriodProvider);
-  final rawData = await ref.watch(activityCountsByDateProvider.future);
-  return _aggregateByDayOfWeek(rawData, period);
+  final data = await ref.watch(dowCategoryCountsProvider.future);
+
+  return data.map((e) {
+    final count = switch (period) {
+      TimePeriod.oneWeek => e.pastWeek,
+      TimePeriod.oneMonth => e.pastMonth,
+      TimePeriod.oneYear => e.pastYear,
+      TimePeriod.all => e.allTime,
+    };
+    // Convert Postgres dow (0=Sun) to ISO 8601 (1=Mon, 7=Sun)
+    final isoDow = e.dayOfWeek == 0 ? 7 : e.dayOfWeek;
+    return WeeklyCategoryData(
+      dayOfWeek: isoDow,
+      activityCount: count,
+      activityCategoryId: e.activityCategoryId,
+    );
+  }).toList();
 }
 
 /// Provides filtered weekly radar data based on global category filters.
@@ -84,35 +99,4 @@ Future<Map<String, List<double>>> normalizedRadarData(Ref ref) async {
   }
 
   return result;
-}
-
-/// Aggregates raw activity counts by day of week and category.
-List<WeeklyCategoryData> _aggregateByDayOfWeek(List<ActivityCountByDate> rawData, TimePeriod period) {
-  final now = DateTime.now();
-  final startDate = switch (period) {
-    TimePeriod.oneWeek => now.subtract(const Duration(days: 6)),
-    TimePeriod.oneMonth => now.subtract(const Duration(days: 29)),
-    TimePeriod.oneYear => now.subtract(const Duration(days: 364)),
-    TimePeriod.all => DateTime(2000), // Far past date for "all time"
-  };
-
-  // Filter by period and aggregate by (dayOfWeek, categoryId)
-  final weeklyTotals = <(int, String), int>{};
-  for (final item in rawData) {
-    if (item.activityDate.isBefore(startDate)) continue;
-
-    // DateTime.weekday is already ISO 8601 (1=Monday, 7=Sunday)
-    final dayOfWeek = item.activityDate.weekday;
-    final key = (dayOfWeek, item.activityCategoryId);
-    weeklyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
-  }
-
-  return weeklyTotals.entries.map((e) {
-    final (dayOfWeek, categoryId) = e.key;
-    return WeeklyCategoryData(
-      dayOfWeek: dayOfWeek,
-      activityCount: e.value,
-      activityCategoryId: categoryId,
-    );
-  }).toList();
 }

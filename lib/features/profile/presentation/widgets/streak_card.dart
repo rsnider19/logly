@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logly/features/profile/presentation/providers/consistency_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -12,24 +11,20 @@ class StreakCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final streakAsync = ref.watch(streakProvider);
-    final consistencyAsync = ref.watch(consistencyScoreProvider);
+    final statsAsync = ref.watch(userStatsProvider);
 
-    if (streakAsync is AsyncError) {
-      return _StreakError(onRetry: () => ref.invalidate(streakProvider));
-    }
-    if (consistencyAsync is AsyncError) {
-      return _StreakError(onRetry: () => ref.invalidate(consistencyScoreProvider));
+    if (statsAsync is AsyncError) {
+      return _StreakError(onRetry: () => ref.invalidate(userStatsProvider));
     }
 
-    final isLoading = streakAsync is! AsyncData || consistencyAsync is! AsyncData;
+    final isLoading = statsAsync is! AsyncData;
 
     return SkellyWrapper(
       isLoading: isLoading,
       child: _StreakContent(
-        currentStreak: streakAsync.value?.currentStreak ?? 0,
-        longestStreak: streakAsync.value?.longestStreak ?? 0,
-        consistencyScore: consistencyAsync.value ?? 0,
+        currentStreak: statsAsync.value?.currentStreak ?? 0,
+        longestStreak: statsAsync.value?.longestStreak ?? 0,
+        consistencyScore: statsAsync.value?.consistencyPct ?? 0,
       ),
     );
   }
@@ -44,7 +39,7 @@ class _StreakContent extends StatefulWidget {
 
   final int currentStreak;
   final int longestStreak;
-  final int consistencyScore;
+  final double consistencyScore;
 
   @override
   State<_StreakContent> createState() => _StreakContentState();
@@ -125,7 +120,7 @@ class _StreakContentState extends State<_StreakContent> {
         Expanded(
           child: _StreakStatBox(
             label: 'Consistency',
-            value: widget.consistencyScore,
+            value: widget.consistencyScore.round(),
             icon: LucideIcons.chartLine,
             iconColor: Colors.teal,
             suffix: '%',

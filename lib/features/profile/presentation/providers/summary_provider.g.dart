@@ -8,71 +8,31 @@ part of 'summary_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Fetches and caches category summary data for all time periods.
-
-@ProviderFor(allPeriodSummaries)
-final allPeriodSummariesProvider = AllPeriodSummariesProvider._();
-
-/// Fetches and caches category summary data for all time periods.
-
-final class AllPeriodSummariesProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<AllPeriodSummaries>,
-          AllPeriodSummaries,
-          FutureOr<AllPeriodSummaries>
-        >
-    with
-        $FutureModifier<AllPeriodSummaries>,
-        $FutureProvider<AllPeriodSummaries> {
-  /// Fetches and caches category summary data for all time periods.
-  AllPeriodSummariesProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'allPeriodSummariesProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$allPeriodSummariesHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<AllPeriodSummaries> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<AllPeriodSummaries> create(Ref ref) {
-    return allPeriodSummaries(ref);
-  }
-}
-
-String _$allPeriodSummariesHash() =>
-    r'3cb9323f336666de8c37929f4253865ad6212bc2';
-
-/// Provides category summary data for the global time period.
+/// Provides (categoryId, count) pairs for the selected time period.
+///
+/// Derives from [periodCategoryCountsProvider] which contains pre-aggregated
+/// counts for all time periods. Simply extracts the appropriate column.
 
 @ProviderFor(categorySummary)
 final categorySummaryProvider = CategorySummaryProvider._();
 
-/// Provides category summary data for the global time period.
+/// Provides (categoryId, count) pairs for the selected time period.
+///
+/// Derives from [periodCategoryCountsProvider] which contains pre-aggregated
+/// counts for all time periods. Simply extracts the appropriate column.
 
 final class CategorySummaryProvider
     extends
         $FunctionalProvider<
-          AsyncValue<List<CategorySummary>>,
-          List<CategorySummary>,
-          FutureOr<List<CategorySummary>>
+          AsyncValue<Map<String, int>>,
+          Map<String, int>,
+          FutureOr<Map<String, int>>
         >
-    with
-        $FutureModifier<List<CategorySummary>>,
-        $FutureProvider<List<CategorySummary>> {
-  /// Provides category summary data for the global time period.
+    with $FutureModifier<Map<String, int>>, $FutureProvider<Map<String, int>> {
+  /// Provides (categoryId, count) pairs for the selected time period.
+  ///
+  /// Derives from [periodCategoryCountsProvider] which contains pre-aggregated
+  /// counts for all time periods. Simply extracts the appropriate column.
   CategorySummaryProvider._()
     : super(
         from: null,
@@ -89,14 +49,14 @@ final class CategorySummaryProvider
 
   @$internal
   @override
-  $FutureProviderElement<List<CategorySummary>> $createElement(
+  $FutureProviderElement<Map<String, int>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<List<CategorySummary>> create(Ref ref) {
+  FutureOr<Map<String, int>> create(Ref ref) {
     return categorySummary(ref);
   }
 }
 
-String _$categorySummaryHash() => r'827baddaaeeecee1ee02e42281e5df94a4750e62';
+String _$categorySummaryHash() => r'd103b81ad6402a18281e0d841deee7f62e14cd44';

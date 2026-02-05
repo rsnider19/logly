@@ -11,8 +11,7 @@ part of 'contribution_provider.dart';
 /// Provides contribution data (activity counts by day) for the last year,
 /// filtered by the global category selection.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// aggregates by date for the contribution graph.
+/// Derives from [dailyCategoryCountsProvider] single source of truth.
 
 @ProviderFor(contributionData)
 final contributionDataProvider = ContributionDataProvider._();
@@ -20,8 +19,7 @@ final contributionDataProvider = ContributionDataProvider._();
 /// Provides contribution data (activity counts by day) for the last year,
 /// filtered by the global category selection.
 ///
-/// Derives from the single source [activityCountsByDateProvider] and
-/// aggregates by date for the contribution graph.
+/// Derives from [dailyCategoryCountsProvider] single source of truth.
 
 final class ContributionDataProvider
     extends
@@ -36,8 +34,7 @@ final class ContributionDataProvider
   /// Provides contribution data (activity counts by day) for the last year,
   /// filtered by the global category selection.
   ///
-  /// Derives from the single source [activityCountsByDateProvider] and
-  /// aggregates by date for the contribution graph.
+  /// Derives from [dailyCategoryCountsProvider] single source of truth.
   ContributionDataProvider._()
     : super(
         from: null,
@@ -64,4 +61,4 @@ final class ContributionDataProvider
   }
 }
 
-String _$contributionDataHash() => r'5fbce0162e3ebeede47a9a1939b9fc21d392bda2';
+String _$contributionDataHash() => r'e52abb2c8589fb447feeb7c2f4ad5dee11c30bac';

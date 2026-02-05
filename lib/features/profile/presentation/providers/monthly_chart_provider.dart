@@ -1,6 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
-import 'package:logly/features/profile/domain/activity_count_by_date.dart';
+import 'package:logly/features/profile/domain/daily_category_counts.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
@@ -19,7 +19,7 @@ part 'monthly_chart_provider.g.dart';
 @riverpod
 Future<List<MonthlyCategoryData>> monthlyChartData(Ref ref) async {
   final period = ref.watch(globalTimePeriodProvider);
-  final rawData = await ref.watch(activityCountsByDateProvider.future);
+  final rawData = await ref.watch(dailyCategoryCountsProvider.future);
 
   return switch (period) {
     TimePeriod.oneWeek => _aggregateByDay(rawData),
@@ -46,18 +46,20 @@ Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
   return allData.where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId)).toList();
 }
 
-/// Aggregates raw activity counts by day for the last 7 days.
-List<MonthlyCategoryData> _aggregateByDay(List<ActivityCountByDate> rawData) {
+/// Aggregates daily category counts by day for the last 7 days.
+List<MonthlyCategoryData> _aggregateByDay(List<DailyCategoryCounts> rawData) {
   final now = DateTime.now();
   final startDate = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 6));
 
   final dailyTotals = <(DateTime, String), int>{};
-  for (final item in rawData) {
-    final dateKey = DateTime(item.activityDate.year, item.activityDate.month, item.activityDate.day);
+  for (final day in rawData) {
+    final dateKey = DateTime(day.activityDate.year, day.activityDate.month, day.activityDate.day);
     if (dateKey.isBefore(startDate)) continue;
 
-    final key = (dateKey, item.activityCategoryId);
-    dailyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
+    for (final cat in day.categories) {
+      final key = (dateKey, cat.activityCategoryId);
+      dailyTotals.update(key, (v) => v + cat.count, ifAbsent: () => cat.count);
+    }
   }
 
   return dailyTotals.entries
@@ -72,16 +74,16 @@ List<MonthlyCategoryData> _aggregateByDay(List<ActivityCountByDate> rawData) {
       .sortedByDescending((a) => a.activityMonth);
 }
 
-/// Aggregates raw activity counts into rolling 7-day windows for the last 30 days.
+/// Aggregates daily category counts into rolling 7-day windows for the last 30 days.
 /// Windows are anchored from today: today-6..today, today-13..today-7, etc.
-List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
+List<MonthlyCategoryData> _aggregateByWeek(List<DailyCategoryCounts> rawData) {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
   final startDate = today.subtract(const Duration(days: 34)); // 5 windows of 7 days
 
   final weeklyTotals = <(DateTime, String), int>{};
-  for (final item in rawData) {
-    final dateKey = DateTime(item.activityDate.year, item.activityDate.month, item.activityDate.day);
+  for (final day in rawData) {
+    final dateKey = DateTime(day.activityDate.year, day.activityDate.month, day.activityDate.day);
     if (dateKey.isBefore(startDate)) continue;
 
     // Bucket into rolling 7-day window anchored from today
@@ -90,8 +92,10 @@ List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
     if (windowIndex >= 5) continue; // Only 5 windows
     final windowKey = today.subtract(Duration(days: windowIndex * 7));
 
-    final key = (windowKey, item.activityCategoryId);
-    weeklyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
+    for (final cat in day.categories) {
+      final key = (windowKey, cat.activityCategoryId);
+      weeklyTotals.update(key, (v) => v + cat.count, ifAbsent: () => cat.count);
+    }
   }
 
   return weeklyTotals.entries
@@ -106,18 +110,20 @@ List<MonthlyCategoryData> _aggregateByWeek(List<ActivityCountByDate> rawData) {
       .sortedByDescending((a) => a.activityMonth);
 }
 
-/// Aggregates raw activity counts by month for last 12 months.
-List<MonthlyCategoryData> _aggregateByMonth(List<ActivityCountByDate> rawData) {
+/// Aggregates daily category counts by month for last 12 months.
+List<MonthlyCategoryData> _aggregateByMonth(List<DailyCategoryCounts> rawData) {
   final now = DateTime.now();
   final startDate = DateTime(now.year - 1, now.month);
 
   // Filter to last 12 months and aggregate by month + category
   final monthlyTotals = <(int, int, String), int>{};
-  for (final item in rawData) {
-    if (item.activityDate.isBefore(startDate)) continue;
+  for (final day in rawData) {
+    if (day.activityDate.isBefore(startDate)) continue;
 
-    final key = (item.activityDate.year, item.activityDate.month, item.activityCategoryId);
-    monthlyTotals.update(key, (v) => v + item.count, ifAbsent: () => item.count);
+    for (final cat in day.categories) {
+      final key = (day.activityDate.year, day.activityDate.month, cat.activityCategoryId);
+      monthlyTotals.update(key, (v) => v + cat.count, ifAbsent: () => cat.count);
+    }
   }
 
   return monthlyTotals.entries

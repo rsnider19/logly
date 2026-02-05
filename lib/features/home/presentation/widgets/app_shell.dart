@@ -6,8 +6,6 @@ import 'package:logly/features/home/presentation/providers/home_navigation_provi
 import 'package:logly/features/home/presentation/widgets/custom_bottom_nav.dart';
 import 'package:logly/features/profile/presentation/providers/activity_counts_provider.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
-import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Shell widget that wraps the main navigation areas with consistent
 /// app bar and bottom navigation.
@@ -35,9 +33,10 @@ class AppShell extends ConsumerWidget {
     switch (index) {
       case 0:
         // Profile tab — invalidate root profile data providers
-        ref.invalidate(activityCountsByDateProvider);
-        ref.invalidate(streakProvider);
-        ref.invalidate(allPeriodSummariesProvider);
+        ref.invalidate(periodCategoryCountsProvider);
+        ref.invalidate(dailyCategoryCountsProvider);
+        ref.invalidate(dowCategoryCountsProvider);
+        ref.invalidate(userStatsProvider);
       case 1:
         // Home tab — refresh daily activities and scroll to top
         ref.read(dailyActivitiesStateProvider.notifier).refresh();

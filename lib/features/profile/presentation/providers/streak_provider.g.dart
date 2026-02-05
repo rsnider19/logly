@@ -8,45 +8,54 @@ part of 'streak_provider.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
-/// Provides the user's streak data.
+/// Provides the user's stats (streaks + consistency).
+///
+/// Fetches from the user_stats view which contains current streak,
+/// longest streak, and consistency percentage.
 
-@ProviderFor(streak)
-final streakProvider = StreakProvider._();
+@ProviderFor(userStats)
+final userStatsProvider = UserStatsProvider._();
 
-/// Provides the user's streak data.
+/// Provides the user's stats (streaks + consistency).
+///
+/// Fetches from the user_stats view which contains current streak,
+/// longest streak, and consistency percentage.
 
-final class StreakProvider
+final class UserStatsProvider
     extends
         $FunctionalProvider<
-          AsyncValue<StreakData>,
-          StreakData,
-          FutureOr<StreakData>
+          AsyncValue<UserStats>,
+          UserStats,
+          FutureOr<UserStats>
         >
-    with $FutureModifier<StreakData>, $FutureProvider<StreakData> {
-  /// Provides the user's streak data.
-  StreakProvider._()
+    with $FutureModifier<UserStats>, $FutureProvider<UserStats> {
+  /// Provides the user's stats (streaks + consistency).
+  ///
+  /// Fetches from the user_stats view which contains current streak,
+  /// longest streak, and consistency percentage.
+  UserStatsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'streakProvider',
+        name: r'userStatsProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$streakHash();
+  String debugGetCreateSourceHash() => _$userStatsHash();
 
   @$internal
   @override
-  $FutureProviderElement<StreakData> $createElement($ProviderPointer pointer) =>
+  $FutureProviderElement<UserStats> $createElement($ProviderPointer pointer) =>
       $FutureProviderElement(pointer);
 
   @override
-  FutureOr<StreakData> create(Ref ref) {
-    return streak(ref);
+  FutureOr<UserStats> create(Ref ref) {
+    return userStats(ref);
   }
 }
 
-String _$streakHash() => r'9ba57e550e2f08c039f452901256b6f53e08c2fd';
+String _$userStatsHash() => r'97eb5b50a87c17f6fd5c22321fd50d407e243f38';

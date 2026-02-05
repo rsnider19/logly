@@ -1,6 +1,9 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/monthly_category_data.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
@@ -226,9 +229,24 @@ class _MonthlyChart extends StatelessWidget {
           maxY: maxTotal > 0 ? maxTotal : 1,
           barGroups: barGroups,
           titlesData: FlTitlesData(
-            topTitles: const AxisTitles(),
+            topTitles: AxisTitles(
+              sideTitles: SideTitles(
+                getTitlesWidget: (value, meta) => Container(),
+                showTitles: true,
+                reservedSize: 10,
+              ),
+            ),
             rightTitles: const AxisTitles(),
-            leftTitles: const AxisTitles(),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 40,
+                interval: maxTotal,
+                getTitlesWidget: (value, meta) {
+                  return _buildYAxisLabel(theme, value);
+                },
+              ),
+            ),
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -238,7 +256,7 @@ class _MonthlyChart extends StatelessWidget {
                   if (index < 0 || index >= periods.length) {
                     return const SizedBox.shrink();
                   }
-                  return _buildLabel(theme, periods[index], index, periods.length);
+                  return _buildXAxisLabel(theme, periods[index], index, periods.length);
                 },
               ),
             ),
@@ -306,8 +324,39 @@ class _MonthlyChart extends StatelessWidget {
     }
   }
 
+  /// Builds the y-axis label for a period.
+  Widget _buildYAxisLabel(ThemeData theme, double value) {
+    return Row(
+      children: [
+        Expanded(
+          child: AutoSizeText(
+            (NumberFormat.compact()..maximumFractionDigits = 1).format(value),
+            textAlign: TextAlign.right,
+            minFontSize: 8,
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontFeatures: [
+                const FontFeature.tabularFigures(),
+              ],
+            ),
+            maxLines: 1,
+          ),
+        ),
+        const Gap(4),
+        SizedBox(
+          width: 8,
+          child: Divider(
+            thickness: 1,
+            height: 1,
+            color: theme.colorScheme.outline,
+          ),
+        ),
+      ],
+    );
+  }
+
   /// Builds the x-axis label for a period.
-  Widget _buildLabel(ThemeData theme, DateTime period, int index, int total) {
+  Widget _buildXAxisLabel(ThemeData theme, DateTime period, int index, int total) {
     String label;
     bool shouldShow;
 

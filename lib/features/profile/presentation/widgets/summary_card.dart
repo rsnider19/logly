@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
-import 'package:logly/features/profile/domain/category_summary.dart';
 import 'package:logly/features/profile/presentation/providers/collapsible_sections_provider.dart';
 import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/providers/summary_provider.dart';
@@ -38,7 +37,7 @@ class _SummaryContent extends ConsumerStatefulWidget {
 
 class _SummaryContentState extends ConsumerState<_SummaryContent> {
   /// Cached summary data to show during loading transitions.
-  List<CategorySummary>? _cachedSummaries;
+  Map<String, int>? _cachedSummaries;
 
   /// Cached max count for consistent scaling during transitions.
   int _cachedMaxCount = 1;
@@ -61,7 +60,7 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
           _cachedSummaries = summaryAsync.value;
           _cachedMaxCount = summaryAsync.value!.isEmpty
               ? 1
-              : summaryAsync.value!.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b);
+              : summaryAsync.value!.values.fold(0, (int a, int b) => a > b ? a : b);
         }
 
         // Show shimmer only on initial load
@@ -76,14 +75,11 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
           );
         }
 
-        // Create a map of category ID to activity count
-        final summaryMap = {for (final s in summaries) s.activityCategoryId: s.activityCount};
-
         // Use cached max count during loading to prevent bar scaling jumps
         // maxCount computed from ALL summaries so bars stay proportional
         final maxCount = isLoading
             ? _cachedMaxCount
-            : (summaries.isEmpty ? 1 : summaries.map((s) => s.activityCount).fold(0, (int a, int b) => a > b ? a : b));
+            : (summaries.isEmpty ? 1 : summaries.values.fold(0, (int a, int b) => a > b ? a : b));
 
         // Sort categories by sortOrder — show ALL categories always
         final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
@@ -101,7 +97,7 @@ class _SummaryContentState extends ConsumerState<_SummaryContent> {
 
         return Column(
           children: sortedCategories.map((category) {
-            final count = summaryMap[category.activityCategoryId] ?? 0;
+            final count = summaries[category.activityCategoryId] ?? 0;
             final color = Color(int.parse('FF${category.hexColor.replaceFirst('#', '')}', radix: 16));
             final isSelected = effectiveFilters.contains(category.activityCategoryId);
 
