@@ -34,3 +34,9 @@ class FetchDailyCountsException extends ProfileException {
   const FetchDailyCountsException([String? technicalDetails])
     : super('Unable to load activity data. Please try again.', technicalDetails);
 }
+
+/// Thrown when fetching weekly/day-of-week data fails.
+class FetchWeeklyDataException extends ProfileException {
+  const FetchWeeklyDataException([String? technicalDetails])
+    : super('Unable to load weekly data. Please try again.', technicalDetails);
+}
