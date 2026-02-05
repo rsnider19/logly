@@ -193,6 +193,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
         chatController: controller,
         theme: ChatTheme.fromThemeData(theme),
         builders: Builders(
+          chatAnimatedListBuilder: (context, itemBuilder) => ChatAnimatedListReversed(
+            itemBuilder: itemBuilder,
+          ),
           composerBuilder: (_) => _buildComposer(),
           emptyChatListBuilder: (_) => ChatEmptyState(
             onSuggestionTap: _handleSendMessage,
