@@ -11,6 +11,7 @@ import 'package:logly/features/home/presentation/widgets/daily_activity_row.dart
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/widgets/haptic_item.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
+import 'package:logly/features/voice_logging/presentation/widgets/voice_log_fab.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// The main home screen displaying a chronological list of days with activities.
@@ -86,6 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       appBar: const CustomAppBar(
         title: 'Activities',
       ),
+      floatingActionButton: const VoiceLogFab(),
       body: SkellyWrapper(
         isLoading: dailyActivitiesAsync.isFirstLoad,
         child: dailyActivitiesAsync.when(

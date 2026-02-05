@@ -46,6 +46,10 @@
 	<string>Granting access will allow us to import your Apple Health data into Logly</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Granting access will allow us to import your Apple Health data into Logly</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Voice logging allows you to quickly log activities by speaking</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Voice logging requires microphone access to transcribe your speech</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
