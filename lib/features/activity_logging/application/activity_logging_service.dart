@@ -126,6 +126,8 @@ class ActivityLoggingService {
     String? activityNameOverride,
     List<String> subActivityIds = const [],
     List<CreateUserActivityDetail> details = const [],
+    double? loggedLocationLng,
+    double? loggedLocationLat,
   }) async {
     if (activityId.isEmpty) {
       throw const ActivityLoggingValidationException('Activity must be selected');
@@ -151,6 +153,8 @@ class ActivityLoggingService {
           activityNameOverride: activityNameOverride,
           subActivityIds: subActivityIds,
           details: details,
+          loggedLocationLng: loggedLocationLng,
+          loggedLocationLat: loggedLocationLat,
         );
 
         final result = await _userActivityRepository.create(activity);
