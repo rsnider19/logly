@@ -70,7 +70,8 @@ class FeatureFlagService {
     required String environment,
   }) {
     return {
-      'platform': Platform.isIOS ? 'ios' : 'android',
+      'platform': Platform.operatingSystem,
+      'platformVersion': Platform.operatingSystemVersion,
       'appVersion': appVersion,
       'buildNumber': buildNumber,
       'environment': environment,
