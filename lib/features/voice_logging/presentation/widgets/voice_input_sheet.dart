@@ -38,20 +38,18 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
 
     // Auto-start listening when sheet opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(voiceInputStateNotifierProvider.notifier).startListening();
+      ref.read(voiceInputStateProvider.notifier).startListening();
     });
   }
 
   @override
   void dispose() {
     _pulseController.dispose();
-    // Cancel any ongoing listening when sheet closes
-    ref.read(voiceInputStateNotifierProvider.notifier).cancel();
     super.dispose();
   }
 
   void _onActivitySelected(ActivitySummary activity) {
-    final parsedData = ref.read(voiceInputStateNotifierProvider).parsedData;
+    final parsedData = ref.read(voiceInputStateProvider).parsedData;
     if (parsedData != null) {
       ref.read(voicePrepopulationProvider.notifier).set(parsedData);
     }
@@ -67,8 +65,8 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
   }
 
   void _onRetry() {
-    ref.read(voiceInputStateNotifierProvider.notifier).reset();
-    ref.read(voiceInputStateNotifierProvider.notifier).startListening();
+    ref.read(voiceInputStateProvider.notifier).reset();
+    ref.read(voiceInputStateProvider.notifier).startListening();
   }
 
   void _onOpenSettings() {
@@ -78,7 +76,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final state = ref.watch(voiceInputStateNotifierProvider);
+    final state = ref.watch(voiceInputStateProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -236,7 +234,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
         const SizedBox(height: 24),
         FilledButton.tonal(
           onPressed: () {
-            ref.read(voiceInputStateNotifierProvider.notifier).stopListening();
+            ref.read(voiceInputStateProvider.notifier).stopListening();
           },
           child: const Text('Done'),
         ),

@@ -79,7 +79,11 @@ class VoiceInputState {
 @riverpod
 class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
   @override
-  VoiceInputState build() => const VoiceInputState();
+  VoiceInputState build() {
+    final speechService = ref.read(speechServiceProvider);
+    ref.onDispose(speechService.cancelListening);
+    return const VoiceInputState();
+  }
 
   /// Starts the voice input session.
   Future<void> startListening() async {
