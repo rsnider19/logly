@@ -1,9 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:logly/features/activity_catalog/application/catalog_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/voice_logging/application/speech_service.dart';
-import 'package:logly/features/voice_logging/application/voice_input_parser.dart';
-import 'package:logly/features/voice_logging/domain/voice_parse_result.dart';
+import 'package:logly/features/voice_logging/data/voice_parse_repository.dart';
+import 'package:logly/features/voice_logging/domain/voice_parse_response.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,11 +22,8 @@ enum VoiceInputStatus {
   /// Actively listening for speech.
   listening,
 
-  /// Processing the transcript.
+  /// Processing the transcript (calling edge function).
   processing,
-
-  /// Searching for matching activities.
-  searchingActivities,
 
   /// Showing results (single match or disambiguation).
   showingResults,
@@ -43,7 +39,7 @@ class VoiceInputState {
     this.status = VoiceInputStatus.idle,
     this.partialTranscript,
     this.finalTranscript,
-    this.parseResult,
+    this.parsedData,
     this.matchedActivities,
     this.errorMessage,
   });
@@ -51,7 +47,7 @@ class VoiceInputState {
   final VoiceInputStatus status;
   final String? partialTranscript;
   final String? finalTranscript;
-  final VoiceParseResult? parseResult;
+  final VoiceParsedData? parsedData;
   final List<ActivitySummary>? matchedActivities;
   final String? errorMessage;
 
@@ -59,12 +55,12 @@ class VoiceInputState {
     VoiceInputStatus? status,
     String? partialTranscript,
     String? finalTranscript,
-    VoiceParseResult? parseResult,
+    VoiceParsedData? parsedData,
     List<ActivitySummary>? matchedActivities,
     String? errorMessage,
     bool clearPartial = false,
     bool clearFinal = false,
-    bool clearParse = false,
+    bool clearParsed = false,
     bool clearMatches = false,
     bool clearError = false,
   }) {
@@ -72,7 +68,7 @@ class VoiceInputState {
       status: status ?? this.status,
       partialTranscript: clearPartial ? null : (partialTranscript ?? this.partialTranscript),
       finalTranscript: clearFinal ? null : (finalTranscript ?? this.finalTranscript),
-      parseResult: clearParse ? null : (parseResult ?? this.parseResult),
+      parsedData: clearParsed ? null : (parsedData ?? this.parsedData),
       matchedActivities: clearMatches ? null : (matchedActivities ?? this.matchedActivities),
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
@@ -138,7 +134,7 @@ class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
       status: VoiceInputStatus.listening,
       clearPartial: true,
       clearFinal: true,
-      clearParse: true,
+      clearParsed: true,
       clearMatches: true,
     );
 
@@ -197,43 +193,25 @@ class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
       finalTranscript: transcript,
     );
 
-    // Parse the transcript
-    final parser = ref.read(voiceInputParserProvider);
-    final parseResult = parser.parse(transcript);
+    try {
+      // Call edge function to parse and search
+      final repository = ref.read(voiceParseRepositoryProvider);
+      final response = await repository.parseAndSearch(transcript);
 
-    state = state.copyWith(
-      parseResult: parseResult,
-      status: VoiceInputStatus.searchingActivities,
-    );
-
-    // Search for matching activities
-    if (parseResult.activityQuery.length < 2) {
+      state = state.copyWith(
+        status: VoiceInputStatus.showingResults,
+        parsedData: response.parsed,
+        matchedActivities: response.activities,
+      );
+    } on VoiceParseException catch (e) {
       state = state.copyWith(
         status: VoiceInputStatus.error,
-        errorMessage: 'Could not understand the activity. Please try again.',
+        errorMessage: e.message,
       );
-      return;
-    }
-
-    try {
-      final catalogService = ref.read(catalogServiceProvider);
-      final activities = await catalogService.searchActivitiesSummary(parseResult.activityQuery);
-
-      if (activities.isEmpty) {
-        state = state.copyWith(
-          status: VoiceInputStatus.showingResults,
-          matchedActivities: [],
-        );
-      } else {
-        state = state.copyWith(
-          status: VoiceInputStatus.showingResults,
-          matchedActivities: activities,
-        );
-      }
     } catch (e) {
       state = state.copyWith(
         status: VoiceInputStatus.error,
-        errorMessage: 'Failed to search activities: $e',
+        errorMessage: 'Failed to process voice input. Please try again.',
       );
     }
   }
@@ -263,11 +241,11 @@ class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
 @riverpod
 class VoicePrepopulation extends _$VoicePrepopulation {
   @override
-  VoiceParseResult? build() => null;
+  VoiceParsedData? build() => null;
 
   /// Sets the prepopulation data.
-  void set(VoiceParseResult result) {
-    state = result;
+  void set(VoiceParsedData data) {
+    state = data;
   }
 
   /// Clears the prepopulation data.

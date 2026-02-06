@@ -51,9 +51,9 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
   }
 
   void _onActivitySelected(ActivitySummary activity) {
-    final parseResult = ref.read(voiceInputStateNotifierProvider).parseResult;
-    if (parseResult != null) {
-      ref.read(voicePrepopulationProvider.notifier).set(parseResult);
+    final parsedData = ref.read(voiceInputStateNotifierProvider).parsedData;
+    if (parsedData != null) {
+      ref.read(voicePrepopulationProvider.notifier).set(parsedData);
     }
 
     // Close the sheet
@@ -62,7 +62,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
     // Navigate to log activity screen
     LogActivityRoute(
       activityId: activity.activityId,
-      date: parseResult?.activityDate?.toIso8601String(),
+      date: parsedData?.date?.iso,
     ).push<void>(context);
   }
 
@@ -116,7 +116,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
       VoiceInputStatus.idle || VoiceInputStatus.requestingPermission => _buildLoadingState(context),
       VoiceInputStatus.permissionDenied => _buildPermissionDeniedState(context, state),
       VoiceInputStatus.listening => _buildListeningState(context, state),
-      VoiceInputStatus.processing || VoiceInputStatus.searchingActivities => _buildProcessingState(context, state),
+      VoiceInputStatus.processing => _buildProcessingState(context, state),
       VoiceInputStatus.showingResults => _buildResultsState(context, state),
       VoiceInputStatus.error => _buildErrorState(context, state),
     };
@@ -254,7 +254,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
         const CircularProgressIndicator(),
         const SizedBox(height: 24),
         Text(
-          state.status == VoiceInputStatus.searchingActivities ? 'Searching activities...' : 'Processing...',
+          'Processing...',
           style: theme.textTheme.titleMedium,
         ),
         const SizedBox(height: 12),
