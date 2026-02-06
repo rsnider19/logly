@@ -3,6 +3,7 @@ import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
 import 'package:logly/features/activity_logging/application/activity_logging_service.dart';
+import 'package:logly/features/activity_logging/application/location_service.dart';
 import 'package:logly/features/activity_logging/domain/create_user_activity.dart';
 import 'package:logly/features/activity_logging/domain/create_user_activity_detail.dart';
 import 'package:logly/features/activity_logging/domain/environment_type.dart';
@@ -149,6 +150,7 @@ class DetailValue {
     this.liquidVolumeInLiters,
     this.weightInKilograms,
     this.latLng,
+    this.locationId,
   });
 
   final String activityDetailId;
@@ -160,7 +162,12 @@ class DetailValue {
   final double? distanceInMeters;
   final double? liquidVolumeInLiters;
   final double? weightInKilograms;
+
+  /// @deprecated Use locationId instead.
   final String? latLng;
+
+  /// Google place_id reference to the location table.
+  final String? locationId;
 
   /// Returns true if this detail has a value set.
   bool get hasValue =>
@@ -171,7 +178,8 @@ class DetailValue {
       distanceInMeters != null ||
       liquidVolumeInLiters != null ||
       weightInKilograms != null ||
-      latLng != null;
+      latLng != null ||
+      locationId != null;
 
   /// Converts to CreateUserActivityDetail for submission.
   CreateUserActivityDetail toCreateDetail() {
@@ -186,6 +194,7 @@ class DetailValue {
       liquidVolumeInLiters: liquidVolumeInLiters,
       weightInKilograms: weightInKilograms,
       latLng: latLng,
+      locationId: locationId,
     );
   }
 
@@ -198,6 +207,7 @@ class DetailValue {
     double? liquidVolumeInLiters,
     double? weightInKilograms,
     String? latLng,
+    String? locationId,
     bool clearText = false,
     bool clearEnvironment = false,
     bool clearNumeric = false,
@@ -206,6 +216,7 @@ class DetailValue {
     bool clearLiquidVolume = false,
     bool clearWeight = false,
     bool clearLatLng = false,
+    bool clearLocationId = false,
   }) {
     return DetailValue(
       activityDetailId: activityDetailId,
@@ -218,6 +229,7 @@ class DetailValue {
       liquidVolumeInLiters: clearLiquidVolume ? null : (liquidVolumeInLiters ?? this.liquidVolumeInLiters),
       weightInKilograms: clearWeight ? null : (weightInKilograms ?? this.weightInKilograms),
       latLng: clearLatLng ? null : (latLng ?? this.latLng),
+      locationId: clearLocationId ? null : (locationId ?? this.locationId),
     );
   }
 }
@@ -257,6 +269,7 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
         liquidVolumeInLiters: detail.liquidVolumeInLiters,
         weightInKilograms: detail.weightInKilograms,
         latLng: detail.latLng,
+        locationId: detail.locationId,
       );
     }
 
@@ -397,6 +410,17 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
       setDetailValue(
         activityDetailId,
         existing.copyWith(weightInKilograms: kilograms, clearWeight: kilograms == null),
+      );
+    }
+  }
+
+  /// Updates a location detail value.
+  void setLocationValue(String activityDetailId, String? locationId) {
+    final existing = state.detailValues[activityDetailId];
+    if (existing != null) {
+      setDetailValue(
+        activityDetailId,
+        existing.copyWith(locationId: locationId, clearLocationId: locationId == null),
       );
     }
   }
@@ -550,8 +574,13 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
 
     try {
       final service = ref.read(activityLoggingServiceProvider);
+      final locationService = ref.read(locationServiceProvider);
       final details = state.detailValues.values.where((d) => d.hasValue).map((d) => d.toCreateDetail()).toList();
       debugPrint('Details with values: ${details.length}');
+
+      // Capture current GPS location silently (for logged_location field)
+      final gpsCoords = await locationService.getCurrentLocationIfPermitted();
+      debugPrint('GPS coords: ${gpsCoords?.latitude}, ${gpsCoords?.longitude}');
 
       late SubmitResult result;
 
@@ -589,6 +618,8 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
           activityNameOverride: state.activityNameOverride,
           subActivityIds: state.selectedSubActivityIds.toList(),
           details: details,
+          loggedLocationLng: gpsCoords?.longitude,
+          loggedLocationLat: gpsCoords?.latitude,
         );
 
         debugPrint('Multi-day result: ${multiDayResult.successCount} success, ${multiDayResult.failureCount} failures');
@@ -634,6 +665,8 @@ class ActivityFormStateNotifier extends _$ActivityFormStateNotifier {
             activityNameOverride: state.activityNameOverride,
             subActivityIds: state.selectedSubActivityIds.toList(),
             details: details,
+            loggedLocationLng: gpsCoords?.longitude,
+            loggedLocationLat: gpsCoords?.latitude,
           ),
         );
 

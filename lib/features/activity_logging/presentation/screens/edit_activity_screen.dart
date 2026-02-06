@@ -20,6 +20,7 @@ import 'package:logly/features/activity_logging/presentation/widgets/detail_inpu
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/environment_selector.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/liquid_volume_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/numeric_input.dart';
+import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/location_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/detail_inputs/weight_input.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/pace_display.dart';
 import 'package:logly/features/activity_logging/presentation/widgets/subactivity_selector.dart';
@@ -490,38 +491,6 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
   }
 
   Widget _buildLocationInput(ActivityDetail detail) {
-    final theme = Theme.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          detail.label,
-          style: theme.textTheme.bodyLarge,
-        ),
-        const SizedBox(height: 8),
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            border: Border.all(color: theme.colorScheme.outline),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                LucideIcons.mapPin,
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 12),
-              Text(
-                'Location picker coming soon',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
+    return LocationInput(activityDetail: detail);
   }
 }

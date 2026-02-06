@@ -15,6 +15,8 @@ import 'package:logly/features/settings/domain/user_preferences.dart';
 import 'package:logly/features/settings/presentation/providers/notification_preferences_provider.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
 import 'package:logly/features/settings/presentation/widgets/health_sync_bottom_sheet.dart';
+import 'package:logly/features/activity_logging/application/location_service.dart';
+import 'package:logly/features/activity_logging/presentation/providers/location_permission_provider.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
@@ -443,6 +445,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ref.read(preferencesStateProvider.notifier).setHapticFeedbackEnabled(value);
             },
           ),
+          _LocationPermissionListTile(),
           _NotificationsSection(
             isToggling: _isTogglingNotifications,
             onEnable: _enableNotifications,
@@ -763,6 +766,38 @@ class _HealthSyncListTile extends ConsumerWidget {
       subtitle: subtitle,
       trailing: const Icon(LucideIcons.chevronRight),
       onTap: isSyncing ? null : () => _handleTap(context, ref, healthSyncEnabled: healthSyncEnabled),
+    );
+  }
+}
+
+/// List tile for location permission toggle.
+class _LocationPermissionListTile extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final permissionAsync = ref.watch(locationPermissionStateProvider);
+
+    final isGranted = permissionAsync.whenOrNull(
+          data: (state) => state.status == LocationPermissionStatus.granted,
+        ) ??
+        false;
+
+    return ListTile(
+      leading: _buildLeadingIcon(LucideIcons.mapPin, theme),
+      title: const Text('Location access'),
+      subtitle: Text(isGranted ? 'Enabled' : 'Disabled'),
+      trailing: const Icon(LucideIcons.chevronRight),
+      onTap: () async {
+        if (isGranted) {
+          // Open system settings to revoke
+          await AppSettings.openAppSettings(type: AppSettingsType.location);
+        } else {
+          // Request permission
+          await ref.read(locationPermissionStateProvider.notifier).requestPermission();
+        }
+        // Refresh status after returning from settings
+        await ref.read(locationPermissionStateProvider.notifier).refresh();
+      },
     );
   }
 }
