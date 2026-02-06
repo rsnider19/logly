@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:dartx/dartx.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -201,13 +202,19 @@ class _MonthlyChart extends StatelessWidget {
         fromY = toY;
       }
 
+      final double barWidth = switch (timePeriod) {
+        TimePeriod.oneWeek => 20,
+        TimePeriod.oneMonth => 8,
+        TimePeriod.oneYear || TimePeriod.all => 12,
+      };
+
       barGroups.add(
         BarChartGroupData(
           x: i,
           barRods: [
             BarChartRodData(
               toY: fromY,
-              width: 20,
+              width: barWidth,
               borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
               rodStackItems: stackItems,
               color: Colors.transparent,
@@ -290,8 +297,8 @@ class _MonthlyChart extends StatelessWidget {
         return List.generate(7, (i) => today.subtract(Duration(days: 6 - i)));
 
       case TimePeriod.oneMonth:
-        // Rolling 7-day windows anchored from today, oldest on the left
-        return List.generate(5, (i) => today.subtract(Duration(days: (4 - i) * 7)));
+        // Last 30 days, oldest on the left
+        return List.generate(30, (i) => today.subtract(Duration(days: 29 - i)));
 
       case TimePeriod.oneYear:
       case TimePeriod.all:
@@ -310,13 +317,7 @@ class _MonthlyChart extends StatelessWidget {
         return DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
 
       case TimePeriod.oneMonth:
-        // Bucket into rolling 7-day windows anchored from today
-        final date = DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
-        final now = DateTime.now();
-        final today = DateTime(now.year, now.month, now.day);
-        final daysAgo = today.difference(date).inDays;
-        final windowIndex = daysAgo ~/ 7;
-        return today.subtract(Duration(days: windowIndex * 7));
+        return DateTime(item.activityMonth.year, item.activityMonth.month, item.activityMonth.day);
 
       case TimePeriod.oneYear:
       case TimePeriod.all:
@@ -367,12 +368,12 @@ class _MonthlyChart extends StatelessWidget {
 
       case TimePeriod.oneMonth:
         label = '${monthLabels[period.month - 1]} ${period.day}';
-        shouldShow = true; // Show all week labels
+        shouldShow = index % 7 == 0;
 
       case TimePeriod.oneYear:
       case TimePeriod.all:
         label = monthLabels[period.month - 1];
-        shouldShow = index % 2 == 0; // Skip every other month label
+        shouldShow = index.isEven; // Skip every other month label
     }
 
     if (!shouldShow) return const SizedBox.shrink();

@@ -9,6 +9,17 @@ import 'package:logly/core/exceptions/app_exception.dart';
 class EnvService {
   const EnvService._();
 
+  static Environment get environment {
+    final value = dotenv.env['ENVIRONMENT'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'Environment not configured',
+        'ENVIRONMENT is missing from env file',
+      );
+    }
+    return Environment.values.firstWhere((e) => e.name == value);
+  }
+
   /// Supabase project URL.
   static String get supabaseUrl {
     final value = dotenv.env['SUPABASE_URL'];
@@ -124,22 +135,26 @@ class EnvService {
     return value;
   }
 
-  /// The current environment name derived from the Supabase URL.
-  ///
-  /// Used for Sentry environment tagging.
-  static String get environment {
-    final url = dotenv.env['SUPABASE_URL'] ?? '';
-    if (url.contains('127.0.0.1') || url.contains('localhost')) {
-      return 'development';
+  /// GrowthBook SDK client key for feature flags.
+  static String get growthBookClientKey {
+    final value = dotenv.env['GROWTHBOOK_CLIENT_KEY'];
+    if (value == null || value.isEmpty) {
+      throw const EnvironmentException(
+        'GrowthBook client key not configured',
+        'GROWTHBOOK_CLIENT_KEY is missing from env file',
+      );
     }
-    if (url.contains('staging')) {
-      return 'staging';
-    }
-    return 'production';
+    return value;
   }
 
   /// Loads the environment file for the given flavor.
   static Future<void> load(String envPath) async {
     await dotenv.load(fileName: envPath);
   }
+}
+
+enum Environment {
+  development,
+  staging,
+  production,
 }

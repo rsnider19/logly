@@ -22,8 +22,8 @@ Future<List<MonthlyCategoryData>> monthlyChartData(Ref ref) async {
   final rawData = await ref.watch(dailyCategoryCountsProvider.future);
 
   return switch (period) {
-    TimePeriod.oneWeek => _aggregateByDay(rawData),
-    TimePeriod.oneMonth => _aggregateByWeek(rawData),
+    TimePeriod.oneWeek => _aggregateByDay(rawData, days: 7),
+    TimePeriod.oneMonth => _aggregateByDay(rawData, days: 30),
     TimePeriod.oneYear || TimePeriod.all => _aggregateByMonth(rawData),
   };
 }
@@ -46,10 +46,10 @@ Future<List<MonthlyCategoryData>> filteredMonthlyChartData(Ref ref) async {
   return allData.where((d) => d.activityCategoryId != null && effectiveFilters.contains(d.activityCategoryId)).toList();
 }
 
-/// Aggregates daily category counts by day for the last 7 days.
-List<MonthlyCategoryData> _aggregateByDay(List<DailyCategoryCounts> rawData) {
+/// Aggregates daily category counts by day for the specified number of days.
+List<MonthlyCategoryData> _aggregateByDay(List<DailyCategoryCounts> rawData, {required int days}) {
   final now = DateTime.now();
-  final startDate = DateTime(now.year, now.month, now.day).subtract(const Duration(days: 6));
+  final startDate = DateTime(now.year, now.month, now.day).subtract(Duration(days: days - 1));
 
   final dailyTotals = <(DateTime, String), int>{};
   for (final day in rawData) {
@@ -67,42 +67,6 @@ List<MonthlyCategoryData> _aggregateByDay(List<DailyCategoryCounts> rawData) {
         final (date, categoryId) = e.key;
         return MonthlyCategoryData(
           activityMonth: date,
-          activityCount: e.value,
-          activityCategoryId: categoryId,
-        );
-      })
-      .sortedByDescending((a) => a.activityMonth);
-}
-
-/// Aggregates daily category counts into rolling 7-day windows for the last 30 days.
-/// Windows are anchored from today: today-6..today, today-13..today-7, etc.
-List<MonthlyCategoryData> _aggregateByWeek(List<DailyCategoryCounts> rawData) {
-  final now = DateTime.now();
-  final today = DateTime(now.year, now.month, now.day);
-  final startDate = today.subtract(const Duration(days: 34)); // 5 windows of 7 days
-
-  final weeklyTotals = <(DateTime, String), int>{};
-  for (final day in rawData) {
-    final dateKey = DateTime(day.activityDate.year, day.activityDate.month, day.activityDate.day);
-    if (dateKey.isBefore(startDate)) continue;
-
-    // Bucket into rolling 7-day window anchored from today
-    final daysAgo = today.difference(dateKey).inDays;
-    final windowIndex = daysAgo ~/ 7;
-    if (windowIndex >= 5) continue; // Only 5 windows
-    final windowKey = today.subtract(Duration(days: windowIndex * 7));
-
-    for (final cat in day.categories) {
-      final key = (windowKey, cat.activityCategoryId);
-      weeklyTotals.update(key, (v) => v + cat.count, ifAbsent: () => cat.count);
-    }
-  }
-
-  return weeklyTotals.entries
-      .map((e) {
-        final (windowKey, categoryId) = e.key;
-        return MonthlyCategoryData(
-          activityMonth: windowKey,
           activityCount: e.value,
           activityCategoryId: categoryId,
         );
