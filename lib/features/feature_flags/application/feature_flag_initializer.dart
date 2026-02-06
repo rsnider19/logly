@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/providers/logger_provider.dart';
+import 'package:logly/core/services/env_service.dart';
 import 'package:logly/core/services/feature_flag_service.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
@@ -38,7 +39,7 @@ class FeatureFlagInitializer {
     final packageInfo = await PackageInfo.fromPlatform();
     _appVersion = packageInfo.version;
     _buildNumber = packageInfo.buildNumber;
-    _environment = _inferEnvironment();
+    _environment = EnvService.environment.name;
 
     // Listen to auth state changes
     _authSubscription = _ref.listen(authStateProvider, (previous, next) {
@@ -58,18 +59,6 @@ class FeatureFlagInitializer {
         unawaited(_onUserAuthenticated(authState.session));
       }
     });
-  }
-
-  String _inferEnvironment() {
-    try {
-      final supabaseUrl = Supabase.instance.client.supabaseUrl;
-      if (supabaseUrl.contains('127.0.0.1') || supabaseUrl.contains('localhost')) {
-        return 'development';
-      }
-      return 'production';
-    } catch (_) {
-      return 'unknown';
-    }
   }
 
   Future<void> _onUserAuthenticated(Session? session) async {
@@ -94,6 +83,7 @@ class FeatureFlagInitializer {
           isPro: isPro,
         ),
       );
+      _logAllFlags();
     } catch (e, st) {
       _logger.e('FeatureFlagInitializer: Failed to update attributes', e, st);
     }
@@ -112,6 +102,18 @@ class FeatureFlagInitializer {
       );
     } catch (e, st) {
       _logger.e('FeatureFlagInitializer: Failed to reset attributes', e, st);
+    }
+  }
+
+  void _logAllFlags() {
+    final features = _service.getAllFeatures();
+    if (features is Map<String, dynamic>) {
+      final buffer = StringBuffer('FeatureFlagInitializer: Current feature flags:\n');
+      for (final key in features.keys) {
+        final result = _service.evalFeature(key);
+        buffer.writeln('  $key: value=${result.value}, on=${result.on}, source=${result.source}');
+      }
+      _logger.i(buffer.toString());
     }
   }
 

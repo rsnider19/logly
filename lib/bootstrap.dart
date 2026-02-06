@@ -51,8 +51,8 @@ Future<void> bootstrap(
       (options) {
         options
           ..dsn = sentryDsn
-          ..environment = EnvService.environment
-          ..tracesSampleRate = EnvService.environment == 'production' ? 0.2 : 1.0
+          ..environment = EnvService.environment.name
+          ..tracesSampleRate = EnvService.environment == Environment.production ? 0.2 : 1.0
           ..sendDefaultPii = false
           ..attachScreenshot = true
           ..attachViewHierarchy = true
@@ -101,19 +101,42 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder, String envPa
 
   // Initialize GrowthBook feature flags
   final packageInfo = await PackageInfo.fromPlatform();
-  final environment = envPath.contains('development')
-      ? 'development'
-      : envPath.contains('staging')
-          ? 'staging'
-          : 'production';
   final gbSdk = await GBSDKBuilderApp(
     apiKey: EnvService.growthBookClientKey,
     hostURL: 'https://cdn.growthbook.io',
     attributes: FeatureFlagService.buildAnonymousAttributes(
       appVersion: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
-      environment: environment,
+      environment: EnvService.environment.name,
     ),
+    growthBookTrackingCallBack: (GBTrackData trackData) {
+      if (kDebugMode) {
+        debugPrint(
+          '⚗️ Experiment: ${trackData.experiment.key} → '
+          'variation: ${trackData.experimentResult.variationID} '
+          '(${trackData.experimentResult.key})'
+          '${trackData.experimentResult.inExperiment ? '' : ' [not in experiment]'}',
+        );
+      }
+      // TODO: Forward to Mixpanel when initialized
+      if (Sentry.isEnabled) {
+        Sentry.addBreadcrumb(
+          Breadcrumb(
+            message: 'Experiment assigned: ${trackData.experiment.key}',
+            category: 'experiment',
+            level: SentryLevel.info,
+            data: {
+              'experimentKey': trackData.experiment.key,
+              if (trackData.experiment.name != null) 'experimentName': trackData.experiment.name!,
+              'variationId': trackData.experimentResult.variationID,
+              'variationKey': trackData.experimentResult.key,
+              if (trackData.experimentResult.name != null) 'variationName': trackData.experimentResult.name!,
+              'inExperiment': trackData.experimentResult.inExperiment,
+            },
+          ),
+        );
+      }
+    },
   ).initialize();
   if (kDebugMode) {
     debugPrint('✓ GrowthBook initialized');
