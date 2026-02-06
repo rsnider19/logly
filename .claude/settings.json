@@ -37,6 +37,7 @@
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/ensure-fvm.sh",
             "timeout": 300,
+            "async": true,
             "statusMessage": "Checking FVM installation..."
           }
         ]
