@@ -1,6 +1,6 @@
 name: logly
 description: A Very Good Project created by Very Good CLI.
-version: 4.2.0+2009
+version: 4.3.1+2010
 publish_to: none
 
 environment:
