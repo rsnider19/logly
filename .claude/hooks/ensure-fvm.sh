@@ -2,6 +2,11 @@
 # Ensures Dart SDK and FVM are installed.
 # Used as a Claude Code SessionStart hook.
 
+# Skip installation in local environments
+if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
+  exit 0
+fi
+
 install_dart_via_apt() {
   # Per https://dart.dev/get-dart#install
   echo "Installing Dart SDK via apt-get..."
