@@ -50,13 +50,13 @@ class VoiceParseRepository {
       final data = response.data as Map<String, dynamic>;
       return VoiceParseResponse.fromJson(data);
     } on FunctionException catch (e, st) {
-      _logger.e('Voice parse function error', error: e, stackTrace: st);
+      _logger.e('Voice parse function error', e, st);
       throw VoiceParseException(
         'Failed to process voice input. Please try again.',
         e.toString(),
       );
     } catch (e, st) {
-      _logger.e('Failed to parse voice input', error: e, stackTrace: st);
+      _logger.e('Failed to parse voice input', e, st);
       if (e is VoiceParseException) rethrow;
       throw VoiceParseException(
         'Failed to process voice input. Please try again.',
@@ -67,7 +67,7 @@ class VoiceParseRepository {
 }
 
 @Riverpod(keepAlive: true)
-VoiceParseRepository voiceParseRepository(VoiceParseRepositoryRef ref) {
+VoiceParseRepository voiceParseRepository(Ref ref) {
   return VoiceParseRepository(
     ref.watch(supabaseProvider),
     ref.watch(loggerProvider),

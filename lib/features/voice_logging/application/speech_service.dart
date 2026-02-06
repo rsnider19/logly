@@ -103,6 +103,6 @@ class SpeechService {
 }
 
 @Riverpod(keepAlive: true)
-SpeechService speechService(SpeechServiceRef ref) {
+SpeechService speechService(Ref ref) {
   return SpeechService();
 }
