@@ -1,3 +1,4 @@
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -40,6 +41,10 @@ class ProfileFilterStateNotifier extends _$ProfileFilterStateNotifier {
 
   /// Updates the selected time period.
   void selectTimePeriod(TimePeriod period) {
+    ref.read(analyticsServiceProvider).trackProfileFilterChanged(
+      filterType: 'time_period',
+      value: period.name,
+    );
     state = state.copyWith(timePeriod: period);
   }
 
@@ -48,6 +53,10 @@ class ProfileFilterStateNotifier extends _$ProfileFilterStateNotifier {
   /// If state is empty (all selected), first populates with all category IDs
   /// then removes the toggled one.
   void toggleCategory(String categoryId, List<String> allCategoryIds) {
+    ref.read(analyticsServiceProvider).trackProfileFilterChanged(
+      filterType: 'category',
+      value: categoryId,
+    );
     final current = state.selectedCategoryIds;
     if (current.isEmpty) {
       // Empty means all selected, so toggling means deselecting one

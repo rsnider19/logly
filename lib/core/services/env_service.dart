@@ -135,6 +135,17 @@ class EnvService {
     return value;
   }
 
+  /// Mixpanel project token for analytics.
+  ///
+  /// Returns null if not configured, which disables analytics.
+  static String? get mixpanelToken {
+    final value = dotenv.env['MIXPANEL_TOKEN'];
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    return value;
+  }
+
   /// GrowthBook SDK client key for feature flags.
   static String get growthBookClientKey {
     final value = dotenv.env['GROWTHBOOK_CLIENT_KEY'];

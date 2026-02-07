@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
@@ -102,6 +103,10 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
     if (request != null) {
       ref.read(pendingSaveStateProvider.notifier).submitOptimisticUpdate(request);
       if (mounted) {
+        ref.read(analyticsServiceProvider).trackActivityEdited(
+          category: _userActivity!.activity?.activityCategory?.name ?? 'unknown',
+          activityName: _userActivity!.activity?.name ?? 'unknown',
+        );
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Activity updated'),
@@ -121,6 +126,10 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
 
     // Editing only supports single day, so we only care about success or failure
     if (result == SubmitResult.success) {
+      ref.read(analyticsServiceProvider).trackActivityEdited(
+        category: _userActivity!.activity?.activityCategory?.name ?? 'unknown',
+        activityName: _userActivity!.activity?.name ?? 'unknown',
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Activity updated successfully'),
@@ -170,6 +179,10 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
         ref.read(pendingSaveStateProvider.notifier).submitOptimisticDelete(request);
 
         if (mounted) {
+          ref.read(analyticsServiceProvider).trackActivityDeleted(
+            category: _userActivity!.activity?.activityCategory?.name ?? 'unknown',
+            activityName: _userActivity!.activity?.name ?? 'unknown',
+          );
           // Show immediate feedback and pop
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/home/presentation/widgets/trending_bottom_sheet.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -41,7 +42,10 @@ class CustomAppBar extends ConsumerWidget implements PreferredSizeWidget {
           IconButton(
             icon: const Icon(LucideIcons.globe),
             tooltip: 'Trending Activities',
-            onPressed: () => _showTrendingSheet(context),
+            onPressed: () {
+              ref.read(analyticsServiceProvider).trackTrendingSheetOpened();
+              _showTrendingSheet(context);
+            },
           ),
         if (showSettingsButton)
           IconButton(

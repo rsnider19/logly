@@ -57,7 +57,7 @@ final class ProfileFilterStateNotifierProvider
 }
 
 String _$profileFilterStateNotifierHash() =>
-    r'1fa3a81d06b93a31d76d6c6f991310f4a0808933';
+    r'2503264f5f4f2e020b4709e071d67d3476ca1290';
 
 /// Global filter state notifier for the profile screen.
 ///

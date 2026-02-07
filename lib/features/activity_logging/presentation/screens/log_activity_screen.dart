@@ -7,6 +7,7 @@ import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/activity_catalog/domain/activity_date_type.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail.dart';
 import 'package:logly/features/activity_catalog/domain/activity_detail_type.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_form_provider.dart';
 import 'package:logly/features/activity_logging/presentation/providers/favorites_provider.dart';
@@ -38,11 +39,13 @@ class LogActivityScreen extends ConsumerStatefulWidget {
   const LogActivityScreen({
     required this.activityId,
     this.initialDate,
+    this.entryPoint,
     super.key,
   });
 
   final String activityId;
   final DateTime? initialDate;
+  final String? entryPoint;
 
   @override
   ConsumerState<LogActivityScreen> createState() => _LogActivityScreenState();
@@ -131,6 +134,19 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
     }
   }
 
+  void _trackActivityLogged(Activity activity) {
+    final formState = ref.read(activityFormStateProvider);
+    ref.read(analyticsServiceProvider).trackActivityLogged(
+      category: activity.activityCategory?.name ?? 'unknown',
+      activityName: activity.name,
+      isCustom: false,
+      isHealthSync: false,
+      hasNotes: formState.comments != null && formState.comments!.isNotEmpty,
+      detailTypes: activity.activityDetail.map((d) => d.activityDetailType.name).toList(),
+      entryPoint: widget.entryPoint ?? 'unknown',
+    );
+  }
+
   Future<void> _saveActivity() async {
     final notifier = ref.read(activityFormStateProvider.notifier);
 
@@ -140,6 +156,7 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
       final request = notifier.prepareOptimisticSave(currentUser.id);
       if (request != null) {
         ref.read(pendingSaveStateProvider.notifier).submitOptimistic(request);
+        _trackActivityLogged(request.activity);
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -161,6 +178,8 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
 
     switch (result) {
       case SubmitResult.success:
+        final activity = ref.read(activityFormStateProvider).activity;
+        if (activity != null) _trackActivityLogged(activity);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Activity logged successfully'),
@@ -225,7 +244,19 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
   }
 
   void _toggleFavorite() {
+    final favState = ref.read(favoriteStateProvider);
+    final isFavorited = favState.whenOrNull(data: (ids) => ids.contains(widget.activityId)) ?? false;
+    final activity = ref.read(activityFormStateProvider).activity;
+
     unawaited(ref.read(favoriteStateProvider.notifier).toggle(widget.activityId));
+
+    if (activity != null) {
+      ref.read(analyticsServiceProvider).trackFavoriteToggled(
+        activityName: activity.name,
+        category: activity.activityCategory?.name ?? 'unknown',
+        isFavorited: !isFavorited, // Track the NEW state after toggle
+      );
+    }
   }
 
   @override

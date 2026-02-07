@@ -16,6 +16,7 @@ class CategoryDetailScreen extends ConsumerStatefulWidget {
   const CategoryDetailScreen({
     required this.categoryId,
     this.initialDate,
+    this.entryPoint,
     super.key,
   });
 
@@ -24,6 +25,9 @@ class CategoryDetailScreen extends ConsumerStatefulWidget {
 
   /// Optional initial date for logging activities.
   final DateTime? initialDate;
+
+  /// Analytics entry point tracking.
+  final String? entryPoint;
 
   @override
   ConsumerState<CategoryDetailScreen> createState() => _CategoryDetailScreenState();
@@ -56,6 +60,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
     LogActivityRoute(
       activityId: activity.activityId,
       date: _selectedDate.toIso8601String(),
+      entryPoint: widget.entryPoint,
     ).pushReplacement(context);
   }
 

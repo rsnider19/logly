@@ -1,3 +1,4 @@
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/chat/application/chat_service.dart';
 import 'package:logly/features/chat/domain/chat_exception.dart';
 import 'package:logly/features/chat/domain/chat_stream_state.dart';
@@ -27,6 +28,9 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
   /// Current conversation ID for multi-turn chaining (persists across requests).
   String? _currentConversationId;
 
+  /// Tracks message count within a conversation for analytics.
+  int _messageCount = 0;
+
   @override
   ChatStreamState build() {
     _service = ref.watch(chatServiceProvider);
@@ -52,6 +56,13 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
     // Reset display state for new request
     state = const ChatStreamState(status: ChatConnectionStatus.connecting);
 
+    _messageCount++;
+    ref.read(analyticsServiceProvider).trackChatMessageSent(
+      isNewConversation: _currentConversationId == null,
+      conversationMessageCount: _messageCount,
+    );
+    final chatStopwatch = Stopwatch()..start();
+
     try {
       await _service.sendQuestion(
         query: query,
@@ -70,6 +81,11 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
       if (state.conversationId != null) {
         _currentConversationId = state.conversationId;
       }
+
+      ref.read(analyticsServiceProvider).trackChatResponseReceived(
+        hasSuggestions: state.followUpSuggestions.isNotEmpty,
+        responseDurationSeconds: chatStopwatch.elapsed.inSeconds,
+      );
     } on Exception catch (e) {
       final errorMessage = e is ChatException ? e.message : 'An unexpected error occurred. Please try again.';
       state = ChatStreamState(
@@ -114,6 +130,7 @@ class ChatStreamStateNotifier extends _$ChatStreamStateNotifier {
     _lastResponseId = null;
     _lastConversionId = null;
     _currentConversationId = null;
+    _messageCount = 0;
     state = const ChatStreamState();
   }
 

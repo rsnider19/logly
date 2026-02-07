@@ -1,4 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/core/providers/logger_provider.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity.dart';
 import 'package:logly/features/custom_activity/data/custom_activity_repository.dart';
@@ -12,10 +14,11 @@ part 'custom_activity_service.g.dart';
 ///
 /// Handles validation, business logic, and orchestrates repositories.
 class CustomActivityService {
-  CustomActivityService(this._repository, this._logger);
+  CustomActivityService(this._repository, this._logger, this._ref);
 
   final CustomActivityRepository _repository;
   final LoggerService _logger;
+  final Ref _ref;
 
   /// Creates a new custom activity.
   ///
@@ -83,11 +86,18 @@ class CustomActivityService {
 
     _logger.d('Creating custom activity: $trimmedName with ${details.length} details');
 
-    return _repository.createCustomActivity(
+    final activity = await _repository.createCustomActivity(
       categoryId: categoryId,
       name: trimmedName,
       details: details,
     );
+
+    _ref.read(analyticsServiceProvider).trackCustomActivityCreated(
+      category: activity.activityCategory?.name ?? 'unknown',
+      detailCount: details.length,
+    );
+
+    return activity;
   }
 
   /// Checks if an activity name is available.
@@ -106,5 +116,6 @@ CustomActivityService customActivityService(Ref ref) {
   return CustomActivityService(
     ref.watch(customActivityRepositoryProvider),
     ref.watch(loggerProvider),
+    ref,
   );
 }

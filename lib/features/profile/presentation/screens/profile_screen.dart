@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/core/services/analytics_service.dart';
+import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/features/profile/presentation/widgets/contribution_graph.dart';
 import 'package:logly/features/profile/presentation/widgets/monthly_chart.dart';
 import 'package:logly/features/profile/presentation/widgets/profile_filter_bar.dart';
@@ -15,11 +17,27 @@ import 'package:logly/features/subscriptions/presentation/widgets/pro_badge.dart
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Profile screen displaying user stats, graphs, and achievements.
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final timePeriod = ref.read(profileFilterStateProvider).timePeriod;
+      ref.read(analyticsServiceProvider).trackProfileStatsViewed(
+        timeRange: timePeriod.name,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -113,7 +131,7 @@ class _InsightsFab extends ConsumerWidget {
       await const ChatRoute().push<void>(context);
     } else {
       // Show paywall - no manual invalidation needed, StateNotifier listens for updates
-      final purchased = await ref.read(subscriptionServiceProvider).showPaywall();
+      final purchased = await ref.read(subscriptionServiceProvider).showPaywall(source: 'profile');
       if (purchased && context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

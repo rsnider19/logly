@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_answers_provider.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_favorites_provider.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
@@ -106,6 +107,12 @@ class _PostAuthSetupShellState extends ConsumerState<PostAuthSetupShell> {
   Future<void> _completeOnboarding() async {
     try {
       final service = ref.read(onboardingServiceProvider);
+      final favoritesCount = ref.read(onboardingFavoritesStateProvider).value?.length ?? 0;
+      final healthGranted = await service.hasHealthPermissions();
+      ref.read(analyticsServiceProvider).trackOnboardingCompleted(
+        favoritesCount: favoritesCount,
+        healthPermissionGranted: healthGranted,
+      );
       await service.completeOnboarding();
       ref.invalidate(profileDataProvider);
       if (mounted) {

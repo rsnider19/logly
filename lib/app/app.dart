@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logly/app/router/app_router.dart';
 import 'package:logly/app/theme/app_theme.dart';
 import 'package:logly/core/providers/scaffold_messenger_provider.dart';
+import 'package:logly/core/services/analytics_initializer.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/core/services/sentry_initializer.dart';
 import 'package:logly/features/feature_flags/application/feature_flag_initializer.dart';
 import 'package:logly/features/health_integration/application/health_sync_initializer.dart';
@@ -16,10 +18,13 @@ class App extends ConsumerStatefulWidget {
   ConsumerState<App> createState() => _AppState();
 }
 
-class _AppState extends ConsumerState<App> {
+class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
+  bool _coldStartTracked = false;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Initialize notification service
       ref.read(notificationServiceProvider).initialize();
@@ -31,7 +36,28 @@ class _AppState extends ConsumerState<App> {
       ref.read(sentryInitializerProvider).initialize();
       // Initialize feature flag attribute updates (syncs GrowthBook with auth state)
       ref.read(featureFlagInitializerProvider).initialize();
+      // Initialize analytics identity sync (syncs Mixpanel with auth state)
+      ref.read(analyticsInitializerProvider).initialize();
+
+      // Track cold start
+      if (!_coldStartTracked) {
+        _coldStartTracked = true;
+        ref.read(analyticsServiceProvider).trackAppOpened(source: 'cold_start');
+      }
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && _coldStartTracked) {
+      ref.read(analyticsServiceProvider).trackAppOpened(source: 'background');
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

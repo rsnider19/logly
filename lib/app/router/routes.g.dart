@@ -273,14 +273,20 @@ RouteBase get $activitySearchRoute => GoRouteData.$route(
 
 mixin $ActivitySearchRoute on GoRouteData {
   static ActivitySearchRoute _fromState(GoRouterState state) =>
-      ActivitySearchRoute(date: state.uri.queryParameters['date']);
+      ActivitySearchRoute(
+        date: state.uri.queryParameters['date'],
+        entryPoint: state.uri.queryParameters['entry-point'],
+      );
 
   ActivitySearchRoute get _self => this as ActivitySearchRoute;
 
   @override
   String get location => GoRouteData.$location(
     '/activities/search',
-    queryParams: {if (_self.date != null) 'date': _self.date},
+    queryParams: {
+      if (_self.date != null) 'date': _self.date,
+      if (_self.entryPoint != null) 'entry-point': _self.entryPoint,
+    },
   );
 
   @override
@@ -306,6 +312,7 @@ mixin $LogActivityRoute on GoRouteData {
   static LogActivityRoute _fromState(GoRouterState state) => LogActivityRoute(
     activityId: state.pathParameters['activityId']!,
     date: state.uri.queryParameters['date'],
+    entryPoint: state.uri.queryParameters['entry-point'],
   );
 
   LogActivityRoute get _self => this as LogActivityRoute;
@@ -313,7 +320,10 @@ mixin $LogActivityRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/activities/log/${Uri.encodeComponent(_self.activityId)}',
-    queryParams: {if (_self.date != null) 'date': _self.date},
+    queryParams: {
+      if (_self.date != null) 'date': _self.date,
+      if (_self.entryPoint != null) 'entry-point': _self.entryPoint,
+    },
   );
 
   @override
@@ -340,6 +350,7 @@ mixin $CategoryDetailRoute on GoRouteData {
       CategoryDetailRoute(
         categoryId: state.pathParameters['categoryId']!,
         date: state.uri.queryParameters['date'],
+        entryPoint: state.uri.queryParameters['entry-point'],
       );
 
   CategoryDetailRoute get _self => this as CategoryDetailRoute;
@@ -347,7 +358,10 @@ mixin $CategoryDetailRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/activities/category/${Uri.encodeComponent(_self.categoryId)}',
-    queryParams: {if (_self.date != null) 'date': _self.date},
+    queryParams: {
+      if (_self.date != null) 'date': _self.date,
+      if (_self.entryPoint != null) 'entry-point': _self.entryPoint,
+    },
   );
 
   @override
