@@ -51,7 +51,11 @@ export interface ErrorMessage {
 export interface DoneMessage {
   type: "done";
   conversation_id: string;
-  follow_up_suggestions?: string[];
+}
+
+export interface FollowUpSuggestionsMessage {
+  type: "follow_up_suggestions";
+  suggestions: string[];
 }
 
 export type StreamMessage =
@@ -60,7 +64,8 @@ export type StreamMessage =
   | ResponseIdMessage
   | ConversionIdMessage
   | ErrorMessage
-  | DoneMessage;
+  | DoneMessage
+  | FollowUpSuggestionsMessage;
 
 // ============================================================
 // Progress Stream
@@ -79,8 +84,10 @@ export interface ProgressStream {
   sendConversionId(conversionId: string): void;
   /** Send an error message (user-friendly). */
   sendError(message: string): void;
-  /** Send completion signal with conversation ID and optional follow-up suggestions. */
-  sendDone(conversationId: string, followUpSuggestions?: string[]): void;
+  /** Send completion signal with conversation ID. */
+  sendDone(conversationId: string): void;
+  /** Send follow-up suggestions (after done, before close). */
+  sendFollowUpSuggestions(suggestions: string[]): void;
   /** Close the stream. Always call in a finally block. */
   close(): void;
 }
@@ -155,15 +162,14 @@ export function createProgressStream(): ProgressStream {
       sendMessage({ type: "error", message });
     },
 
-    sendDone(conversationId: string, followUpSuggestions?: string[]): void {
-      const message: DoneMessage = {
-        type: "done",
-        conversation_id: conversationId,
-      };
-      if (followUpSuggestions && followUpSuggestions.length > 0) {
-        message.follow_up_suggestions = followUpSuggestions;
+    sendDone(conversationId: string): void {
+      sendMessage({ type: "done", conversation_id: conversationId });
+    },
+
+    sendFollowUpSuggestions(suggestions: string[]): void {
+      if (suggestions.length > 0) {
+        sendMessage({ type: "follow_up_suggestions", suggestions });
       }
-      sendMessage(message);
     },
 
     close(): void {
