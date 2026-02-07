@@ -279,7 +279,7 @@ as String,
 mixin _$ChatStreamState {
 
 /// Current connection/stream status.
- ChatConnectionStatus get status;/// Typewriter-dripped text for UI display (characters appear progressively).
+ ChatConnectionStatus get status;/// Text for UI display (updated as tokens arrive).
  String get displayText;/// Complete accumulated text for copy/accessibility (all deltas concatenated).
  String get fullText;/// Active step label (null when no step is in progress).
  String? get currentStepName;/// Active step status ("start" or "complete").
@@ -500,7 +500,7 @@ class _ChatStreamState implements ChatStreamState {
 
 /// Current connection/stream status.
 @override@JsonKey() final  ChatConnectionStatus status;
-/// Typewriter-dripped text for UI display (characters appear progressively).
+/// Text for UI display (updated as tokens arrive).
 @override@JsonKey() final  String displayText;
 /// Complete accumulated text for copy/accessibility (all deltas concatenated).
 @override@JsonKey() final  String fullText;

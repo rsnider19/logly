@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
-import 'package:logly/features/chat/application/typewriter_buffer.dart';
 import 'package:logly/features/chat/data/chat_repository.dart';
 import 'package:logly/features/chat/domain/chat_event.dart';
 import 'package:logly/features/chat/domain/chat_exception.dart';
@@ -13,13 +12,12 @@ part 'chat_service.g.dart';
 
 /// Business logic layer orchestrating the chat stream lifecycle.
 ///
-/// Transforms raw [ChatEvent] streams from [ChatRepository] into smooth,
-/// typewriter-animated [ChatStreamState] updates via callbacks. Handles
-/// stall detection (30s timeout), one silent auto-retry, and event routing.
+/// Transforms raw [ChatEvent] streams from [ChatRepository] into
+/// [ChatStreamState] updates via callbacks. Handles stall detection
+/// (30s timeout), one silent auto-retry, and event routing.
 ///
-/// The service is stateless for stream management -- it creates a new
-/// [TypewriterBuffer] per request and returns results via the
-/// `onStateUpdate` callback. The Riverpod notifier manages the
+/// The service is stateless for stream management -- it returns results
+/// via the `onStateUpdate` callback. The Riverpod notifier manages the
 /// stateful lifecycle.
 class ChatService {
   ChatService(this._repository, this._logger);
@@ -38,8 +36,8 @@ class ChatService {
     _cancelled = true;
   }
 
-  /// Sends a question through the chat pipeline with stall detection,
-  /// auto-retry, and typewriter buffering.
+  /// Sends a question through the chat pipeline with stall detection
+  /// and auto-retry.
   ///
   /// [onStateUpdate] is called for each state change, allowing the
   /// caller (typically a Riverpod notifier) to control state emission.
@@ -149,66 +147,78 @@ class ChatService {
     void Function(ChatStreamState) onStateUpdate, {
     required bool isRetry,
   }) async {
-    final typewriter = TypewriterBuffer();
+    var fullText = '';
+    String? responseId;
+    String? conversionId;
+    String? conversationId = inputConversationId;
+    var followUpSuggestions = <String>[];
+    String? currentStepName;
+    String? currentStepStatus;
+    final completedSteps = <ChatCompletedStep>[];
 
-    try {
-      var fullText = '';
-      String? responseId;
-      String? conversionId;
-      String? conversationId = inputConversationId;
-      var followUpSuggestions = <String>[];
-      String? currentStepName;
-      String? currentStepStatus;
-      final completedSteps = <ChatCompletedStep>[];
+    final eventStream = _repository
+        .sendQuestion(
+          query: query,
+          previousResponseId: previousResponseId,
+          previousConversionId: previousConversionId,
+          conversationId: inputConversationId,
+        )
+        .timeout(
+          const Duration(seconds: 30),
+          onTimeout: (sink) {
+            sink
+              ..addError(const ChatStallException())
+              ..close();
+          },
+        );
 
-      final eventStream = _repository
-          .sendQuestion(
-            query: query,
-            previousResponseId: previousResponseId,
-            previousConversionId: previousConversionId,
-            conversationId: inputConversationId,
-          )
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: (sink) {
-              sink
-                ..addError(const ChatStallException())
-                ..close();
-            },
-          );
+    await for (final event in eventStream) {
+      // Check for user-initiated cancellation
+      if (_cancelled) {
+        _logger.i('Chat stream cancelled by user');
+        onStateUpdate(
+          ChatStreamState(
+            status: ChatConnectionStatus.completed,
+            displayText: fullText,
+            fullText: fullText,
+            completedSteps: List.unmodifiable(completedSteps),
+            responseId: responseId,
+            conversionId: conversionId,
+          ),
+        );
+        return;
+      }
 
-      await for (final event in eventStream) {
-        // Check for user-initiated cancellation
-        if (_cancelled) {
-          _logger.i('Chat stream cancelled by user');
+      switch (event) {
+        case ChatStepEvent():
+          if (event.status == 'complete') {
+            completedSteps.add(ChatCompletedStep(name: event.name));
+            currentStepName = null;
+            currentStepStatus = null;
+          } else {
+            currentStepName = event.name;
+            currentStepStatus = event.status;
+          }
           onStateUpdate(
             ChatStreamState(
-              status: ChatConnectionStatus.completed,
-              displayText: typewriter.currentText,
+              status: ChatConnectionStatus.streaming,
+              displayText: fullText,
               fullText: fullText,
+              currentStepName: currentStepName,
+              currentStepStatus: currentStepStatus,
               completedSteps: List.unmodifiable(completedSteps),
               responseId: responseId,
               conversionId: conversionId,
             ),
           );
-          return;
-        }
 
-        switch (event) {
-          case ChatStepEvent():
-            if (event.status == 'complete') {
-              completedSteps.add(ChatCompletedStep(name: event.name));
-              currentStepName = null;
-              currentStepStatus = null;
-            } else {
-              currentStepName = event.name;
-              currentStepStatus = event.status;
-            }
-            // Step events are emitted instantly (no typewriter delay)
+        case ChatTextDeltaEvent(:final delta):
+          if (delta.isNotEmpty) {
+            fullText += delta;
             onStateUpdate(
               ChatStreamState(
                 status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
+                displayText: fullText,
                 fullText: fullText,
                 currentStepName: currentStepName,
                 currentStepStatus: currentStepStatus,
@@ -217,130 +227,77 @@ class ChatService {
                 conversionId: conversionId,
               ),
             );
+          }
 
-          case ChatTextDeltaEvent(:final delta):
-            if (delta.isNotEmpty) {
-              fullText += delta;
-              typewriter.addDelta(delta);
-              onStateUpdate(
-                ChatStreamState(
-                  status: ChatConnectionStatus.streaming,
-                  displayText: typewriter.currentText,
-                  fullText: fullText,
-                  currentStepName: currentStepName,
-                  currentStepStatus: currentStepStatus,
-                  completedSteps: List.unmodifiable(completedSteps),
-                  responseId: responseId,
-                  conversionId: conversionId,
-                ),
-              );
-            }
-
-          case ChatResponseIdEvent():
-            responseId = event.responseId;
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-              ),
-            );
-
-          case ChatConversionIdEvent():
-            conversionId = event.conversionId;
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-              ),
-            );
-
-          case ChatErrorEvent(:final message):
-            throw ChatConnectionException(message);
-
-          case ChatDoneEvent(
-              conversationId: final doneConversationId,
-              followUpSuggestions: final doneSuggestions,
-            ):
-            conversationId = doneConversationId;
-            followUpSuggestions = doneSuggestions;
-            typewriter.markDone();
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.completing,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-                conversationId: conversationId,
-                followUpSuggestions: followUpSuggestions,
-              ),
-            );
-        }
-      }
-
-      // After the SSE stream closes, listen to typewriter draining
-      // and emit display text updates as characters drip out.
-      await for (final displayText in typewriter.stream) {
-        if (_cancelled) {
+        case ChatResponseIdEvent():
+          responseId = event.responseId;
           onStateUpdate(
             ChatStreamState(
-              status: ChatConnectionStatus.completed,
-              displayText: typewriter.currentText,
+              status: ChatConnectionStatus.streaming,
+              displayText: fullText,
+              fullText: fullText,
+              currentStepName: currentStepName,
+              currentStepStatus: currentStepStatus,
+              completedSteps: List.unmodifiable(completedSteps),
+              responseId: responseId,
+              conversionId: conversionId,
+            ),
+          );
+
+        case ChatConversionIdEvent():
+          conversionId = event.conversionId;
+          onStateUpdate(
+            ChatStreamState(
+              status: ChatConnectionStatus.streaming,
+              displayText: fullText,
+              fullText: fullText,
+              currentStepName: currentStepName,
+              currentStepStatus: currentStepStatus,
+              completedSteps: List.unmodifiable(completedSteps),
+              responseId: responseId,
+              conversionId: conversionId,
+            ),
+          );
+
+        case ChatErrorEvent(:final message):
+          throw ChatConnectionException(message);
+
+        case ChatDoneEvent(conversationId: final doneConversationId):
+          conversationId = doneConversationId;
+          // Text is complete — notify UI so it can finalize the message
+          // while we wait for follow-up suggestions.
+          onStateUpdate(
+            ChatStreamState(
+              status: ChatConnectionStatus.completing,
+              displayText: fullText,
               fullText: fullText,
               completedSteps: List.unmodifiable(completedSteps),
               responseId: responseId,
               conversionId: conversionId,
               conversationId: conversationId,
-              followUpSuggestions: followUpSuggestions,
             ),
           );
-          return;
-        }
-        onStateUpdate(
-          ChatStreamState(
-            status: ChatConnectionStatus.completing,
-            displayText: displayText,
-            fullText: fullText,
-            completedSteps: List.unmodifiable(completedSteps),
-            responseId: responseId,
-            conversionId: conversionId,
-            conversationId: conversationId,
-            followUpSuggestions: followUpSuggestions,
-          ),
-        );
-      }
 
-      // Typewriter stream closed -- all characters drained
-      onStateUpdate(
-        ChatStreamState(
-          status: ChatConnectionStatus.completed,
-          displayText: fullText,
-          fullText: fullText,
-          completedSteps: List.unmodifiable(completedSteps),
-          responseId: responseId,
-          conversionId: conversionId,
-          conversationId: conversationId,
-          followUpSuggestions: followUpSuggestions,
-        ),
-      );
-    } finally {
-      typewriter.dispose();
+        case ChatFollowUpSuggestionsEvent(:final suggestions):
+          followUpSuggestions = suggestions;
+      }
     }
+
+    // If cancelled, exit without overwriting state.
+    if (_cancelled) return;
+
+    onStateUpdate(
+      ChatStreamState(
+        status: ChatConnectionStatus.completed,
+        displayText: fullText,
+        fullText: fullText,
+        completedSteps: List.unmodifiable(completedSteps),
+        responseId: responseId,
+        conversionId: conversionId,
+        conversationId: conversationId,
+        followUpSuggestions: followUpSuggestions,
+      ),
+    );
   }
 }
 
