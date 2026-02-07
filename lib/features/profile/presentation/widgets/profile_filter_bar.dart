@@ -13,16 +13,17 @@ class ProfileFilterBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const Padding(
-      padding: EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _CategoryChipRow(),
-          SizedBox(height: 8),
-          _TimePeriodChipRow(),
-        ],
-      ),
+    return const Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _CategoryChipRow(),
+        SizedBox(height: 8),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: _TimePeriodChipRow(),
+        ),
+        SizedBox(height: 8),
+      ],
     );
   }
 }
@@ -32,47 +33,41 @@ class _CategoryChipRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categoriesAsync = ref.watch(frequencySortedCategoriesProvider);
+    final categories = ref.watch(frequencySortedCategoriesProvider);
     final filterState = ref.watch(profileFilterStateProvider);
     final notifier = ref.watch(profileFilterStateProvider.notifier);
+    final isAllSelected = filterState.selectedCategoryIds.isEmpty;
 
-    return categoriesAsync.when(
-      data: (categories) {
-        final isAllSelected = filterState.selectedCategoryIds.isEmpty;
-
-        return SizedBox(
-          height: 40,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: categories.length + 1,
-            separatorBuilder: (_, _) => const SizedBox(width: 8),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return _AllFilterChip(
-                  isSelected: isAllSelected,
-                  onPressed: notifier.selectAllCategories,
-                );
+    return SizedBox(
+      height: 40,
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        itemCount: categories.length + 1,
+        separatorBuilder: (_, _) => const SizedBox(width: 8),
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return _AllFilterChip(
+              isSelected: isAllSelected,
+              onPressed: notifier.selectAllCategories,
+            );
+          }
+          final category = categories[index - 1];
+          final isSelected = filterState.selectedCategoryIds.contains(category.activityCategoryId);
+          return _CategoryFilterChip(
+            category: category,
+            isSelected: isSelected,
+            onPressed: () async {
+              if (!isSelected) {
+                await ref.read(categoryFilterFrequencyRepositoryProvider).incrementFrequency(
+                      category.activityCategoryId,
+                    );
               }
-              final category = categories[index - 1];
-              final isSelected = filterState.selectedCategoryIds.contains(category.activityCategoryId);
-              return _CategoryFilterChip(
-                category: category,
-                isSelected: isSelected,
-                onPressed: () async {
-                  if (!isSelected) {
-                    await ref.read(categoryFilterFrequencyRepositoryProvider).incrementFrequency(
-                          category.activityCategoryId,
-                        );
-                  }
-                  notifier.toggleCategory(category.activityCategoryId);
-                },
-              );
+              notifier.toggleCategory(category.activityCategoryId);
             },
-          ),
-        );
-      },
-      loading: () => const SizedBox(height: 40),
-      error: (_, _) => const SizedBox.shrink(),
+          );
+        },
+      ),
     );
   }
 }
@@ -134,7 +129,7 @@ class _CategoryFilterChip extends StatelessWidget {
       avatar: ActivityCategoryIcon(
         activityCategory: category,
         size: 18,
-        color: isSelected ? theme.colorScheme.onSurface : categoryColor,
+        color: theme.colorScheme.onSurface,
       ),
       label: Text(category.name),
       shape: const StadiumBorder(),

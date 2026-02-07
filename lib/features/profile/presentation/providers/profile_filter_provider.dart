@@ -102,11 +102,10 @@ TimePeriod globalTimePeriod(Ref ref) {
 /// descending frequency. Categories with no recorded taps fall back to
 /// their default [ActivityCategory.sortOrder].
 ///
-/// Auto-dispose ensures sort order is recalculated each time the profile
-/// screen is rebuilt (e.g., navigating away and back).
-@riverpod
-Future<List<ActivityCategory>> frequencySortedCategories(Ref ref) async {
-  final categories = await ref.watch(activityCategoriesProvider.future);
+/// Kept alive because categories are preloaded before the profile screen.
+@Riverpod(keepAlive: true)
+List<ActivityCategory> frequencySortedCategories(Ref ref) {
+  final categories = ref.watch(activityCategoriesProvider).requireValue;
   final freqRepo = ref.watch(categoryFilterFrequencyRepositoryProvider);
   final frequencies = freqRepo.getFrequencies();
 
