@@ -160,11 +160,17 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
 
       case ChatConnectionStatus.completed:
         if (_currentAiMessageId != null) {
-          // Already finalized during completing — update with suggestions.
-          await _addSuggestionsToFinalizedMessage(next);
-        } else {
-          // Direct completed (e.g. cancellation) — finalize now.
-          await _finalizeMessage(next);
+          final msg = _findMessageById(_currentAiMessageId!);
+          if (msg is TextStreamMessage) {
+            // Buffer-based flow: finalize directly from streaming → completed.
+            // Suggestions are already in the state so they're included in
+            // the finalized TextMessage metadata.
+            await _finalizeMessage(next);
+          } else {
+            // Two-phase flow (completing → completed): already finalized,
+            // just add suggestions.
+            await _addSuggestionsToFinalizedMessage(next);
+          }
         }
 
       case ChatConnectionStatus.error:

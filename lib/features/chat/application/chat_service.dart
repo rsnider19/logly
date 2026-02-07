@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logly/core/providers/logger_provider.dart';
 import 'package:logly/core/services/logger_service.dart';
+import 'package:logly/features/chat/application/typewriter_buffer.dart';
 import 'package:logly/features/chat/data/chat_repository.dart';
 import 'package:logly/features/chat/domain/chat_event.dart';
 import 'package:logly/features/chat/domain/chat_exception.dart';
@@ -156,69 +157,69 @@ class ChatService {
     String? currentStepStatus;
     final completedSteps = <ChatCompletedStep>[];
 
-    final eventStream = _repository
-        .sendQuestion(
-          query: query,
-          previousResponseId: previousResponseId,
-          previousConversionId: previousConversionId,
-          conversationId: inputConversationId,
-        )
-        .timeout(
-          const Duration(seconds: 30),
-          onTimeout: (sink) {
-            sink
-              ..addError(const ChatStallException())
-              ..close();
-          },
-        );
+    // Typewriter buffer: drips characters at 5ms/char during streaming,
+    // then 1ms/char once done. displayText trails fullText until drained.
+    final buffer = TypewriterBuffer();
+    final bufferDone = Completer<void>();
 
-    await for (final event in eventStream) {
-      // Check for user-initiated cancellation
-      if (_cancelled) {
-        _logger.i('Chat stream cancelled by user');
+    // Buffer drip listener — emits display-text updates at typewriter pace.
+    final bufferSub = buffer.stream.listen(
+      (displayText) {
+        if (_cancelled) return;
         onStateUpdate(
           ChatStreamState(
-            status: ChatConnectionStatus.completed,
-            displayText: fullText,
+            status: ChatConnectionStatus.streaming,
+            displayText: displayText,
             fullText: fullText,
+            currentStepName: currentStepName,
+            currentStepStatus: currentStepStatus,
             completedSteps: List.unmodifiable(completedSteps),
             responseId: responseId,
             conversionId: conversionId,
           ),
         );
-        return;
-      }
+      },
+      onDone: () {
+        if (!bufferDone.isCompleted) bufferDone.complete();
+      },
+    );
 
-      switch (event) {
-        case ChatStepEvent():
-          if (event.status == 'complete') {
-            completedSteps.add(ChatCompletedStep(name: event.name));
-            currentStepName = null;
-            currentStepStatus = null;
-          } else {
-            currentStepName = event.name;
-            currentStepStatus = event.status;
-          }
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.streaming,
-              displayText: fullText,
-              fullText: fullText,
-              currentStepName: currentStepName,
-              currentStepStatus: currentStepStatus,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-            ),
+    try {
+      final eventStream = _repository
+          .sendQuestion(
+            query: query,
+            previousResponseId: previousResponseId,
+            previousConversionId: previousConversionId,
+            conversationId: inputConversationId,
+          )
+          .timeout(
+            const Duration(seconds: 30),
+            onTimeout: (sink) {
+              sink
+                ..addError(const ChatStallException())
+                ..close();
+            },
           );
 
-        case ChatTextDeltaEvent(:final delta):
-          if (delta.isNotEmpty) {
-            fullText += delta;
+      await for (final event in eventStream) {
+        // Check for user-initiated cancellation
+        if (_cancelled) return;
+
+        switch (event) {
+          case ChatStepEvent():
+            if (event.status == 'complete') {
+              completedSteps.add(ChatCompletedStep(name: event.name));
+              currentStepName = null;
+              currentStepStatus = null;
+            } else {
+              currentStepName = event.name;
+              currentStepStatus = event.status;
+            }
+            // Emit step update with current dripped text (not full text).
             onStateUpdate(
               ChatStreamState(
                 status: ChatConnectionStatus.streaming,
-                displayText: fullText,
+                displayText: buffer.currentText,
                 fullText: fullText,
                 currentStepName: currentStepName,
                 currentStepStatus: currentStepStatus,
@@ -227,65 +228,51 @@ class ChatService {
                 conversionId: conversionId,
               ),
             );
-          }
 
-        case ChatResponseIdEvent():
-          responseId = event.responseId;
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.streaming,
-              displayText: fullText,
-              fullText: fullText,
-              currentStepName: currentStepName,
-              currentStepStatus: currentStepStatus,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-            ),
-          );
+          case ChatTextDeltaEvent(:final delta):
+            if (delta.isNotEmpty) {
+              fullText += delta;
+              buffer.addDelta(delta);
+              // Display updates come from the buffer.stream listener above.
+            }
 
-        case ChatConversionIdEvent():
-          conversionId = event.conversionId;
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.streaming,
-              displayText: fullText,
-              fullText: fullText,
-              currentStepName: currentStepName,
-              currentStepStatus: currentStepStatus,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-            ),
-          );
+          case ChatResponseIdEvent():
+            responseId = event.responseId;
 
-        case ChatErrorEvent(:final message):
-          throw ChatConnectionException(message);
+          case ChatConversionIdEvent():
+            conversionId = event.conversionId;
 
-        case ChatDoneEvent(conversationId: final doneConversationId):
-          conversationId = doneConversationId;
-          // Text is complete — notify UI so it can finalize the message
-          // while we wait for follow-up suggestions.
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.completing,
-              displayText: fullText,
-              fullText: fullText,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-              conversationId: conversationId,
-            ),
-          );
+          case ChatErrorEvent(:final message):
+            throw ChatConnectionException(message);
 
-        case ChatFollowUpSuggestionsEvent(:final suggestions):
-          followUpSuggestions = suggestions;
+          case ChatDoneEvent(conversationId: final doneConversationId):
+            conversationId = doneConversationId;
+            // No more text deltas — switch buffer to fast drain (1ms/char).
+            // Don't emit completing yet; wait for buffer to fully drain.
+            buffer.markDone();
+
+          case ChatFollowUpSuggestionsEvent(:final suggestions):
+            followUpSuggestions = suggestions;
+        }
       }
+
+      // All SSE events processed. Ensure buffer is marked done (idempotent)
+      // and wait for it to finish draining remaining characters.
+      buffer.markDone();
+      if (!buffer.isComplete) {
+        await bufferDone.future;
+      }
+    } finally {
+      await bufferSub.cancel();
+      buffer.dispose();
     }
 
-    // If cancelled, exit without overwriting state.
+    // If cancelled during drain, exit without overwriting state.
     if (_cancelled) return;
 
+    // Buffer fully drained + all events received → emit completed.
+    // Suggestions are included so the UI can show them immediately
+    // without a separate completing → completed transition.
     onStateUpdate(
       ChatStreamState(
         status: ChatConnectionStatus.completed,
