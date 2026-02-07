@@ -70,7 +70,7 @@ final class MonthlyChartDataProvider
   }
 }
 
-String _$monthlyChartDataHash() => r'eecbdd0b51bee9aa93344f864c5412f87b7d6f70';
+String _$monthlyChartDataHash() => r'0e9cc58d0a309770e3eed89a79285a854166a1e4';
 
 /// Provides filtered chart data based on global category filters.
 
