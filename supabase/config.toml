@@ -322,3 +322,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/chat/deno.json"
 entrypoint = "./functions/chat/index.ts"
+
+[functions.parse-voice-activity]
+enabled = true
+verify_jwt = false
+import_map = "./functions/parse-voice-activity/deno.json"
+entrypoint = "./functions/parse-voice-activity/index.ts"
