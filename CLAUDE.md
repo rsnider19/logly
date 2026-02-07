@@ -46,6 +46,7 @@ This ensures the user sees the changes immediately. If the hot restart fails due
 - **Riverpod** for state management with code generation (`riverpod_annotation`, `riverpod_generator`)
   - when creating a new provider, always use the `riverpod_generator` to generate the provider and the provider notifier. use the `@Riverpod(keepAlive: true)` annotation to keep the provider alive if it is expected to always be in use. if the provider is only used in a specific screen, do not use the `keepAlive` annotation.
   - for Notifier providers, the class name should be formatted like `<classname>StateNotifier` and the generated provider will be formatted like `<classname>StateProvider`.
+  - **NEVER use `ref` inside `State.dispose()`**. The `BuildContext` is invalid at that point. Instead, save any needed provider references (notifiers, values) in fields during `initState()` and use those fields in `dispose()`.
 - **Supabase** for backend (auth, database via PostgREST, storage, edge functions)
 - **Drift** for local SQLite caching and offline support
 
@@ -83,6 +84,24 @@ await supabase
 // RPC (stored procedures)
 final response = await supabase.rpc('get_user_stats', params: {'user_id': userId});
 ```
+
+### Supabase Edge Functions
+
+Edge functions are Deno-based serverless functions that run on Supabase infrastructure. They are located in `supabase/functions/[function-name]/`.
+
+**CRITICAL**: When creating a new edge function, you MUST update `supabase/config.toml` with a configuration block for the function. Without this configuration, the function will not run in the local development environment.
+
+Each edge function requires the following configuration in `supabase/config.toml`:
+
+```toml
+[functions.function-name]
+enabled = true
+verify_jwt = false  # Set to true if the function should verify JWT tokens automatically
+import_map = "./functions/function-name/deno.json"
+entrypoint = "./functions/function-name/index.ts"
+```
+
+**JWT Verification**: Most edge functions should use `verify_jwt = false` and implement manual JWT verification via middleware for better control over authentication logic. Only set to `true` if you want Supabase to automatically verify JWT tokens before the function executes.
 
 ### Database Schema
 
