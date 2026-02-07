@@ -45,7 +45,7 @@ final class VoiceInputStateNotifierProvider
 }
 
 String _$voiceInputStateNotifierHash() =>
-    r'c303080d7291499a1d8aeb51bff84a0b8da47b02';
+    r'be29a55cafbe8ef47068364a85670e80934a1a97';
 
 /// State notifier for managing the voice input flow.
 
