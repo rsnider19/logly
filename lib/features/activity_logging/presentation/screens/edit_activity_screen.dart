@@ -421,8 +421,9 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
               ),
             ),
           ),
-          // Save button
-          SafeArea(
+          // Save button - hidden when keyboard is open
+          if (MediaQuery.of(context).viewInsets.bottom == 0)
+            SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: SizedBox(
