@@ -42,12 +42,17 @@ sealed class ChatEvent with _$ChatEvent {
     required String message,
   }) = ChatErrorEvent;
 
-  /// Stream completion with conversation context and follow-up suggestions.
+  /// Stream completion with conversation context.
   @FreezedUnionValue('done')
   const factory ChatEvent.done({
     @JsonKey(name: 'conversation_id') required String conversationId,
-    @JsonKey(name: 'follow_up_suggestions') @Default([]) List<String> followUpSuggestions,
   }) = ChatDoneEvent;
+
+  /// Follow-up suggestions (arrives after done, before stream closes).
+  @FreezedUnionValue('follow_up_suggestions')
+  const factory ChatEvent.followUpSuggestions({
+    @Default([]) List<String> suggestions,
+  }) = ChatFollowUpSuggestionsEvent;
 
   factory ChatEvent.fromJson(Map<String, dynamic> json) => _$ChatEventFromJson(json);
 }
