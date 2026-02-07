@@ -12,12 +12,14 @@ _VoiceParseResponse _$VoiceParseResponseFromJson(Map<String, dynamic> json) =>
       activities: (json['activities'] as List<dynamic>)
           .map((e) => ActivitySummary.fromJson(e as Map<String, dynamic>))
           .toList(),
+      telemetryId: json['telemetry_id'] as String?,
     );
 
 Map<String, dynamic> _$VoiceParseResponseToJson(_VoiceParseResponse instance) =>
     <String, dynamic>{
       'parsed': instance.parsed.toJson(),
       'activities': instance.activities.map((e) => e.toJson()).toList(),
+      'telemetry_id': instance.telemetryId,
     };
 
 _VoiceParsedData _$VoiceParsedDataFromJson(Map<String, dynamic> json) =>

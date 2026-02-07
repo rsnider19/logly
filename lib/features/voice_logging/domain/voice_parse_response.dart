@@ -15,6 +15,9 @@ abstract class VoiceParseResponse with _$VoiceParseResponse {
 
     /// Top matching activities from hybrid search.
     required List<ActivitySummary> activities,
+
+    /// Optional telemetry ID for tracking voice parsing events.
+    String? telemetryId,
   }) = _VoiceParseResponse;
 
   factory VoiceParseResponse.fromJson(Map<String, dynamic> json) =>

@@ -33,9 +33,21 @@ class VoiceParseRepository {
   /// 3. Returns both parsed data and top 5 matching activities
   Future<VoiceParseResponse> parseAndSearch(String transcript) async {
     try {
+      final now = DateTime.now();
+      final offset = now.timeZoneOffset;
+      final sign = offset.isNegative ? '-' : '+';
+      final hours = offset.inHours.abs().toString().padLeft(2, '0');
+      final minutes = (offset.inMinutes.abs() % 60).toString().padLeft(2, '0');
+      final utcOffset = '$sign$hours:$minutes';
+
       final response = await _supabase.functions.invoke(
         'parse-voice-activity',
-        body: {'transcript': transcript},
+        body: {
+          'transcript': transcript,
+          'timezone': now.timeZoneName,
+          'utc_offset': utcOffset,
+          'local_date': now.toIso8601String(),
+        },
       );
 
       if (response.status != 200) {

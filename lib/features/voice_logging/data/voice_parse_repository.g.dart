@@ -55,4 +55,4 @@ final class VoiceParseRepositoryProvider
 }
 
 String _$voiceParseRepositoryHash() =>
-    r'e94ac23d550c0f51f7b07906c19e8847b697e6db';
+    r'5e3e2e825b0b780b082567f12a9a425c8553697c';

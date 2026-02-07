@@ -17,7 +17,8 @@ mixin _$VoiceParseResponse {
 
 /// The extracted activity data from the voice transcript.
  VoiceParsedData get parsed;/// Top matching activities from hybrid search.
- List<ActivitySummary> get activities;
+ List<ActivitySummary> get activities;/// Optional telemetry ID for tracking voice parsing events.
+ String? get telemetryId;
 /// Create a copy of VoiceParseResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +31,16 @@ $VoiceParseResponseCopyWith<VoiceParseResponse> get copyWith => _$VoiceParseResp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceParseResponse&&(identical(other.parsed, parsed) || other.parsed == parsed)&&const DeepCollectionEquality().equals(other.activities, activities));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is VoiceParseResponse&&(identical(other.parsed, parsed) || other.parsed == parsed)&&const DeepCollectionEquality().equals(other.activities, activities)&&(identical(other.telemetryId, telemetryId) || other.telemetryId == telemetryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,parsed,const DeepCollectionEquality().hash(activities));
+int get hashCode => Object.hash(runtimeType,parsed,const DeepCollectionEquality().hash(activities),telemetryId);
 
 @override
 String toString() {
-  return 'VoiceParseResponse(parsed: $parsed, activities: $activities)';
+  return 'VoiceParseResponse(parsed: $parsed, activities: $activities, telemetryId: $telemetryId)';
 }
 
 
@@ -50,7 +51,7 @@ abstract mixin class $VoiceParseResponseCopyWith<$Res>  {
   factory $VoiceParseResponseCopyWith(VoiceParseResponse value, $Res Function(VoiceParseResponse) _then) = _$VoiceParseResponseCopyWithImpl;
 @useResult
 $Res call({
- VoiceParsedData parsed, List<ActivitySummary> activities
+ VoiceParsedData parsed, List<ActivitySummary> activities, String? telemetryId
 });
 
 
@@ -67,11 +68,12 @@ class _$VoiceParseResponseCopyWithImpl<$Res>
 
 /// Create a copy of VoiceParseResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? parsed = null,Object? activities = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? parsed = null,Object? activities = null,Object? telemetryId = freezed,}) {
   return _then(_self.copyWith(
 parsed: null == parsed ? _self.parsed : parsed // ignore: cast_nullable_to_non_nullable
 as VoiceParsedData,activities: null == activities ? _self.activities : activities // ignore: cast_nullable_to_non_nullable
-as List<ActivitySummary>,
+as List<ActivitySummary>,telemetryId: freezed == telemetryId ? _self.telemetryId : telemetryId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 /// Create a copy of VoiceParseResponse
@@ -165,10 +167,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( VoiceParsedData parsed,  List<ActivitySummary> activities)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( VoiceParsedData parsed,  List<ActivitySummary> activities,  String? telemetryId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _VoiceParseResponse() when $default != null:
-return $default(_that.parsed,_that.activities);case _:
+return $default(_that.parsed,_that.activities,_that.telemetryId);case _:
   return orElse();
 
 }
@@ -186,10 +188,10 @@ return $default(_that.parsed,_that.activities);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( VoiceParsedData parsed,  List<ActivitySummary> activities)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( VoiceParsedData parsed,  List<ActivitySummary> activities,  String? telemetryId)  $default,) {final _that = this;
 switch (_that) {
 case _VoiceParseResponse():
-return $default(_that.parsed,_that.activities);case _:
+return $default(_that.parsed,_that.activities,_that.telemetryId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +208,10 @@ return $default(_that.parsed,_that.activities);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( VoiceParsedData parsed,  List<ActivitySummary> activities)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( VoiceParsedData parsed,  List<ActivitySummary> activities,  String? telemetryId)?  $default,) {final _that = this;
 switch (_that) {
 case _VoiceParseResponse() when $default != null:
-return $default(_that.parsed,_that.activities);case _:
+return $default(_that.parsed,_that.activities,_that.telemetryId);case _:
   return null;
 
 }
@@ -221,7 +223,7 @@ return $default(_that.parsed,_that.activities);case _:
 @JsonSerializable()
 
 class _VoiceParseResponse implements VoiceParseResponse {
-  const _VoiceParseResponse({required this.parsed, required final  List<ActivitySummary> activities}): _activities = activities;
+  const _VoiceParseResponse({required this.parsed, required final  List<ActivitySummary> activities, this.telemetryId}): _activities = activities;
   factory _VoiceParseResponse.fromJson(Map<String, dynamic> json) => _$VoiceParseResponseFromJson(json);
 
 /// The extracted activity data from the voice transcript.
@@ -235,6 +237,8 @@ class _VoiceParseResponse implements VoiceParseResponse {
   return EqualUnmodifiableListView(_activities);
 }
 
+/// Optional telemetry ID for tracking voice parsing events.
+@override final  String? telemetryId;
 
 /// Create a copy of VoiceParseResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VoiceParseResponse&&(identical(other.parsed, parsed) || other.parsed == parsed)&&const DeepCollectionEquality().equals(other._activities, _activities));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _VoiceParseResponse&&(identical(other.parsed, parsed) || other.parsed == parsed)&&const DeepCollectionEquality().equals(other._activities, _activities)&&(identical(other.telemetryId, telemetryId) || other.telemetryId == telemetryId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,parsed,const DeepCollectionEquality().hash(_activities));
+int get hashCode => Object.hash(runtimeType,parsed,const DeepCollectionEquality().hash(_activities),telemetryId);
 
 @override
 String toString() {
-  return 'VoiceParseResponse(parsed: $parsed, activities: $activities)';
+  return 'VoiceParseResponse(parsed: $parsed, activities: $activities, telemetryId: $telemetryId)';
 }
 
 
@@ -269,7 +273,7 @@ abstract mixin class _$VoiceParseResponseCopyWith<$Res> implements $VoiceParseRe
   factory _$VoiceParseResponseCopyWith(_VoiceParseResponse value, $Res Function(_VoiceParseResponse) _then) = __$VoiceParseResponseCopyWithImpl;
 @override @useResult
 $Res call({
- VoiceParsedData parsed, List<ActivitySummary> activities
+ VoiceParsedData parsed, List<ActivitySummary> activities, String? telemetryId
 });
 
 
@@ -286,11 +290,12 @@ class __$VoiceParseResponseCopyWithImpl<$Res>
 
 /// Create a copy of VoiceParseResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? parsed = null,Object? activities = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? parsed = null,Object? activities = null,Object? telemetryId = freezed,}) {
   return _then(_VoiceParseResponse(
 parsed: null == parsed ? _self.parsed : parsed // ignore: cast_nullable_to_non_nullable
 as VoiceParsedData,activities: null == activities ? _self._activities : activities // ignore: cast_nullable_to_non_nullable
-as List<ActivitySummary>,
+as List<ActivitySummary>,telemetryId: freezed == telemetryId ? _self.telemetryId : telemetryId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
