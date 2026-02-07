@@ -25,6 +25,8 @@ import 'package:logly/features/activity_logging/presentation/widgets/subactivity
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/settings/domain/user_preferences.dart';
 import 'package:logly/features/settings/presentation/providers/preferences_provider.dart';
+import 'package:logly/features/voice_logging/domain/voice_parse_response.dart';
+import 'package:logly/features/voice_logging/presentation/providers/voice_input_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -72,14 +74,60 @@ class _LogActivityScreenState extends ConsumerState<LogActivityScreen> {
             ) ??
             true;
 
-        ref
-            .read(activityFormStateProvider.notifier)
-            .initForCreate(
-              activity,
-              initialDate: widget.initialDate,
-              isMetric: isMetric,
-            );
+        final notifier = ref.read(activityFormStateProvider.notifier);
+        notifier.initForCreate(
+          activity,
+          initialDate: widget.initialDate,
+          isMetric: isMetric,
+        );
+
+        // Apply voice prepopulation if available
+        final voicePrepop = ref.read(voicePrepopulationProvider);
+        if (voicePrepop != null) {
+          _applyVoicePrepopulation(notifier, activity, voicePrepop);
+          ref.read(voicePrepopulationProvider.notifier).clear();
+        }
       });
+    }
+  }
+
+  void _applyVoicePrepopulation(
+    ActivityFormStateNotifier notifier,
+    Activity activity,
+    VoiceParsedData prepop,
+  ) {
+    // Apply duration to first duration detail
+    if (prepop.duration != null) {
+      final durationDetail = activity.activityDetail
+          .where((d) => d.activityDetailType == ActivityDetailType.duration)
+          .firstOrNull;
+      if (durationDetail != null) {
+        notifier.setDurationValue(durationDetail.activityDetailId, prepop.duration!.seconds);
+      }
+    }
+
+    // Apply distance to first distance detail
+    if (prepop.distance != null) {
+      final distanceDetail = activity.activityDetail
+          .where((d) => d.activityDetailType == ActivityDetailType.distance)
+          .firstOrNull;
+      if (distanceDetail != null) {
+        notifier.setDistanceValue(distanceDetail.activityDetailId, prepop.distance!.meters);
+      }
+    }
+
+    // Apply date if provided
+    if (prepop.date != null) {
+      final parsedDate = DateTime.tryParse(prepop.date!.iso);
+      if (parsedDate != null) {
+        notifier.setActivityDate(parsedDate);
+      }
+    }
+
+    // Apply comments if there's leftover text
+    if (prepop.comments != null && prepop.comments!.isNotEmpty) {
+      notifier.setComments(prepop.comments);
+      _commentsController.text = prepop.comments!;
     }
   }
 
