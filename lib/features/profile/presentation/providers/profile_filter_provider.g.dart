@@ -57,7 +57,7 @@ final class ProfileFilterStateNotifierProvider
 }
 
 String _$profileFilterStateNotifierHash() =>
-    r'1fa3a81d06b93a31d76d6c6f991310f4a0808933';
+    r'e3bf4b45ef91f7d9cc4b324211fe991328140325';
 
 /// Global filter state notifier for the profile screen.
 ///
@@ -184,3 +184,74 @@ final class GlobalTimePeriodProvider
 }
 
 String _$globalTimePeriodHash() => r'da1c434ffe2173250a913a344cc3321e6c6a0ee6';
+
+/// Provides activity categories sorted by filter toggle frequency.
+///
+/// Reads frequency data from SharedPreferences and sorts categories by
+/// descending frequency. Categories with no recorded taps fall back to
+/// their default [ActivityCategory.sortOrder].
+///
+/// Kept alive because categories are preloaded before the profile screen.
+
+@ProviderFor(frequencySortedCategories)
+final frequencySortedCategoriesProvider = FrequencySortedCategoriesProvider._();
+
+/// Provides activity categories sorted by filter toggle frequency.
+///
+/// Reads frequency data from SharedPreferences and sorts categories by
+/// descending frequency. Categories with no recorded taps fall back to
+/// their default [ActivityCategory.sortOrder].
+///
+/// Kept alive because categories are preloaded before the profile screen.
+
+final class FrequencySortedCategoriesProvider
+    extends
+        $FunctionalProvider<
+          List<ActivityCategory>,
+          List<ActivityCategory>,
+          List<ActivityCategory>
+        >
+    with $Provider<List<ActivityCategory>> {
+  /// Provides activity categories sorted by filter toggle frequency.
+  ///
+  /// Reads frequency data from SharedPreferences and sorts categories by
+  /// descending frequency. Categories with no recorded taps fall back to
+  /// their default [ActivityCategory.sortOrder].
+  ///
+  /// Kept alive because categories are preloaded before the profile screen.
+  FrequencySortedCategoriesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'frequencySortedCategoriesProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$frequencySortedCategoriesHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<ActivityCategory>> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  List<ActivityCategory> create(Ref ref) {
+    return frequencySortedCategories(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<ActivityCategory> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<ActivityCategory>>(value),
+    );
+  }
+}
+
+String _$frequencySortedCategoriesHash() =>
+    r'1a0a9a321912b6d1636a4e36b6e76dccfaeba3fb';

@@ -43,7 +43,7 @@ class ProfileScreen extends ConsumerWidget {
               ),
             ],
             bottom: const PreferredSize(
-              preferredSize: Size.fromHeight(120),
+              preferredSize: Size.fromHeight(104),
               child: ProfileFilterBar(),
             ),
           ),
