@@ -14,14 +14,19 @@ part of 'search_section_expansion_provider.dart';
 /// across app sessions. All sections default to expanded.
 
 @ProviderFor(SearchSectionExpansionStateNotifier)
-final searchSectionExpansionStateProvider = SearchSectionExpansionStateNotifierProvider._();
+final searchSectionExpansionStateProvider =
+    SearchSectionExpansionStateNotifierProvider._();
 
 /// Manages expand/collapse state for search screen sections.
 ///
 /// Persists state to SharedPreferences so expansion state is preserved
 /// across app sessions. All sections default to expanded.
 final class SearchSectionExpansionStateNotifierProvider
-    extends $NotifierProvider<SearchSectionExpansionStateNotifier, Map<String, bool>> {
+    extends
+        $NotifierProvider<
+          SearchSectionExpansionStateNotifier,
+          Map<String, bool>
+        > {
   /// Manages expand/collapse state for search screen sections.
   ///
   /// Persists state to SharedPreferences so expansion state is preserved
@@ -38,11 +43,13 @@ final class SearchSectionExpansionStateNotifierProvider
       );
 
   @override
-  String debugGetCreateSourceHash() => _$searchSectionExpansionStateNotifierHash();
+  String debugGetCreateSourceHash() =>
+      _$searchSectionExpansionStateNotifierHash();
 
   @$internal
   @override
-  SearchSectionExpansionStateNotifier create() => SearchSectionExpansionStateNotifier();
+  SearchSectionExpansionStateNotifier create() =>
+      SearchSectionExpansionStateNotifier();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(Map<String, bool> value) {
@@ -53,14 +60,16 @@ final class SearchSectionExpansionStateNotifierProvider
   }
 }
 
-String _$searchSectionExpansionStateNotifierHash() => r'c417fd367190b0e743ec7aef16047f53c1c1aab0';
+String _$searchSectionExpansionStateNotifierHash() =>
+    r'c417fd367190b0e743ec7aef16047f53c1c1aab0';
 
 /// Manages expand/collapse state for search screen sections.
 ///
 /// Persists state to SharedPreferences so expansion state is preserved
 /// across app sessions. All sections default to expanded.
 
-abstract class _$SearchSectionExpansionStateNotifier extends $Notifier<Map<String, bool>> {
+abstract class _$SearchSectionExpansionStateNotifier
+    extends $Notifier<Map<String, bool>> {
   Map<String, bool> build();
   @$mustCallSuper
   @override

@@ -45,7 +45,7 @@ final class PendingSaveStateNotifierProvider
 }
 
 String _$pendingSaveStateNotifierHash() =>
-    r'8c00b9ea883d2c1fc87831696b2bd717d29990a8';
+    r'bfd4d853e8bd3f1a9dfecb3b6993a7dc951d6d15';
 
 /// Orchestrates optimistic background saving for single-day activity creation.
 

@@ -11,7 +11,8 @@ part of 'scaffold_messenger_provider.dart';
 /// Provides the [ScaffoldMessengerState] for showing snackbars from anywhere.
 
 @ProviderFor(scaffoldMessengerKeyProvider)
-final scaffoldMessengerKeyProviderProvider = ScaffoldMessengerKeyProviderProvider._();
+final scaffoldMessengerKeyProviderProvider =
+    ScaffoldMessengerKeyProviderProvider._();
 
 /// Provides the [ScaffoldMessengerState] for showing snackbars from anywhere.
 
@@ -60,4 +61,5 @@ final class ScaffoldMessengerKeyProviderProvider
   }
 }
 
-String _$scaffoldMessengerKeyProviderHash() => r'cd84ccfd70b6d5391902cf3372b15633b2456640';
+String _$scaffoldMessengerKeyProviderHash() =>
+    r'cd84ccfd70b6d5391902cf3372b15633b2456640';

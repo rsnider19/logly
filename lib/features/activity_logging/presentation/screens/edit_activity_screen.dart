@@ -160,10 +160,17 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
       setState(() => _isDeleting = true);
 
       try {
-        final service = ref.read(activityLoggingServiceProvider);
-        await service.deleteActivity(widget.userActivityId);
+        // Create deletion request
+        final request = PendingDeleteRequest(
+          userActivityId: widget.userActivityId,
+          originalEntry: _userActivity!,
+        );
+
+        // Submit optimistic deletion
+        ref.read(pendingSaveStateProvider.notifier).submitOptimisticDelete(request);
 
         if (mounted) {
+          // Show immediate feedback and pop
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Activity deleted'),
@@ -173,6 +180,8 @@ class _EditActivityScreenState extends ConsumerState<EditActivityScreen> {
           context.pop(true);
         }
       } catch (e) {
+        // This catch is just for synchronous errors (e.g., null userActivity)
+        // Async errors are handled in the provider
         if (mounted) {
           setState(() => _isDeleting = false);
           ScaffoldMessenger.of(context).showSnackBar(

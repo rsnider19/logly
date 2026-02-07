@@ -50,6 +50,18 @@ class PendingUpdateRequest {
   final UserActivity optimisticEntry;
 }
 
+/// Holds the data needed to perform an optimistic deletion in the background.
+@immutable
+class PendingDeleteRequest {
+  const PendingDeleteRequest({
+    required this.userActivityId,
+    required this.originalEntry,
+  });
+
+  final String userActivityId;
+  final UserActivity originalEntry;
+}
+
 /// Orchestrates optimistic background saving for single-day activity creation.
 @Riverpod(keepAlive: true)
 class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
@@ -161,6 +173,48 @@ class PendingSaveStateNotifier extends _$PendingSaveStateNotifier {
             action: SnackBarAction(
               label: 'Retry',
               onPressed: () => submitOptimisticUpdate(request),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  /// Removes an entry optimistically and fires the real delete in the background.
+  void submitOptimisticDelete(PendingDeleteRequest request) {
+    // Optimistically remove from home screen
+    ref
+        .read(dailyActivitiesStateProvider.notifier)
+        .removeOptimisticEntry(request.userActivityId);
+
+    // Fire background delete (intentionally not awaited)
+    unawaited(_performDelete(request));
+  }
+
+  Future<void> _performDelete(PendingDeleteRequest request) async {
+    try {
+      final service = ref.read(activityLoggingServiceProvider);
+      await service.deleteActivity(request.userActivityId);
+
+      // Refresh all activity providers with the real data
+      await _refreshActivityProviders();
+    } catch (e) {
+      // Re-add the original entry on failure (rollback)
+      ref
+          .read(dailyActivitiesStateProvider.notifier)
+          .addOptimisticEntry(request.originalEntry);
+
+      // Show error snackbar with retry
+      final messengerKey = ref.read(scaffoldMessengerKeyProviderProvider);
+      final messengerState = messengerKey.currentState;
+      if (messengerState != null) {
+        messengerState.showSnackBar(
+          SnackBar(
+            content: const Text('Failed to delete activity'),
+            behavior: SnackBarBehavior.floating,
+            action: SnackBarAction(
+              label: 'Retry',
+              onPressed: () => submitOptimisticDelete(request),
             ),
           ),
         );
