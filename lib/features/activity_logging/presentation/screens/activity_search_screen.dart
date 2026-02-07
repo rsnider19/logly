@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/activity_provider.dart';
@@ -28,10 +29,12 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 class ActivitySearchScreen extends ConsumerStatefulWidget {
   const ActivitySearchScreen({
     this.initialDate,
+    this.entryPoint,
     super.key,
   });
 
   final DateTime? initialDate;
+  final String? entryPoint;
 
   @override
   ConsumerState<ActivitySearchScreen> createState() => _ActivitySearchScreenState();
@@ -41,6 +44,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
   late TextEditingController _searchController;
   late DateTime _selectedDate;
   final FocusNode _searchFocusNode = FocusNode();
+  String? _lastTrackedQuery;
 
   @override
   void initState() {
@@ -83,13 +87,16 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
     LogActivityRoute(
       activityId: activity.activityId,
       date: _selectedDate.toIso8601String(),
+      entryPoint: widget.entryPoint,
     ).pushReplacement(context);
   }
 
   void _navigateToCategory(ActivityCategory category) {
+    ref.read(analyticsServiceProvider).trackCategoryBrowsed(categoryName: category.name);
     CategoryDetailRoute(
       categoryId: category.activityCategoryId,
       date: _selectedDate.toIso8601String(),
+      entryPoint: widget.entryPoint,
     ).pushReplacement(context);
   }
 
@@ -167,6 +174,13 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
 
     return searchResultsAsync.when(
       data: (activities) {
+        if (searchQuery != _lastTrackedQuery) {
+          _lastTrackedQuery = searchQuery;
+          ref.read(analyticsServiceProvider).trackActivitySearchPerformed(
+            query: searchQuery,
+            resultCount: activities.length,
+          );
+        }
         final showCreateOption = searchQuery.trim().length >= 2 && !_hasExactMatch(activities, searchQuery);
 
         if (activities.isEmpty) {
@@ -294,7 +308,7 @@ class _ActivitySearchScreenState extends ConsumerState<ActivitySearchScreen> {
         ),
         onTap: hasAccess
             ? () => _navigateToCreateActivity(searchQuery)
-            : () => ref.read(subscriptionServiceProvider).showPaywall(),
+            : () => ref.read(subscriptionServiceProvider).showPaywall(source: 'create_custom_activity'),
       ),
     );
   }

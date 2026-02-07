@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/profile/presentation/providers/streak_provider.dart';
 import 'package:logly/widgets/skeleton_loader.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -30,7 +31,7 @@ class StreakCard extends ConsumerWidget {
   }
 }
 
-class _StreakContent extends StatefulWidget {
+class _StreakContent extends ConsumerStatefulWidget {
   const _StreakContent({
     required this.currentStreak,
     required this.longestStreak,
@@ -42,10 +43,10 @@ class _StreakContent extends StatefulWidget {
   final double consistencyScore;
 
   @override
-  State<_StreakContent> createState() => _StreakContentState();
+  ConsumerState<_StreakContent> createState() => _StreakContentState();
 }
 
-class _StreakContentState extends State<_StreakContent> {
+class _StreakContentState extends ConsumerState<_StreakContent> {
   final autoSizeGroup = AutoSizeGroup();
 
   void _showConsistencyInfo(BuildContext context) {
@@ -93,6 +94,8 @@ class _StreakContentState extends State<_StreakContent> {
 
   @override
   Widget build(BuildContext context) {
+    final analyticsService = ref.read(analyticsServiceProvider);
+
     return Row(
       children: [
         Expanded(
@@ -103,6 +106,7 @@ class _StreakContentState extends State<_StreakContent> {
             iconColor: Colors.orange,
             autoSizeGroup: autoSizeGroup,
             placeholderText: '8888',
+            onTap: () => analyticsService.trackStreakCardTapped(cardType: 'current'),
           ),
         ),
         const SizedBox(width: 16),
@@ -114,6 +118,7 @@ class _StreakContentState extends State<_StreakContent> {
             iconColor: Colors.amber,
             autoSizeGroup: autoSizeGroup,
             placeholderText: '8888',
+            onTap: () => analyticsService.trackStreakCardTapped(cardType: 'longest'),
           ),
         ),
         const SizedBox(width: 16),
@@ -127,7 +132,10 @@ class _StreakContentState extends State<_StreakContent> {
             autoSizeGroup: autoSizeGroup,
             placeholderText: '888%',
             showInfoIcon: true,
-            onTap: () => _showConsistencyInfo(context),
+            onTap: () {
+              analyticsService.trackStreakCardTapped(cardType: 'consistency');
+              _showConsistencyInfo(context);
+            },
           ),
         ),
       ],

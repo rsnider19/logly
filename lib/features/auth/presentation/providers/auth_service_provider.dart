@@ -1,5 +1,6 @@
 import 'package:logly/app/database/database_provider.dart';
 import 'package:logly/core/providers/logger_provider.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/activity_logging/presentation/providers/search_section_expansion_provider.dart';
 import 'package:logly/features/auth/data/auth_repository.dart';
@@ -28,6 +29,16 @@ class AuthService {
     _logger.i('Initiating Apple sign-in');
     final response = await _repository.signInWithApple();
     _logger.i('Apple sign-in successful for user: ${response.user?.id}');
+    final user = response.user;
+    if (user != null) {
+      final isNewUser = DateTime.now().difference(DateTime.parse(user.createdAt)).inSeconds < 10;
+      final analytics = _ref.read(analyticsServiceProvider);
+      if (isNewUser) {
+        analytics.trackSignUpCompleted(authProvider: 'apple');
+      } else {
+        analytics.trackSignInCompleted(authProvider: 'apple');
+      }
+    }
     return response;
   }
 
@@ -40,6 +51,16 @@ class AuthService {
     _logger.i('Initiating Google sign-in');
     final response = await _repository.signInWithGoogle();
     _logger.i('Google sign-in successful for user: ${response.user?.id}');
+    final user = response.user;
+    if (user != null) {
+      final isNewUser = DateTime.now().difference(DateTime.parse(user.createdAt)).inSeconds < 10;
+      final analytics = _ref.read(analyticsServiceProvider);
+      if (isNewUser) {
+        analytics.trackSignUpCompleted(authProvider: 'google');
+      } else {
+        analytics.trackSignInCompleted(authProvider: 'google');
+      }
+    }
     return response;
   }
 

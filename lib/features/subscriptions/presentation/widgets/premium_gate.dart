@@ -156,7 +156,7 @@ class _DefaultLockedContent extends ConsumerWidget {
   }
 
   Future<void> _showPaywall(WidgetRef ref) async {
-    await ref.read(subscriptionServiceProvider).showPaywall();
+    await ref.read(subscriptionServiceProvider).showPaywall(source: 'premium_gate');
     // No need to manually invalidate - the StateNotifier listens for updates
   }
 }

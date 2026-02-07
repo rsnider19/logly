@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/activity_logging/presentation/providers/activity_statistics_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -31,6 +32,7 @@ class ActivityStatisticsScreen extends ConsumerStatefulWidget {
 
 class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScreen> {
   late DateTime _focusedDay;
+  bool _hasTrackedView = false;
 
   Color get _dotColor {
     if (widget.colorHex != null && widget.colorHex!.isNotEmpty) {
@@ -56,6 +58,14 @@ class _ActivityStatisticsScreenState extends ConsumerState<ActivityStatisticsScr
     final statsAsync = ref.watch(
       activityMonthStatisticsProvider(widget.activityId, _focusedDay.year, _focusedDay.month),
     );
+
+    if (!_hasTrackedView && statsAsync is AsyncData) {
+      _hasTrackedView = true;
+      ref.read(analyticsServiceProvider).trackActivityStatsViewed(
+        activityName: widget.activityName,
+        category: statsAsync.value?.activity?.activityCategory?.name ?? '',
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(

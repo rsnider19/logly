@@ -59,4 +59,4 @@ final class CustomActivityServiceProvider
 }
 
 String _$customActivityServiceHash() =>
-    r'7474ed2ab9ac760bc9e49ca4d891138fa96bb252';
+    r'942843c5ffedd45ffc9187efd0c69478aa4f9d44';

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/onboarding/application/onboarding_service.dart';
 
 /// Content widget for health permission request, extracted from HealthPermissionScreen.
@@ -30,12 +31,23 @@ class _HealthContentState extends ConsumerState<HealthContent> {
 
   IconData get _platformIcon => Platform.isIOS ? Icons.favorite : LucideIcons.heartPulse;
 
+  String get _analyticsPlatform => Platform.isIOS ? 'apple_health' : 'google_fit';
+
   Future<void> _requestPermissions() async {
     setState(() => _isRequesting = true);
+
+    final analyticsService = ref.read(analyticsServiceProvider);
+    analyticsService.trackHealthPermissionRequested(platform: _analyticsPlatform);
 
     try {
       final service = ref.read(onboardingServiceProvider);
       final granted = await service.requestHealthPermissions();
+
+      if (granted) {
+        analyticsService.trackHealthPermissionGranted(platform: _analyticsPlatform);
+      } else {
+        analyticsService.trackHealthPermissionDenied(platform: _analyticsPlatform);
+      }
 
       if (mounted) {
         if (!granted) {
@@ -49,6 +61,7 @@ class _HealthContentState extends ConsumerState<HealthContent> {
         widget.onComplete?.call();
       }
     } catch (e) {
+      analyticsService.trackHealthPermissionDenied(platform: _analyticsPlatform);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

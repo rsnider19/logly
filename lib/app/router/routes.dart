@@ -176,10 +176,13 @@ class OnboardingSetupRoute extends GoRouteData with $OnboardingSetupRoute {
 /// Activity search route - search and select activities to log.
 @TypedGoRoute<ActivitySearchRoute>(path: '/activities/search')
 class ActivitySearchRoute extends GoRouteData with $ActivitySearchRoute {
-  const ActivitySearchRoute({this.date});
+  const ActivitySearchRoute({this.date, this.entryPoint});
 
   /// Optional initial date for the activity (ISO 8601 string).
   final String? date;
+
+  /// Analytics entry point tracking (plus_icon, date_row, logly_it_chip).
+  final String? entryPoint;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -187,7 +190,7 @@ class ActivitySearchRoute extends GoRouteData with $ActivitySearchRoute {
     if (date != null) {
       initialDate = DateTime.tryParse(date!);
     }
-    return ActivitySearchScreen(initialDate: initialDate);
+    return ActivitySearchScreen(initialDate: initialDate, entryPoint: entryPoint);
   }
 }
 
@@ -199,6 +202,7 @@ class LogActivityRoute extends GoRouteData with $LogActivityRoute {
   const LogActivityRoute({
     required this.activityId,
     this.date,
+    this.entryPoint,
   });
 
   /// The ID of the activity to log.
@@ -206,6 +210,9 @@ class LogActivityRoute extends GoRouteData with $LogActivityRoute {
 
   /// Optional initial date for the activity (ISO 8601 string).
   final String? date;
+
+  /// Analytics entry point tracking (plus_icon, date_row, logly_it_chip).
+  final String? entryPoint;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -217,6 +224,7 @@ class LogActivityRoute extends GoRouteData with $LogActivityRoute {
     return LogActivityScreen(
       activityId: activityId,
       initialDate: initialDate,
+      entryPoint: entryPoint,
     );
   }
 }
@@ -227,6 +235,7 @@ class CategoryDetailRoute extends GoRouteData with $CategoryDetailRoute {
   const CategoryDetailRoute({
     required this.categoryId,
     this.date,
+    this.entryPoint,
   });
 
   /// The ID of the category to display.
@@ -234,6 +243,9 @@ class CategoryDetailRoute extends GoRouteData with $CategoryDetailRoute {
 
   /// Optional initial date for logging activities (ISO 8601 string).
   final String? date;
+
+  /// Analytics entry point tracking.
+  final String? entryPoint;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
@@ -244,6 +256,7 @@ class CategoryDetailRoute extends GoRouteData with $CategoryDetailRoute {
     return CategoryDetailScreen(
       categoryId: categoryId,
       initialDate: initialDate,
+      entryPoint: entryPoint,
     );
   }
 }

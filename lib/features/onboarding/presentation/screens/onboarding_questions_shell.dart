@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_answers_provider.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
 import 'package:logly/features/onboarding/presentation/widgets/onboarding_top_bar.dart';
@@ -39,6 +40,16 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   /// Pages: [transition, gender, birthday, units, motivations, progressPrefs, userDescriptors]
   static const _totalPages = _totalQuestions + 1;
 
+  static const _stepNames = [
+    'transition',
+    'gender',
+    'birthday',
+    'units',
+    'motivations',
+    'progress_preferences',
+    'user_descriptors',
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +73,12 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   int get _currentSegment => _currentPage;
 
   Future<void> _next() async {
+    ref.read(analyticsServiceProvider).trackOnboardingStepCompleted(
+      stepName: _stepNames[_currentPage],
+      stepNumber: _currentPage,
+      skipped: false,
+    );
+
     if (_isLastQuestion) {
       if (_isFromSettings) {
         // Persist answers and return to settings
@@ -95,6 +112,11 @@ class _OnboardingQuestionsShellState extends ConsumerState<OnboardingQuestionsSh
   }
 
   void _skip() {
+    ref.read(analyticsServiceProvider).trackOnboardingStepCompleted(
+      stepName: _stepNames[_currentPage],
+      stepNumber: _currentPage,
+      skipped: true,
+    );
     context.go('/auth');
   }
 

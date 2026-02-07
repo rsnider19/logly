@@ -10,8 +10,10 @@ import 'package:growthbook_sdk_flutter/growthbook_sdk_flutter.dart';
 import 'package:logly/core/exceptions/app_exception.dart';
 import 'package:logly/core/providers/growthbook_provider.dart';
 import 'package:logly/core/providers/shared_preferences_provider.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/core/services/env_service.dart';
 import 'package:logly/core/services/feature_flag_service.dart';
+import 'package:logly/core/services/logger_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -99,6 +101,13 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder, String envPa
     debugPrint('✓ RevenueCat configured');
   }
 
+  // Initialize Mixpanel analytics (before GrowthBook so experiments can forward)
+  final analyticsService = AnalyticsService(LoggerService());
+  await analyticsService.initialize();
+  if (kDebugMode) {
+    debugPrint('✓ Mixpanel ${analyticsService.isInitialized ? "initialized" : "disabled (no token)"}');
+  }
+
   // Initialize GrowthBook feature flags
   final packageInfo = await PackageInfo.fromPlatform();
   final gbSdk = await GBSDKBuilderApp(
@@ -118,7 +127,12 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder, String envPa
           '${trackData.experimentResult.inExperiment ? '' : ' [not in experiment]'}',
         );
       }
-      // TODO: Forward to Mixpanel when initialized
+      // Forward experiment assignments to Mixpanel
+      analyticsService.trackExperimentViewed(
+        experimentKey: trackData.experiment.key,
+        variationId: trackData.experimentResult.variationID ?? 0,
+        variationKey: trackData.experimentResult.key,
+      );
       if (Sentry.isEnabled) {
         Sentry.addBreadcrumb(
           Breadcrumb(
@@ -162,6 +176,7 @@ Future<void> _initializeAndRun(FutureOr<Widget> Function() builder, String envPa
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
         growthBookProvider.overrideWithValue(gbSdk),
+        analyticsServiceProvider.overrideWithValue(analyticsService),
       ],
       child: await builder(),
     ),

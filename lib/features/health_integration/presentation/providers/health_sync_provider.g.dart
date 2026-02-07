@@ -45,7 +45,7 @@ final class HealthSyncStateNotifierProvider
 }
 
 String _$healthSyncStateNotifierHash() =>
-    r'3811e9691e1e705c3b0171fa1a519f8c8f3cae9c';
+    r'9717e5d43572f2e18a6de6ab6885f87b4b2c1eb7';
 
 /// Notifier for managing health sync state.
 

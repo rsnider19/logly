@@ -49,7 +49,7 @@ class _CustomNameInputState extends ConsumerState<CustomNameInput> {
   }
 
   Future<void> _showPaywall() async {
-    await ref.read(subscriptionServiceProvider).showPaywall();
+    await ref.read(subscriptionServiceProvider).showPaywall(source: 'custom_name');
   }
 
   @override

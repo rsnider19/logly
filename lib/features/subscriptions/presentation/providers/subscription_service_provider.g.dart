@@ -59,4 +59,4 @@ final class SubscriptionServiceProvider
 }
 
 String _$subscriptionServiceHash() =>
-    r'1f41f8e9f20e0308edab18442f4759ac664e5846';
+    r'17818144795345aa8e614ef98a930f58c4f35873';

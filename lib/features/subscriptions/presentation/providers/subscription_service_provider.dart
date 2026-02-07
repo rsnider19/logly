@@ -1,4 +1,5 @@
 import 'package:logly/core/providers/logger_provider.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/core/services/logger_service.dart';
 import 'package:logly/features/subscriptions/data/subscription_repository.dart';
 import 'package:logly/features/subscriptions/domain/feature_code.dart';
@@ -12,10 +13,11 @@ part 'subscription_service_provider.g.dart';
 ///
 /// Coordinates repository calls and provides feature access control.
 class SubscriptionService {
-  SubscriptionService(this._repository, this._logger);
+  SubscriptionService(this._repository, this._logger, this._analytics);
 
   final SubscriptionRepository _repository;
   final LoggerService _logger;
+  final AnalyticsService _analytics;
 
   /// Checks if the current user has access to a specific premium feature.
   ///
@@ -37,7 +39,8 @@ class SubscriptionService {
   }
 
   /// Shows the paywall and returns true if a purchase was made.
-  Future<bool> showPaywall() async {
+  Future<bool> showPaywall({String source = 'unknown'}) async {
+    _analytics.trackSubscriptionViewed(source: source);
     return _repository.showPaywall();
   }
 
@@ -56,5 +59,6 @@ SubscriptionService subscriptionService(Ref ref) {
   return SubscriptionService(
     ref.watch(subscriptionRepositoryProvider),
     ref.watch(loggerProvider),
+    ref.watch(analyticsServiceProvider),
   );
 }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/health_integration/application/health_sync_service.dart';
 import 'package:logly/features/health_integration/domain/health_exception.dart';
 import 'package:logly/features/health_integration/domain/sync_result.dart';
@@ -66,6 +69,10 @@ class HealthSyncStateNotifier extends _$HealthSyncStateNotifier {
   Future<void> sync({DateTime? fromDate}) async {
     if (state.isSyncing) return;
 
+    final stopwatch = Stopwatch()..start();
+    final platform = Platform.isIOS ? 'apple_health' : 'google_fit';
+    ref.read(analyticsServiceProvider).trackHealthSyncStarted(platform: platform);
+
     state = state.copyWith(
       isSyncing: true,
       errorMessage: null,
@@ -93,6 +100,11 @@ class HealthSyncStateNotifier extends _$HealthSyncStateNotifier {
         currentMonth: 0,
         totalMonths: 0,
       );
+      ref.read(analyticsServiceProvider).trackHealthSyncCompleted(
+        platform: platform,
+        activitiesSyncedCount: result.created,
+        durationSeconds: stopwatch.elapsed.inSeconds,
+      );
     } on HealthException catch (e) {
       state = state.copyWith(
         isSyncing: false,
@@ -100,12 +112,20 @@ class HealthSyncStateNotifier extends _$HealthSyncStateNotifier {
         currentMonth: 0,
         totalMonths: 0,
       );
+      ref.read(analyticsServiceProvider).trackHealthSyncFailed(
+        platform: platform,
+        errorType: e.runtimeType.toString(),
+      );
     } catch (e) {
       state = state.copyWith(
         isSyncing: false,
         errorMessage: 'An unexpected error occurred. Please try again.',
         currentMonth: 0,
         totalMonths: 0,
+      );
+      ref.read(analyticsServiceProvider).trackHealthSyncFailed(
+        platform: platform,
+        errorType: e.runtimeType.toString(),
       );
     }
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logly/app/router/routes.dart';
+import 'package:logly/core/services/analytics_route_observer.dart';
+import 'package:logly/core/services/analytics_service.dart';
 import 'package:logly/features/auth/presentation/providers/auth_state_provider.dart';
 import 'package:logly/features/onboarding/presentation/providers/onboarding_status_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,11 +23,14 @@ GoRouter appRouter(Ref ref) {
   ref.listen(currentUserProvider, (_, __) => refreshNotifier.value++);
   ref.listen(onboardingCompletedProvider, (_, __) => refreshNotifier.value++);
 
+  final analyticsService = ref.watch(analyticsServiceProvider);
+
   return GoRouter(
     initialLocation: '/',
     debugLogDiagnostics: true,
     routes: $appRoutes,
     refreshListenable: refreshNotifier,
+    observers: [AnalyticsRouteObserver(analyticsService)],
     redirect: (context, state) {
       // Read current state at redirect evaluation time (not at provider build time)
       final isAuthenticated = ref.read(currentUserProvider) != null;

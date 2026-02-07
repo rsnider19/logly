@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logly/app/router/routes.dart';
 import 'package:logly/features/activity_logging/domain/user_activity.dart';
@@ -127,7 +126,7 @@ class DailyActivityRow extends StatelessWidget {
                       Color.getAlphaFromOpacity(0.25),
                     ),
                   ),
-                  onPressed: () => const ActivitySearchRoute().push<void>(context),
+                  onPressed: () => const ActivitySearchRoute(entryPoint: 'logly_it_chip').push<void>(context),
                 ),
               ),
             ),
@@ -169,7 +168,7 @@ class DailyActivityRow extends StatelessWidget {
 
   void _navigateToLogActivity(BuildContext context) {
     final dateStr = summary.activityDate.toIso8601String().split('T').first;
-    unawaited(context.push('/activities/search?date=$dateStr'));
+    unawaited(ActivitySearchRoute(date: dateStr, entryPoint: 'date_row').push<void>(context));
   }
 
   String _formatDayName(DateTime date) {
