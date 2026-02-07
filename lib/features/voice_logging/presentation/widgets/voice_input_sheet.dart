@@ -27,10 +27,12 @@ class VoiceInputSheet extends ConsumerStatefulWidget {
 
 class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTickerProviderStateMixin {
   late AnimationController _pulseController;
+  late final VoiceInputStateNotifier _voiceInputNotifier;
 
   @override
   void initState() {
     super.initState();
+    _voiceInputNotifier = ref.read(voiceInputStateProvider.notifier);
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -44,6 +46,13 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
 
   @override
   void dispose() {
+    // Track dismissal if showing results or error
+    // Use saved notifier reference since ref is invalid in dispose()
+    final state = _voiceInputNotifier.state;
+    if (state.status == VoiceInputStatus.showingResults || state.status == VoiceInputStatus.error) {
+      _voiceInputNotifier.trackDismissed();
+    }
+
     _pulseController.dispose();
     super.dispose();
   }
@@ -53,6 +62,9 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
     if (parsedData != null) {
       ref.read(voicePrepopulationProvider.notifier).set(parsedData);
     }
+
+    // Track activity selection
+    ref.read(voiceInputStateProvider.notifier).trackActivitySelected(activity.activityId);
 
     // Close the sheet
     Navigator.of(context).pop();
@@ -65,6 +77,9 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
   }
 
   void _onRetry() {
+    // Track retry action
+    ref.read(voiceInputStateProvider.notifier).trackRetry();
+
     ref.read(voiceInputStateProvider.notifier).reset();
     ref.read(voiceInputStateProvider.notifier).startListening();
   }
@@ -78,32 +93,15 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
     final theme = Theme.of(context);
     final state = ref.watch(voiceInputStateProvider);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Handle bar
-              Container(
-                width: 40,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Content based on state
-              _buildContent(context, state),
-            ],
-          ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _buildContent(context, state),
+          ],
         ),
       ),
     );
@@ -226,7 +224,7 @@ class _VoiceInputSheetState extends ConsumerState<VoiceInputSheet> with SingleTi
           )
         else
           Text(
-            'Try saying "I ran 5 miles"',
+            'Try saying "I swam for 30 minutes yesterday"',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),

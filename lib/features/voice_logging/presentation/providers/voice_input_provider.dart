@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logly/features/activity_catalog/domain/activity_summary.dart';
 import 'package:logly/features/voice_logging/application/speech_service.dart';
+import 'package:logly/features/voice_logging/application/voice_telemetry_service.dart';
 import 'package:logly/features/voice_logging/data/voice_parse_repository.dart';
 import 'package:logly/features/voice_logging/domain/voice_parse_response.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,6 +43,7 @@ class VoiceInputState {
     this.parsedData,
     this.matchedActivities,
     this.errorMessage,
+    this.telemetryId,
   });
 
   final VoiceInputStatus status;
@@ -50,6 +52,7 @@ class VoiceInputState {
   final VoiceParsedData? parsedData;
   final List<ActivitySummary>? matchedActivities;
   final String? errorMessage;
+  final String? telemetryId;
 
   VoiceInputState copyWith({
     VoiceInputStatus? status,
@@ -58,11 +61,13 @@ class VoiceInputState {
     VoiceParsedData? parsedData,
     List<ActivitySummary>? matchedActivities,
     String? errorMessage,
+    String? telemetryId,
     bool clearPartial = false,
     bool clearFinal = false,
     bool clearParsed = false,
     bool clearMatches = false,
     bool clearError = false,
+    bool clearTelemetry = false,
   }) {
     return VoiceInputState(
       status: status ?? this.status,
@@ -71,6 +76,7 @@ class VoiceInputState {
       parsedData: clearParsed ? null : (parsedData ?? this.parsedData),
       matchedActivities: clearMatches ? null : (matchedActivities ?? this.matchedActivities),
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      telemetryId: clearTelemetry ? null : (telemetryId ?? this.telemetryId),
     );
   }
 }
@@ -206,6 +212,7 @@ class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
         status: VoiceInputStatus.showingResults,
         parsedData: response.parsed,
         matchedActivities: response.activities,
+        telemetryId: response.telemetryId,
       );
     } on VoiceParseException catch (e) {
       state = state.copyWith(
@@ -237,12 +244,46 @@ class VoiceInputStateNotifier extends _$VoiceInputStateNotifier {
   void reset() {
     state = const VoiceInputState();
   }
+
+  /// Tracks when a user selects an activity from the results.
+  Future<void> trackActivitySelected(String activityId) async {
+    final telemetryId = state.telemetryId;
+    if (telemetryId == null) return;
+    final telemetry = await ref.read(voiceTelemetryServiceProvider.future);
+    telemetry.updateUserAction(
+      telemetryId: telemetryId,
+      userAction: 'activity_selected',
+      selectedActivityId: activityId,
+    );
+  }
+
+  /// Tracks when a user dismisses the voice input sheet.
+  Future<void> trackDismissed() async {
+    final telemetryId = state.telemetryId;
+    if (telemetryId == null) return;
+    final telemetry = await ref.read(voiceTelemetryServiceProvider.future);
+    telemetry.updateUserAction(
+      telemetryId: telemetryId,
+      userAction: 'dismissed',
+    );
+  }
+
+  /// Tracks when a user retries voice input after an error.
+  Future<void> trackRetry() async {
+    final telemetryId = state.telemetryId;
+    if (telemetryId == null) return;
+    final telemetry = await ref.read(voiceTelemetryServiceProvider.future);
+    telemetry.updateUserAction(
+      telemetryId: telemetryId,
+      userAction: 'retry',
+    );
+  }
 }
 
 /// Provider for storing voice prepopulation data.
 ///
 /// This is consumed by LogActivityScreen to pre-fill form fields.
-@riverpod
+@Riverpod(keepAlive: true)
 class VoicePrepopulation extends _$VoicePrepopulation {
   @override
   VoiceParsedData? build() => null;

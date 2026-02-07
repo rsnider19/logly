@@ -48,4 +48,4 @@ final class SpeechServiceProvider
   }
 }
 
-String _$speechServiceHash() => r'65487c7657eb072123e50c2ecf03166b41f599f2';
+String _$speechServiceHash() => r'3842168f4aa137a288e83df45b4fb5ac4aab6f9c';

@@ -1,3 +1,4 @@
+import 'package:dartx/dartx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,6 +17,7 @@ class SpeechService {
 
   final SpeechToText _speech;
   bool _initialized = false;
+  void Function(String error)? _onError;
 
   /// Checks if speech recognition is available on this device.
   Future<bool> isAvailable() async {
@@ -67,27 +69,32 @@ class SpeechService {
       }
     }
 
+    _onError = onError;
+
     await _speech.listen(
       onResult: (SpeechRecognitionResult result) {
         onResult(result.recognizedWords, result.finalResult);
       },
-      listenFor: const Duration(seconds: 30),
-      pauseFor: const Duration(seconds: 3),
-      partialResults: true,
+      listenFor: 30.seconds,
+      pauseFor: 5.seconds,
       localeId: localeId,
-      onSoundLevelChange: null,
-      cancelOnError: true,
-      listenMode: ListenMode.confirmation,
+      listenOptions: SpeechListenOptions(
+        cancelOnError: true,
+        listenMode: ListenMode.dictation,
+        enableHapticFeedback: true,
+      ),
     );
   }
 
   /// Stops listening and returns the final result.
   Future<void> stopListening() async {
+    _onError = null;
     await _speech.stop();
   }
 
   /// Cancels listening without processing.
   Future<void> cancelListening() async {
+    _onError = null;
     await _speech.cancel();
   }
 
@@ -99,6 +106,8 @@ class SpeechService {
 
   void _handleError(SpeechRecognitionError error) {
     debugPrint('Speech recognition error: ${error.errorMsg}');
+    _onError?.call('Speech recognition failed. Please try again.');
+    _onError = null;
   }
 }
 

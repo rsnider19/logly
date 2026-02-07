@@ -45,7 +45,7 @@ final class VoiceInputStateNotifierProvider
 }
 
 String _$voiceInputStateNotifierHash() =>
-    r'3549731145f5530649583e013c7ce8e303fe3303';
+    r'c303080d7291499a1d8aeb51bff84a0b8da47b02';
 
 /// State notifier for managing the voice input flow.
 
@@ -88,7 +88,7 @@ final class VoicePrepopulationProvider
         argument: null,
         retry: null,
         name: r'voicePrepopulationProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -110,7 +110,7 @@ final class VoicePrepopulationProvider
 }
 
 String _$voicePrepopulationHash() =>
-    r'26ef3a4afee33c321f8ef58dd21452c5a16f45b9';
+    r'2bbd1bd10470d13e47086bec4e9f40ea5831bdde';
 
 /// Provider for storing voice prepopulation data.
 ///

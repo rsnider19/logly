@@ -14,7 +14,9 @@ class VoiceLogFab extends ConsumerWidget {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.transparent,
+      useRootNavigator: true,
+      clipBehavior: Clip.antiAlias,
+      showDragHandle: true,
       builder: (context) => const VoiceInputSheet(),
     );
   }
