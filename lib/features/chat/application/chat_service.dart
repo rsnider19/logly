@@ -13,13 +13,12 @@ part 'chat_service.g.dart';
 
 /// Business logic layer orchestrating the chat stream lifecycle.
 ///
-/// Transforms raw [ChatEvent] streams from [ChatRepository] into smooth,
-/// typewriter-animated [ChatStreamState] updates via callbacks. Handles
-/// stall detection (30s timeout), one silent auto-retry, and event routing.
+/// Transforms raw [ChatEvent] streams from [ChatRepository] into
+/// [ChatStreamState] updates via callbacks. Handles stall detection
+/// (30s timeout), one silent auto-retry, and event routing.
 ///
-/// The service is stateless for stream management -- it creates a new
-/// [TypewriterBuffer] per request and returns results via the
-/// `onStateUpdate` callback. The Riverpod notifier manages the
+/// The service is stateless for stream management -- it returns results
+/// via the `onStateUpdate` callback. The Riverpod notifier manages the
 /// stateful lifecycle.
 class ChatService {
   ChatService(this._repository, this._logger);
@@ -38,8 +37,8 @@ class ChatService {
     _cancelled = true;
   }
 
-  /// Sends a question through the chat pipeline with stall detection,
-  /// auto-retry, and typewriter buffering.
+  /// Sends a question through the chat pipeline with stall detection
+  /// and auto-retry.
   ///
   /// [onStateUpdate] is called for each state change, allowing the
   /// caller (typically a Riverpod notifier) to control state emission.
@@ -149,18 +148,43 @@ class ChatService {
     void Function(ChatStreamState) onStateUpdate, {
     required bool isRetry,
   }) async {
-    final typewriter = TypewriterBuffer();
+    var fullText = '';
+    String? responseId;
+    String? conversionId;
+    String? conversationId = inputConversationId;
+    var followUpSuggestions = <String>[];
+    String? currentStepName;
+    String? currentStepStatus;
+    final completedSteps = <ChatCompletedStep>[];
+
+    // Typewriter buffer: drips characters at 5ms/char during streaming,
+    // then 1ms/char once done. displayText trails fullText until drained.
+    final buffer = TypewriterBuffer();
+    final bufferDone = Completer<void>();
+
+    // Buffer drip listener — emits display-text updates at typewriter pace.
+    final bufferSub = buffer.stream.listen(
+      (displayText) {
+        if (_cancelled) return;
+        onStateUpdate(
+          ChatStreamState(
+            status: ChatConnectionStatus.streaming,
+            displayText: displayText,
+            fullText: fullText,
+            currentStepName: currentStepName,
+            currentStepStatus: currentStepStatus,
+            completedSteps: List.unmodifiable(completedSteps),
+            responseId: responseId,
+            conversionId: conversionId,
+          ),
+        );
+      },
+      onDone: () {
+        if (!bufferDone.isCompleted) bufferDone.complete();
+      },
+    );
 
     try {
-      var fullText = '';
-      String? responseId;
-      String? conversionId;
-      String? conversationId = inputConversationId;
-      var followUpSuggestions = <String>[];
-      String? currentStepName;
-      String? currentStepStatus;
-      final completedSteps = <ChatCompletedStep>[];
-
       final eventStream = _repository
           .sendQuestion(
             query: query,
@@ -179,20 +203,7 @@ class ChatService {
 
       await for (final event in eventStream) {
         // Check for user-initiated cancellation
-        if (_cancelled) {
-          _logger.i('Chat stream cancelled by user');
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.completed,
-              displayText: typewriter.currentText,
-              fullText: fullText,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-            ),
-          );
-          return;
-        }
+        if (_cancelled) return;
 
         switch (event) {
           case ChatStepEvent():
@@ -204,11 +215,11 @@ class ChatService {
               currentStepName = event.name;
               currentStepStatus = event.status;
             }
-            // Step events are emitted instantly (no typewriter delay)
+            // Emit step update with current dripped text (not full text).
             onStateUpdate(
               ChatStreamState(
                 status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
+                displayText: buffer.currentText,
                 fullText: fullText,
                 currentStepName: currentStepName,
                 currentStepStatus: currentStepStatus,
@@ -221,126 +232,59 @@ class ChatService {
           case ChatTextDeltaEvent(:final delta):
             if (delta.isNotEmpty) {
               fullText += delta;
-              typewriter.addDelta(delta);
-              onStateUpdate(
-                ChatStreamState(
-                  status: ChatConnectionStatus.streaming,
-                  displayText: typewriter.currentText,
-                  fullText: fullText,
-                  currentStepName: currentStepName,
-                  currentStepStatus: currentStepStatus,
-                  completedSteps: List.unmodifiable(completedSteps),
-                  responseId: responseId,
-                  conversionId: conversionId,
-                ),
-              );
+              buffer.addDelta(delta);
+              // Display updates come from the buffer.stream listener above.
             }
 
           case ChatResponseIdEvent():
             responseId = event.responseId;
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-              ),
-            );
 
           case ChatConversionIdEvent():
             conversionId = event.conversionId;
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.streaming,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-              ),
-            );
 
           case ChatErrorEvent(:final message):
             throw ChatConnectionException(message);
 
-          case ChatDoneEvent(
-              conversationId: final doneConversationId,
-              followUpSuggestions: final doneSuggestions,
-            ):
+          case ChatDoneEvent(conversationId: final doneConversationId):
             conversationId = doneConversationId;
-            followUpSuggestions = doneSuggestions;
-            typewriter.markDone();
-            onStateUpdate(
-              ChatStreamState(
-                status: ChatConnectionStatus.completing,
-                displayText: typewriter.currentText,
-                fullText: fullText,
-                currentStepName: currentStepName,
-                currentStepStatus: currentStepStatus,
-                completedSteps: List.unmodifiable(completedSteps),
-                responseId: responseId,
-                conversionId: conversionId,
-                conversationId: conversationId,
-                followUpSuggestions: followUpSuggestions,
-              ),
-            );
+            // No more text deltas — switch buffer to fast drain (1ms/char).
+            // Don't emit completing yet; wait for buffer to fully drain.
+            buffer.markDone();
+
+          case ChatFollowUpSuggestionsEvent(:final suggestions):
+            followUpSuggestions = suggestions;
         }
       }
 
-      // After the SSE stream closes, listen to typewriter draining
-      // and emit display text updates as characters drip out.
-      await for (final displayText in typewriter.stream) {
-        if (_cancelled) {
-          onStateUpdate(
-            ChatStreamState(
-              status: ChatConnectionStatus.completed,
-              displayText: typewriter.currentText,
-              fullText: fullText,
-              completedSteps: List.unmodifiable(completedSteps),
-              responseId: responseId,
-              conversionId: conversionId,
-              conversationId: conversationId,
-              followUpSuggestions: followUpSuggestions,
-            ),
-          );
-          return;
-        }
-        onStateUpdate(
-          ChatStreamState(
-            status: ChatConnectionStatus.completing,
-            displayText: displayText,
-            fullText: fullText,
-            completedSteps: List.unmodifiable(completedSteps),
-            responseId: responseId,
-            conversionId: conversionId,
-            conversationId: conversationId,
-            followUpSuggestions: followUpSuggestions,
-          ),
-        );
+      // All SSE events processed. Ensure buffer is marked done (idempotent)
+      // and wait for it to finish draining remaining characters.
+      buffer.markDone();
+      if (!buffer.isComplete) {
+        await bufferDone.future;
       }
-
-      // Typewriter stream closed -- all characters drained
-      onStateUpdate(
-        ChatStreamState(
-          status: ChatConnectionStatus.completed,
-          displayText: fullText,
-          fullText: fullText,
-          completedSteps: List.unmodifiable(completedSteps),
-          responseId: responseId,
-          conversionId: conversionId,
-          conversationId: conversationId,
-          followUpSuggestions: followUpSuggestions,
-        ),
-      );
     } finally {
-      typewriter.dispose();
+      await bufferSub.cancel();
+      buffer.dispose();
     }
+
+    // If cancelled during drain, exit without overwriting state.
+    if (_cancelled) return;
+
+    // Buffer fully drained + all events received → emit completed.
+    // Suggestions are included so the UI can show them immediately
+    // without a separate completing → completed transition.
+    onStateUpdate(
+      ChatStreamState(
+        status: ChatConnectionStatus.completed,
+        displayText: fullText,
+        fullText: fullText,
+        completedSteps: List.unmodifiable(completedSteps),
+        responseId: responseId,
+        conversionId: conversionId,
+        conversationId: conversationId,
+        followUpSuggestions: followUpSuggestions,
+      ),
+    );
   }
 }
 

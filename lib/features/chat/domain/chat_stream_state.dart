@@ -14,7 +14,7 @@ enum ChatConnectionStatus {
   /// Receiving events from the server.
   streaming,
 
-  /// Done event received, typewriter buffer draining remaining text.
+  /// Done event received, finalizing.
   completing,
 
   /// All text emitted, stream finished successfully.
@@ -36,7 +36,7 @@ abstract class ChatCompletedStep with _$ChatCompletedStep {
 
 /// State model for the chat stream lifecycle.
 ///
-/// Tracks connection status, typewriter text, pipeline steps,
+/// Tracks connection status, streamed text, pipeline steps,
 /// follow-up IDs, and error information.
 @freezed
 abstract class ChatStreamState with _$ChatStreamState {
@@ -44,7 +44,7 @@ abstract class ChatStreamState with _$ChatStreamState {
     /// Current connection/stream status.
     @Default(ChatConnectionStatus.idle) ChatConnectionStatus status,
 
-    /// Typewriter-dripped text for UI display (characters appear progressively).
+    /// Text for UI display (updated as tokens arrive).
     @Default('') String displayText,
 
     /// Complete accumulated text for copy/accessibility (all deltas concatenated).

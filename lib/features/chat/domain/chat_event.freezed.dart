@@ -39,6 +39,10 @@ ChatEvent _$ChatEventFromJson(
           return ChatDoneEvent.fromJson(
             json
           );
+                case 'follow_up_suggestions':
+          return ChatFollowUpSuggestionsEvent.fromJson(
+            json
+          );
         
           default:
             throw CheckedFromJsonException(
@@ -97,7 +101,7 @@ extension ChatEventPatterns on ChatEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatStepEvent value)?  step,TResult Function( ChatTextDeltaEvent value)?  textDelta,TResult Function( ChatResponseIdEvent value)?  responseId,TResult Function( ChatConversionIdEvent value)?  conversionId,TResult Function( ChatErrorEvent value)?  error,TResult Function( ChatDoneEvent value)?  done,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatStepEvent value)?  step,TResult Function( ChatTextDeltaEvent value)?  textDelta,TResult Function( ChatResponseIdEvent value)?  responseId,TResult Function( ChatConversionIdEvent value)?  conversionId,TResult Function( ChatErrorEvent value)?  error,TResult Function( ChatDoneEvent value)?  done,TResult Function( ChatFollowUpSuggestionsEvent value)?  followUpSuggestions,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ChatStepEvent() when step != null:
@@ -106,7 +110,8 @@ return textDelta(_that);case ChatResponseIdEvent() when responseId != null:
 return responseId(_that);case ChatConversionIdEvent() when conversionId != null:
 return conversionId(_that);case ChatErrorEvent() when error != null:
 return error(_that);case ChatDoneEvent() when done != null:
-return done(_that);case _:
+return done(_that);case ChatFollowUpSuggestionsEvent() when followUpSuggestions != null:
+return followUpSuggestions(_that);case _:
   return orElse();
 
 }
@@ -124,7 +129,7 @@ return done(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatStepEvent value)  step,required TResult Function( ChatTextDeltaEvent value)  textDelta,required TResult Function( ChatResponseIdEvent value)  responseId,required TResult Function( ChatConversionIdEvent value)  conversionId,required TResult Function( ChatErrorEvent value)  error,required TResult Function( ChatDoneEvent value)  done,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatStepEvent value)  step,required TResult Function( ChatTextDeltaEvent value)  textDelta,required TResult Function( ChatResponseIdEvent value)  responseId,required TResult Function( ChatConversionIdEvent value)  conversionId,required TResult Function( ChatErrorEvent value)  error,required TResult Function( ChatDoneEvent value)  done,required TResult Function( ChatFollowUpSuggestionsEvent value)  followUpSuggestions,}){
 final _that = this;
 switch (_that) {
 case ChatStepEvent():
@@ -133,7 +138,8 @@ return textDelta(_that);case ChatResponseIdEvent():
 return responseId(_that);case ChatConversionIdEvent():
 return conversionId(_that);case ChatErrorEvent():
 return error(_that);case ChatDoneEvent():
-return done(_that);}
+return done(_that);case ChatFollowUpSuggestionsEvent():
+return followUpSuggestions(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -147,7 +153,7 @@ return done(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatStepEvent value)?  step,TResult? Function( ChatTextDeltaEvent value)?  textDelta,TResult? Function( ChatResponseIdEvent value)?  responseId,TResult? Function( ChatConversionIdEvent value)?  conversionId,TResult? Function( ChatErrorEvent value)?  error,TResult? Function( ChatDoneEvent value)?  done,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatStepEvent value)?  step,TResult? Function( ChatTextDeltaEvent value)?  textDelta,TResult? Function( ChatResponseIdEvent value)?  responseId,TResult? Function( ChatConversionIdEvent value)?  conversionId,TResult? Function( ChatErrorEvent value)?  error,TResult? Function( ChatDoneEvent value)?  done,TResult? Function( ChatFollowUpSuggestionsEvent value)?  followUpSuggestions,}){
 final _that = this;
 switch (_that) {
 case ChatStepEvent() when step != null:
@@ -156,7 +162,8 @@ return textDelta(_that);case ChatResponseIdEvent() when responseId != null:
 return responseId(_that);case ChatConversionIdEvent() when conversionId != null:
 return conversionId(_that);case ChatErrorEvent() when error != null:
 return error(_that);case ChatDoneEvent() when done != null:
-return done(_that);case _:
+return done(_that);case ChatFollowUpSuggestionsEvent() when followUpSuggestions != null:
+return followUpSuggestions(_that);case _:
   return null;
 
 }
@@ -173,7 +180,7 @@ return done(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String status)?  step,TResult Function( String delta)?  textDelta,TResult Function(@JsonKey(name: 'responseId')  String responseId)?  responseId,TResult Function(@JsonKey(name: 'conversionId')  String conversionId)?  conversionId,TResult Function( String message)?  error,TResult Function(@JsonKey(name: 'conversation_id')  String conversationId, @JsonKey(name: 'follow_up_suggestions')  List<String> followUpSuggestions)?  done,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function( String name,  String status)?  step,TResult Function( String delta)?  textDelta,TResult Function(@JsonKey(name: 'responseId')  String responseId)?  responseId,TResult Function(@JsonKey(name: 'conversionId')  String conversionId)?  conversionId,TResult Function( String message)?  error,TResult Function(@JsonKey(name: 'conversation_id')  String conversationId)?  done,TResult Function( List<String> suggestions)?  followUpSuggestions,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ChatStepEvent() when step != null:
 return step(_that.name,_that.status);case ChatTextDeltaEvent() when textDelta != null:
@@ -181,7 +188,8 @@ return textDelta(_that.delta);case ChatResponseIdEvent() when responseId != null
 return responseId(_that.responseId);case ChatConversionIdEvent() when conversionId != null:
 return conversionId(_that.conversionId);case ChatErrorEvent() when error != null:
 return error(_that.message);case ChatDoneEvent() when done != null:
-return done(_that.conversationId,_that.followUpSuggestions);case _:
+return done(_that.conversationId);case ChatFollowUpSuggestionsEvent() when followUpSuggestions != null:
+return followUpSuggestions(_that.suggestions);case _:
   return orElse();
 
 }
@@ -199,7 +207,7 @@ return done(_that.conversationId,_that.followUpSuggestions);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String status)  step,required TResult Function( String delta)  textDelta,required TResult Function(@JsonKey(name: 'responseId')  String responseId)  responseId,required TResult Function(@JsonKey(name: 'conversionId')  String conversionId)  conversionId,required TResult Function( String message)  error,required TResult Function(@JsonKey(name: 'conversation_id')  String conversationId, @JsonKey(name: 'follow_up_suggestions')  List<String> followUpSuggestions)  done,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function( String name,  String status)  step,required TResult Function( String delta)  textDelta,required TResult Function(@JsonKey(name: 'responseId')  String responseId)  responseId,required TResult Function(@JsonKey(name: 'conversionId')  String conversionId)  conversionId,required TResult Function( String message)  error,required TResult Function(@JsonKey(name: 'conversation_id')  String conversationId)  done,required TResult Function( List<String> suggestions)  followUpSuggestions,}) {final _that = this;
 switch (_that) {
 case ChatStepEvent():
 return step(_that.name,_that.status);case ChatTextDeltaEvent():
@@ -207,7 +215,8 @@ return textDelta(_that.delta);case ChatResponseIdEvent():
 return responseId(_that.responseId);case ChatConversionIdEvent():
 return conversionId(_that.conversionId);case ChatErrorEvent():
 return error(_that.message);case ChatDoneEvent():
-return done(_that.conversationId,_that.followUpSuggestions);}
+return done(_that.conversationId);case ChatFollowUpSuggestionsEvent():
+return followUpSuggestions(_that.suggestions);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -221,7 +230,7 @@ return done(_that.conversationId,_that.followUpSuggestions);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String status)?  step,TResult? Function( String delta)?  textDelta,TResult? Function(@JsonKey(name: 'responseId')  String responseId)?  responseId,TResult? Function(@JsonKey(name: 'conversionId')  String conversionId)?  conversionId,TResult? Function( String message)?  error,TResult? Function(@JsonKey(name: 'conversation_id')  String conversationId, @JsonKey(name: 'follow_up_suggestions')  List<String> followUpSuggestions)?  done,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function( String name,  String status)?  step,TResult? Function( String delta)?  textDelta,TResult? Function(@JsonKey(name: 'responseId')  String responseId)?  responseId,TResult? Function(@JsonKey(name: 'conversionId')  String conversionId)?  conversionId,TResult? Function( String message)?  error,TResult? Function(@JsonKey(name: 'conversation_id')  String conversationId)?  done,TResult? Function( List<String> suggestions)?  followUpSuggestions,}) {final _that = this;
 switch (_that) {
 case ChatStepEvent() when step != null:
 return step(_that.name,_that.status);case ChatTextDeltaEvent() when textDelta != null:
@@ -229,7 +238,8 @@ return textDelta(_that.delta);case ChatResponseIdEvent() when responseId != null
 return responseId(_that.responseId);case ChatConversionIdEvent() when conversionId != null:
 return conversionId(_that.conversionId);case ChatErrorEvent() when error != null:
 return error(_that.message);case ChatDoneEvent() when done != null:
-return done(_that.conversationId,_that.followUpSuggestions);case _:
+return done(_that.conversationId);case ChatFollowUpSuggestionsEvent() when followUpSuggestions != null:
+return followUpSuggestions(_that.suggestions);case _:
   return null;
 
 }
@@ -608,17 +618,10 @@ as String,
 @JsonSerializable()
 
 class ChatDoneEvent extends ChatEvent {
-  const ChatDoneEvent({@JsonKey(name: 'conversation_id') required this.conversationId, @JsonKey(name: 'follow_up_suggestions') final  List<String> followUpSuggestions = const [], final  String? $type}): _followUpSuggestions = followUpSuggestions,$type = $type ?? 'done',super._();
+  const ChatDoneEvent({@JsonKey(name: 'conversation_id') required this.conversationId, final  String? $type}): $type = $type ?? 'done',super._();
   factory ChatDoneEvent.fromJson(Map<String, dynamic> json) => _$ChatDoneEventFromJson(json);
 
 @JsonKey(name: 'conversation_id') final  String conversationId;
- final  List<String> _followUpSuggestions;
-@JsonKey(name: 'follow_up_suggestions') List<String> get followUpSuggestions {
-  if (_followUpSuggestions is EqualUnmodifiableListView) return _followUpSuggestions;
-  // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_followUpSuggestions);
-}
-
 
 @JsonKey(name: 'type')
 final String $type;
@@ -637,16 +640,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatDoneEvent&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&const DeepCollectionEquality().equals(other._followUpSuggestions, _followUpSuggestions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatDoneEvent&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,conversationId,const DeepCollectionEquality().hash(_followUpSuggestions));
+int get hashCode => Object.hash(runtimeType,conversationId);
 
 @override
 String toString() {
-  return 'ChatEvent.done(conversationId: $conversationId, followUpSuggestions: $followUpSuggestions)';
+  return 'ChatEvent.done(conversationId: $conversationId)';
 }
 
 
@@ -657,7 +660,7 @@ abstract mixin class $ChatDoneEventCopyWith<$Res> implements $ChatEventCopyWith<
   factory $ChatDoneEventCopyWith(ChatDoneEvent value, $Res Function(ChatDoneEvent) _then) = _$ChatDoneEventCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'conversation_id') String conversationId,@JsonKey(name: 'follow_up_suggestions') List<String> followUpSuggestions
+@JsonKey(name: 'conversation_id') String conversationId
 });
 
 
@@ -674,10 +677,88 @@ class _$ChatDoneEventCopyWithImpl<$Res>
 
 /// Create a copy of ChatEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,Object? followUpSuggestions = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,}) {
   return _then(ChatDoneEvent(
 conversationId: null == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
-as String,followUpSuggestions: null == followUpSuggestions ? _self._followUpSuggestions : followUpSuggestions // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+/// @nodoc
+@JsonSerializable()
+
+class ChatFollowUpSuggestionsEvent extends ChatEvent {
+  const ChatFollowUpSuggestionsEvent({final  List<String> suggestions = const [], final  String? $type}): _suggestions = suggestions,$type = $type ?? 'follow_up_suggestions',super._();
+  factory ChatFollowUpSuggestionsEvent.fromJson(Map<String, dynamic> json) => _$ChatFollowUpSuggestionsEventFromJson(json);
+
+ final  List<String> _suggestions;
+@JsonKey() List<String> get suggestions {
+  if (_suggestions is EqualUnmodifiableListView) return _suggestions;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_suggestions);
+}
+
+
+@JsonKey(name: 'type')
+final String $type;
+
+
+/// Create a copy of ChatEvent
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ChatFollowUpSuggestionsEventCopyWith<ChatFollowUpSuggestionsEvent> get copyWith => _$ChatFollowUpSuggestionsEventCopyWithImpl<ChatFollowUpSuggestionsEvent>(this, _$identity);
+
+@override
+Map<String, dynamic> toJson() {
+  return _$ChatFollowUpSuggestionsEventToJson(this, );
+}
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatFollowUpSuggestionsEvent&&const DeepCollectionEquality().equals(other._suggestions, _suggestions));
+}
+
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_suggestions));
+
+@override
+String toString() {
+  return 'ChatEvent.followUpSuggestions(suggestions: $suggestions)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $ChatFollowUpSuggestionsEventCopyWith<$Res> implements $ChatEventCopyWith<$Res> {
+  factory $ChatFollowUpSuggestionsEventCopyWith(ChatFollowUpSuggestionsEvent value, $Res Function(ChatFollowUpSuggestionsEvent) _then) = _$ChatFollowUpSuggestionsEventCopyWithImpl;
+@useResult
+$Res call({
+ List<String> suggestions
+});
+
+
+
+
+}
+/// @nodoc
+class _$ChatFollowUpSuggestionsEventCopyWithImpl<$Res>
+    implements $ChatFollowUpSuggestionsEventCopyWith<$Res> {
+  _$ChatFollowUpSuggestionsEventCopyWithImpl(this._self, this._then);
+
+  final ChatFollowUpSuggestionsEvent _self;
+  final $Res Function(ChatFollowUpSuggestionsEvent) _then;
+
+/// Create a copy of ChatEvent
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? suggestions = null,}) {
+  return _then(ChatFollowUpSuggestionsEvent(
+suggestions: null == suggestions ? _self._suggestions : suggestions // ignore: cast_nullable_to_non_nullable
 as List<String>,
   ));
 }

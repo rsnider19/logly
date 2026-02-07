@@ -138,7 +138,6 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
         await _updateStreamMessage(next);
 
       case ChatConnectionStatus.streaming:
-      case ChatConnectionStatus.completing:
         // Track step start time on first step event
         if (next.currentStepName != null && _stepStartTime == null) {
           _stepStartTime = DateTime.now();
@@ -154,8 +153,25 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
 
         await _updateStreamMessage(next);
 
+      case ChatConnectionStatus.completing:
+        // Text is done — finalize stream message to TextMessage.
+        // Keep _currentAiMessageId so we can update suggestions later.
+        await _finalizeMessage(next, clearTracking: false);
+
       case ChatConnectionStatus.completed:
-        await _finalizeMessage(next);
+        if (_currentAiMessageId != null) {
+          final msg = _findMessageById(_currentAiMessageId!);
+          if (msg is TextStreamMessage) {
+            // Buffer-based flow: finalize directly from streaming → completed.
+            // Suggestions are already in the state so they're included in
+            // the finalized TextMessage metadata.
+            await _finalizeMessage(next);
+          } else {
+            // Two-phase flow (completing → completed): already finalized,
+            // just add suggestions.
+            await _addSuggestionsToFinalizedMessage(next);
+          }
+        }
 
       case ChatConnectionStatus.error:
         await _handleError(next);
@@ -182,7 +198,13 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
   }
 
   /// Replaces the TextStreamMessage with a final TextMessage on completion.
-  Future<void> _finalizeMessage(ChatStreamState streamState) async {
+  ///
+  /// When [clearTracking] is false, keeps `_currentAiMessageId` so the
+  /// message can be updated with follow-up suggestions later.
+  Future<void> _finalizeMessage(
+    ChatStreamState streamState, {
+    bool clearTracking = true,
+  }) async {
     final aiMsgId = _currentAiMessageId;
     if (aiMsgId == null) return;
 
@@ -206,6 +228,36 @@ class ChatUiStateNotifier extends _$ChatUiStateNotifier {
     );
 
     await _controller.updateMessage(oldMsg, newMsg);
+
+    if (clearTracking) {
+      _currentAiMessageId = null;
+      _pendingUserQuery = null;
+      _pendingUserMessageId = null;
+    }
+  }
+
+  /// Updates the already-finalized TextMessage with follow-up suggestions.
+  Future<void> _addSuggestionsToFinalizedMessage(ChatStreamState streamState) async {
+    final aiMsgId = _currentAiMessageId;
+    if (aiMsgId == null) return;
+
+    final oldMsg = _findMessageById(aiMsgId);
+    if (oldMsg == null || oldMsg is! TextMessage) return;
+
+    if (streamState.followUpSuggestions.isNotEmpty) {
+      final newMetadata = Map<String, dynamic>.from(oldMsg.metadata ?? {});
+      newMetadata['followUpSuggestions'] = streamState.followUpSuggestions;
+
+      final newMsg = Message.text(
+        id: oldMsg.id,
+        authorId: oldMsg.authorId,
+        text: oldMsg.text,
+        createdAt: oldMsg.createdAt,
+        metadata: newMetadata,
+      );
+
+      await _controller.updateMessage(oldMsg, newMsg);
+    }
 
     // Clear tracking state
     _currentAiMessageId = null;

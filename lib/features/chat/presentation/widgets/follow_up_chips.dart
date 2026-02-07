@@ -1,5 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:logly/widgets/skeleton_loader.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 /// Tappable follow-up question suggestions shown after an AI response.
@@ -45,22 +46,41 @@ class FollowUpChips extends StatelessWidget {
               widthFactor: 0.5,
               child: Padding(
                 padding: EdgeInsets.only(
-                  right: index == 0 ? 4 : 0,
-                  left: index == 1 ? 4 : 0,
+                  right: index.isEven ? 4 : 0,
+                  left: index.isOdd ? 4 : 0,
                 ),
-                child: ActionChip(
-                  label: Text(
-                    '$suggestion\n',
-                    style: theme.textTheme.bodySmall,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
+                child: Skelly(
+                  builder: (context) => ActionChip(
+                    label: FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Text(
+                        '$suggestion\n',
+                        style: theme.textTheme.bodySmall,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                    ),
+                    onPressed: () => onTap(suggestion),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    side: BorderSide.none,
                   ),
-                  onPressed: () => onTap(suggestion),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  placeholder: (context) => ActionChip(
+                    label: Text(
+                      '$suggestion\n',
+                      style: theme.textTheme.bodySmall,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                    onPressed: () => onTap(suggestion),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                    side: BorderSide.none,
                   ),
-                  backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                  side: BorderSide.none,
                 ),
               ),
             );

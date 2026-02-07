@@ -269,12 +269,27 @@ export function runPipeline(input: PipelineInput): Response {
 
         progress.sendResponseId(responseId);
 
+        // Send done immediately so the client can finalize the message
+        progress.sendDone(conversationId!);
+
+        // Update conversation IDs immediately for follow-up chaining
+        if (conversationId) {
+          await updateConversationIds(
+            conversationId,
+            responseId,
+            sqlResult.conversionId
+          );
+        }
+
         // Generate follow-up suggestions in a separate call
         const followUps = await generateFollowUpSuggestions({
           question: sanitizedQuery,
           response: fullResponseText,
           hashedUserId: hashedUser,
         });
+
+        // Send suggestions to client (arrives after done)
+        progress.sendFollowUpSuggestions(followUps);
 
         // Capture final telemetry fields
         telemetry.aiResponse = fullResponseText;
@@ -285,16 +300,7 @@ export function runPipeline(input: PipelineInput): Response {
             steps:
               completedStepNames.length > 0 ? completedStepNames : undefined,
           });
-
-          // Update conversation with latest IDs for follow-up chaining
-          await updateConversationIds(
-            conversationId,
-            responseId,
-            sqlResult.conversionId
-          );
         }
-
-        progress.sendDone(conversationId!, followUps);
       } catch (err) {
         telemetry.responseGenerationDurationMs = Math.round(performance.now() - respStart);
         telemetry.errorType = "response_generation";
