@@ -1,4 +1,6 @@
+import 'package:logly/features/activity_catalog/domain/activity_category.dart';
 import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
+import 'package:logly/features/profile/data/category_filter_frequency_repository.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -45,16 +47,17 @@ class ProfileFilterStateNotifier extends _$ProfileFilterStateNotifier {
 
   /// Toggles a category filter on/off.
   ///
-  /// If state is empty (all selected), first populates with all category IDs
-  /// then removes the toggled one.
-  void toggleCategory(String categoryId, List<String> allCategoryIds) {
+  /// When "All" is active (empty set), tapping a category selects only that
+  /// category. When individual categories are selected, tapping toggles that
+  /// category. If the last category is deselected, auto-resets to "All"
+  /// (empty set).
+  void toggleCategory(String categoryId) {
     final current = state.selectedCategoryIds;
     if (current.isEmpty) {
-      // Empty means all selected, so toggling means deselecting one
-      state = state.copyWith(
-        selectedCategoryIds: allCategoryIds.where((id) => id != categoryId).toSet(),
-      );
+      // "All" is active — select only this category
+      state = state.copyWith(selectedCategoryIds: {categoryId});
     } else if (current.contains(categoryId)) {
+      // Deselect this category; empty set means auto-reselect "All"
       state = state.copyWith(
         selectedCategoryIds: {...current}..remove(categoryId),
       );
@@ -91,4 +94,26 @@ Future<Set<String>> effectiveGlobalCategoryFilters(Ref ref) async {
 @riverpod
 TimePeriod globalTimePeriod(Ref ref) {
   return ref.watch(profileFilterStateProvider).timePeriod;
+}
+
+/// Provides activity categories sorted by filter toggle frequency.
+///
+/// Reads frequency data from SharedPreferences and sorts categories by
+/// descending frequency. Categories with no recorded taps fall back to
+/// their default [ActivityCategory.sortOrder].
+///
+/// Auto-dispose ensures sort order is recalculated each time the profile
+/// screen is rebuilt (e.g., navigating away and back).
+@riverpod
+Future<List<ActivityCategory>> frequencySortedCategories(Ref ref) async {
+  final categories = await ref.watch(activityCategoriesProvider.future);
+  final freqRepo = ref.watch(categoryFilterFrequencyRepositoryProvider);
+  final frequencies = freqRepo.getFrequencies();
+
+  return [...categories]..sort((a, b) {
+    final freqA = frequencies[a.activityCategoryId] ?? 0;
+    final freqB = frequencies[b.activityCategoryId] ?? 0;
+    if (freqA != freqB) return freqB.compareTo(freqA);
+    return a.sortOrder.compareTo(b.sortOrder);
+  });
 }

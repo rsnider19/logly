@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logly/features/activity_catalog/presentation/providers/category_provider.dart';
+import 'package:logly/features/activity_catalog/domain/activity_category.dart';
+import 'package:logly/features/profile/data/category_filter_frequency_repository.dart';
 import 'package:logly/features/profile/domain/time_period.dart';
 import 'package:logly/features/profile/presentation/providers/profile_filter_provider.dart';
 import 'package:logly/widgets/logly_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-/// Floating filter bar for the profile screen with category icons and time period chips.
+/// Floating filter bar for the profile screen with category chips and time period chips.
 class ProfileFilterBar extends ConsumerWidget {
   const ProfileFilterBar({super.key});
 
@@ -16,7 +18,7 @@ class ProfileFilterBar extends ConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _CategoryIconRow(),
+          _CategoryChipRow(),
           SizedBox(height: 8),
           _TimePeriodChipRow(),
         ],
@@ -25,61 +27,124 @@ class ProfileFilterBar extends ConsumerWidget {
   }
 }
 
-class _CategoryIconRow extends ConsumerWidget {
-  const _CategoryIconRow();
+class _CategoryChipRow extends ConsumerWidget {
+  const _CategoryChipRow();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categoriesAsync = ref.watch(activityCategoriesProvider);
+    final categoriesAsync = ref.watch(frequencySortedCategoriesProvider);
     final filterState = ref.watch(profileFilterStateProvider);
-    final effectiveFiltersAsync = ref.watch(effectiveGlobalCategoryFiltersProvider);
     final notifier = ref.watch(profileFilterStateProvider.notifier);
 
     return categoriesAsync.when(
       data: (categories) {
-        final sortedCategories = [...categories]..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
-        final allCategoryIds = sortedCategories.map((c) => c.activityCategoryId).toList();
+        final isAllSelected = filterState.selectedCategoryIds.isEmpty;
 
-        final effectiveFilters = effectiveFiltersAsync.when(
-          data: (filters) => filters,
-          loading: allCategoryIds.toSet,
-          error: (_, _) => allCategoryIds.toSet(),
-        );
-
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            for (final category in sortedCategories)
-              Builder(
-                builder: (context) {
-                  final isSelected = effectiveFilters.contains(category.activityCategoryId);
-                  return IconButton.outlined(
-                    onPressed: () => notifier.toggleCategory(category.activityCategoryId, allCategoryIds),
-                    color: Color(int.parse(category.hexColor.replaceFirst('#', 'FF'), radix: 16)),
-                    style: IconButton.styleFrom(
-                      shape: const CircleBorder(),
-                      side: BorderSide(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.54))
-                            : category.color,
-                      ),
-                      backgroundColor: isSelected ? category.color : null,
-                    ),
-                    icon: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: ActivityCategoryIcon(
-                        activityCategory: category,
-                        color: isSelected ? Theme.of(context).colorScheme.onSurface : category.color,
-                      ),
-                    ),
-                  );
+        return SizedBox(
+          height: 40,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: categories.length + 1,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return _AllFilterChip(
+                  isSelected: isAllSelected,
+                  onPressed: notifier.selectAllCategories,
+                );
+              }
+              final category = categories[index - 1];
+              final isSelected = filterState.selectedCategoryIds.contains(category.activityCategoryId);
+              return _CategoryFilterChip(
+                category: category,
+                isSelected: isSelected,
+                onPressed: () async {
+                  if (!isSelected) {
+                    await ref.read(categoryFilterFrequencyRepositoryProvider).incrementFrequency(
+                          category.activityCategoryId,
+                        );
+                  }
+                  notifier.toggleCategory(category.activityCategoryId);
                 },
-              ),
-          ],
+              );
+            },
+          ),
         );
       },
-      loading: () => const SizedBox(height: 48),
+      loading: () => const SizedBox(height: 40),
       error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _AllFilterChip extends StatelessWidget {
+  const _AllFilterChip({
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  final bool isSelected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ActionChip(
+      avatar: Icon(
+        LucideIcons.listFilter,
+        size: 18,
+        color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+      ),
+      label: Text(
+        'All',
+        style: TextStyle(
+          color: isSelected ? theme.colorScheme.onPrimary : theme.colorScheme.onSurface,
+        ),
+      ),
+      shape: const StadiumBorder(),
+      backgroundColor: isSelected ? theme.colorScheme.primary : null,
+      side: BorderSide(
+        color: isSelected
+            ? theme.colorScheme.surface.withAlpha(Color.getAlphaFromOpacity(0.25))
+            : theme.colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.25)),
+      ),
+      onPressed: onPressed,
+    );
+  }
+}
+
+class _CategoryFilterChip extends StatelessWidget {
+  const _CategoryFilterChip({
+    required this.category,
+    required this.isSelected,
+    required this.onPressed,
+  });
+
+  final ActivityCategory category;
+  final bool isSelected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final categoryColor = category.color;
+
+    return ActionChip(
+      avatar: ActivityCategoryIcon(
+        activityCategory: category,
+        size: 18,
+        color: isSelected ? theme.colorScheme.onSurface : categoryColor,
+      ),
+      label: Text(category.name),
+      shape: const StadiumBorder(),
+      backgroundColor: isSelected ? categoryColor : null,
+      side: BorderSide(
+        color: isSelected
+            ? theme.colorScheme.surface.withAlpha(Color.getAlphaFromOpacity(0.25))
+            : theme.colorScheme.onSurface.withAlpha(Color.getAlphaFromOpacity(0.25)),
+      ),
+      onPressed: onPressed,
     );
   }
 }
@@ -110,6 +175,7 @@ class _TimePeriodChipRow extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              shape: const StadiumBorder(),
               selected: isSelected,
               onSelected: (_) => notifier.selectTimePeriod(period),
             ),

@@ -57,7 +57,7 @@ final class ProfileFilterStateNotifierProvider
 }
 
 String _$profileFilterStateNotifierHash() =>
-    r'1fa3a81d06b93a31d76d6c6f991310f4a0808933';
+    r'e3bf4b45ef91f7d9cc4b324211fe991328140325';
 
 /// Global filter state notifier for the profile screen.
 ///
@@ -184,3 +184,71 @@ final class GlobalTimePeriodProvider
 }
 
 String _$globalTimePeriodHash() => r'da1c434ffe2173250a913a344cc3321e6c6a0ee6';
+
+/// Provides activity categories sorted by filter toggle frequency.
+///
+/// Reads frequency data from SharedPreferences and sorts categories by
+/// descending frequency. Categories with no recorded taps fall back to
+/// their default [ActivityCategory.sortOrder].
+///
+/// Auto-dispose ensures sort order is recalculated each time the profile
+/// screen is rebuilt (e.g., navigating away and back).
+
+@ProviderFor(frequencySortedCategories)
+final frequencySortedCategoriesProvider = FrequencySortedCategoriesProvider._();
+
+/// Provides activity categories sorted by filter toggle frequency.
+///
+/// Reads frequency data from SharedPreferences and sorts categories by
+/// descending frequency. Categories with no recorded taps fall back to
+/// their default [ActivityCategory.sortOrder].
+///
+/// Auto-dispose ensures sort order is recalculated each time the profile
+/// screen is rebuilt (e.g., navigating away and back).
+
+final class FrequencySortedCategoriesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<ActivityCategory>>,
+          List<ActivityCategory>,
+          FutureOr<List<ActivityCategory>>
+        >
+    with
+        $FutureModifier<List<ActivityCategory>>,
+        $FutureProvider<List<ActivityCategory>> {
+  /// Provides activity categories sorted by filter toggle frequency.
+  ///
+  /// Reads frequency data from SharedPreferences and sorts categories by
+  /// descending frequency. Categories with no recorded taps fall back to
+  /// their default [ActivityCategory.sortOrder].
+  ///
+  /// Auto-dispose ensures sort order is recalculated each time the profile
+  /// screen is rebuilt (e.g., navigating away and back).
+  FrequencySortedCategoriesProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'frequencySortedCategoriesProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$frequencySortedCategoriesHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<ActivityCategory>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<ActivityCategory>> create(Ref ref) {
+    return frequencySortedCategories(ref);
+  }
+}
+
+String _$frequencySortedCategoriesHash() =>
+    r'd6d4f2a8e477bc08b22ad55d79b7594650fb825d';
