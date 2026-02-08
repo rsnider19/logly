@@ -55,6 +55,7 @@ dependencies:
   sign_in_with_apple: ^6.1.4
   shared_preferences: ^2.5.4
   shimmer: ^3.0.0
+  speech_to_text: ^7.3.0
   sliver_tools: ^0.2.12
   smooth_page_indicator: ^2.0.1
   sqlite3_flutter_libs: ^0.5.28
